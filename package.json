@@ -1,0 +1,35 @@
+{
+	"name": "kathamo",
+	"version": "1.0.0",
+	"description": "WordPress plugin starter",
+	"main": "index.js",
+	"scripts": {
+		"build": "vite build --mode production",
+		"dev": "vite build --watch --mode development"
+	},
+	"author": {
+		"name": "Keramot UL Islam [AbmSourav]",
+		"email": "keramotul.islam@gmail.com",
+		"url": "https://abmsourav.com"
+	},
+	"contributors": [
+		{
+			"name": "Keramot UL Islam [AbmSourav]",
+			"email": "keramotul.islam@gmail.com"
+		},
+		{
+			"name": "CodesVault",
+			"email": "codesvault@gmail.com",
+			"url": "https://github.com/CodesVault"
+		}
+	],
+	"license": "GPL-2.0",
+	"devDependencies": {
+		"autoprefixer": "^10.4.14",
+		"postcss": "^8.4.24",
+		"postcss-import": "^15.1.0",
+		"sass": "^1.63.3",
+		"tailwindcss": "^3.3.2",
+		"vite": "^4.3.9"
+	}
+}

@@ -1,0 +1,67 @@
+<?php
+
+namespace HexCoupon\App\Core;
+
+use HexCoupon\App\Core\Lib\SingleTon;
+
+class AssetsManager
+{
+	use SingleTon;
+
+	private $version = '';
+	private $configs = [];
+
+	public function register()
+	{
+		$this->configs = Hxc_get_config();
+
+		$this->before_register_assets();
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
+	}
+
+	private function before_register_assets()
+	{
+		if ( $this->configs['dev_mode'] ) {
+			return $this->version = time();
+		}
+		$this->version = $this->configs['plugin_version'];
+	}
+
+	public function admin_scripts()
+	{
+//		wp_enqueue_style(
+//			Hxc_prefix( 'admin-css' ),
+//			Hxc_asset_url( "/dist/admin.css" ),
+//			[],
+//			$this->version
+//		);
+		$folder_prefix = Hxc_get_config('dev_mode') ? '/dev' : '/dist';
+		//todo filter so that this js only load on wooCommerce coupon create/edit/update page
+		wp_enqueue_script(
+			Hxc_prefix( 'admin-js' ),
+			Hxc_asset_url( $folder_prefix."/admin/js/admin.js" ),
+			['jquery','select2'],
+			$this->version,
+			true
+		);
+	}
+
+	public function public_scripts()
+	{
+		wp_enqueue_style(
+			Hxc_prefix( 'public-css' ),
+			Hxc_asset_url( "/dist/public.css" ),
+			[],
+			$this->version
+		);
+
+		wp_enqueue_script(
+			Hxc_prefix( 'public-js' ),
+			Hxc_asset_url( "/dist/public.js" ),
+			[],
+			$this->version,
+			true
+		);
+	}
+}
