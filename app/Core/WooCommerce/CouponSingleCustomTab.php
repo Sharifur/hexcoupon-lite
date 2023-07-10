@@ -103,7 +103,7 @@ class CouponSingleCustomTab
 			}
 			echo '</select>';
 		} else {
-			echo 'No payment methods found.';
+			echo 'No payment methods found .';
 		}
 	}
 
@@ -165,50 +165,6 @@ class CouponSingleCustomTab
 		return false;
 	}
 
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @method apply_selected_roles_to_coupon
-	 * @param bool $is_valid
-	 * @param string $coupon
-	 * @since 1.0.0
-	 * @return bool
-	 * Apply coupon to the selected roles only.
-	 */
-	function apply_coupon_to_selected_user_roles( $is_valid, $coupon ) : bool
-	{
-		//check if it is a valid  coupon or not
-		if ( ! $is_valid ) return $is_valid;
-
-
-
-
-
-
-		//get current role
-		$selected_roles = get_post_meta( $coupon->get_id(), 'permitted_roles', true );
-
-		//check it is does not have any role assigned
-		if (empty($selected_roles)) return true;
-
-
-
-
-
-		$user = wp_get_current_user();
-		$user_roles = $user->roles;
-//		print_r($user_roles);
-
-		dd( $selected_roles,$user_roles);
-
-		foreach ( $user_roles as $user_role ) {
-			if ( in_array( $user_role, $selected_roles ) ) {
-				return $is_valid;
-			}
-		}
-
-		return false;
-	}
 }
 
 
