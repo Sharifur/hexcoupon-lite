@@ -11,15 +11,6 @@ class RenderHelpers
 
 	public function Wp_Kses_Allowed_For_Forms()
 	{
-
-		/*
-		<select id="product_categories" name="product_categories[]"  class="wc-enhanced-select select2-hidden-accessible enhanced" multiple="" data-placeholder="Any category" tabindex="-1" aria-hidden="true">
-						<option value="19">Accessories</option><option value="16" selected="selected">Clothing</option><option value="21" selected="selected">Decor</option><option value="18" selected="selected">Hoodies</option><option value="20">Music</option><option value="17">Tshirts</option><option value="15">Uncategorized</option>
-		</select>
-
-
-		 */
-
 		return array_merge( $this->common_allowed(), [
 			'input' => 	[
 				'type' => true,
@@ -35,6 +26,7 @@ class RenderHelpers
 				'multiple' => true,
 				'tabindex' => true,
 				'aria-hidden' => true,
+				'data-placeholder' => true
 			],
 			'option' => 	[
 				'value' => true,
@@ -251,7 +243,8 @@ class RenderHelpers
 		];
 	}
 
-	public function Wp_Kses_Allowed_String(){
+	public function Wp_Kses_Allowed_String()
+	{
 		return array_merge( $this->common_allowed(), array(
 			'address'    => array(),
 			'abbr'       => array(),

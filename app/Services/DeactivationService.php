@@ -19,6 +19,10 @@ class DeactivationService
 
 	public static function deactivate()
 	{
-		// do something
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p><?php echo esc_html__( 'Plugin is deactivated', 'hexcoupon'); ?></p>
+		</div>
+		<?php
 	}
 }

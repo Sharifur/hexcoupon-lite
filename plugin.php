@@ -3,12 +3,18 @@
  * @package hexcoupon
  *
  * Plugin Name: HexCoupon
- * Plugin URI: https://wphex.com/
- * Description: Add coupon functionality in your Woocommerce store.
+ * Plugin URI: https://wordpress.org/plugins/hexcoupon
+ * Description: Extend coupon functionality in your Woocommerce store.
  * Version: 1.0.0
  * Author: WpHex
+ * Requires at least: 5.4
+ * Tested up to: 6.2.2
+ * Requires PHP: 7.1
+ * WC requires at least: 6.0
+ * WC tested up to: 7.8.2
  * Author URI: https://wphex.com/
  * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: hexcoupon
  * Domain Path: /languages
  */
