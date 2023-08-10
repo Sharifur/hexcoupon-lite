@@ -109,7 +109,7 @@ class CouponSingleCustomTab
 	 */
 	public function add_custom_coupon_tab()
 	{
-		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel">';
+		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel payment_and_shipping_method">';
 
 		$selected_payment_methods = get_post_meta( get_the_ID(),'permitted_payment_methods',true );
 
@@ -125,6 +125,8 @@ class CouponSingleCustomTab
 			'placeholder' => __('Apply Payment Methods')
 		] );
 
+		echo '<span class="permitted_payment_methods_tooltip">'.wc_help_tip( esc_html__( 'Select payment methods that you want to apply to the coupon.', 'hexcoupon' ) ).'</span>';
+
 		$selected_shipping_methods = get_post_meta( get_the_ID(),'permitted_shipping_methods',true );
 
 		$output .= FormHelpers::Init( [
@@ -139,7 +141,10 @@ class CouponSingleCustomTab
 			'placeholder' => __('Apply Shipping Methods')
 		] );
 
+		echo '<span class="permitted_shipping_methods_tooltip">'.wc_help_tip( esc_html__( 'Select shipping methods that you want to apply to the coupon.', 'hexcoupon' ) ).'</span>';
+
 		$output .= '</div>';
+
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
 	}

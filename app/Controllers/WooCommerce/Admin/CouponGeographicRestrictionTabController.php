@@ -191,7 +191,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	public function delete_post_meta( $coupon_id )
 	{
 		$apply_geographic_restriction = get_post_meta( $coupon_id, 'apply_geographic_restriction', true );
-		var_dump($apply_geographic_restriction);
+
 		if ( 'restrict_by_shipping_zones'  === $apply_geographic_restriction ) {
 			delete_post_meta( $coupon_id, 'restricted_countries' );
 		} else {

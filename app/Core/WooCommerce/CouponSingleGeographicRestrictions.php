@@ -96,6 +96,7 @@ class CouponSingleGeographicRestrictions {
 		$apply_geographic_restriction = ! empty( $apply_geographic_restriction ) ? $apply_geographic_restriction : '';
 
 		echo '<div id="geographic_restriction_tab" class="panel apply_geographic_restriction">';
+
 		woocommerce_wp_radio(
 			[
 				'id' => 'apply_geographic_restriction',
@@ -107,7 +108,6 @@ class CouponSingleGeographicRestrictions {
 				'value' => $apply_geographic_restriction,
 			]
 		);
-
 
 		$restricted_shipping_zones = get_post_meta( get_the_ID(),'restricted_shipping_zones',true );
 
@@ -124,6 +124,8 @@ class CouponSingleGeographicRestrictions {
 			'class' => 'restricted_shipping_zones',
 			'placeholder' => __('Search for shipping zone')
 		] );
+
+		echo '<span class="restricted_shipping_zones_tooltip">'.wc_help_tip( esc_html__( 'Select zones that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -144,6 +146,8 @@ class CouponSingleGeographicRestrictions {
 			'class' => 'restricted_countries',
 			'placeholder' => __('Search for countries')
 		] );
+
+		echo '<span class="restricted_countries_tooltip">'.wc_help_tip( esc_html__( 'Select countries that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 

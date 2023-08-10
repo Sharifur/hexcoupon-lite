@@ -5,6 +5,7 @@ namespace HexCoupon\App\Core;
 use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponColumTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
+use HexCoupon\App\Controllers\WooCommerce\Admin\CouponSharableUrlTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageRestrictionTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageLimitsTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeographicRestrictionTabController;
@@ -13,6 +14,7 @@ use HexCoupon\App\Core\WooCommerce\CouponCategory;
 use HexCoupon\App\Core\WooCommerce\CouponSingleCustomTab;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeneralTab;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeographicRestrictions;
+use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
 use HexCoupon\App\Core\WooCommerce\CouponDuplicatePost;
@@ -39,18 +41,20 @@ final class Core extends BootManager
 			AdminNoticeManager::class,
 			MyAccount::class,
 			CouponCategory::class,
+			CouponDuplicatePost::class,
+			CouponShortcode::class,
+			CouponColumTabController::class,
+			CouponGeneralTabController::class,
+			CouponUsageRestrictionTabController::class,
+			CouponUsageLimitsTabController::class,
+			CouponGeographicRestrictionTabController::class,
 			CouponSingleCustomTab::class,
 			CouponSingleGeneralTab::class,
 			CouponSingleUsageRestriction::class,
-			CouponColumTabController::class,
-			CouponDuplicatePost::class,
-			CouponShortcode::class,
-			CouponGeneralTabController::class,
-			CouponUsageRestrictionTabController::class,
-			CouponGeographicRestrictionTabController::class,
-			CouponUsageLimitsTabController::class,
-			CouponSingleGeographicRestrictions::class,
 			CouponSingleUsageLimits::class,
+			CouponSingleGeographicRestrictions::class,
+			CouponSingleSharableUrl::class,
+			CouponSharableUrlTabController::class,
 		];
 	}
 }
