@@ -21,7 +21,67 @@ class CouponUsageLimitsTabController extends BaseController {
 	public function register()
 	{
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_usage_limit' ] );
-		add_action( 'save_post', [ $this,'reset_usage_limit' ] );
+		add_action( 'woocommerce_coupon_options_save', [ $this, 'perform_resetting_task_of_usage_limit' ], 10, 2 );
+		add_action( 'coupon_periodic_task_hook', [ $this, 'reset_usage_limit'] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method perform_resetting_task_of_usage_limit
+	 * @param object $coupon
+	 * @param int $post_id
+	 * @return void
+	 * @since 1.0.0
+	 * Register hook that is needed to validate the coupon.
+	 */
+	public function perform_resetting_task_of_usage_limit( $post_id, $coupon )
+	{
+		$reset_usage_limit = get_post_meta( $coupon->get_id(), 'reset_usage_limit', true );
+		$reset_option_value = get_post_meta( $coupon->get_id(), 'reset_option_value', true );
+
+		$days_count = 0; // Initialize $days_count to a default value
+
+		switch ( $reset_option_value ) {
+			case 'annually':
+				$days_count = 365 * DAY_IN_SECONDS;
+				break;
+			case 'monthly':
+				$days_count = 30 * DAY_IN_SECONDS;
+				break;
+			case 'weekly':
+				$days_count = 7 * DAY_IN_SECONDS;
+				break;
+			case 'daily':
+				$days_count = 18000;
+				break;
+		}
+
+		// Check if the reset_usage_limit checkbox is enabled and if days count is set
+		if ( ! empty( $reset_usage_limit ) && 'yes' === $reset_usage_limit && $days_count > 0 ) {
+			// Check if there are any usage limit given
+			if ( $coupon->get_usage_limit() || $coupon->get_usage_limit_per_user() ) {
+				// Create a schedule event and hook that with 'coupon_periodic_task_hook' custom hook
+				wp_schedule_single_event( time() + $days_count, 'coupon_periodic_task_hook', array( $coupon ) );
+			}
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method reset_usage_limit
+	 * @param object $coupon
+	 * @return void
+	 * @since 1.0.0
+	 * Reset the usage limit values.
+	 */
+	public function reset_usage_limit( $coupon )
+	{
+		$coupon->set_usage_limit(null);
+		$coupon->set_usage_limit_per_user(null);
+		$coupon->save();
 	}
 
 	/**
@@ -66,60 +126,19 @@ class CouponUsageLimitsTabController extends BaseController {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method reset_usage_limit
+	 * @method delete_meta_value
 	 * @param int $coupon_id
 	 * @return mixed
 	 * @since 1.0.0
-	 * Save the coupon cart condition.
+	 * Delete the reset_option_value meta value .
 	 */
-	public function reset_usage_limit( $coupon_id )
+	public function delete_meta_value( $coupon_id )
 	{
 		$reset_usage_limit = get_post_meta( $coupon_id, 'reset_usage_limit', true );
-		$reset_option_value = get_post_meta( $coupon_id, 'reset_option_value', true );
 
-		global $days_count;
-
-		switch ( $reset_option_value ) {
-			case 'annually':
-				$days_count = 365;
-				break;
-			case 'monthly':
-				$days_count = 30;
-				break;
-			case 'weekly':
-				$days_count = 7;
-				break;
-			case 'daily':
-				$days_count = 1;
-				break;
+		// Delete the reset_option_value meta value if reset_usage_limit meta values is not set.
+		if ( empty( $reset_usage_limit ) ) {
+			delete_post_meta( $coupon_id, 'reset_option_value' );
 		}
-
-		if ( 'yes' === $reset_usage_limit ) {
-			// Schedule the event to delete the post meta after the desired interval
-//			$interval = $days_count * DAY_IN_SECONDS;
-
-			add_action( 'init', [ $this, 'custom_delete_coupon_meta_function' ] );
-
-			wp_schedule_single_event( time() + 60, 'init', array( $coupon_id ) );
-		}
-
-//		 Hook the function to be executed when the scheduled event runs
-//		add_action( 'init', 'custom_delete_coupon_meta_function' );
-
-//		if ( empty( $reset_usage_limit ) ) {
-//			delete_post_meta( $coupon_id, 'reset_option_value' );
-//			delete_post_meta( $coupon_id, 'usage_limit_per_user' );
-//			delete_post_meta( $coupon_id, 'usage_limit' );
-//		}
-	}
-
-	// Define the function to delete the post meta
-	private function custom_delete_coupon_meta_function($coupon_id) {
-		add_action('save_post','a');
-		function a($coupon_id) {
-			delete_post_meta( $coupon_id, 'usage_limit' );
-			delete_post_meta( $coupon_id, 'usage_limit_per_user' );
-		}
-
 	}
 }

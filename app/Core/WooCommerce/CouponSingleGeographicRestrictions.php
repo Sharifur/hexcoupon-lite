@@ -51,54 +51,14 @@ class CouponSingleGeographicRestrictions {
 	 */
 	private function get_all_shipping_zones() {
 		$shipping_zones = [];
-		$raw_zones = \WC_Shipping_Zones::get_zones();
+		$all_zones = \WC_Shipping_Zones::get_zones();
 
-		foreach ( $raw_zones as $raw_zone ) {
-			$zone_locations = [];
-
-			foreach ( $raw_zone['zone_locations'] as $zone_location ) {
-				$zone_locations[] = [
-					'type' => $zone_location->type,
-					'code' => $zone_location->code,
-//					'area_name' => $zone_location->city_name,
-				];
-			}
-
-
-
-			$shipping_zones[ $zone_locations[0]['code'] ] = $raw_zone['zone_name'];
+		foreach ( $all_zones as $zone ) {
+			$shipping_zones[ $zone['formatted_zone_location'] ] = $zone['zone_name'];
 		}
 
 		return $shipping_zones;
 	}
-
-	private function get_all_shipping_zones_copy() {
-		$shipping_zones = [];
-		$raw_zones = \WC_Shipping_Zones::get_zones();
-
-		foreach ( $raw_zones as $raw_zone ) {
-			$zone_name = $raw_zone['zone_name'];
-			$city_names = []; // Initialize an array to store city names for the current zone
-
-			foreach ( $raw_zone['zone_locations'] as $zone_location ) {
-				if ( 'postcode' !== $zone_location->type ) {
-					$city_names[] = $zone_location->code; // Add city name to the array
-				}
-			}
-
-			if ( !empty($city_names) ) {
-				foreach($city_names as $city_name) {
-					$shipping_zones[ $city_name ] = $zone_name;
-				}
-
-
-
-			}
-		}
-
-		return $shipping_zones;
-	}
-
 
 	/**
 	 * @package hexcoupon
@@ -133,6 +93,7 @@ class CouponSingleGeographicRestrictions {
 		global $post;
 
 		$apply_geographic_restriction = get_post_meta( $post->ID, 'apply_geographic_restriction', true );
+		$apply_geographic_restriction = ! empty( $apply_geographic_restriction ) ? $apply_geographic_restriction : '';
 
 		echo '<div id="geographic_restriction_tab" class="panel apply_geographic_restriction">';
 		woocommerce_wp_radio(
@@ -157,7 +118,7 @@ class CouponSingleGeographicRestrictions {
 			'name' => 'restricted_shipping_zones',
 			'value' => $restricted_shipping_zones,
 			'type' => 'select',
-			'options' => $this->get_all_shipping_zones_copy(), //if the field is select, this param will be here
+			'options' => $this->get_all_shipping_zones(), //if the field is select, this param will be here
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_shipping_zones',
@@ -186,6 +147,6 @@ class CouponSingleGeographicRestrictions {
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
-		echo '</div>';
+		echo '</div></div>';
 	}
 }

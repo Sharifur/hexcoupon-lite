@@ -348,8 +348,6 @@ class CouponGeneralTabController extends BaseController
 				}
 			}
 		}
-
-		return false;
 	}
 
 	/**
@@ -398,6 +396,8 @@ class CouponGeneralTabController extends BaseController
 		if ( $this->apply_to_single_day( $valid, $coupon, 'friday', 'fri' ) ) {
 			return $valid;
 		}
+
+		return false;
 	}
 
 	/**
@@ -420,20 +420,23 @@ class CouponGeneralTabController extends BaseController
 
 		// Apply coupon
 		if ( $apply_coupon_starting_date ) {
-			echo 'coupon starting date is returning '.$apply_coupon_starting_date.'. <br>';
-			if ( 'yes' === $days_hours_of_week )	{
-				if ( $apply_coupon_on_different_days ) {
-					echo 'apply coupon on different days is returning '.$apply_coupon_on_different_days.'. <br>';
+			if ( 'yes' === $days_hours_of_week ) {
+				if ( is_null( $apply_coupon_on_different_days ) || $apply_coupon_on_different_days ) {
+					echo '## apply coupon on different days is returning true because either they are not set or you are on time on different days. <br>';
 					return true;
 				} else {
-					echo 'apply coupon on different days is returning '.$apply_coupon_on_different_days.'. <br>';
+					add_filter('woocommerce_coupon_is_valid',function(){
+
+					});
+					echo '## apply coupon on different days is returning false because different days time is not matching. <br>';
 					return false;
 				}
 			}
 
+			echo '## coupon starting date is returning '.$apply_coupon_starting_date.'. <br>';
 			return true;
 		}
-		echo 'apply coupon on different days is returning false. <br>';
+		echo '## apply coupon on different days is returning false. <br>';
 
 		return false;
 	}

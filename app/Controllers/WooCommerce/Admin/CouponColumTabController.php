@@ -138,13 +138,13 @@ class CouponColumTabController extends BaseController
 		$selectedShippingMethods = $this->apply_selected_shipping_methods_to_coupon( $valid, $coupon );
 
 		if ( ! $selectedPaymentMethod && ! $selectedShippingMethods ) {
-			echo 'there is no payment and shipping method selected. <br>';
-			return true;
+			echo '## coupon is valid coz there is no payment and shipping method selected. <br>';
+			return $valid;
 		}
 
 		if ( $selectedPaymentMethod && $selectedShippingMethods ) {
-			echo 'payment method is returning '.$selectedPaymentMethod.'and shipping method is returning '.$selectedShippingMethods.' . <br>';
-			return true;
+			echo '## coupon is valid coz payment method is returning '.$selectedPaymentMethod.' and shipping method is returning '.$selectedShippingMethods.' . <br>';
+			return $valid;
 		}
 
 		return false;

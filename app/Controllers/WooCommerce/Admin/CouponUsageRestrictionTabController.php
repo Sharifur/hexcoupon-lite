@@ -309,9 +309,6 @@ class CouponUsageRestrictionTabController extends BaseController
 		$apply_cart_condition_on_individual_customer = $this->apply_cart_condition_on_individual_customer( $valid, $coupon );
 
 		if ( is_null( $apply_cart_condition_on_product ) || is_null( $apply_cart_condition_on_categories ) || is_null( $apply_cart_condition_on_customer_grp ) || is_null( $apply_cart_condition_on_individual_customer ) ) {
-
-			echo 'product '.$apply_cart_condition_on_product.', categories '.$apply_cart_condition_on_categories.', customer group '.$apply_cart_condition_on_customer_grp.', individual customer '.$apply_cart_condition_on_individual_customer.' are returning null. <br>';
-
 			if ( $apply_cart_condition_on_product || $apply_cart_condition_on_categories || $apply_cart_condition_on_customer_grp || $apply_cart_condition_on_individual_customer )	{
 
 				echo 'apply_cart_condition_on_product is returning '.$apply_cart_condition_on_product.'<br>';
@@ -323,7 +320,7 @@ class CouponUsageRestrictionTabController extends BaseController
 
 			}
 
-			echo 'cart condition is returning false. <br>';
+			echo '## coupon is valid coz cart condition is returning true because they are not set. <br>';
 
 			return $valid;
 		}
@@ -374,18 +371,17 @@ class CouponUsageRestrictionTabController extends BaseController
 			],
 		];
 
+		// loop through all the meta_keys and get their value
 		foreach ( $meta_keys as $meta_key => $related_meta_keys ) {
 			$meta_value = get_post_meta( $coupon_id, $meta_key, true );
 
+			// if any of the meta_key's value is empty then delete another meta_key's values which are co-related
 			if ( empty( $meta_value ) ) {
 				foreach ( $related_meta_keys as $related_meta_key ) {
 					delete_post_meta( $coupon_id, $related_meta_key );
 				}
 			}
 		}
-
-
 	}
-
 
 }

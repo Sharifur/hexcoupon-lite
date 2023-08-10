@@ -34,7 +34,7 @@ class CouponSingleCustomTab
 	public function add_custom_coupon_tab_content( $tabs )
 	{
 		$tabs['custom_coupon_tab'] = array(
-			'label'    => esc_html__( 'HexCoupon', 'hexcoupon' ),
+			'label'    => esc_html__( 'Payment & shipping method', 'hexcoupon' ),
 			'target'   => 'custom_coupon_tab',
 			'class'    => array( 'show_if_coupon_usage_limits' ),
 		);

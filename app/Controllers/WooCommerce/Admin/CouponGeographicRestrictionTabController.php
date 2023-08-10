@@ -23,6 +23,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		add_action( 'save_post', [ $this, 'save_coupon_all_meta_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
+		add_action( 'save_post', [ $this,'delete_post_meta' ] );
 	}
 
 	/**
@@ -88,6 +89,10 @@ class CouponGeographicRestrictionTabController extends BaseController
 		$apply_geographic_restriction = get_post_meta( $coupon->get_id(), 'apply_geographic_restriction', true );
 		$selected_restricted_shipping_zones = get_post_meta( $coupon->get_id(), 'restricted_shipping_zones', true );
 
+		$all_cities = ! empty( $selected_restricted_shipping_zones ) ? $selected_restricted_shipping_zones : [];
+
+		$all_cities = implode(',',$all_cities);
+
 		global $woocommerce;
 
 		$billing_city = $woocommerce->customer->get_billing_city();
@@ -97,7 +102,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 				return $valid;
 			}
 
-			if ( in_array( $billing_city, $selected_restricted_shipping_zones ) ) {
+			if ( str_contains( $all_cities, $billing_city ) ) {
 				return false;
 			}
 		}
@@ -150,29 +155,47 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
-
-		var_dump($restricted_shipping_zones);
-		echo '<br>';
+		var_dump($restrict_shipping_countries);
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
-				echo 'shipping zone area is returning false because if shipping address is matched with the selected restricted area from coupon single page it will return false.  <br>';
+				echo 'The coupon is not valid. The city from your shipping address is matching with the restricted cities, please select a different city. <br>';
 				return false;
 			}
 		}
 
 		if ( ! is_null( $restrict_shipping_countries ) ) {
 			if ( ! $restrict_shipping_countries ) {
-				echo 'shipping zone country is returning false because if shipping address is matched with the selected restricted country from coupon single page it will return false.  <br>';
+				echo '## The coupon is not valid. The Country from your shipping address is matching with the restricted countries, please select a different country.  <br>';
 				return false;
 			}
 		}
 
 		if ( is_null( $restricted_shipping_zones ) || is_null( $restrict_shipping_countries ) ) {
-			echo 'coupon is valid coz shipping zone and country is returning null <br>';
+			echo '## coupon is valid coz shipping zone and country is returning null <br>';
 			return $valid;
 		}
 
 		return $valid;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method delete_post_meta
+	 * @param int $coupon_id
+	 * @return mixed
+	 * @since 1.0.0
+	 * Delete post meta-data of Geographic restriction tab.
+	 */
+	public function delete_post_meta( $coupon_id )
+	{
+		$apply_geographic_restriction = get_post_meta( $coupon_id, 'apply_geographic_restriction', true );
+		var_dump($apply_geographic_restriction);
+		if ( 'restrict_by_shipping_zones'  === $apply_geographic_restriction ) {
+			delete_post_meta( $coupon_id, 'restricted_countries' );
+		} else {
+			delete_post_meta( $coupon_id, 'restricted_shipping_zones' );
+		}
 	}
 }
