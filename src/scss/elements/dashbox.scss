@@ -1,0 +1,36 @@
+.HxcAppWrapper{
+	margin-top: 30px;
+	.MainContainer{
+		.DashBox {
+			border-radius: 4px;
+			background: rgba(255, 255, 255, 0.90);
+			/* UNTITLED INP SH */
+			box-shadow: 0px 1px 20px 0px rgba(16, 24, 40, 0.05);
+			padding: 20px;
+			.title {
+				color: var(--black, #1D2939);
+				font-feature-settings: 'case' on, 'clig' off, 'liga' off;
+
+				/* 24/32 SMBLD */
+				font-family: var(--hex-heading-font-family);
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 600;
+				line-height: 32px; /* 133.333% */
+				margin: 0;
+			}
+			.para{
+				color: var(--black4, #475467);
+				font-feature-settings: 'case' on, 'clig' off, 'liga' off;
+
+				/* 14/22 RGLR */
+				font-family: var(--hex-heading-font-family);
+				font-size: 12px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 22px; /* 157.143% */
+				margin: 0;
+			}
+		}
+	}
+}

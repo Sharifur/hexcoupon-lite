@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codesvault/howdy-qb",
-            "version": "1.3.1",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodesVault/howdy_qb.git",
-                "reference": "079093b280efc6a290d09e4d6b22905790296248"
+                "reference": "f7bf2cfe830d42879fd323b996b967674d61af80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/079093b280efc6a290d09e4d6b22905790296248",
-                "reference": "079093b280efc6a290d09e4d6b22905790296248",
+                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/f7bf2cfe830d42879fd323b996b967674d61af80",
+                "reference": "f7bf2cfe830d42879fd323b996b967674d61af80",
                 "shasum": ""
             },
             "require": {
@@ -64,22 +64,22 @@
             ],
             "support": {
                 "issues": "https://github.com/CodesVault/howdy_qb/issues",
-                "source": "https://github.com/CodesVault/howdy_qb/tree/1.3.1"
+                "source": "https://github.com/CodesVault/howdy_qb/tree/1.5.3"
             },
-            "time": "2023-05-27T08:54:39+00:00"
+            "time": "2023-08-08T17:27:14+00:00"
         },
         {
             "name": "codesvault/kathamo-framework",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodesVault/kathamo-framework.git",
-                "reference": "3fe49aafb5d7fe3a6f0244a5fed7e88b9c0079d7"
+                "reference": "5e33448f1f10696b80d7a6050fe6366dd1548d8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/kathamo-framework/zipball/3fe49aafb5d7fe3a6f0244a5fed7e88b9c0079d7",
-                "reference": "3fe49aafb5d7fe3a6f0244a5fed7e88b9c0079d7",
+                "url": "https://api.github.com/repos/CodesVault/kathamo-framework/zipball/5e33448f1f10696b80d7a6050fe6366dd1548d8c",
+                "reference": "5e33448f1f10696b80d7a6050fe6366dd1548d8c",
                 "shasum": ""
             },
             "require": {
@@ -108,22 +108,22 @@
             "description": "The core framework for Kathamo.",
             "support": {
                 "issues": "https://github.com/CodesVault/kathamo-framework/issues",
-                "source": "https://github.com/CodesVault/kathamo-framework/tree/1.1.0"
+                "source": "https://github.com/CodesVault/kathamo-framework/tree/1.2.0"
             },
-            "time": "2023-06-15T11:53:48+00:00"
+            "time": "2023-07-26T19:49:55+00:00"
         },
         {
             "name": "codesvault/validator",
-            "version": "1.0.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodesVault/validator.git",
-                "reference": "b79a76356c4c4e7f3e94c290be3d9e4336da17e2"
+                "reference": "f42dc2ba8c45cd62636bd21ae3189327bec61438"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/validator/zipball/b79a76356c4c4e7f3e94c290be3d9e4336da17e2",
-                "reference": "b79a76356c4c4e7f3e94c290be3d9e4336da17e2",
+                "url": "https://api.github.com/repos/CodesVault/validator/zipball/f42dc2ba8c45cd62636bd21ae3189327bec61438",
+                "reference": "f42dc2ba8c45cd62636bd21ae3189327bec61438",
                 "shasum": ""
             },
             "require": {
@@ -162,9 +162,9 @@
             ],
             "support": {
                 "issues": "https://github.com/CodesVault/validator/issues",
-                "source": "https://github.com/CodesVault/validator/tree/1.0.1"
+                "source": "https://github.com/CodesVault/validator/tree/1.1.2"
             },
-            "time": "2023-06-05T08:36:11+00:00"
+            "time": "2023-07-26T12:44:57+00:00"
         }
     ],
     "packages-dev": [
@@ -629,16 +629,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.4.24",
+            "version": "v5.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "8e12706bf9c68a2da633f23bfdc15b4dce5970b3"
+                "reference": "e706c99b4a6f4d9383b52b80dd8c74880501e314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/8e12706bf9c68a2da633f23bfdc15b4dce5970b3",
-                "reference": "8e12706bf9c68a2da633f23bfdc15b4dce5970b3",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e706c99b4a6f4d9383b52b80dd8c74880501e314",
+                "reference": "e706c99b4a6f4d9383b52b80dd8c74880501e314",
                 "shasum": ""
             },
             "require": {
@@ -652,6 +652,7 @@
             "require-dev": {
                 "ext-iconv": "*",
                 "symfony/console": "^4.4|^5.0|^6.0",
+                "symfony/http-kernel": "^4.4|^5.0|^6.0",
                 "symfony/process": "^4.4|^5.0|^6.0",
                 "symfony/uid": "^5.1|^6.0",
                 "twig/twig": "^2.13|^3.0.4"
@@ -697,7 +698,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.4.24"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.4.26"
             },
             "funding": [
                 {
@@ -713,7 +714,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-25T13:05:00+00:00"
+            "time": "2023-07-13T07:32:46+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
