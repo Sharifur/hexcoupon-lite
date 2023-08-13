@@ -20,8 +20,10 @@ class CouponSharableUrlTabController extends BaseController {
 	 */
 	public function register()
 	{
-		add_action( 'save_post', [ $this, 'save_coupon_all_meta_data' ] );
-		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_all_meta_data' ] );
+//		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
+		add_action( 'wp_loaded', [ $this, 'apply_coupon_activation_via_url' ] );
+		add_action( 'save_post', [ $this,'delete_post_meta' ] );
 	}
 
 	/**
@@ -56,35 +58,61 @@ class CouponSharableUrlTabController extends BaseController {
 	 * @param int $post_id post ID of Coupon.
 	 * @return mixed
 	 * @since 1.0.0
-	 * Save the coupon user roles custom meta-data when the coupon is updated.
+	 * Save the coupon sharable url custom meta-data when the coupon is updated.
 	 */
-	public function save_coupon_all_meta_data( $post_id )
+	public function save_coupon_all_meta_data( $coupon_id )
 	{
-		// Save coupon permitted payment method meta field data
-		$this->save_coupon_meta_data( 'apply_automatic_coupon_by_url', 'string', $post_id );
+		$meta_data_list = [
+			[ 'apply_automatic_coupon_by_url', 'string' ],
+			[ 'sharable_url', 'string' ],
+			[ 'message_for_coupon_discount_url', 'string' ],
+			[ 'apply_redirect_sharable_link', 'string' ],
+			[ 'redirect_link', 'string' ],
+		];
 
-		// Save coupon permitted payment method meta field data
-		$this->save_coupon_meta_data( 'sharable_url', 'string', $post_id );
-
-		$this->save_coupon_meta_data( 'message_for_coupon_discount_url', 'string', $post_id );
-
-		$this->save_coupon_meta_data( 'apply_redirect_sharable_link', 'string', $post_id );
-
-		$this->save_coupon_meta_data( 'redirect_link', 'string', $post_id );
+		foreach ( $meta_data_list as $meta_data ) {
+			$this->save_coupon_meta_data( $meta_data[0], $meta_data[1], $coupon_id );
+		}
 	}
 
 	/**
 	 * @package hexcoupon
-	 * @author Wphex
-	 * @method apply_coupon_meta_data
-	 * @param bool $valid
-	 * @param object $coupon
+	 * @author WpHex
+	 * @method apply_coupon_activation_via_url
+	 * @return mixed
 	 * @since 1.0.0
-	 * @return bool
-	 * Apply coupon based on all criteria.
+	 * Apply coupon automatically after visiting a custom url.
 	 */
-	public function apply_coupon_meta_data( $valid, $coupon )
-	{
+	public function apply_coupon_activation_via_url() {
+		if ( isset( $_GET['coupon_code'] ) && 'c' === $_GET['coupon_code'] ) {
+			$coupon_code = $_GET['coupon_code']; // Replace 'c' with your actual coupon code
+			$coupon = new \WC_Coupon( $coupon_code );
+			$redirect_link = get_post_meta( $coupon->get_id(), 'redirect_link', true );
 
+			if ( $coupon->is_valid() ) {
+				WC()->cart->apply_coupon( $coupon_code );
+				wp_safe_redirect( $redirect_link );
+				exit();
+			}
+		}
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method delete_post_meta
+	 * @param int $coupon_id
+	 * @return mixed
+	 * @since 1.0.0
+	 * Delete post meta-data of Sharable url coupon tab.
+	 */
+	public function delete_post_meta( $coupon_id )
+	{
+		$apply_redirect_sharable_link = get_post_meta( $coupon_id, 'apply_redirect_sharable_link', true );
+
+		if ( 'redirect_back_to_origin'  === $apply_redirect_sharable_link ) {
+			delete_post_meta( $coupon_id, 'redirect_link' );
+		}
+	}
+
 }

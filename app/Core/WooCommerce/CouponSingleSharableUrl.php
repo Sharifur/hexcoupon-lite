@@ -67,9 +67,16 @@ class CouponSingleSharableUrl {
 			]
 		);
 
+//		$coupon_id = isset( $_GET['coupon_id'] ) ? intval( $_GET['coupon_id'] ) : 0;
+//		$coupon_code = get_the_title($coupon_id);
+
 		$sharable_url = get_post_meta( $post->ID, 'sharable_url', true );
 
-		$sharable_url = 'http://localhost/hexcoupon/'.$sharable_url;
+		if ( ! empty( $sharable_url ) && strpos( $sharable_url, 'http' ) !== 0 ) {
+			$sharable_url_new = get_site_url() . '/' . $sharable_url;
+		} else {
+			$sharable_url_new = $sharable_url;
+		}
 
 		woocommerce_wp_text_input(
 			[
@@ -78,7 +85,7 @@ class CouponSingleSharableUrl {
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set the coupon sharable url link for customer.', 'hexcoupon' ),
 				'type' => 'text',
-				'value' => $sharable_url,
+				'value' => $sharable_url_new,
 				'class' => 'sharable-url form-control',
 				'placeholder' => esc_html( 'coupon/20%discount' ),
 				'data_type' => 'url',
@@ -86,7 +93,7 @@ class CouponSingleSharableUrl {
 		);
 		?>
 
-		<p class="output-url-text"><span><?php echo esc_html( $sharable_url ); ?></span></p>
+		<p class="output-url-text"><span><?php echo esc_url ( $sharable_url_new ); ?></span></p>
 		<p class="copy-sharable-url"><?php echo esc_html__( 'Copy URL', 'hexcoupon' ); ?></p>
 
 		<?php

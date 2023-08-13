@@ -278,7 +278,7 @@ p.output-url-text {
 	}
 }
 
-/*Geographic restrictions*/
+/* Geographic restrictions */
 .restricted_shipping_zones label,
 .restricted_countries label {
 	margin: 0 20px 0 12px;
@@ -291,6 +291,12 @@ p.output-url-text {
 
 .restricted_countries .select2-container:last-child {
 	margin-left: 34px;
+}
+
+/* Sharable url */
+#sharable_url_coupon_tab .apply_automatic_coupon_by_url_field {
+	padding: 0 !important;
+	margin-left: 12px !important;
 }
 
 
