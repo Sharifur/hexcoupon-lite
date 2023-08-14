@@ -1,0 +1,10 @@
+.hex-grid-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* This creates 4 columns of equal width */
+	gap: 16px; /* This is the space between each grid item */
+	/* Additional styling like padding or margin if needed */
+	.grid-item {
+		/* Styles specific to each grid item */
+	}
+}
+
