@@ -299,4 +299,22 @@ p.output-url-text {
 	margin-left: 12px !important;
 }
 
+/* General Tab */
+.customer_purchases li,
+.customer_gets_as_free li,
+.bogo_use_limit li {
+	width: 50% !important;
+	float: left;
+	font-size: 13px;
+}
+
+.add_a_specific_product_to_purchase span.select2-container,
+.add_a_specific_product_for_free span.select2-container {
+	width: 50% !important;
+}
+
+.bogo_use_limit {
+	border-bottom: none !important;
+}
+
 

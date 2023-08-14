@@ -34,6 +34,159 @@ class CouponSingleGeneralTab
 	{
 		global $post;
 
+		// Adding coupon type select input field
+		woocommerce_wp_select( [
+			'class' => 'select short',
+			'label' => 'Coupon type',
+			'id' => 'coupon_type',
+			'options' => [
+				'percent' => 'Percentage discount',
+				'fixed_cart' => 'Fixed cart discount',
+				'fixed_product' => 'Fixed product discount',
+				'buy_x_get_x_bogo' => 'Buy X Get X Product (BOGO)',
+
+			]
+		] );
+
+		$customer_purchases = get_post_meta( $post->ID, 'customer_purchases', true );
+		$customer_purchases = ! empty( $customer_purchases ) ? $customer_purchases : '';
+
+		// Adding customer purchases radio buttons field
+		echo '<div class="options_group customer_purchases">';
+
+		woocommerce_wp_radio(
+			[
+				'id' => 'customer_purchases',
+				'label' => 'Customer purchases',
+				'options' => [
+					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
+					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
+					'product_categories' => esc_html__( 'Product categories', 'hexcoupon' ),
+					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
+				],
+				'value' => $customer_purchases,
+			]
+		);
+
+		echo '</div>';
+
+		// Adding a select2 field to add a specific product
+		$add_a_specific_product = get_post_meta( get_the_ID(),'add_a_specific_product_to_purchase',true );
+
+		$output ='<div class="add_a_specific_product_to_purchase">';
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
+			'name' => 'add_a_specific_product',
+			'value' => $add_a_specific_product,
+			'type' => 'select',
+			'options' => ['test1','test2'], //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+			'class' => 'add_a_specific_product_to_purchase',
+			'placeholder' => __('Search for a specific product')
+		] );
+
+		echo '<span class="add_a_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hexcoupon' ) ).'</span>';
+
+		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
+
+		echo '</div>';
+
+		// Adding customer gets as free radio buttons
+		$customer_gets_as_free = get_post_meta( $post->ID, 'customer_gets_as_free', true );
+		$customer_gets_as_free = ! empty( $customer_gets_as_free ) ? $customer_gets_as_free : '';
+
+		echo '<div class="options_group customer_gets_as_free">';
+
+		woocommerce_wp_radio(
+			[
+				'id' => 'customer_gets_as_free',
+				'label' => 'Customer gets as free',
+				'options' => [
+					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
+					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
+					'product_categories' => esc_html__( 'Product categories', 'hexcoupon' ),
+					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
+					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hexcoupon' ),
+				],
+				'value' => $customer_gets_as_free,
+			]
+		);
+
+		echo '</div>';
+
+		// Adding a select2 field to add a specific product
+		$add_a_specific_product_for_free = get_post_meta( get_the_ID(),'add_a_specific_product_for_free',true );
+
+		$output ='<div class="add_a_specific_product_for_free">';
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
+			'name' => 'add_a_specific_product_for_free',
+			'value' => $add_a_specific_product_for_free,
+			'type' => 'select',
+			'options' => ['test1','test2'], //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+			'class' => 'add_a_specific_product_for_free',
+			'placeholder' => __('Search for a specific product')
+		] );
+
+		echo '<span class="add_a_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
+
+		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
+
+		echo '</div>';
+
+		// Adding customer bogo use limit radio buttons
+		$bogo_use_limit = get_post_meta( $post->ID, 'bogo_use_limit', true );
+		$bogo_use_limit = ! empty( $bogo_use_limit ) ? $bogo_use_limit : '';
+
+		echo '<div class="options_group bogo_use_limit">';
+
+		woocommerce_wp_radio(
+			[
+				'id' => 'bogo_use_limit',
+				'label' => esc_html__( 'Use limit', 'hexcoupon' ),
+				'options' => [
+					'can_be_used_only_once' => esc_html__( 'Can be used only once', 'hexcoupon' ),
+					'can_be_used_multiple_times' => esc_html__( 'Can be used multiple times', 'hexcoupon' ),
+				],
+				'value' => $bogo_use_limit,
+			]
+		);
+
+		echo '</div>';
+
+		$automatically_add_bogo_deal_product = get_post_meta( $post->ID, 'automatically_add_bogo_deal_product', true );
+		$automatically_add_bogo_deal_product = ! empty( $automatically_add_bogo_deal_product ) ? $automatically_add_bogo_deal_product : '';
+
+		echo '<div class="options_group bogo_deal_checkboxes">';
+
+		woocommerce_wp_checkbox(
+			[
+				'id' => 'automatically_add_bogo_deal_product',
+				'label' => esc_html__( 'Automatically add product', 'hexcoupon' ),
+				'description' => esc_html__( 'Check this box to automatically add the BOGO deals product to the customers cart', 'hexcoupon' ),
+				'value' => $automatically_add_bogo_deal_product,
+			]
+		);
+
+		$display_bogo_button = get_post_meta( $post->ID, 'display_bogo_button', true );
+		$display_bogo_button = ! empty( $display_bogo_button ) ? $display_bogo_button : '';
+
+		woocommerce_wp_checkbox(
+			[
+				'id' => 'display_bogo_button',
+				'label' => esc_html__( 'Display button', 'hexcoupon' ),
+				'description' => esc_html__( 'Display a button in the shopping cart to show(BOGO) deals products that are either manually removed by customers or not automatically added.', 'hexcoupon' ),
+				'value' => $display_bogo_button,
+			]
+		);
+
+		echo '</div>';
+
 		woocommerce_wp_textarea_input(
 			[
 				'id' => 'message_for_coupon_expiry_date',

@@ -11,7 +11,7 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageLimitsTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeographicRestrictionTabController;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\WooCommerce\CouponCategory;
-use HexCoupon\App\Core\WooCommerce\CouponSingleCustomTab;
+use HexCoupon\App\Core\WooCommerce\CouponPaymentandShipping;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeneralTab;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeographicRestrictions;
 use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
@@ -48,7 +48,7 @@ final class Core extends BootManager
 			CouponUsageRestrictionTabController::class,
 			CouponUsageLimitsTabController::class,
 			CouponGeographicRestrictionTabController::class,
-			CouponSingleCustomTab::class,
+			CouponPaymentandShipping::class,
 			CouponSingleGeneralTab::class,
 			CouponSingleUsageRestriction::class,
 			CouponSingleUsageLimits::class,

@@ -5,7 +5,7 @@ use HexCoupon\App\Core\Helpers\FormHelpers;
 use HexCoupon\App\Core\Helpers\RenderHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 
-class CouponSingleCustomTab
+class CouponPaymentandShipping
 {
 	use singleton;
 

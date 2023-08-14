@@ -67,25 +67,20 @@ class CouponSingleSharableUrl {
 			]
 		);
 
-//		$coupon_id = isset( $_GET['coupon_id'] ) ? intval( $_GET['coupon_id'] ) : 0;
-//		$coupon_code = get_the_title($coupon_id);
+		$coupon_id = isset( $_GET['coupon_id'] ) ? intval( $_GET['coupon_id'] ) : 0;
 
-		$sharable_url = get_post_meta( $post->ID, 'sharable_url', true );
+		$coupon_code = get_the_title( $coupon_id );
 
-		if ( ! empty( $sharable_url ) && strpos( $sharable_url, 'http' ) !== 0 ) {
-			$sharable_url_new = get_site_url() . '/' . $sharable_url;
-		} else {
-			$sharable_url_new = $sharable_url;
-		}
+		$sharable_url = get_site_url() . '/' . '?coupon_code=' . $coupon_code;
 
 		woocommerce_wp_text_input(
 			[
 				'id' => 'sharable_url',
 				'label' => esc_html__( 'Edit URL link', 'hexcoupon' ),
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set the coupon sharable url link for customer.', 'hexcoupon' ),
+				'description' => esc_html__( 'Please update the page to implement the url and afterwards copy the url and give to the users.', 'hexcoupon' ),
 				'type' => 'text',
-				'value' => $sharable_url_new,
+				'value' => $sharable_url,
 				'class' => 'sharable-url form-control',
 				'placeholder' => esc_html( 'coupon/20%discount' ),
 				'data_type' => 'url',
@@ -93,7 +88,7 @@ class CouponSingleSharableUrl {
 		);
 		?>
 
-		<p class="output-url-text"><span><?php echo esc_url ( $sharable_url_new ); ?></span></p>
+		<p class="output-url-text"><span><?php echo esc_url ( $sharable_url ); ?></span></p>
 		<p class="copy-sharable-url"><?php echo esc_html__( 'Copy URL', 'hexcoupon' ); ?></p>
 
 		<?php
@@ -133,7 +128,7 @@ class CouponSingleSharableUrl {
 				'id' => 'redirect_link',
 				'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set the coupon redirect url link.', 'hexcoupon' ),
+				'description' => esc_html__( 'Set the coupon redirect url link. E.g: http://yourwebsite.com/cart or http://yourwebsite.com/checkout', 'hexcoupon' ),
 				'type' => 'text',
 				'value' => $redirect_link,
 				'class' => 'redirect_link form-control',

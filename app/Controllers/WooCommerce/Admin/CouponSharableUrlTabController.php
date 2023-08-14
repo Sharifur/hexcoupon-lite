@@ -84,15 +84,38 @@ class CouponSharableUrlTabController extends BaseController {
 	 * Apply coupon automatically after visiting a custom url.
 	 */
 	public function apply_coupon_activation_via_url() {
-		if ( isset( $_GET['coupon_code'] ) && 'c' === $_GET['coupon_code'] ) {
+		if ( isset( $_GET['coupon_code'] ) ) {
 			$coupon_code = $_GET['coupon_code']; // Replace 'c' with your actual coupon code
 			$coupon = new \WC_Coupon( $coupon_code );
+
 			$redirect_link = get_post_meta( $coupon->get_id(), 'redirect_link', true );
 
-			if ( $coupon->is_valid() ) {
-				WC()->cart->apply_coupon( $coupon_code );
-				wp_safe_redirect( $redirect_link );
-				exit();
+			$apply_redirect_sharable_link = get_post_meta( $coupon->get_id(), 'apply_redirect_sharable_link', true );
+
+			if ( 'redirect_back_to_origin' === $apply_redirect_sharable_link ) {
+				// Get the referring URL
+				$redirect_link = wp_get_referer();
+
+				// If there's no referring URL or, it's the current page, redirect to the home page
+				if (!$redirect_link || $redirect_link === get_permalink()) {
+					$redirect_link = home_url();
+				}
+			}
+
+			// Check is the coupon valid or not
+			$discounts = new \WC_Discounts( WC()->cart );
+			$response = $discounts->is_coupon_valid( $coupon );
+
+			// Check if the given url has the right coupon code
+			$sharable_url = get_post_meta( $coupon->get_id(), 'sharable_url', true );
+			$coupon_code_search = str_contains( $sharable_url, 'coupon_code=' . $coupon_code );
+
+			if ( $coupon_code_search ) {
+				if ( $response ) {
+					WC()->cart->apply_coupon( $coupon_code );
+					wp_safe_redirect( $redirect_link );
+					exit();
+				}
 			}
 		}
 	}
