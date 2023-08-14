@@ -45,6 +45,37 @@ class AssetsManager
 			$this->version,
 			true
 		);
+
+		wp_enqueue_script(
+			Hxc_prefix( 'main' ),
+			Hxc_url( "/dist/assets/index.js" ),
+
+			['jquery','wp-element'],
+			$this->version,
+			true
+		);
+		wp_enqueue_style(
+			Hxc_prefix( 'admin' ),
+			Hxc_asset_url( "/dist/admin/css/admin.css" ),
+			[],
+			$this->version,
+			"all"
+		);
+
+		//load css only on the plugin page
+
+		$screen = get_current_screen();
+		if ($screen->base === "toplevel_page_hexcoupon-page"){
+			wp_enqueue_style(
+				Hxc_prefix( 'main' ),
+				Hxc_url( "/dist/assets/index.css" ),
+				[],
+				$this->version,
+				"all"
+			);
+		}
+
+		 wp_set_script_translations( 'main', 'hexcoupon-lite', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 
 	public function public_scripts()

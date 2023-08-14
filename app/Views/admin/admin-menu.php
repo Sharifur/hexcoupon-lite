@@ -1,4 +1,4 @@
-<h1 class="kf-title kf-text-3xl kf-text-green-800"><?php echo esc_html( $plugin_name ); ?></h1>
+<div id="vite-react-sample"></div>
 <p>
 	<?php echo esc_html( $developed ); ?>
 	<a class="kf-text-blue-700" class="" href="<?php echo esc_url( $author_link ); ?>">
