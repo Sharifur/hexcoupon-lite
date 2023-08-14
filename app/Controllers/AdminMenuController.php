@@ -8,6 +8,7 @@ use HexCoupon\App\Services\AdminMenuService;
 use HexCoupon\App\Services\AllCouponsMeuService;
 use HexCoupon\App\Services\CouponCategoryMenuService;
 use Kathamo\Framework\Lib\Http\Request;
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 class AdminMenuController extends BaseController
 {
@@ -17,58 +18,60 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method register
-	 * @return void
+	 * @return mixed
 	 * @since 1.0.0
 	 * Register all hooks for adding menus in the dashboard area.
 	 */
 	public function register()
 	{
-		add_action( 'admin_menu', [ $this, 'add_hexcoupon_menu' ] );
-		add_action( 'admin_menu', [ $this, 'add_all_coupon_submenu' ] );
-		add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
-		add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
+		add_action( 'plugins_loaded', [ $this, 'show_hexcoupon_plugin_menu' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method show_hexcoupon_plugin_menu
+	 * @return mixed
+	 * @since 1.0.0
+	 * Checks whether 'Woocommerce' plugin is active or not and based on that the 'Hexcoupon' menu is then displayed.
+	 */
+	public function show_hexcoupon_plugin_menu()
+	{
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+			add_action( 'admin_menu', [ $this, 'add_hexcoupon_menu' ] );
+			add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
+			add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
+		}
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_hexcoupon_menu
-	 * @return string
+	 * @return mixed
 	 * @since 1.0.0
 	 * Add a menu named 'HexCoupon' in the admin dashboard area.
 	 */
 	public function add_hexcoupon_menu()
 	{
 		add_menu_page(
-			__( 'HexCoupon', 'hexcoupon' ),
-			__( 'HexCoupon', 'hexcoupon' ),
+			esc_html__( 'HexCoupon', 'hexcoupon' ),
+			esc_html__( 'HexCoupon', 'hexcoupon' ),
 			'manage_options',
 			'hexcoupon-page',
-			[ $this, 'render_admin_menu' ],
+			[ $this, 'render_all_coupons_submenu' ],
 			'dashicons-admin-settings',
 			40
 		);
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method add_all_coupon_submenu
-	 * @return string
-	 * @since 1.0.0
-	 * Add a sub-menu named 'All Coupons' in the admin dashboard area under the menu 'HexCoupon'.
-	 */
-	public function add_all_coupon_submenu()
-	{
-
-		//
+		// duplicate of menu page to create a different title for the first submenu which is by default a duplicate of the main menu
 		add_submenu_page(
-			'hexcoupon-page',
-			__( 'All Coupons', 'hexcoupon' ),
-			__( 'All Coupons', 'hexcoupon' ),
+			'hexcoupon-page', // slug of the menu which will be used for this submenu
+			esc_html__( 'All Coupons', 'hexcoupon' ),
+			esc_html__( 'All Coupons', 'hexcoupon' ),
 			'manage_options',
-			'all_coupons',
-			[ $this, 'render_all_coupons_submenu' ],
+			'hexcoupon-page' // slug of the menu page file
 		);
 	}
 
@@ -84,8 +87,8 @@ class AdminMenuController extends BaseController
 	{
 		add_submenu_page(
 			'hexcoupon-page',
-			__( 'Add Coupon', 'hexcoupon' ),
-			__( 'Add Coupon', 'hexcoupon' ),
+			esc_html__( 'Add Coupon', 'hexcoupon' ),
+			esc_html__( 'Add Coupon', 'hexcoupon' ),
 			'manage_options',
 			'add_new_coupon',
 			[ $this, 'render_addnew_coupon_submenu' ],
@@ -104,36 +107,12 @@ class AdminMenuController extends BaseController
 	{
 		add_submenu_page(
 			'hexcoupon-page',
-			__( 'Coupon Category', 'hexcoupon' ),
-			__( 'Coupon Category', 'hexcoupon' ),
+			esc_html__( 'Coupon Categories', 'hexcoupon' ),
+			esc_html__( 'Coupon Categories', 'hexcoupon' ),
 			'manage_options',
 			'coupon_category',
 			[ $this, 'render_coupon_category_submenu' ],
 		);
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method render_admin_menu
-	 * @return string
-	 * @since 1.0.0
-	 * Rednders the 'HexCoupon' menu page content.
-	 */
-	public function render_admin_menu()
-	{
-		// $this->middleware( 'auth' );
-
-		// $validate = $this->validate( [
-		// 	'page' => 'stringOnly',
-		// ] );
-
-		// $res = Request::get( 'https://jsonplaceholder.typicode.com/posts/1' );
-		// dump($validate->getData(), $res->getBody(), 'Response from jsonplaceholder');
-
-		$menu_data = AdminMenuService::getInstance();
-		$data      = $menu_data->getData();
-		$this->render( '/admin/admin-menu.php', $data );
 	}
 
 	/**

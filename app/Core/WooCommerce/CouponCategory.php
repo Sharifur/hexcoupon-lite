@@ -31,10 +31,10 @@ class CouponCategory
 	public function add_taxonomy_to_coupon()
 	{
 		register_taxonomy(
-			__( 'shop_coupon_taxonomy' ),
+			'shop_coupon_taxonomy',
 			'shop_coupon',
 			[
-				'label' => __( 'Coupon Taxonomy' ),
+				'label' => esc_html__( 'Coupon Taxonomy' ),
 				'rewrite' => [ 'slug' => 'coupon_taxonomy' ],
 				'hierarchical' => true,
 			],
