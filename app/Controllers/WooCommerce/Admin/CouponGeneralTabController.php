@@ -96,26 +96,30 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function save_coupon_on_different_days( $coupon_id )
 	{
-		// Save coupon applicability on saturday.
-		$this->save_meta_data( 'coupon_apply_on_saturday', 'string', $coupon_id );
+		$meta_fields_data = [
+			[ 'coupon_apply_on_saturday', 'string' ],
+			[ 'coupon_apply_on_sunday', 'string' ],
+			[ 'coupon_apply_on_monday', 'string' ],
+			[ 'coupon_apply_on_tuesday', 'string' ],
+			[ 'coupon_apply_on_wednesday', 'string' ],
+			[ 'coupon_apply_on_thursday', 'string' ],
+			[ 'coupon_apply_on_friday', 'string' ],
+			[ 'discount_type', 'string' ],
+			[ 'customer_purchases', 'string' ],
+			[ 'add_a_specific_product', 'string' ],
+			[ 'add_specific_category', 'string' ],
+			[ 'customer_gets_as_free', 'string' ],
+			[ 'add_a_specific_product_for_free', 'string' ],
+			[ 'bogo_use_limit', 'string' ],
+			[ 'automatically_add_bogo_deal_product', 'string' ],
+			[ 'display_bogo_button', 'string' ],
+		];
 
-		// Save coupon applicability on sunday.
-		$this->save_meta_data( 'coupon_apply_on_sunday', 'string', $coupon_id );
-
-		// Save coupon applicability on monday.
-		$this->save_meta_data( 'coupon_apply_on_monday', 'string', $coupon_id );
-
-		// Save coupon applicability on tuesday.
-		$this->save_meta_data( 'coupon_apply_on_tuesday', 'string', $coupon_id );
-
-		// Save coupon applicability on wednesday.
-		$this->save_meta_data( 'coupon_apply_on_wednesday', 'string', $coupon_id );
-
-		// Save coupon applicability on thursday.
-		$this->save_meta_data( 'coupon_apply_on_thursday', 'string', $coupon_id );
-
-		// Save coupon applicability on friday.
-		$this->save_meta_data( 'coupon_apply_on_friday', 'string', $coupon_id );
+		foreach ( $meta_fields_data as $meta_field_data ) {
+			if ( ! empty( $meta_field_data[0] ) && ! empty( $meta_field_data[1] ) ) {
+				$this->save_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id );
+			}
+		}
 	}
 
 	/**
@@ -129,47 +133,28 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function save_coupon_start_expiry_time( $coupon_id )
 	{
-		// Save coupon start time on saturday
-		$this->save_meta_data( 'sat_coupon_start_time', 'string', $coupon_id );
+		$meta_fields_data = [
+			[ 'sat_coupon_start_time', 'string' ],
+			[ 'sat_coupon_expiry_time', 'string' ],
+			[ 'sun_coupon_start_time', 'string' ],
+			[ 'sun_coupon_expiry_time', 'string' ],
+			[ 'mon_coupon_start_time', 'string' ],
+			[ 'mon_coupon_expiry_time', 'string' ],
+			[ 'tue_coupon_start_time', 'string' ],
+			[ 'tue_coupon_expiry_time', 'string' ],
+			[ 'wed_coupon_start_time', 'string' ],
+			[ 'wed_coupon_expiry_time', 'string' ],
+			[ 'thu_coupon_start_time', 'string' ],
+			[ 'thu_coupon_expiry_time', 'string' ],
+			[ 'fri_coupon_start_time', 'string' ],
+			[ 'fri_coupon_expiry_time', 'string' ],
+		];
 
-		// Save coupon expiry time on saturday
-		$this->save_meta_data( 'sat_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon start time on sunday
-		$this->save_meta_data( 'sun_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on sunday
-		$this->save_meta_data( 'sun_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon start time on monday
-		$this->save_meta_data( 'mon_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on monday
-		$this->save_meta_data( 'mon_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon start time on tuesday
-		$this->save_meta_data( 'tue_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on tuesday
-		$this->save_meta_data( 'tue_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon start time on wednesday
-		$this->save_meta_data( 'wed_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on wednesday
-		$this->save_meta_data( 'wed_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon start time on thursday
-		$this->save_meta_data( 'thu_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on thursday
-		$this->save_meta_data( 'thu_coupon_expiry_time', 'string', $coupon_id );
-
-		// Save coupon start time on friday
-		$this->save_meta_data( 'fri_coupon_start_time', 'string', $coupon_id );
-
-		// Save coupon expiry time on friday
-		$this->save_meta_data( 'fri_coupon_expiry_time', 'string', $coupon_id );
+		foreach ( $meta_fields_data as $meta_field_data ) {
+			if ( ! empty( $meta_field_data[0] ) && ! empty( $meta_field_data[1] ) ) {
+				$this->save_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id );
+			}
+		}
 	}
 
 	/**
@@ -183,47 +168,28 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function save_coupon_dynamic_start_expiry_time( $coupon_id )
 	{
-		// saturday start time
-		$this->save_dynamic_meta_data( 'saturday', 'sat_coupon_start_time_', 'string', $coupon_id );
+		$meta_fields_data = [
+			[ 'saturday', 'sat_coupon_start_time_', 'string' ],
+			[ 'saturday', 'sat_coupon_expiry_time_', 'string' ],
+			[ 'sunday', 'sun_coupon_start_time_', 'string' ],
+			[ 'sunday', 'sun_coupon_expiry_time_', 'string' ],
+			[ 'monday', 'mon_coupon_start_time_', 'string' ],
+			[ 'monday', 'mon_coupon_expiry_time_', 'string' ],
+			[ 'tuesday', 'tue_coupon_start_time_', 'string' ],
+			[ 'tuesday', 'tue_coupon_expiry_time_', 'string' ],
+			[ 'wednesday', 'wed_coupon_start_time_', 'string' ],
+			[ 'wednesday', 'wed_coupon_start_time_', 'string' ],
+			[ 'thursday', 'thu_coupon_start_time_', 'string' ],
+			[ 'thursday', 'thu_coupon_expiry_time_', 'string' ],
+			[ 'friday', 'fri_coupon_start_time_', 'string' ],
+			[ 'friday', 'fri_coupon_expiry_time_', 'string' ],
+		];
 
-		// saturday expiry time
-		$this->save_dynamic_meta_data( 'saturday', 'sat_coupon_expiry_time_', 'string', $coupon_id );
-
-		// sunday start time
-		$this->save_dynamic_meta_data( 'sunday', 'sun_coupon_start_time_', 'string', $coupon_id );
-
-		// sunday expiry time
-		$this->save_dynamic_meta_data( 'sunday', 'sun_coupon_expiry_time_', 'string', $coupon_id );
-
-		// monday start time
-		$this->save_dynamic_meta_data( 'monday', 'mon_coupon_start_time_', 'string', $coupon_id );
-
-		// monday expiry time
-		$this->save_dynamic_meta_data( 'monday', 'mon_coupon_expiry_time_', 'string', $coupon_id );
-
-		// tuesday start time
-		$this->save_dynamic_meta_data( 'tuesday', 'tue_coupon_start_time_', 'string', $coupon_id );
-
-		// tuesday expiry time
-		$this->save_dynamic_meta_data( 'tuesday', 'tue_coupon_expiry_time_', 'string', $coupon_id );
-
-		// wednesday start time
-		$this->save_dynamic_meta_data( 'wednesday', 'wed_coupon_start_time_', 'string', $coupon_id );
-
-		// wednesday expiry time
-		$this->save_dynamic_meta_data( 'wednesday', 'wed_coupon_expiry_time_', 'string', $coupon_id );
-
-		// thursday start time
-		$this->save_dynamic_meta_data( 'thursday', 'thu_coupon_start_time_', 'string', $coupon_id );
-
-		// thursday expiry time
-		$this->save_dynamic_meta_data( 'thursday', 'thu_coupon_expiry_time_', 'string', $coupon_id );
-
-		// friday start time
-		$this->save_dynamic_meta_data( 'friday', 'fri_coupon_start_time_', 'string', $coupon_id );
-
-		// friday expiry time
-		$this->save_dynamic_meta_data( 'friday', 'fri_coupon_expiry_time_', 'string', $coupon_id );
+		foreach ( $meta_fields_data as $meta_field_data ) {
+			if ( ! empty( $meta_field_data[0] ) && ! empty( $meta_field_data[1] ) && ! empty( $meta_field_data[2] ) ) {
+				$this->save_dynamic_meta_data( $meta_field_data[0], $meta_field_data[1], $meta_field_data[2], $coupon_id );
+			}
+		}
 	}
 
 	/**
@@ -237,17 +203,18 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function save_coupon_general_tab_meta_field_data( $coupon_id )
 	{
-		// Save coupon expiry date message.
-		$this->save_meta_data( 'message_for_coupon_expiry_date', 'string', $coupon_id );
+		$meta_fields_data = [
+			[ 'message_for_coupon_expiry_date', 'string' ],
+			[ 'coupon_starting_date', 'string' ],
+			[ 'message_for_coupon_starting_date', 'string' ],
+			[ 'apply_days_hours_of_week', 'string' ],
+		];
 
-		// Save coupon starting date field.
-		$this->save_meta_data( 'coupon_starting_date', 'string', $coupon_id );
-
-		// Save coupon starting date message field.
-		$this->save_meta_data( 'message_for_coupon_starting_date', 'string', $coupon_id );
-
-		// Save coupon days and hours of week field.
-		$this->save_meta_data( 'apply_days_hours_of_week', 'string', $coupon_id );
+		foreach ( $meta_fields_data as $meta_field_data ) {
+			if ( ! empty( $meta_field_data[0] ) && ! empty( $meta_field_data[1] ) ) {
+				$this->save_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id );
+			}
+		}
 
 		// Save the coupon days and hours option applicability on different days
 		$this->save_coupon_on_different_days( $coupon_id );

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codesvault/howdy-qb",
-            "version": "1.5.3",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodesVault/howdy_qb.git",
-                "reference": "f7bf2cfe830d42879fd323b996b967674d61af80"
+                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/f7bf2cfe830d42879fd323b996b967674d61af80",
-                "reference": "f7bf2cfe830d42879fd323b996b967674d61af80",
+                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/dce09fa9259ffd2d090b42efed609dc672707bf2",
+                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2",
                 "shasum": ""
             },
             "require": {
@@ -64,9 +64,9 @@
             ],
             "support": {
                 "issues": "https://github.com/CodesVault/howdy_qb/issues",
-                "source": "https://github.com/CodesVault/howdy_qb/tree/1.5.3"
+                "source": "https://github.com/CodesVault/howdy_qb/tree/1.5.4"
             },
-            "time": "2023-08-08T17:27:14+00:00"
+            "time": "2023-08-12T06:26:58+00:00"
         },
         {
             "name": "codesvault/kathamo-framework",

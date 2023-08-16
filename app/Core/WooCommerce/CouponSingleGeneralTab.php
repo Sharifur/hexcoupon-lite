@@ -3,6 +3,7 @@ namespace HexCoupon\App\Core\WooCommerce;
 
 use HexCoupon\App\Core\Helpers\FormHelpers;
 use HexCoupon\App\Core\Helpers\RenderHelpers;
+use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class CouponSingleGeneralTab
@@ -25,6 +26,32 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @method show_categories
+	 * @return array
+	 * @since 1.0.0
+	 * Show all the categories of the product.
+	 */
+	private function show_categories()
+	{
+		$all_product_categories = [];
+
+		$product_categories = get_categories(
+			[
+				'taxonomy'     => 'product_cat',
+				'orderby'      => 'name',
+			]
+		);
+
+		foreach ( $product_categories as $category ) {
+			$all_product_categories[$category->term_id] = $category->name;
+		}
+
+		return $all_product_categories;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
 	 * @method expiry_date_message_field
 	 * @return mixed
 	 * @since 1.0.0
@@ -34,18 +61,22 @@ class CouponSingleGeneralTab
 	{
 		global $post;
 
+		$discount_type = get_post_meta( $post->ID, 'discount_type', true );
+		$discount_type = ! empty( $discount_type ) ? $discount_type : '';
+
 		// Adding coupon type select input field
 		woocommerce_wp_select( [
 			'class' => 'select short',
 			'label' => 'Coupon type',
 			'id' => 'coupon_type',
+			'name' => 'discount_type',
 			'options' => [
 				'percent' => 'Percentage discount',
 				'fixed_cart' => 'Fixed cart discount',
 				'fixed_product' => 'Fixed product discount',
 				'buy_x_get_x_bogo' => 'Buy X Get X Product (BOGO)',
-
-			]
+			],
+			'value' => $discount_type,
 		] );
 
 		$customer_purchases = get_post_meta( $post->ID, 'customer_purchases', true );
@@ -71,16 +102,16 @@ class CouponSingleGeneralTab
 		echo '</div>';
 
 		// Adding a select2 field to add a specific product
-		$add_a_specific_product = get_post_meta( get_the_ID(),'add_a_specific_product_to_purchase',true );
+		$add_a_specific_product_to_purchase = get_post_meta( get_the_ID(),'add_a_specific_product_to_purchase',true );
 
 		$output ='<div class="add_a_specific_product_to_purchase">';
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
-			'name' => 'add_a_specific_product',
-			'value' => $add_a_specific_product,
+			'name' => 'add_a_specific_product_to_purchase',
+			'value' => $add_a_specific_product_to_purchase,
 			'type' => 'select',
-			'options' => ['test1','test2'], //if the field is select, this param will be here
+			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'add_a_specific_product_to_purchase',
@@ -92,6 +123,31 @@ class CouponSingleGeneralTab
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
 		echo '</div>';
+
+
+		// Adding a select2 field to add categories
+		$add_categories_to_purchase = get_post_meta( get_the_ID(),'add_categories_to_purchase',true );
+
+		$output ='<div class="add_categories_to_purchase">';
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
+			'name' => 'add_categories_to_purchase',
+			'value' => $add_categories_to_purchase,
+			'type' => 'select',
+			'options' => $this->show_categories(), //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+			'class' => 'add_categories_to_purchase',
+			'placeholder' => __('Search for categories')
+		] );
+
+		echo '<span class="add_categories_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer need to buy from.', 'hexcoupon' ) ).'</span>';
+
+		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
+
+		echo '</div>';
+
 
 		// Adding customer gets as free radio buttons
 		$customer_gets_as_free = get_post_meta( $post->ID, 'customer_gets_as_free', true );
@@ -126,7 +182,7 @@ class CouponSingleGeneralTab
 			'name' => 'add_a_specific_product_for_free',
 			'value' => $add_a_specific_product_for_free,
 			'type' => 'select',
-			'options' => ['test1','test2'], //if the field is select, this param will be here
+			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'add_a_specific_product_for_free',
@@ -134,6 +190,29 @@ class CouponSingleGeneralTab
 		] );
 
 		echo '<span class="add_a_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
+
+		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
+
+		echo '</div>';
+
+		// Adding a select2 field to add categories that will be given as free
+		$add_categories_as_free = get_post_meta( get_the_ID(),'add_categories_as_free',true );
+
+		$output ='<div class="add_categories_as_free">';
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
+			'name' => 'add_categories_as_free',
+			'value' => $add_categories_as_free,
+			'type' => 'select',
+			'options' => $this->show_categories(), //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+			'class' => 'add_categories_as_free',
+			'placeholder' => __('Search for categories')
+		] );
+
+		echo '<span class="add_categories_as_free_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer will get as free.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 

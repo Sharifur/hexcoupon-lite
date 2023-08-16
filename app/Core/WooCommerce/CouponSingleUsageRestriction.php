@@ -48,7 +48,7 @@ class CouponSingleUsageRestriction {
 	 * @since 1.0.0
 	 * Retrieve all available WoCommerce products.
 	 */
-	private function show_all_products()
+	public function show_all_products()
 	{
 		$all_product_titles = [];
 

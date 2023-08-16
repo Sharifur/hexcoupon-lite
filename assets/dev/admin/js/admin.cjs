@@ -24,15 +24,27 @@
 
 		// Place add a specific product to purchase select2 field after the customer purchases radio buttons
 		$(".add_a_specific_product_to_purchase").insertAfter(".customer_purchases_field");
+		$("#add_a_specific_product_to_purchase").insertAfter(".add_a_specific_product_to_purchase label");
+
 
 		// Place the tooltip of add a specific product to purchase select2 field
 		$(".add_a_specific_product_to_purchase_tooltip").insertAfter(".add_a_specific_product_to_purchase span.select2-container");
 
+		// Place the add categories select2 input fields after the customer purchases field
+		$(".add_categories_to_purchase").insertAfter(".customer_purchases_field");
+		$(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
+
+		//
 		$(".customer_gets_as_free").insertAfter(".customer_purchases");
 
 		$(".add_a_specific_product_for_free").insertAfter(".customer_gets_as_free_field");
+		$("#add_a_specific_product_for_free").insertAfter(".add_a_specific_product_for_free label");
 
 		$(".add_a_specific_product_for_free_tooltip").insertAfter(".add_a_specific_product_for_free span.select2-container");
+
+		// Place the add categories select2 input fields after the customer gets as free field
+		$(".add_categories_as_free").insertAfter(".customer_gets_as_free_field");
+		$(".add_categories_as_free_tooltip").insertAfter(".add_categories_as_free span.select2-container");
 
 		// Place the bogo use limit radibo buttons after the add specific product as free input select2 field
 		$(".bogo_use_limit").insertAfter("div.add_a_specific_product_for_free");
@@ -40,6 +52,121 @@
 		// Place the bogo deal checkboxes after the customer gets as free div
 		$(".bogo_deal_checkboxes").insertAfter(".customer_gets_as_free");
 
+
+		// Remove all other fields if BOGO is selected
+		const discountTypeField = $("select[name^='discount_type']");
+
+		// if ("buy_x_get_x_bogo" === $(discount_type_field).val()) {
+		// 	$(".customer_purchases").show()
+		// 	$(".customer_gets_as_free").show()
+		// 	$(".bogo_deal_checkboxes").show()
+		//
+		// 	$(".coupon_amount_field").hide();
+		// 	$(".free_shipping_field").hide();
+		// 	$(".expiry_date_field").hide();
+		// 	$(".message_for_coupon_expiry_date_field").hide();
+		// 	$(".coupon_starting_date_field").hide();
+		// 	$(".message_for_coupon_starting_date_field").hide();
+		// 	$(".apply_days_hours_of_week_field").hide();
+		// }
+
+		discountTypeField.on("change",function (){
+			if("buy_x_get_x_bogo" === this.value){
+				$(".customer_purchases").show()
+				$(".customer_gets_as_free").show()
+				$(".bogo_deal_checkboxes").show()
+
+				$(".coupon_amount_field").hide();
+				$(".free_shipping_field").hide();
+				$(".expiry_date_field").hide();
+				$(".message_for_coupon_expiry_date_field").hide();
+				$(".coupon_starting_date_field").hide();
+				$(".message_for_coupon_starting_date_field").hide();
+				$(".apply_days_hours_of_week_field").hide();
+			}
+			else {
+				$(".customer_purchases").hide()
+				$(".customer_gets_as_free").hide()
+				$(".bogo_deal_checkboxes").hide()
+
+				$(".coupon_amount_field").show();
+				$(".free_shipping_field").show();
+				$(".expiry_date_field").show();
+				$(".message_for_coupon_expiry_date_field").show();
+				$(".coupon_starting_date_field").show();
+				$(".message_for_coupon_starting_date_field").show();
+				$(".apply_days_hours_of_week_field").show();
+			}
+		});
+
+		// perform on page load
+		discountTypeField.trigger("change");
+
+		// Don't allow more than one product selection on selecting a specific product from the customer purchases field
+		const customerPurchases = $("input[name='customer_purchases']");
+
+		// Show or hide product selection and category selection input fields if product categories type is selected
+		customerPurchases.on("change",function(){
+			if("product_categories" === $(this).val()){
+				$(".add_categories_to_purchase").show();
+				$(".add_a_specific_product_to_purchase").hide();
+			}else {
+				$(".add_categories_to_purchase").hide();
+				$(".add_a_specific_product_to_purchase").show();
+			}
+		});
+
+		// Control number of result selection if a specific product type is selected
+		customerPurchases.on("change",function(){
+			if("a_specific_product" === $(this).val()){
+				$("#add_a_specific_product_to_purchase").select2({
+					maximumSelectionLength: 1 // Set maximum selection to 1
+				});
+			}else {
+				$("#add_a_specific_product_to_purchase").select2({
+					maximumSelectionLength: 0 // Set maximum selection to unlimited
+				});
+			}
+		});
+
+		// Trigger the change on page load
+		customerPurchases.trigger("change");
+
+		// Don't allow more than one product selection on selecting a specific product from the customer gets as free field
+		const customerGetsAsFree = $("input[name='customer_gets_as_free']");
+
+		// Show or hide product selection and category selection input fields if product categories type is selected
+		customerGetsAsFree.on("change",function(){
+			if("product_categories" === $(this).val()){
+				$(".add_categories_as_free").show();
+				$(".add_a_specific_product_for_free").hide();
+			}else {
+				$(".add_categories_as_free").hide();
+				$(".add_a_specific_product_for_free").show();
+			}
+		});
+
+		// Control number of result selection if a specific product type is selected
+		customerGetsAsFree.on("change",function(){
+			if("a_specific_product" === $(this).val()){
+				$("#add_a_specific_product_for_free").select2({
+					maximumSelectionLength: 1 // Set maximum selection to 1
+				});
+			}else {
+				$("#add_a_specific_product_for_free").select2({
+					maximumSelectionLength: 0 // Set maximum selection to unlimited
+				});
+			}
+		});
+
+		customerGetsAsFree.on("change",function(){
+			if("same_product_added_to_cart" === $(this).val()){
+				$(".add_a_specific_product_for_free").hide();
+			}
+		});
+
+		// Trigger the change on page load
+		customerGetsAsFree.trigger("change");
 
 
 		/*

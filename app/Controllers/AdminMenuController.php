@@ -41,6 +41,7 @@ class AdminMenuController extends BaseController
 
 		if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			add_action( 'admin_menu', [ $this, 'add_hexcoupon_menu' ] );
+			add_action( 'admin_menu', [ $this, 'add_all_coupons_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
 		}
@@ -61,17 +62,29 @@ class AdminMenuController extends BaseController
 			esc_html__( 'HexCoupon', 'hexcoupon' ),
 			'manage_options',
 			'hexcoupon-page',
-			[ $this, 'render_all_coupons_submenu' ],
+			[ $this, 'render_hexcoupon' ],
 			'dashicons-admin-settings',
 			40
 		);
-		// duplicate of menu page to create a different title for the first submenu which is by default a duplicate of the main menu
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method add_all_coupons_submenu
+	 * @return string
+	 * @since 1.0.0
+	 * Add a sub-menu named 'Add All Coupons' in the admin dashboard area under the menu 'HexCoupon'.
+	 */
+	public function add_all_coupons_submenu()
+	{
 		add_submenu_page(
-			'hexcoupon-page', // slug of the menu which will be used for this submenu
+			'hexcoupon-page',
 			esc_html__( 'All Coupons', 'hexcoupon' ),
 			esc_html__( 'All Coupons', 'hexcoupon' ),
 			'manage_options',
-			'hexcoupon-page' // slug of the menu page file
+			'all-coupons',
+			[ $this, 'render_all_coupons_submenu' ]
 		);
 	}
 
@@ -113,6 +126,11 @@ class AdminMenuController extends BaseController
 			'coupon_category',
 			[ $this, 'render_coupon_category_submenu' ],
 		);
+	}
+
+	public function render_hexcoupon()
+	{
+		$this->render( '/admin/admin-menu.php' );
 	}
 
 	/**
