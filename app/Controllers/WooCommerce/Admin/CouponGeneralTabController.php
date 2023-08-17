@@ -24,6 +24,137 @@ class CouponGeneralTabController extends BaseController
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_general_tab_meta_field_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon' ], 10, 2 );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
+		add_action( 'woocommerce_before_calculate_totals', [ $this, 'add_free_items_to_cart' ] );
+		add_filter( 'woocommerce_cart_item_price', [ $this, 'replace_price_amount_with_free_text' ], 10, 2 );
+		add_action( 'woocommerce_before_calculate_totals', [ $this, 'apply_price_deduction' ] );
+		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
+	}
+
+	/**
+	 * @return array
+	 * @throws \Exception
+	 * @package hexcoupon
+	 * @since 1.0.0
+	 * Add free items to the cart page.
+	 * @author WpHex
+	 * @method add_free_items_to_cart
+	 */
+	public function add_free_items_to_cart()
+	{
+		$applied_coupon = WC()->cart->get_applied_coupons();
+		$coupon_id = '';
+
+		if ( ! empty( $applied_coupon ) ) {
+			// Assuming only one coupon is applied; if multiple, you might need to loop through $applied_coupon array
+			$coupon_code = reset( $applied_coupon );
+			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
+		}
+
+		$selected_products_to_purchase = get_post_meta( $coupon_id, 'add_a_specific_product_to_purchase', true ); // get purchasable selected product
+		$selected_products_as_free = get_post_meta( $coupon_id, 'add_a_specific_product_for_free', true ); // get free selected product
+
+		// Product IDs
+		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : [];
+		$free_gift_id = $selected_products_as_free;
+
+		// Check if the main product is in the cart
+		$main_product_in_cart = false;
+		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
+				$main_product_in_cart = true;
+				break;
+			}
+		}
+
+		// Add free item to cart if the main product is in the cart
+		if ( $main_product_in_cart ) {
+			$free_gift_added = false;
+			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+				if ( in_array( $cart_item['product_id'], $free_gift_id ) ) {
+					$free_gift_added = true;
+					break;
+				}
+			}
+
+			if ( ! $free_gift_added ) {
+				foreach ( $free_gift_id as $free_gift_single_id ) {
+					WC()->cart->add_to_cart( $free_gift_single_id );
+				}
+			}
+		}
+
+		return $free_gift_id;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method replace_price_amount_with_free_text
+	 * @param string $price
+	 * @param array $cart_item
+	 * @return string
+	 * @since 1.0.0
+	 * Replace price amount with 'free (BOGO Deal)' text in the price column of product in the cart page.
+	 */
+	public function replace_price_amount_with_free_text( $price, $cart_item )
+	{
+		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : [];
+
+		if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+			$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
+		}
+		return $price;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method apply_price_deduction
+	 * @param object $cart
+	 * @return void
+	 * @since 1.0.0
+	 * Deduct the free item price from the cart page.
+	 */
+	public function apply_price_deduction( $cart )
+	{
+		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+			return;
+
+		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : [];
+
+		// Deduct the price of the free items from the cart total
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+				$cart_item['data']->set_price( 0 );
+			}
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method show_free_items_name_before_total_price
+	 * @return void
+	 * @since 1.0.0
+	 * Show BOGO deals free items name in the cart page.
+	 */
+	public function show_free_items_name_before_total_price()
+	{
+		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : []; // get all free items id's
+
+		// Display free item names
+		$free_items = '';
+		foreach ( WC()->cart->get_cart() as $cart_item ) {
+			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+				$free_items .= esc_html( $cart_item['data']->get_name() );
+			}
+		}
+
+		if ( ! empty( $free_items ) ) {
+			echo '<tr class="free-items-row">';
+			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name">' . esc_html( $free_items ) . '</td>';
+			echo '</tr>';
+		}
 	}
 
 	/**
@@ -468,6 +599,12 @@ class CouponGeneralTabController extends BaseController
 				delete_post_meta( $coupon_id,  $coupon_prefix . '_start_time' );
 				delete_post_meta( $coupon_id,  $coupon_prefix . '_expiry_time' );
 			}
+		}
+
+		$bogo_use_limit = get_post_meta( $coupon_id, 'bogo_use_limit', true );
+
+		if ( 'can_be_used_only_once' === $bogo_use_limit ) {
+			delete_post_meta( $coupon_id,'bogo_coupon_maximum_usability_limit' );
 		}
 	}
 }

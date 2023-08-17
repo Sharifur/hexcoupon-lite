@@ -169,6 +169,20 @@
 		customerGetsAsFree.trigger("change");
 
 
+		// Bogo use limit
+		const bogoUseLimit = $("input[name='bogo_use_limit']");
+
+		bogoUseLimit.on("change",function(){
+			if($(this).is(":checked") && "can_be_used_only_once" === $(this).val()) {
+				$(".bogo_coupon_maximum_usability_limit_field").hide();
+			}if($(this).is(":checked") && "can_be_used_multiple_times" === $(this).val()) {
+				$(".bogo_coupon_maximum_usability_limit_field").show();
+			}
+		});
+
+		bogoUseLimit.trigger("change");
+
+
 		/*
        ========================================
            Usage Limits

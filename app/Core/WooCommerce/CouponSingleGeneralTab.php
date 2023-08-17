@@ -21,6 +21,7 @@ class CouponSingleGeneralTab
 	public function register()
 	{
 		add_action( 'woocommerce_coupon_options', [ $this, 'add_coupon_extra_fields' ] );
+		add_action( 'woocommerce_cart_coupon', [ $this, 'add_custom_button_before_coupon_field' ], 5 );
 	}
 
 	/**
@@ -92,7 +93,7 @@ class CouponSingleGeneralTab
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
-					'product_categories' => esc_html__( 'Product categories', 'hexcoupon' ),
+					'product_categories' => esc_html__( 'Any product from categories', 'hexcoupon' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
 				],
 				'value' => $customer_purchases,
@@ -162,7 +163,7 @@ class CouponSingleGeneralTab
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
-					'product_categories' => esc_html__( 'Product categories', 'hexcoupon' ),
+					'product_categories' => esc_html__( 'Any product from categories', 'hexcoupon' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
 					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hexcoupon' ),
 				],
@@ -236,6 +237,21 @@ class CouponSingleGeneralTab
 			]
 		);
 
+		$bogo_coupon_maximum_usability_limit = get_post_meta( $post->ID, 'bogo_coupon_maximum_usability_limit', true );
+
+		woocommerce_wp_text_input(
+			[
+				'id' => 'bogo_coupon_maximum_usability_limit',
+				'label' => esc_html__( 'Add maximum usability limit', 'hexcoupon' ),
+				'desc_tip' => true,
+				'description' => esc_html__( 'Add how many times this coupon can be applied.', 'hexcoupon' ),
+				'type' => 'number',
+				'value' => $bogo_coupon_maximum_usability_limit,
+				'class' => 'short',
+				'placeholder' => esc_html( 'Add a number' ),
+			]
+		);
+
 		echo '</div>';
 
 		$automatically_add_bogo_deal_product = get_post_meta( $post->ID, 'automatically_add_bogo_deal_product', true );
@@ -259,7 +275,7 @@ class CouponSingleGeneralTab
 			[
 				'id' => 'display_bogo_button',
 				'label' => esc_html__( 'Display button', 'hexcoupon' ),
-				'description' => esc_html__( 'Display a button in the shopping cart to show(BOGO) deals products that are either manually removed by customers or not automatically added.', 'hexcoupon' ),
+				'description' => esc_html__( 'Display a button in the shopping cart to show(BOGO) deals products that are either manually removed by customers.', 'hexcoupon' ),
 				'value' => $display_bogo_button,
 			]
 		);
@@ -863,5 +879,31 @@ class CouponSingleGeneralTab
 
 		// Add apply on friday fields
 		$this->add_coupon_apply_on_friday_fields();
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method add_custom_button_before_coupon_field
+	 * @return void
+	 * @since 1.0.0
+	 * Add button in the cart page to add removed free item of BOGO deals.
+	 */
+	public function add_custom_button_before_coupon_field()
+	{
+		$applied_coupon = WC()->cart->get_applied_coupons();
+		$coupon_id = '';
+
+		if ( ! empty( $applied_coupon ) ) {
+			// Assuming only one coupon is applied; if multiple, you might need to loop through $applied_coupon array
+			$coupon_code = reset( $applied_coupon );
+			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
+		}
+
+		$display_bogo_button = get_post_meta( $coupon_id, 'display_bogo_button', true );
+
+		if ( 'yes' === $display_bogo_button ) {
+			echo '<tr class="custom-coupon-button-row"><td colspan="6"><a href="javascript:void(0)" class="button-for-adding-removed-item button wp-element-button">' . esc_html__( 'Add removed free item', 'hexcoupon' ) . '</a></td></tr>';
+		}
 	}
 }
