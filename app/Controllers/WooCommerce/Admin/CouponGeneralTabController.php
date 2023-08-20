@@ -53,6 +53,40 @@ class CouponGeneralTabController extends BaseController
 	}
 
 	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method get_product_categories_id_in_cart
+	 * @return array
+	 * @since 1.0.0
+	 * Get product categories id from the cart page.
+	 */
+	private function get_product_categories_id_in_cart()
+	{
+		// Initialize an empty array to store product categories
+		$product_categories = [];
+
+		// Get the current cart contents
+		$cart = WC()->cart->get_cart();
+
+		// Loop through cart items and extract categories
+		foreach ( $cart as $cart_item_key => $cart_item ) {
+			$product_id = $cart_item['product_id'];
+			$product = wc_get_product( $product_id );
+
+			// Get product categories
+			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
+
+			// Add categories to the array
+			$product_categories = array_merge( $product_categories, $categories );
+		}
+
+		// Remove duplicate categories
+		$product_categories = array_unique( $product_categories );
+
+		return $product_categories;
+	}
+
+	/**
 	 * @throws \Exception
 	 * @package hexcoupon
 	 * @author WpHex
@@ -63,58 +97,95 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function add_free_items_to_cart()
 	{
+//		function wc_remove_all_quantity_fields( $return, $product ) {
+//			return true;
+//		}
+//		add_filter( 'woocommerce_is_sold_individually', 'wc_remove_all_quantity_fields', 10, 2 );
+
 		$coupon_id = $this->coupon_id();
+
+		$customer_purchases = get_post_meta( $coupon_id, 'customer_purchases', true );
 
 		$selected_products_to_purchase = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true ); // get purchasable selected product
 		$selected_products_as_free = get_post_meta( $coupon_id, 'add_specific_product_for_free', true ); // get free selected product
+
 		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true ); // get meta value of customer gets as free
+
+		$add_categories_to_purchase = get_post_meta( $coupon_id, 'add_categories_to_purchase', true );
+		$add_categories_as_free = get_post_meta( $coupon_id, 'add_categories_as_free', true );
 
 		// Product IDs
 		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : [];
 		$free_item_id = ! empty( $selected_products_as_free ) ? $selected_products_as_free : [];
 
-		// Check if the main product is in the cart
-		$main_product_in_cart = false;
+		$cart_product_ids = [];
+
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-			if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
-				$main_product_in_cart = true;
-				break;
+			$cart_product_ids[] = $cart_item['product_id'];
+		}
+
+		$main_product_in_cart = false;
+
+		// Check if the cart has the exact or any product that the admin has selected to purchase
+		if ( 'a_specific_product' === $customer_purchases || 'any_products_listed_below' === $customer_purchases ) {
+			foreach ( $main_product_id as $main_product_single ) {
+				if ( in_array( $main_product_single, $cart_product_ids ) ) {
+					$main_product_in_cart = true;
+					break;
+				}
+			}
+		}
+
+		// Check if the cart has all the exact products that the admin has selected to purchase
+		if ( 'a_combination_of_products' === $customer_purchases ) {
+			foreach ( $main_product_id as $main_product_single ) {
+				if ( ! in_array( $main_product_single, $cart_product_ids ) ) {
+					$main_product_in_cart = false;
+					break;
+				}
+				else {
+					$main_product_in_cart = true;
+				}
+			}
+		}
+
+		if ( 'product_categories'=== $customer_purchases ) {
+			$product_categories_id_in_cart = $this->get_product_categories_id_in_cart();
+
+			foreach ( $add_categories_to_purchase as $add_category_to_purchase ) {
+				if ( in_array( $add_category_to_purchase, $product_categories_id_in_cart ) ) {
+					$main_product_in_cart = true;
+					break;
+				}
 			}
 		}
 
 		// Add free item to cart if the main product is in the cart
 		if ( $main_product_in_cart ) {
-//			$free_gift_added = false;
-//			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-//				if ( in_array( $cart_item['product_id'], $free_item_id ) ) {
-//					$free_gift_added = true;
-//					break;
-//				}
-//			}
-//
-//			if ( ! $free_gift_added ) {
-//				foreach ( $free_item_id as $free_gift_single_id ) {
-//					WC()->cart->add_to_cart( $free_gift_single_id );
-//				}
-//			}
-//			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
-//				foreach ( $main_product_id as $a ) {
-//					WC()->cart->add_to_cart( $a );
-//				}
-//			}
-
-			foreach ( $main_product_id as $a ) {
-					WC()->cart->add_to_cart( $a, 1 );
+			if ( ! empty( $free_item_id ) ) {
+				foreach ( $free_item_id as $free_gift_single_id ) {
+					if ( ! in_array( $free_gift_single_id, $cart_product_ids ) ) {
+						WC()->cart->add_to_cart( $free_gift_single_id );
+					}
 				}
-		}
-//		else {
-//			// Remove free item from the cart if the main product does not exist in the cart
-//			foreach ( $free_item_id as $free_single_item_id ) {
-//				$generate_free_item_id =  WC()->cart->generate_cart_id( $free_single_item_id ); // generate id of free item
-//				$free_single_item_key = WC()->cart->find_product_in_cart( $generate_free_item_id ); // find the item key
-//				WC()->cart->remove_cart_item( $free_single_item_key ); // finally remove the item
+			}
+
+//			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
+//				foreach ( $main_product_id as $main_product_single ) {
+//					if ( in_array( $main_product_single, $cart_product_ids ) ) {
+//						WC()->cart->add_to_cart($main_product_single);
+//					}
+//				}
 //			}
-//		}
+		}
+		else {
+			// Remove free item from the cart if the main product does not exist in the cart
+			foreach ( $free_item_id as $free_single_item_id ) {
+				$generate_free_item_id =  WC()->cart->generate_cart_id( $free_single_item_id ); // generate id of free item
+				$free_single_item_key = WC()->cart->find_product_in_cart( $generate_free_item_id ); // find the item key
+				WC()->cart->remove_cart_item( $free_single_item_key ); // finally remove the item
+			}
+		}
 
 		return $free_item_id;
 	}
@@ -133,42 +204,15 @@ class CouponGeneralTabController extends BaseController
 	{
 		$coupon_id = $this->coupon_id(); // Get the id of applied coupon
 
-//		$main_product_id_categories = [];
-//		$selected_main_product_id = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true );
-
-//		if ( $selected_main_product_id ) {
-//			foreach ( $selected_main_product_id as $single_main_product_id ) {
-//				$main_product_id_categories[] = wp_get_post_terms( $single_main_product_id, 'product_cat', [ 'fields' => 'ids' ] );
-//			}
-//		}
-
-//		$selected_categories_as_free = get_post_meta( $coupon_id, 'add_categories_as_free', true ); // Get selected free categories meta-value of applied coupon
-//
-//		$product_categories_id_in_cart = $this->get_product_categories_id_in_cart();
-
 		$customer_purchases = get_post_meta(  $coupon_id, 'customer_purchases', true );
 
 		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : [];
 
-		if ( 'a_specific_product' === $customer_purchases ) {
+		if ( 'a_specific_product' === $customer_purchases || 'a_combination_of_products' === $customer_purchases || 'any_products_listed_below' === $customer_purchases || 'product_categories' === $customer_purchases ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
 				$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
 			}
 		}
-
-		// Remove categories from $main_product_id_categories that are in $product_categories_id_in_cart
-//		foreach ( $main_product_id_categories as $main_product_categories ) {
-//			$product_categories_id_in_cart = array_diff( $product_categories_id_in_cart, $main_product_categories );
-//		}
-
-
-//		if ( $selected_categories_as_free ) {
-//			foreach ( $selected_categories_as_free as $selected_category_as_free ) {
-//				if ( ! in_array( $selected_category_as_free, $product_categories_id_in_cart ) ) {
-//					$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
-//				}
-//			}
-//		}
 
 		return $price;
 	}
@@ -222,40 +266,6 @@ class CouponGeneralTabController extends BaseController
 			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name" style="font-weight: bold;">' . esc_html( $free_items ) . '</td>';
 			echo '</tr>';
 		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method get_product_categories_id_in_cart
-	 * @return array
-	 * @since 1.0.0
-	 * Get product categories id from the cart page.
-	 */
-	private function get_product_categories_id_in_cart()
-	{
-		// Initialize an empty array to store product categories
-		$product_categories = [];
-
-		// Get the current cart contents
-		$cart = WC()->cart->get_cart();
-
-		// Loop through cart items and extract categories
-		foreach ( $cart as $cart_item_key => $cart_item ) {
-			$product_id = $cart_item['product_id'];
-			$product = wc_get_product( $product_id );
-
-			// Get product categories
-			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
-
-			// Add categories to the array
-			$product_categories = array_merge( $product_categories, $categories );
-		}
-
-		// Remove duplicate categories
-		$product_categories = array_unique( $product_categories );
-
-		return $product_categories;
 	}
 
 	/**
@@ -621,6 +631,7 @@ class CouponGeneralTabController extends BaseController
 		if ( $apply_coupon_starting_date ) {
 			if ( 'yes' === $days_hours_of_week ) {
 				if ( is_null( $apply_coupon_on_different_days ) || $apply_coupon_on_different_days ) {
+
 					echo '## apply coupon on different days is returning true because either they are not set or you are on time on different days. <br>';
 					return true;
 				} else {
@@ -703,13 +714,18 @@ class CouponGeneralTabController extends BaseController
 		}
 
 		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true );
+		$customer_purchases = get_post_meta( $coupon_id, 'customer_purchases', true );
 
-		if ( 'product_categories' === $customer_gets_as_free || 'same_product_added_to_cart' === $customer_gets_as_free ) {
-			delete_post_meta( $coupon_id,'add_specific_product_for_free' );
+		if ( 'product_categories' === $customer_purchases ) {
+			delete_post_meta( $coupon_id, 'add_specific_product_to_purchase' );
 		}
 
-		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free || 'any_products_listed_below' === $customer_gets_as_free || 'same_product_added_to_cart' === $customer_gets_as_free ) {
-			delete_post_meta( $coupon_id,'add_categories_as_free' );
+		if ( 'a_specific_product' === $customer_purchases || 'a_combination_of_products' === $customer_purchases || 'any_products_listed_below' === $customer_purchases ) {
+			delete_post_meta( $coupon_id, 'add_categories_to_purchase' );
+		}
+
+		if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
+			delete_post_meta( $coupon_id,'add_specific_product_for_free' );
 		}
 
 		$bogo_use_limit = get_post_meta( $coupon_id, 'bogo_use_limit', true );

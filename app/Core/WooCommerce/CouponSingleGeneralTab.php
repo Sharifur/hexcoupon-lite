@@ -163,7 +163,6 @@ class CouponSingleGeneralTab
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
-					'product_categories' => esc_html__( 'Any product from categories', 'hexcoupon' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
 					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hexcoupon' ),
 				],
@@ -191,29 +190,6 @@ class CouponSingleGeneralTab
 		] );
 
 		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
-
-		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
-
-		echo '</div>';
-
-		// Adding a select2 field to add categories that will be given as free
-		$add_categories_as_free = get_post_meta( get_the_ID(),'add_categories_as_free',true );
-
-		$output ='<div class="add_categories_as_free">';
-
-		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
-			'name' => 'add_categories_as_free',
-			'value' => $add_categories_as_free,
-			'type' => 'select',
-			'options' => $this->show_categories(), //if the field is select, this param will be here
-			'multiple' => true,
-			'select2' => true,
-			'class' => 'add_categories_as_free',
-			'placeholder' => __('Search for categories')
-		] );
-
-		echo '<span class="add_categories_as_free_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer will get as free.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 

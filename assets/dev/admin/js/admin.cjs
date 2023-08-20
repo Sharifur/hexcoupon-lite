@@ -42,10 +42,6 @@
 
 		$(".add_specific_product_for_free_tooltip").insertAfter(".add_specific_product_for_free span.select2-container");
 
-		// Place the add categories select2 input fields after the customer gets as free field
-		$(".add_categories_as_free").insertAfter(".customer_gets_as_free_field");
-		$(".add_categories_as_free_tooltip").insertAfter(".add_categories_as_free span.select2-container");
-
 		// Place the bogo use limit radibo buttons after the add specific product as free input select2 field
 		$(".bogo_use_limit").insertAfter("div.add_specific_product_for_free");
 
@@ -137,30 +133,27 @@
 
 		// Show or hide product selection and category selection input fields if product categories type is selected
 		customerGetsAsFree.on("change",function(){
-			if("product_categories" === $(this).val()){
-				$(".add_categories_as_free").show();
+			if($(this).is(":checked") && "same_product_added_to_cart" === $(this).val()){
 				$(".add_specific_product_for_free").hide();
 			}else{
-				$(".add_categories_as_free").hide();
 				$(".add_specific_product_for_free").show();
 			}
 		});
 
-
-
+		customerGetsAsFree.trigger("change");
 
 		// Control number of result selection if a specific product type is selected
-		customerGetsAsFree.on("change",function(){
-			if("a_specific_product" === $(this).val()){
-				$("#add_specific_product_for_free").select2({
-					maximumSelectionLength: 1 // Set maximum selection to 1
-				});
-			}else {
-				$("#add_specific_product_for_free").select2({
-					maximumSelectionLength: 0 // Set maximum selection to unlimited
-				});
-			}
-		});
+		// customerGetsAsFree.on("change",function(){
+		// 	if("a_specific_product" === $(this).val()){
+		// 		$("#add_specific_product_for_free").select2({
+		// 			maximumSelectionLength: 1 // Set maximum selection to 1
+		// 		});
+		// 	}else {
+		// 		$("#add_specific_product_for_free").select2({
+		// 			maximumSelectionLength: 0 // Set maximum selection to unlimited
+		// 		});
+		// 	}
+		// });
 
 		// customerGetsAsFree.on("change",function(){
 		// 	if("same_product_added_to_cart" === $(this).val()){
@@ -170,15 +163,15 @@
 
 
 		// Trigger the change on page load
-		customerGetsAsFree.trigger("change");
+		// customerGetsAsFree.trigger("change");
 
-		customerGetsAsFree.on("change",function(){
-			if("same_product_added_to_cart" === $(this).val()){
-				$(".add_specific_product_for_free").hide();
-			}
-		});
+		// customerGetsAsFree.on("change",function(){
+		// 	if("same_product_added_to_cart" === $(this).val()){
+		// 		$(".add_specific_product_for_free").hide();
+		// 	}
+		// });
 
-		customerGetsAsFree.trigger("change");
+		// customerGetsAsFree.trigger("change");
 
 		// Bogo use limit
 		const bogoUseLimit = $("input[name='bogo_use_limit']");
