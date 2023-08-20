@@ -31,15 +31,14 @@ class CouponGeneralTabController extends BaseController
 	}
 
 	/**
-	 * @return array
-	 * @throws \Exception
 	 * @package hexcoupon
-	 * @since 1.0.0
-	 * Add free items to the cart page.
 	 * @author WpHex
-	 * @method add_free_items_to_cart
+	 * @method coupon_id
+	 * @return int
+	 * @since 1.0.0
+	 * Get the id of the applied coupon from the cart page.
 	 */
-	public function add_free_items_to_cart()
+	private function coupon_id()
 	{
 		$applied_coupon = WC()->cart->get_applied_coupons();
 		$coupon_id = '';
@@ -50,12 +49,29 @@ class CouponGeneralTabController extends BaseController
 			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
 		}
 
-		$selected_products_to_purchase = get_post_meta( $coupon_id, 'add_a_specific_product_to_purchase', true ); // get purchasable selected product
-		$selected_products_as_free = get_post_meta( $coupon_id, 'add_a_specific_product_for_free', true ); // get free selected product
+		return $coupon_id;
+	}
+
+	/**
+	 * @throws \Exception
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method add_free_items_to_cart
+	 * @return array
+	 * @since 1.0.0
+	 * Add free items to the cart page.
+	 */
+	public function add_free_items_to_cart()
+	{
+		$coupon_id = $this->coupon_id();
+
+		$selected_products_to_purchase = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true ); // get purchasable selected product
+		$selected_products_as_free = get_post_meta( $coupon_id, 'add_specific_product_for_free', true ); // get free selected product
+		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true ); // get meta value of customer gets as free
 
 		// Product IDs
 		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : [];
-		$free_gift_id = $selected_products_as_free;
+		$free_item_id = ! empty( $selected_products_as_free ) ? $selected_products_as_free : [];
 
 		// Check if the main product is in the cart
 		$main_product_in_cart = false;
@@ -68,22 +84,39 @@ class CouponGeneralTabController extends BaseController
 
 		// Add free item to cart if the main product is in the cart
 		if ( $main_product_in_cart ) {
-			$free_gift_added = false;
-			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-				if ( in_array( $cart_item['product_id'], $free_gift_id ) ) {
-					$free_gift_added = true;
-					break;
-				}
-			}
+//			$free_gift_added = false;
+//			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+//				if ( in_array( $cart_item['product_id'], $free_item_id ) ) {
+//					$free_gift_added = true;
+//					break;
+//				}
+//			}
+//
+//			if ( ! $free_gift_added ) {
+//				foreach ( $free_item_id as $free_gift_single_id ) {
+//					WC()->cart->add_to_cart( $free_gift_single_id );
+//				}
+//			}
+//			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
+//				foreach ( $main_product_id as $a ) {
+//					WC()->cart->add_to_cart( $a );
+//				}
+//			}
 
-			if ( ! $free_gift_added ) {
-				foreach ( $free_gift_id as $free_gift_single_id ) {
-					WC()->cart->add_to_cart( $free_gift_single_id );
+			foreach ( $main_product_id as $a ) {
+					WC()->cart->add_to_cart( $a, 1 );
 				}
-			}
 		}
+//		else {
+//			// Remove free item from the cart if the main product does not exist in the cart
+//			foreach ( $free_item_id as $free_single_item_id ) {
+//				$generate_free_item_id =  WC()->cart->generate_cart_id( $free_single_item_id ); // generate id of free item
+//				$free_single_item_key = WC()->cart->find_product_in_cart( $generate_free_item_id ); // find the item key
+//				WC()->cart->remove_cart_item( $free_single_item_key ); // finally remove the item
+//			}
+//		}
 
-		return $free_gift_id;
+		return $free_item_id;
 	}
 
 	/**
@@ -98,11 +131,45 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function replace_price_amount_with_free_text( $price, $cart_item )
 	{
+		$coupon_id = $this->coupon_id(); // Get the id of applied coupon
+
+//		$main_product_id_categories = [];
+//		$selected_main_product_id = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true );
+
+//		if ( $selected_main_product_id ) {
+//			foreach ( $selected_main_product_id as $single_main_product_id ) {
+//				$main_product_id_categories[] = wp_get_post_terms( $single_main_product_id, 'product_cat', [ 'fields' => 'ids' ] );
+//			}
+//		}
+
+//		$selected_categories_as_free = get_post_meta( $coupon_id, 'add_categories_as_free', true ); // Get selected free categories meta-value of applied coupon
+//
+//		$product_categories_id_in_cart = $this->get_product_categories_id_in_cart();
+
+		$customer_purchases = get_post_meta(  $coupon_id, 'customer_purchases', true );
+
 		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : [];
 
-		if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
-			$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
+		if ( 'a_specific_product' === $customer_purchases ) {
+			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+				$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
+			}
 		}
+
+		// Remove categories from $main_product_id_categories that are in $product_categories_id_in_cart
+//		foreach ( $main_product_id_categories as $main_product_categories ) {
+//			$product_categories_id_in_cart = array_diff( $product_categories_id_in_cart, $main_product_categories );
+//		}
+
+
+//		if ( $selected_categories_as_free ) {
+//			foreach ( $selected_categories_as_free as $selected_category_as_free ) {
+//				if ( ! in_array( $selected_category_as_free, $product_categories_id_in_cart ) ) {
+//					$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
+//				}
+//			}
+//		}
+
 		return $price;
 	}
 
@@ -146,15 +213,49 @@ class CouponGeneralTabController extends BaseController
 		$free_items = '';
 		foreach ( WC()->cart->get_cart() as $cart_item ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
-				$free_items .= esc_html( $cart_item['data']->get_name() );
+				$free_items .= esc_html( $cart_item['data']->get_name() ) . ', ';
 			}
 		}
 
 		if ( ! empty( $free_items ) ) {
 			echo '<tr class="free-items-row">';
-			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name">' . esc_html( $free_items ) . '</td>';
+			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name" style="font-weight: bold;">' . esc_html( $free_items ) . '</td>';
 			echo '</tr>';
 		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method get_product_categories_id_in_cart
+	 * @return array
+	 * @since 1.0.0
+	 * Get product categories id from the cart page.
+	 */
+	private function get_product_categories_id_in_cart()
+	{
+		// Initialize an empty array to store product categories
+		$product_categories = [];
+
+		// Get the current cart contents
+		$cart = WC()->cart->get_cart();
+
+		// Loop through cart items and extract categories
+		foreach ( $cart as $cart_item_key => $cart_item ) {
+			$product_id = $cart_item['product_id'];
+			$product = wc_get_product( $product_id );
+
+			// Get product categories
+			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
+
+			// Add categories to the array
+			$product_categories = array_merge( $product_categories, $categories );
+		}
+
+		// Remove duplicate categories
+		$product_categories = array_unique( $product_categories );
+
+		return $product_categories;
 	}
 
 	/**
@@ -240,7 +341,7 @@ class CouponGeneralTabController extends BaseController
 			[ 'add_a_specific_product', 'string' ],
 			[ 'add_specific_category', 'string' ],
 			[ 'customer_gets_as_free', 'string' ],
-			[ 'add_a_specific_product_for_free', 'string' ],
+			[ 'add_specific_product_for_free', 'string' ],
 			[ 'bogo_use_limit', 'string' ],
 			[ 'automatically_add_bogo_deal_product', 'string' ],
 			[ 'display_bogo_button', 'string' ],
@@ -599,6 +700,16 @@ class CouponGeneralTabController extends BaseController
 				delete_post_meta( $coupon_id,  $coupon_prefix . '_start_time' );
 				delete_post_meta( $coupon_id,  $coupon_prefix . '_expiry_time' );
 			}
+		}
+
+		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true );
+
+		if ( 'product_categories' === $customer_gets_as_free || 'same_product_added_to_cart' === $customer_gets_as_free ) {
+			delete_post_meta( $coupon_id,'add_specific_product_for_free' );
+		}
+
+		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free || 'any_products_listed_below' === $customer_gets_as_free || 'same_product_added_to_cart' === $customer_gets_as_free ) {
+			delete_post_meta( $coupon_id,'add_categories_as_free' );
 		}
 
 		$bogo_use_limit = get_post_meta( $coupon_id, 'bogo_use_limit', true );

@@ -308,8 +308,8 @@ p.output-url-text {
 	font-size: 13px;
 }
 
-.add_a_specific_product_to_purchase span.select2-container,
-.add_a_specific_product_for_free span.select2-container,
+.add_specific_product_to_purchase span.select2-container,
+.add_specific_product_for_free span.select2-container,
 .add_categories_to_purchase span.select2-container,
 .add_categories_as_free span.select2-container {
 	width: 50% !important;

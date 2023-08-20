@@ -102,24 +102,24 @@ class CouponSingleGeneralTab
 
 		echo '</div>';
 
-		// Adding a select2 field to add a specific product
-		$add_a_specific_product_to_purchase = get_post_meta( get_the_ID(),'add_a_specific_product_to_purchase',true );
+		// Adding a select2 field to add specific product
+		$add_specific_product_to_purchase = get_post_meta( get_the_ID(),'add_specific_product_to_purchase',true );
 
-		$output ='<div class="add_a_specific_product_to_purchase">';
+		$output ='<div class="add_specific_product_to_purchase">';
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
-			'name' => 'add_a_specific_product_to_purchase',
-			'value' => $add_a_specific_product_to_purchase,
+			'name' => 'add_specific_product_to_purchase',
+			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
 			'multiple' => true,
 			'select2' => true,
-			'class' => 'add_a_specific_product_to_purchase',
-			'placeholder' => __('Search for a specific product')
+			'class' => 'add_specific_product_to_purchase',
+			'placeholder' => __('Search for specific product')
 		] );
 
-		echo '<span class="add_a_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="add_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -174,23 +174,23 @@ class CouponSingleGeneralTab
 		echo '</div>';
 
 		// Adding a select2 field to add a specific product
-		$add_a_specific_product_for_free = get_post_meta( get_the_ID(),'add_a_specific_product_for_free',true );
+		$add_specific_product_for_free = get_post_meta( get_the_ID(),'add_specific_product_for_free',true );
 
-		$output ='<div class="add_a_specific_product_for_free">';
+		$output ='<div class="add_specific_product_for_free">';
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
-			'name' => 'add_a_specific_product_for_free',
-			'value' => $add_a_specific_product_for_free,
+			'name' => 'add_specific_product_for_free',
+			'value' => $add_specific_product_for_free,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
 			'multiple' => true,
 			'select2' => true,
-			'class' => 'add_a_specific_product_for_free',
-			'placeholder' => __('Search for a specific product')
+			'class' => 'add_specific_product_for_free',
+			'placeholder' => __('Search for specific product')
 		] );
 
-		echo '<span class="add_a_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
