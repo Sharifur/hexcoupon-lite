@@ -311,32 +311,32 @@ class CouponUsageRestrictionTabController extends BaseController
 		if ( is_null( $apply_cart_condition_on_product ) || is_null( $apply_cart_condition_on_categories ) || is_null( $apply_cart_condition_on_customer_grp ) || is_null( $apply_cart_condition_on_individual_customer ) ) {
 			if ( $apply_cart_condition_on_product || $apply_cart_condition_on_categories || $apply_cart_condition_on_customer_grp || $apply_cart_condition_on_individual_customer )	{
 
-				echo 'apply_cart_condition_on_product is returning '.$apply_cart_condition_on_product.'<br>';
-				echo 'apply_cart_condition_on_categories is returning '.$apply_cart_condition_on_categories.'<br>';
-				echo 'apply_cart_condition_on_customer_grp is returning '.$apply_cart_condition_on_customer_grp.'<br>';
-				echo 'apply_cart_condition_on_individual_customer is returning '.$apply_cart_condition_on_individual_customer.'<br>';
+//				echo 'apply_cart_condition_on_product is returning '.$apply_cart_condition_on_product.'<br>';
+//				echo 'apply_cart_condition_on_categories is returning '.$apply_cart_condition_on_categories.'<br>';
+//				echo 'apply_cart_condition_on_customer_grp is returning '.$apply_cart_condition_on_customer_grp.'<br>';
+//				echo 'apply_cart_condition_on_individual_customer is returning '.$apply_cart_condition_on_individual_customer.'<br>';
 
 				return $valid;
 
 			}
 
-			echo '## coupon is valid coz cart condition is returning true because they are not set. <br>';
+//			echo '## coupon is valid coz cart condition is returning true because they are not set. <br>';
 
 			return $valid;
 		}
 
 		if ( $apply_cart_condition_on_product && $apply_cart_condition_on_categories && $apply_cart_condition_on_customer_grp && $apply_cart_condition_on_individual_customer )	{
 
-			echo 'product cart condition is returning '.$apply_cart_condition_on_product.' <brs>';
-			echo 'categories cart condition is returning '.$apply_cart_condition_on_categories.' <brs>';
-			echo 'customer group cart condition is returning '.$apply_cart_condition_on_customer_grp.' <brs>';
-			echo 'individual customer cart condition is returning '.$apply_cart_condition_on_individual_customer.' <brs>';
+//			echo 'product cart condition is returning '.$apply_cart_condition_on_product.' <brs>';
+//			echo 'categories cart condition is returning '.$apply_cart_condition_on_categories.' <brs>';
+//			echo 'customer group cart condition is returning '.$apply_cart_condition_on_customer_grp.' <brs>';
+//			echo 'individual customer cart condition is returning '.$apply_cart_condition_on_individual_customer.' <brs>';
 
 			return $valid;
 
 		}
 
-		echo 'cart condition is returning false. <br>';
+//		echo 'cart condition is returning false. <br>';
 
 		return false;
 

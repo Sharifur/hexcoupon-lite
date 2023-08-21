@@ -159,20 +159,20 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
-				echo 'The coupon is not valid. The city from your shipping address is matching with the restricted cities, please select a different city. <br>';
+//				echo 'The coupon is not valid. The city from your shipping address is matching with the restricted cities, please select a different city. <br>';
 				return false;
 			}
 		}
 
 		if ( ! is_null( $restrict_shipping_countries ) ) {
 			if ( ! $restrict_shipping_countries ) {
-				echo '## The coupon is not valid. The Country from your shipping address is matching with the restricted countries, please select a different country.  <br>';
+//				echo '## The coupon is not valid. The Country from your shipping address is matching with the restricted countries, please select a different country.  <br>';
 				return false;
 			}
 		}
 
 		if ( is_null( $restricted_shipping_zones ) || is_null( $restrict_shipping_countries ) ) {
-			echo '## coupon is valid coz shipping zone and country is returning null <br>';
+//			echo '## coupon is valid coz shipping zone and country is returning null <br>';
 			return $valid;
 		}
 

@@ -195,41 +195,6 @@ class CouponSingleGeneralTab
 
 		echo '</div>';
 
-		// Adding customer bogo use limit radio buttons
-		$bogo_use_limit = get_post_meta( $post->ID, 'bogo_use_limit', true );
-		$bogo_use_limit = ! empty( $bogo_use_limit ) ? $bogo_use_limit : '';
-
-		echo '<div class="options_group bogo_use_limit">';
-
-		woocommerce_wp_radio(
-			[
-				'id' => 'bogo_use_limit',
-				'label' => esc_html__( 'Use limit', 'hexcoupon' ),
-				'options' => [
-					'can_be_used_only_once' => esc_html__( 'Can be used only once', 'hexcoupon' ),
-					'can_be_used_multiple_times' => esc_html__( 'Can be used multiple times', 'hexcoupon' ),
-				],
-				'value' => $bogo_use_limit,
-			]
-		);
-
-		$bogo_coupon_maximum_usability_limit = get_post_meta( $post->ID, 'bogo_coupon_maximum_usability_limit', true );
-
-		woocommerce_wp_text_input(
-			[
-				'id' => 'bogo_coupon_maximum_usability_limit',
-				'label' => esc_html__( 'Add maximum usability limit', 'hexcoupon' ),
-				'desc_tip' => true,
-				'description' => esc_html__( 'Add how many times this coupon can be applied.', 'hexcoupon' ),
-				'type' => 'number',
-				'value' => $bogo_coupon_maximum_usability_limit,
-				'class' => 'short',
-				'placeholder' => esc_html( 'Add a number' ),
-			]
-		);
-
-		echo '</div>';
-
 		$automatically_add_bogo_deal_product = get_post_meta( $post->ID, 'automatically_add_bogo_deal_product', true );
 		$automatically_add_bogo_deal_product = ! empty( $automatically_add_bogo_deal_product ) ? $automatically_add_bogo_deal_product : '';
 

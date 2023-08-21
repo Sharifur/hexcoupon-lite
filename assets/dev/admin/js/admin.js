@@ -42,8 +42,6 @@
 
 		$(".add_specific_product_for_free_tooltip").insertAfter(".add_specific_product_for_free span.select2-container");
 
-		// Place the bogo use limit radibo buttons after the add specific product as free input select2 field
-		$(".bogo_use_limit").insertAfter("div.add_specific_product_for_free");
 
 		// Place the bogo deal checkboxes after the customer gets as free div
 		$(".bogo_deal_checkboxes").insertAfter(".customer_gets_as_free");
@@ -172,19 +170,6 @@
 		// });
 
 		// customerGetsAsFree.trigger("change");
-
-		// Bogo use limit
-		const bogoUseLimit = $("input[name='bogo_use_limit']");
-
-		bogoUseLimit.on("change",function(){
-			if($(this).is(":checked") && "can_be_used_only_once" === $(this).val()) {
-				$(".bogo_coupon_maximum_usability_limit_field").hide();
-			}if($(this).is(":checked") && "can_be_used_multiple_times" === $(this).val()) {
-				$(".bogo_coupon_maximum_usability_limit_field").show();
-			}
-		});
-
-		bogoUseLimit.trigger("change");
 
 		/*
        ========================================

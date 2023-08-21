@@ -6,6 +6,7 @@ use HexCoupon\App\Controllers\BaseController;
 use hexcoupon\app\Core\Helpers\ValidationHelper;
 use HexCoupon\App\Core\Lib\SingleTon;
 use Kathamo\Framework\Lib\Http\Request;
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 class CouponGeneralTabController extends BaseController
 {
@@ -28,6 +29,7 @@ class CouponGeneralTabController extends BaseController
 		add_filter( 'woocommerce_cart_item_price', [ $this, 'replace_price_amount_with_free_text' ], 10, 2 );
 		add_action( 'woocommerce_before_calculate_totals', [ $this, 'apply_price_deduction' ] );
 		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
+		add_action('wp_loaded', [ $this, 'display_exceeded_quantity_notice_for_free_item' ] );
 	}
 
 	/**
@@ -87,6 +89,21 @@ class CouponGeneralTabController extends BaseController
 	}
 
 	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method display_exceeded_quantity_notice_for_free_item
+	 * @return void
+	 * @since 1.0.0
+	 * Display a notice for adding more than one item on free products.
+	 */
+	public function display_exceeded_quantity_notice_for_free_item()
+	{
+		if ( isset( $_GET['?exceeded_quantity'] ) && $_GET['?exceeded_quantity'] === 'true' ) {
+			wc_add_notice( __( 'Cannot proceed to checkout because you can not add more than "one" item from the free product', 'hexcoupon' ),  'error');
+		}
+	}
+
+	/**
 	 * @throws \Exception
 	 * @package hexcoupon
 	 * @author WpHex
@@ -97,12 +114,8 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function add_free_items_to_cart()
 	{
-//		function wc_remove_all_quantity_fields( $return, $product ) {
-//			return true;
-//		}
-//		add_filter( 'woocommerce_is_sold_individually', 'wc_remove_all_quantity_fields', 10, 2 );
 
-		$coupon_id = $this->coupon_id();
+		$coupon_id = $this->coupon_id(); // get the id of applied coupon from the cart page
 
 		$customer_purchases = get_post_meta( $coupon_id, 'customer_purchases', true );
 
@@ -111,26 +124,25 @@ class CouponGeneralTabController extends BaseController
 
 		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true ); // get meta value of customer gets as free
 
-		$add_categories_to_purchase = get_post_meta( $coupon_id, 'add_categories_to_purchase', true );
-		$add_categories_as_free = get_post_meta( $coupon_id, 'add_categories_as_free', true );
+		$add_categories_to_purchase = get_post_meta( $coupon_id, 'add_categories_to_purchase', true ); // get the meta-value of coupon purchasable product categories
 
 		// Product IDs
-		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : [];
-		$free_item_id = ! empty( $selected_products_as_free ) ? $selected_products_as_free : [];
+		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : []; // product ids that has to be existed in the cart to apply BOGO deals
+		$free_item_id = ! empty( $selected_products_as_free ) ? $selected_products_as_free : []; // ids of products that customer will get as free
 
 		$cart_product_ids = [];
 
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-			$cart_product_ids[] = $cart_item['product_id'];
+			$cart_product_ids[] = $cart_item['product_id']; // assign all ids of products in the cart in an array
 		}
 
-		$main_product_in_cart = false;
+		$main_product_in_cart = false; // '$main_product_in_cart' is false if there are no products in the cart that needs to be there to apply BOGO deals.
 
 		// Check if the cart has the exact or any product that the admin has selected to purchase
 		if ( 'a_specific_product' === $customer_purchases || 'any_products_listed_below' === $customer_purchases ) {
 			foreach ( $main_product_id as $main_product_single ) {
 				if ( in_array( $main_product_single, $cart_product_ids ) ) {
-					$main_product_in_cart = true;
+					$main_product_in_cart = true; // if the cart has the product it assigns value of '$main_product_in_cart' to 'true'
 					break;
 				}
 			}
@@ -140,21 +152,21 @@ class CouponGeneralTabController extends BaseController
 		if ( 'a_combination_of_products' === $customer_purchases ) {
 			foreach ( $main_product_id as $main_product_single ) {
 				if ( ! in_array( $main_product_single, $cart_product_ids ) ) {
-					$main_product_in_cart = false;
+					$main_product_in_cart = false; // if the cart does not have the product it assigns value of '$main_product_in_cart' to 'false'
 					break;
 				}
 				else {
-					$main_product_in_cart = true;
+					$main_product_in_cart = true; // else it becomes 'true'
 				}
 			}
 		}
 
 		if ( 'product_categories'=== $customer_purchases ) {
-			$product_categories_id_in_cart = $this->get_product_categories_id_in_cart();
+			$product_categories_id_in_cart = $this->get_product_categories_id_in_cart(); // assign product categories id of the cart page
 
 			foreach ( $add_categories_to_purchase as $add_category_to_purchase ) {
 				if ( in_array( $add_category_to_purchase, $product_categories_id_in_cart ) ) {
-					$main_product_in_cart = true;
+					$main_product_in_cart = true; // if the cart does have the products from the selected categories then '$main_product_in_cart' becomes 'true'
 					break;
 				}
 			}
@@ -165,7 +177,8 @@ class CouponGeneralTabController extends BaseController
 			if ( ! empty( $free_item_id ) ) {
 				foreach ( $free_item_id as $free_gift_single_id ) {
 					if ( ! in_array( $free_gift_single_id, $cart_product_ids ) ) {
-						WC()->cart->add_to_cart( $free_gift_single_id );
+						WC()->cart->add_to_cart( $free_gift_single_id);
+						break;
 					}
 				}
 			}
@@ -177,6 +190,22 @@ class CouponGeneralTabController extends BaseController
 //					}
 //				}
 //			}
+
+			$quantities = WC()->cart->get_cart_item_quantities();
+
+			if ( ! empty( $free_item_id ) ) {
+				foreach ( $free_item_id as $free_gift_single_id ) {
+					if( isset( $quantities[$free_gift_single_id] ) && $quantities[$free_gift_single_id] > 1 ) {
+						if ( is_checkout() ) {
+							$cart_url = wc_get_cart_url() . '&?exceeded_quantity=true';
+							wp_safe_redirect( $cart_url );
+							exit;
+						}
+						break;
+					}
+				}
+			}
+
 		}
 		else {
 			// Remove free item from the cart if the main product does not exist in the cart
@@ -352,7 +381,6 @@ class CouponGeneralTabController extends BaseController
 			[ 'add_specific_category', 'string' ],
 			[ 'customer_gets_as_free', 'string' ],
 			[ 'add_specific_product_for_free', 'string' ],
-			[ 'bogo_use_limit', 'string' ],
 			[ 'automatically_add_bogo_deal_product', 'string' ],
 			[ 'display_bogo_button', 'string' ],
 		];
@@ -632,21 +660,21 @@ class CouponGeneralTabController extends BaseController
 			if ( 'yes' === $days_hours_of_week ) {
 				if ( is_null( $apply_coupon_on_different_days ) || $apply_coupon_on_different_days ) {
 
-					echo '## apply coupon on different days is returning true because either they are not set or you are on time on different days. <br>';
+//					echo '## apply coupon on different days is returning true because either they are not set or you are on time on different days. <br>';
 					return true;
 				} else {
 					add_filter('woocommerce_coupon_is_valid',function(){
 
 					});
-					echo '## apply coupon on different days is returning false because different days time is not matching. <br>';
+//					echo '## apply coupon on different days is returning false because different days time is not matching. <br>';
 					return false;
 				}
 			}
 
-			echo '## coupon starting date is returning '.$apply_coupon_starting_date.'. <br>';
+//			echo '## coupon starting date is returning '.$apply_coupon_starting_date.'. <br>';
 			return true;
 		}
-		echo '## apply coupon on different days is returning false. <br>';
+//		echo '## apply coupon on different days is returning false. <br>';
 
 		return false;
 	}
@@ -726,12 +754,6 @@ class CouponGeneralTabController extends BaseController
 
 		if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
 			delete_post_meta( $coupon_id,'add_specific_product_for_free' );
-		}
-
-		$bogo_use_limit = get_post_meta( $coupon_id, 'bogo_use_limit', true );
-
-		if ( 'can_be_used_only_once' === $bogo_use_limit ) {
-			delete_post_meta( $coupon_id,'bogo_coupon_maximum_usability_limit' );
 		}
 	}
 }
