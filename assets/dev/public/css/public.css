@@ -1,0 +1,14 @@
+.woocommerce .cart-collaterals .cart_totals, .woocommerce-page .cart-collaterals .cart_totals {
+	margin-top: 40px;
+}
+
+.custom-product {
+	width: 28%;
+	float: left;
+	margin: 20px 20px;
+}
+
+.free_bogo_deal_text {
+	font-weight: bold;
+}
+

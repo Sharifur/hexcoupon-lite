@@ -17,6 +17,7 @@ class AssetsManager
 
 		$this->before_register_assets();
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 	}
 
 	private function before_register_assets()
@@ -143,6 +144,14 @@ class AssetsManager
 
 	public function public_scripts()
 	{
+		wp_enqueue_style(
+			Hxc_prefix( 'public' ),
+			Hxc_asset_url( "/dev/public/css/public.css" ),
+			array(),
+			$this->version,
+			'all'
+		);
+
 		wp_enqueue_style(
 			Hxc_prefix( 'public-css' ),
 			Hxc_asset_url( "/dist/public.css" ),

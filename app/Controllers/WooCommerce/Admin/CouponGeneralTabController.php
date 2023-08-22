@@ -99,7 +99,47 @@ class CouponGeneralTabController extends BaseController
 	public function display_exceeded_quantity_notice_for_free_item()
 	{
 		if ( isset( $_GET['?exceeded_quantity'] ) && $_GET['?exceeded_quantity'] === 'true' ) {
-			wc_add_notice( __( 'Cannot proceed to checkout because you can not add more than "one" item from the free product', 'hexcoupon' ),  'error');
+			wc_add_notice( __( 'Cannot proceed to checkout because you can not add more than "one" item from the free product. Please reduce the product quantity or reduce product to one item.', 'hexcoupon' ),  'error');
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method custom_content_below_coupon_button
+	 * @return void
+	 * @since 1.0.0
+	 * Display the free items below the apply coupon button.
+	 */
+	public function custom_content_below_coupon_button()
+	{
+		global $product;
+
+		// Check if we are on the cart page
+		if ( is_cart() ) {
+			echo '<div class="hexcoupon_select_free_item">';
+			// Add content for the free items
+			echo '<h3>' . esc_html__( 'Please select any product from below', 'hexcoupon' ) . '</h3>';
+
+			// Get the ids of free items.
+			$product_ids = $this->add_free_items_to_cart();
+
+			foreach ( $product_ids as $product_id ) {
+				// Output each product
+				$product = wc_get_product( $product_id );
+				if ( $product ) {
+					echo '<div class="custom-product">';
+					echo '<a href="' . get_permalink( $product_id ) . '">' . $product->get_image() . '</a>';
+					echo '<h3 class="has-text-align-center wp-block-post-title has-medium-font-size"><a href="' . get_permalink ( $product_id ) . '">' . $product->get_name() . '</a></h3>';
+					echo '<p class="price has-font-size has-small-font-size has-text-align-center">' . $product->get_price_html() . '</p>';
+					echo '<form class="cart" action="' . esc_url( wc_get_cart_url() ) . '" method="post">';
+					echo '<div class="has-text-align-center"><button type="submit" name="add-to-cart" value="' . esc_attr( $product_id ) . '" class="button wp-element-button wp-block-button__link">' . esc_html__( 'Add to Cart', 'hexcoupon' ) . '</button></div>';
+					echo '</form>';
+					echo '</div>';
+				}
+			}
+
+			echo '</div>';
 		}
 	}
 
@@ -114,7 +154,6 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function add_free_items_to_cart()
 	{
-
 		$coupon_id = $this->coupon_id(); // get the id of applied coupon from the cart page
 
 		$customer_purchases = get_post_meta( $coupon_id, 'customer_purchases', true );
@@ -174,22 +213,51 @@ class CouponGeneralTabController extends BaseController
 
 		// Add free item to cart if the main product is in the cart
 		if ( $main_product_in_cart ) {
-			if ( ! empty( $free_item_id ) ) {
-				foreach ( $free_item_id as $free_gift_single_id ) {
-					if ( ! in_array( $free_gift_single_id, $cart_product_ids ) ) {
-						WC()->cart->add_to_cart( $free_gift_single_id);
-						break;
+			if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free ) {
+				if ( ! empty( $free_item_id ) ) {
+					foreach ( $free_item_id as $free_gift_single_id ) {
+						if ( ! in_array( $free_gift_single_id, $cart_product_ids ) ) {
+							WC()->cart->add_to_cart( $free_gift_single_id);
+							break;
+						}
 					}
 				}
 			}
 
-//			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
-//				foreach ( $main_product_id as $main_product_single ) {
-//					if ( in_array( $main_product_single, $cart_product_ids ) ) {
-//						WC()->cart->add_to_cart($main_product_single);
-//					}
-//				}
-//			}
+			// Give same item/items  as free which were added by admin to purchase
+			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
+				foreach ( $main_product_id as $main_product_single ) {
+					$main_product_single = intval($main_product_single);
+
+					foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+						if ( $cart_item['product_id'] === $main_product_single ) {
+							// Get the current quantity
+							$current_quantity = $cart_item['quantity'];
+
+							// Increase the quantity by one
+							$new_quantity = $current_quantity + 1;
+
+							// Update the cart with the new quantity
+//							WC()->cart->set_quantity( $cart_item_key, $new_quantity );
+
+							break; // Exit the loop since we have found our product
+						}
+					}
+				}
+			}
+
+			if ( 'any_products_listed_below' === $customer_gets_as_free ) {
+				add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button' ] );
+
+				$matches = array_intersect( $free_item_id, $cart_product_ids );
+				if ( $matches > 1 ) {
+					if ( is_checkout() ) {
+						$cart_url = esc_url(wc_get_cart_url() . '&?exceeded_quantity=true');
+						wp_safe_redirect($cart_url);
+						exit;
+					}
+				}
+			}
 
 			$quantities = WC()->cart->get_cart_item_quantities();
 
@@ -197,7 +265,7 @@ class CouponGeneralTabController extends BaseController
 				foreach ( $free_item_id as $free_gift_single_id ) {
 					if( isset( $quantities[$free_gift_single_id] ) && $quantities[$free_gift_single_id] > 1 ) {
 						if ( is_checkout() ) {
-							$cart_url = wc_get_cart_url() . '&?exceeded_quantity=true';
+							$cart_url = esc_url(wc_get_cart_url() . '&?exceeded_quantity=true');
 							wp_safe_redirect( $cart_url );
 							exit;
 						}
@@ -239,7 +307,7 @@ class CouponGeneralTabController extends BaseController
 
 		if ( 'a_specific_product' === $customer_purchases || 'a_combination_of_products' === $customer_purchases || 'any_products_listed_below' === $customer_purchases || 'product_categories' === $customer_purchases ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
-				$price = '<span style="font-weight: bold">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
+				$price = '<span class="free_bogo_deal_text">' . esc_html__( 'Free (BOGO Deal)', 'hexcoupon' ) . '</span>';
 			}
 		}
 
