@@ -12,26 +12,26 @@ class CouponSingleGeographicRestrictions {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method register
 	 * @return mixed
-	 * @since 1.0.0
 	 * Registers all hooks that are needed to create custom tab 'Geographic Restrictions' on 'Coupon Single' page.
 	 */
 	public function register()
 	{
-		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_geographic_restriction_tab_content' ] );
-		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_geographic_restriction_tab' ] );
+		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_geographic_restriction_tab' ] );
+		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_geographic_restriction_tab_content' ] );
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_custom_coupon_tab_content
-	 * @return string
 	 * @since 1.0.0
+	 * @method add_geographic_restriction_tab
+	 * @return string
 	 * Displays the new tab in the coupon single page called 'Geographic restrictions'.
 	 */
-	public function add_geographic_restriction_tab_content( $tabs )
+	public function add_geographic_restriction_tab( $tabs )
 	{
 		$tabs['geographic_restriction_tab'] = array(
 			'label'    => esc_html__( 'Geographic restrictions', 'hexcoupon' ),
@@ -44,55 +44,15 @@ class CouponSingleGeographicRestrictions {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method get_all_shipping_zones
-	 * @return array
 	 * @since 1.0.0
-	 * Get the shipping zone name and code.
-	 */
-	private function get_all_shipping_zones() {
-		$shipping_zones = [];
-		$all_zones = \WC_Shipping_Zones::get_zones();
-
-		foreach ( $all_zones as $zone ) {
-			$shipping_zones[ $zone['formatted_zone_location'] ] = $zone['zone_name'];
-		}
-
-		return $shipping_zones;
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method get_all_countries_name
-	 * @return array
-	 * @since 1.0.0
-	 * Get all the countries names of WooCommerce.
-	 */
-	private function get_all_countries_name()
-	{
-		$countries_names = [];
-		$all_countries = WC()->countries->get_countries();
-
-		foreach ( $all_countries as $country_code => $country_name ) {
-			$countries_names[ $country_code ] = $country_name;
-		}
-
-		return $countries_names;
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method add_custom_coupon_tab
-	 * @return string
-	 * @since 1.0.0
+	 * @method add_geographic_restriction_tab_content
+	 * @return void
 	 * Displays the content of custom tab 'Geographic restrictions'.
 	 */
-	public function add_geographic_restriction_tab()
+	public function add_geographic_restriction_tab_content()
 	{
-		global $post;
-
-		$apply_geographic_restriction = get_post_meta( $post->ID, 'apply_geographic_restriction', true );
+		// get 'apply_geographic_restriction' meta field data
+		$apply_geographic_restriction = get_post_meta( get_the_ID(), 'apply_geographic_restriction', true );
 		$apply_geographic_restriction = ! empty( $apply_geographic_restriction ) ? $apply_geographic_restriction : '';
 
 		echo '<div id="geographic_restriction_tab" class="panel apply_geographic_restriction">';
@@ -110,6 +70,7 @@ class CouponSingleGeographicRestrictions {
 		);
 
 		$restricted_shipping_zones = get_post_meta( get_the_ID(),'restricted_shipping_zones',true );
+		$restricted_shipping_zones = ! empty( $restricted_shipping_zones ) ? $restricted_shipping_zones : '';
 
 		$output ='<div class="restricted_shipping_zones">';
 
@@ -122,7 +83,7 @@ class CouponSingleGeographicRestrictions {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_shipping_zones',
-			'placeholder' => __('Search for shipping zone')
+			'placeholder' => esc_html__( 'Search for shipping zone', 'hexcoupon' )
 		] );
 
 		echo '<span class="restricted_shipping_zones_tooltip">'.wc_help_tip( esc_html__( 'Select zones that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';
@@ -152,5 +113,47 @@ class CouponSingleGeographicRestrictions {
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
 		echo '</div></div>';
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_shipping_zones
+	 * @return array
+	 * Get all the shipping zone name and code.
+	 */
+	private function get_all_shipping_zones()
+	{
+		$shipping_zones = []; // define an empty array
+
+		$all_zones = \WC_Shipping_Zones::get_zones(); // get all shipping zones
+
+		foreach ( $all_zones as $zone ) {
+			$shipping_zones[ $zone['formatted_zone_location'] ] = $zone['zone_name'];
+		}
+
+		return $shipping_zones; // return formatted_zone_location
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_countries_name
+	 * @return array
+	 * Get all the countries names of WooCommerce.
+	 */
+	private function get_all_countries_name()
+	{
+		$countries_names = []; // define an empty array
+
+		$all_countries = WC()->countries->get_countries(); // get all countries name
+
+		foreach ( $all_countries as $country_code => $country_name ) {
+			$countries_names[ $country_code ] = $country_name;
+		}
+
+		return $countries_names;
 	}
 }

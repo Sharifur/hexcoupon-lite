@@ -12,9 +12,9 @@ class CouponSingleSharableUrl {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method register
 	 * @return mixed
-	 * @since 1.0.0
 	 * Registers all hooks that are needed to create custom tab 'Sharable URL coupon' on 'Coupon Single' page.
 	 */
 	public function register()
@@ -26,11 +26,11 @@ class CouponSingleSharableUrl {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method add_sharable_url_coupon_tab
 	 * @param array $tabs
 	 * @return array
-	 * @since 1.0.0
-	 * Displays the new tab in the coupon single page called 'Sharable URL coupon'.
+	 * Displays a new tab in the coupon single page called 'Sharable URL coupon'.
 	 */
 	public function add_sharable_url_coupon_tab( $tabs )
 	{
@@ -45,15 +45,17 @@ class CouponSingleSharableUrl {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_sharable_url_coupon_tab_content
-	 * @return string
 	 * @since 1.0.0
+	 * @method add_sharable_url_coupon_tab_content
+	 * @return void
 	 * Displays the content of custom tab 'Sharable URL coupon'.
 	 */
 	public function add_sharable_url_coupon_tab_content()
 	{
+		// declare the global $post object
 		global $post;
 
+		// get 'apply_automatic_coupon_by_url' meta field data
 		$apply_automatic_coupon_by_url = get_post_meta( $post->ID, 'apply_automatic_coupon_by_url', true );
 
 		echo '<div id="sharable_url_coupon_tab" class="panel woocommerce_options_panel sharable_url_coupon_tab">';
@@ -69,9 +71,9 @@ class CouponSingleSharableUrl {
 
 		$coupon_id = isset( $_GET['coupon_id'] ) ? intval( $_GET['coupon_id'] ) : 0;
 
-		$coupon_code = get_the_title( $coupon_id );
+		$coupon_code = get_the_title( $coupon_id ); // get the coupon code title
 
-		$sharable_url = get_site_url() . '/' . '?coupon_code=' . $coupon_code;
+		$sharable_url = sanitize_url( get_site_url() . '/' . '?coupon_code=' . $coupon_code );
 
 		woocommerce_wp_text_input(
 			[
@@ -92,6 +94,7 @@ class CouponSingleSharableUrl {
 		<p class="copy-sharable-url"><?php echo esc_html__( 'Copy URL', 'hexcoupon' ); ?></p>
 
 		<?php
+		// get 'message_for_coupon_discount_url' meta field data
 		$message_for_coupon_discount_url = get_post_meta( $post->ID, 'message_for_coupon_discount_url', true );
 
 		woocommerce_wp_textarea_input(
@@ -105,6 +108,7 @@ class CouponSingleSharableUrl {
 			]
 		);
 
+		// get 'apply_redirect_sharable_link' meta field data
 		$apply_redirect_sharable_link = get_post_meta( $post->ID, 'apply_redirect_sharable_link', true );
 
 		echo '<div class="options_group redirect_url">';
@@ -121,6 +125,7 @@ class CouponSingleSharableUrl {
 			]
 		);
 
+		// get 'redirect_link' meta field data
 		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
 
 		woocommerce_wp_text_input(

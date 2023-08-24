@@ -21,7 +21,6 @@ class CouponSingleGeneralTab
 	public function register()
 	{
 		add_action( 'woocommerce_coupon_options', [ $this, 'add_coupon_extra_fields' ] );
-		add_action( 'woocommerce_cart_coupon', [ $this, 'add_custom_button_before_coupon_field' ], 5 );
 	}
 
 	/**
@@ -206,18 +205,6 @@ class CouponSingleGeneralTab
 				'label' => esc_html__( 'Automatically add product', 'hexcoupon' ),
 				'description' => esc_html__( 'Check this box to automatically add the BOGO deals product to the customers cart', 'hexcoupon' ),
 				'value' => $automatically_add_bogo_deal_product,
-			]
-		);
-
-		$display_bogo_button = get_post_meta( $post->ID, 'display_bogo_button', true );
-		$display_bogo_button = ! empty( $display_bogo_button ) ? $display_bogo_button : '';
-
-		woocommerce_wp_checkbox(
-			[
-				'id' => 'display_bogo_button',
-				'label' => esc_html__( 'Display button', 'hexcoupon' ),
-				'description' => esc_html__( 'Display a button in the shopping cart to show(BOGO) deals products that are either manually removed by customers.', 'hexcoupon' ),
-				'value' => $display_bogo_button,
 			]
 		);
 
@@ -820,31 +807,5 @@ class CouponSingleGeneralTab
 
 		// Add apply on friday fields
 		$this->add_coupon_apply_on_friday_fields();
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method add_custom_button_before_coupon_field
-	 * @return void
-	 * @since 1.0.0
-	 * Add button in the cart page to add removed free item of BOGO deals.
-	 */
-	public function add_custom_button_before_coupon_field()
-	{
-		$applied_coupon = WC()->cart->get_applied_coupons();
-		$coupon_id = '';
-
-		if ( ! empty( $applied_coupon ) ) {
-			// Assuming only one coupon is applied; if multiple, you might need to loop through $applied_coupon array
-			$coupon_code = reset( $applied_coupon );
-			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
-		}
-
-		$display_bogo_button = get_post_meta( $coupon_id, 'display_bogo_button', true );
-
-		if ( 'yes' === $display_bogo_button ) {
-			echo '<tr class="custom-coupon-button-row"><td colspan="6"><a href="javascript:void(0)" class="button-for-adding-removed-item button wp-element-button">' . esc_html__( 'Add removed free item', 'hexcoupon' ) . '</a></td></tr>';
-		}
 	}
 }

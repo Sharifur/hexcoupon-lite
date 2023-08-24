@@ -30,9 +30,9 @@
 		// Place the tooltip of add a specific product to purchase select2 field
 		$(".add_specific_product_to_purchase_tooltip").insertAfter(".add_specific_product_to_purchase span.select2-container");
 
-		// Place the add categories select2 input fields after the customer purchases field
-		$(".add_categories_to_purchase").insertAfter(".customer_purchases_field");
+		// category free
 		$(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
+		$(".add_categories_to_purchase").insertAfter(".add_specific_product_to_purchase");
 
 		//
 		$(".customer_gets_as_free").insertAfter(".customer_purchases");
@@ -101,30 +101,32 @@
 
 		// Show or hide product selection and category selection input fields if product categories type is selected
 		customerPurchases.on("change",function(){
-			if("product_categories" === $(this).val()){
+			if($(this).is(":checked") && "product_categories" === $(this).val()){
 				$(".add_categories_to_purchase").show();
 				$(".add_specific_product_to_purchase").hide();
-			}else {
+			}else{
 				$(".add_categories_to_purchase").hide();
 				$(".add_specific_product_to_purchase").show();
 			}
 		});
 
-		// Control number of result selection if a specific product type is selected
-		customerPurchases.on("change",function(){
-			if("a_specific_product" === $(this).val()){
-				$("#add_specific_product_to_purchase").select2({
-					maximumSelectionLength: 1 // Set maximum selection to 1
-				});
-			}else {
-				$("#add_specific_product_to_purchase").select2({
-					maximumSelectionLength: 0 // Set maximum selection to unlimited
-				});
-			}
-		});
-
-		// Trigger the change on page load
 		customerPurchases.trigger("change");
+
+		// Control number of result selection if a specific product type is selected
+		// customerPurchases.on("change",function(){
+		// 	if("a_specific_product" === $(this).val()){
+		// 		$("#add_specific_product_to_purchase").select2({
+		// 			maximumSelectionLength: 1 // Set maximum selection to 1
+		// 		});
+		// 	}else {
+		// 		$("#add_specific_product_to_purchase").select2({
+		// 			maximumSelectionLength: 0 // Set maximum selection to unlimited
+		// 		});
+		// 	}
+		// });
+		//
+		// // Trigger the change on page load
+		// customerPurchases.trigger("change");
 
 		// Don't allow more than one product selection on selecting a specific product from the customer gets as free field
 		const customerGetsAsFree = $("input[name='customer_gets_as_free']");
@@ -141,17 +143,17 @@
 		customerGetsAsFree.trigger("change");
 
 		// Control number of result selection if a specific product type is selected
-		// customerGetsAsFree.on("change",function(){
-		// 	if("a_specific_product" === $(this).val()){
-		// 		$("#add_specific_product_for_free").select2({
-		// 			maximumSelectionLength: 1 // Set maximum selection to 1
-		// 		});
-		// 	}else {
-		// 		$("#add_specific_product_for_free").select2({
-		// 			maximumSelectionLength: 0 // Set maximum selection to unlimited
-		// 		});
-		// 	}
-		// });
+		customerGetsAsFree.on("change",function(){
+			if("a_specific_product" === $(this).val()){
+				$("#add_specific_product_for_free").select2({
+					maximumSelectionLength: 1 // Set maximum selection to 1
+				});
+			}else {
+				$("#add_specific_product_for_free").select2({
+					maximumSelectionLength: 0 // Set maximum selection to unlimited
+				});
+			}
+		});
 
 		// customerGetsAsFree.on("change",function(){
 		// 	if("same_product_added_to_cart" === $(this).val()){
@@ -259,7 +261,8 @@
 		$(".selected_customer_group_tooltip").insertAfter(".selected_customer_group");
 		$(".selected_individual_customer_tooltip").insertAfter(".selected_individual_customer");
 
-
+		// $(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
+		// $(".add_categories_to_purchase").insertAfter(".customer_purchases");
 
 
 		// function appendSelectedValue(selectedValue) {

@@ -12,26 +12,81 @@ class CouponPaymentandShipping
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method register
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method register
+	 * @return void
 	 * Registers all hooks that are needed to create custom tab on 'Coupon Single' page.
 	 */
 	public function register()
 	{
-		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_custom_coupon_tab' ] );
-		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_custom_coupon_tab_content' ] );
+		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_custom_coupon_tab' ] );
+		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_custom_coupon_tab_content' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method get_all_payment_methods
+	 * @return array
+	 * Retrieve all payment methods of 'WooCommerce' that are enabled
+	 */
+	public function get_all_payment_methods()
+	{
+		// get all available payment method gateways
+		$payment_gateways = WC()->payment_gateways->get_available_payment_gateways();
+
+		$payment_options = []; // define an empty array
+
+		// assign all the payment method gateways in the '$payment_options' array
+		foreach ( $payment_gateways as $gateway_id => $gateway ) {
+			$payment_options[ $gateway_id ] = $gateway->get_title();
+		}
+
+		return $payment_options; // return the values
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method get_all_shipping_methods
+	 * @return array
+	 * Retrieve all shipping methods of 'WooCommerce' that are enabled.
+	 */
+	public function get_all_shipping_methods()
+	{
+		// get all shipping zones
+		$shipping_methods = \WC_Shipping_Zones::get_zones();
+
+		$shipping_method_names = []; // define an empty array
+
+		// Show the names of the enabled shipping methods only.
+		foreach ( $shipping_methods as $shipping_method ) {
+			foreach ( $shipping_method['shipping_methods'] as $single_method ) {
+				$method_title = $single_method->get_method_title();
+				$method_id = $single_method->id;
+
+				if ( 'yes' === $single_method->enabled && in_array( $method_title, [ 'Free shipping', 'Flat rate', 'Local pickup' ] ) ) {
+					$shipping_method_names[$method_id] = $single_method->title;
+				}
+			}
+		}
+
+
+		return $shipping_method_names; // finally return all shipping method names
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_custom_coupon_tab_content
-	 * @return string
+	 * @method add_custom_coupon_tab
+	 * @param array $tabs
+	 * @return array
 	 * @since 1.0.0
-	 * Displays the new tab in the coupon single page called 'Hexcoupon'.
+	 * Displays the new tab in the coupon single page called 'Payment & shipping method'.
 	 */
-	public function add_custom_coupon_tab_content( $tabs )
+	public function add_custom_coupon_tab( $tabs )
 	{
 		$tabs['custom_coupon_tab'] = array(
 			'label'    => esc_html__( 'Payment & shipping method', 'hexcoupon' ),
@@ -43,71 +98,13 @@ class CouponPaymentandShipping
 
 	/**
 	 * @package hexcoupon
-	 * @author Wphex
-	 * @method get_all_payment_methods
-	 * @return array
-	 * @since 1.0.0
-	 * Retrieve all payment methods of 'WooCommerce' that are enabled
-	 */
-	public function get_all_payment_methods()
-	{
-		$payment_gateways = WC()->payment_gateways->get_available_payment_gateways();
-		$payment_options = [];
-
-		foreach ( $payment_gateways as $gateway_id => $gateway ) {
-			$payment_options[ $gateway_id ] = $gateway->get_title();
-		}
-
-		return $payment_options;
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @method get_all_shipping_methods
-	 * @return mixed
-	 * @since 1.0.0
-	 * Retrieve all shipping methods of 'WooCommerce' that are enabled.
-	 */
-	public function get_all_shipping_methods()
-	{
-		$shipping_methods = \WC_Shipping_Zones::get_zones();
-
-		// Show the names of the enabled shipping methods only.
-		$shipping_method_names = [];
-		foreach ( $shipping_methods as $shipping_method ) {
-			foreach ( $shipping_method['shipping_methods'] as $shipping_method ) {
-				if ( 'Free shipping' === $shipping_method->get_method_title() ) {
-					$shipping_method_index = 1;
-					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
-				}
-				if ( 'Flat rate' === $shipping_method->get_method_title() ) {
-					$shipping_method_index = 2;
-					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
-				}
-				if ( 'Local pickup' === $shipping_method->get_method_title() ) {
-					$shipping_method_index = 3;
-					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
-				}
-
-				if ( 'yes' === $shipping_method->enabled ) {
-					$shipping_method_names[$shipping_method_id] = $shipping_method->title;
-				}
-			}
-		}
-
-		return $shipping_method_names;
-	}
-
-	/**
-	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_custom_coupon_tab
-	 * @return string
 	 * @since 1.0.0
-	 * Displays the content of custom tab 'Hexcoupon'.
+	 * @method add_custom_coupon_tab
+	 * @return void
+	 * Displays the content of custom tab 'Payment & shipping method'.
 	 */
-	public function add_custom_coupon_tab()
+	public function add_custom_coupon_tab_content()
 	{
 		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel payment_and_shipping_method">';
 
@@ -122,7 +119,7 @@ class CouponPaymentandShipping
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'permitted_payment_methods',
-			'placeholder' => __('Apply Payment Methods')
+			'placeholder' => esc_html__('Apply Payment Methods')
 		] );
 
 		echo '<span class="permitted_payment_methods_tooltip">'.wc_help_tip( esc_html__( 'Select payment methods that you want to apply to the coupon.', 'hexcoupon' ) ).'</span>';
@@ -138,7 +135,7 @@ class CouponPaymentandShipping
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'permitted_shipping_methods',
-			'placeholder' => __('Apply Shipping Methods')
+			'placeholder' => esc_html__('Apply Shipping Methods')
 		] );
 
 		echo '<span class="permitted_shipping_methods_tooltip">'.wc_help_tip( esc_html__( 'Select shipping methods that you want to apply to the coupon.', 'hexcoupon' ) ).'</span>';
@@ -146,6 +143,5 @@ class CouponPaymentandShipping
 		$output .= '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
-
 	}
 }

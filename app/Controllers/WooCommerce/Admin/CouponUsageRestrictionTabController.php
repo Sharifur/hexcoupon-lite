@@ -14,9 +14,9 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method register
 	 * @return void
-	 * @since 1.0.0
 	 * Register hook that is needed to validate the coupon.
 	 */
 	public function register()
@@ -29,12 +29,12 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method save_coupon_usage_restriction_meta_data
-	 * @param $key
-	 * @param $data_type
-	 * @param $coupon_id
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method save_coupon_usage_restriction_meta_data
+	 * @param string $key
+	 * @param string $data_type
+	 * @param int $coupon_id
+	 * @return void
 	 * Save the coupon usage restriction meta-data.
 	 */
 	private function save_coupon_usage_restriction_meta_data( $key, $data_type, $coupon_id )
@@ -43,6 +43,7 @@ class CouponUsageRestrictionTabController extends BaseController
 			$key => $data_type
 		] );
 		$error = $validator->error();
+
 		if ( $error ) {
 
 		}
@@ -54,14 +55,15 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method save_coupon_cart_condition
-	 * @param $coupon_id
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method save_coupon_cart_condition
+	 * @param int $coupon_id
+	 * @return void
 	 * Save the coupon cart condition.
 	 */
 	public function save_coupon_cart_condition( $coupon_id )
 	{
+		// initialize the array
 		$meta_data_list = [
 			[ 'apply_cart_condition_for_customer_on_products', 'string' ],
 			[ 'apply_on_listed_product', 'string' ],
@@ -78,6 +80,7 @@ class CouponUsageRestrictionTabController extends BaseController
 			[ 'selected_individual_customer', 'array' ],
 		];
 
+		// save coupon usage restriction meta field values
 		foreach ( $meta_data_list as $meta_data ) {
 			$this->save_coupon_usage_restriction_meta_data( $meta_data[0], $meta_data[1], $coupon_id );
 		}
@@ -86,30 +89,31 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method apply_cart_condition_on_product
 	 * @param bool $valid
 	 * @param object $coupon
 	 * @return bool
-	 * @since 1.0.0
 	 * Apply/validate products cart condition.
 	 */
 	private function apply_cart_condition_on_product( $valid, $coupon )
 	{
-
+		// get value of 'apply_cart_condition_for_customer_on_products' meta field
 		$apply_cart_condition_on_products = get_post_meta( $coupon->get_id(), 'apply_cart_condition_for_customer_on_products', true );
 
+		// get value of 'all_selected_products' meta field
 		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
 
+		// get value of 'apply_on_listed_product' meta field
 		$apply_on_listed_product = get_post_meta( $coupon->get_id(), 'apply_on_listed_product', true );
 
+		// get all cart items
 		$cart_items = WC()->cart->get_cart();
 
-		$product_id = [];
+		$product_id = []; // initialize an empty array
 
 		if ( ! empty( $apply_cart_condition_on_products ) && 'yes' === $apply_cart_condition_on_products ) {
-
 			if ( 'all_of_the_product' === $apply_on_listed_product ) {
-
 				foreach ( $cart_items as $item => $key ) {
 					$product_id[] = $key['product_id'];
 				}
@@ -119,7 +123,8 @@ class CouponUsageRestrictionTabController extends BaseController
 
 				if ( empty( $diff_result ) && empty( $diff_result2 ) ) {
 					return $valid;
-				} else {
+				}
+				else {
 					return false;
 				}
 			}
@@ -139,22 +144,25 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method apply_cart_condition_on_product
+	 * @since 1.0.0
+	 * @method apply_cart_condition_on_categories
 	 * @param bool $valid
 	 * @param object $coupon
 	 * @return bool
-	 * @since 1.0.0
 	 * Apply/validate products categories cart condition.
 	 */
 	private function apply_cart_condition_on_categories( $valid, $coupon )
 	{
+		// get the value of 'apply_cart_condition_for_customer_on_categories' meta field
 		$apply_cart_condition_on_categories = get_post_meta( $coupon->get_id(), 'apply_cart_condition_for_customer_on_categories', true );
 
+		// get the value of 'all_selected_categories'
 		$all_selected_categories = get_post_meta( $coupon->get_id(), 'all_selected_categories', true );
 
+		// get all cart items
 		$cart_items = WC()->cart->get_cart();
 
-		$product_categories_id = [];
+		$product_categories_id = []; // initialize an empty array
 
 		foreach ( $cart_items as $cart_item_key => $cart_item ) {
 			$product_id = $cart_item['product_id'];
@@ -186,11 +194,11 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method apply_cart_condition_on_customer
+	 * @since 1.0.0
+	 * @method apply_cart_condition_on_customer_grp
 	 * @param bool $valid
 	 * @param object $coupon
 	 * @return bool
-	 * @since 1.0.0
 	 * Apply/validate products cart condition based on customer group or individual customer.
 	 */
 	private function apply_cart_condition_on_customer_grp( $valid, $coupon )
@@ -229,9 +237,9 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method show_user_id
 	 * @return array
-	 * @since 1.0.0
 	 * Retrieve the ID of all users.
 	 */
 	private function show_user_id()
@@ -257,10 +265,10 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method show_user_id
+	 * @method apply_cart_condition_on_individual_customer
 	 * @return bool
 	 * @since 1.0.0
-	 * Retrieve the ID of all users.
+	 * Apply/validate cart condition on individual customer
 	 */
 	private function apply_cart_condition_on_individual_customer( $valid, $coupon )
 	{
@@ -294,11 +302,11 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method apply_cart_condition
 	 * @param bool $valid
 	 * @param object $coupon
 	 * @return bool
-	 * @since 1.0.0
 	 * Apply/validate the coupon cart condition.
 	 */
 	public function apply_cart_condition( $valid, $coupon )
@@ -310,33 +318,20 @@ class CouponUsageRestrictionTabController extends BaseController
 
 		if ( is_null( $apply_cart_condition_on_product ) || is_null( $apply_cart_condition_on_categories ) || is_null( $apply_cart_condition_on_customer_grp ) || is_null( $apply_cart_condition_on_individual_customer ) ) {
 			if ( $apply_cart_condition_on_product || $apply_cart_condition_on_categories || $apply_cart_condition_on_customer_grp || $apply_cart_condition_on_individual_customer )	{
-
-//				echo 'apply_cart_condition_on_product is returning '.$apply_cart_condition_on_product.'<br>';
-//				echo 'apply_cart_condition_on_categories is returning '.$apply_cart_condition_on_categories.'<br>';
-//				echo 'apply_cart_condition_on_customer_grp is returning '.$apply_cart_condition_on_customer_grp.'<br>';
-//				echo 'apply_cart_condition_on_individual_customer is returning '.$apply_cart_condition_on_individual_customer.'<br>';
-
 				return $valid;
-
 			}
-
-//			echo '## coupon is valid coz cart condition is returning true because they are not set. <br>';
 
 			return $valid;
 		}
 
 		if ( $apply_cart_condition_on_product && $apply_cart_condition_on_categories && $apply_cart_condition_on_customer_grp && $apply_cart_condition_on_individual_customer )	{
-
-//			echo 'product cart condition is returning '.$apply_cart_condition_on_product.' <brs>';
-//			echo 'categories cart condition is returning '.$apply_cart_condition_on_categories.' <brs>';
-//			echo 'customer group cart condition is returning '.$apply_cart_condition_on_customer_grp.' <brs>';
-//			echo 'individual customer cart condition is returning '.$apply_cart_condition_on_individual_customer.' <brs>';
-
 			return $valid;
-
 		}
 
-//		echo 'cart condition is returning false. <br>';
+		else {
+			// display a custom coupon error message if the coupon is invalid
+			add_filter( 'woocommerce_coupon_error', [ $this, 'custom_change_invalid_coupon_error_message' ] , 10, 2 );
+		}
 
 		return false;
 
@@ -345,10 +340,10 @@ class CouponUsageRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method delete_post_meta
 	 * @param int $coupon_id
-	 * @return mixed
-	 * @since 1.0.0
+	 * @return void
 	 * Delete post meta data.
 	 */
 	public function delete_post_meta( $coupon_id )
@@ -384,4 +379,23 @@ class CouponUsageRestrictionTabController extends BaseController
 		}
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method custom_change_invalid_coupon_error_message
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function custom_change_invalid_coupon_error_message( $err, $err_code )
+	{
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. cart condition does not match.', 'hexcoupon');
+		}
+
+		return $err;
+	}
 }

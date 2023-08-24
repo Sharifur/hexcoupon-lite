@@ -17,31 +17,32 @@ class CouponGeographicRestrictionTabController extends BaseController
 	 * @method register
 	 * @return mixed
 	 * @since 1.0.0
-	 * Add all hooks that are needed to save the coupon meta-data and apply it on products
+	 * Add all hooks that are needed for 'Geographic restriction' tab
 	 */
 	public function register()
 	{
-		add_action( 'save_post', [ $this, 'save_coupon_all_meta_data' ] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_all_meta_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
-		add_action( 'save_post', [ $this,'delete_post_meta' ] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this,'delete_post_meta' ] );
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method save_coupon_meta_data
-	 * @param $key
-	 * @param $data_type
-	 * @param $post_id
-	 * @return mixed
 	 * @since 1.0.0
-	 * Save the coupon geographic restriction meta-data.
+	 * @method save_coupon_meta_data
+	 * @param string $key
+	 * @param string $data_type
+	 * @param int $post_id
+	 * @return void
+	 * Save the coupon geographic restriction all meta-data.
 	 */
 	private function save_coupon_meta_data( $key, $data_type, $post_id )
 	{
 		$validator = $this->validate( [
 			$key => $data_type
 		] );
+
 		$error = $validator->error();
 		if ( $error ) {
 
@@ -54,15 +55,15 @@ class CouponGeographicRestrictionTabController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method save_coupon_all_meta_data
 	 * @param int $coupon_id.
-	 * @return mixed
-	 * @since 1.0.0
-	 * Save the coupon user roles custom meta-data when the coupon is updated.
+	 * @return void
+	 * Save the coupon geographic restriction meta-field data.
 	 */
 	public function save_coupon_all_meta_data( $coupon_id )
 	{
-		// Save coupon restricted shipping zones meta field data
+		// Assign all meta fields key and their data type
 		$meta_fields_data = [
 			[ 'apply_geographic_restriction', 'string' ],
 			[ 'restricted_shipping_zones', 'array' ],
@@ -70,32 +71,32 @@ class CouponGeographicRestrictionTabController extends BaseController
 		];
 
 		foreach ( $meta_fields_data as $meta_field_data ) {
-			$this->save_coupon_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id );
+			$this->save_coupon_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id ); // finally save the values
 		}
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author Wphex
-	 * @method apply_selected_payments_method_to_coupon
+	 * @since 1.0.0
+	 * @method restrict_selected_shipping_zones_to_coupon
 	 * @param bool $valid
 	 * @param object $coupon
-	 * @since 1.0.0
 	 * @return bool
-	 * Apply coupon to user selected payment methods only.
+	 * Apply coupon to selected shipping zones only.
 	 */
 	private function restrict_selected_shipping_zones_to_coupon( $valid, $coupon )
 	{
+		global $woocommerce;
+
 		$apply_geographic_restriction = get_post_meta( $coupon->get_id(), 'apply_geographic_restriction', true );
 		$selected_restricted_shipping_zones = get_post_meta( $coupon->get_id(), 'restricted_shipping_zones', true );
 
 		$all_cities = ! empty( $selected_restricted_shipping_zones ) ? $selected_restricted_shipping_zones : [];
 
-		$all_cities = implode(',',$all_cities);
+		$all_cities = implode( ',', $all_cities );
 
-		global $woocommerce;
-
-		$billing_city = $woocommerce->customer->get_billing_city();
+		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
 
 		if ( 'restrict_by_shipping_zones' === $apply_geographic_restriction ) {
 			if ( empty( $selected_restricted_shipping_zones ) ) {
@@ -106,25 +107,24 @@ class CouponGeographicRestrictionTabController extends BaseController
 				return false;
 			}
 		}
-
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author Wphex
-	 * @method apply_selected_payments_method_to_coupon
+	 * @since 1.0.0
+	 * @method restrict_selected_shipping_countries
 	 * @param bool $valid
 	 * @param object $coupon
-	 * @since 1.0.0
 	 * @return bool
-	 * Apply coupon to user selected payment methods only.
+	 * Apply coupon to selected countries only.
 	 */
 	private function restrict_selected_shipping_countries( $valid, $coupon )
 	{
+		global $woocommerce;
+
 		$apply_geographic_restriction = get_post_meta( $coupon->get_id(), 'apply_geographic_restriction', true );
 		$selected_restricted_shipping_countries = get_post_meta( $coupon->get_id(), 'restricted_countries', true );
-
-		global $woocommerce;
 
 		$billing_country = $woocommerce->customer->get_billing_country();
 
@@ -137,17 +137,16 @@ class CouponGeographicRestrictionTabController extends BaseController
 				return false;
 			}
 		}
-
 	}
 
 
 	/**
 	 * @package hexcoupon
 	 * @author Wphex
+	 * @since 1.0.0
 	 * @method apply_coupon_meta_data
 	 * @param bool $valid
 	 * @param object $coupon
-	 * @since 1.0.0
 	 * @return bool
 	 * Apply coupon based on all criteria.
 	 */
@@ -155,24 +154,26 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
-		var_dump($restrict_shipping_countries);
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
-//				echo 'The coupon is not valid. The city from your shipping address is matching with the restricted cities, please select a different city. <br>';
+				// display a custom coupon error message if the coupon is invalid
+				add_filter( 'woocommerce_coupon_error', [ $this, 'custom_coupon_error_message_for_shipping_zones' ] , 10, 2 );
+
 				return false;
 			}
 		}
 
 		if ( ! is_null( $restrict_shipping_countries ) ) {
 			if ( ! $restrict_shipping_countries ) {
-//				echo '## The coupon is not valid. The Country from your shipping address is matching with the restricted countries, please select a different country.  <br>';
+				// display a custom coupon error message if the coupon is invalid
+				add_filter( 'woocommerce_coupon_error', [ $this, 'custom_coupon_error_message_for_shipping_countries' ] , 10, 2 );
+
 				return false;
 			}
 		}
 
 		if ( is_null( $restricted_shipping_zones ) || is_null( $restrict_shipping_countries ) ) {
-//			echo '## coupon is valid coz shipping zone and country is returning null <br>';
 			return $valid;
 		}
 
@@ -197,5 +198,45 @@ class CouponGeographicRestrictionTabController extends BaseController
 		} else {
 			delete_post_meta( $coupon_id, 'restricted_shipping_zones' );
 		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method custom_coupon_error_message_for_shipping_zones
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function custom_coupon_error_message_for_shipping_zones( $err, $err_code )
+	{
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. Your shipping zone does not support this coupon.', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method custom_coupon_error_message_for_shipping_countries
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function custom_coupon_error_message_for_shipping_countries( $err, $err_code )
+	{
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. Your country does not support this coupon.', 'hexcoupon');
+		}
+
+		return $err;
 	}
 }
