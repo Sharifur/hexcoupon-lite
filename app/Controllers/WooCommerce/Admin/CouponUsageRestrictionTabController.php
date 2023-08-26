@@ -125,14 +125,23 @@ class CouponUsageRestrictionTabController extends BaseController
 					return $valid;
 				}
 				else {
+					// display a custom coupon error message if the coupon is invalid
+					add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_not_matching_all_products' ] , 10, 3 );
 					return false;
 				}
 			}
 
 			if ( 'any_of_the_product' === $apply_on_listed_product ) {
 				foreach ( $cart_items as $item => $key ) {
-					if ( in_array( $key['product_id'], $all_selected_products ) ) {
-						return $valid;
+					if ( ! empty( $all_selected_products ) ) {
+						if ( in_array( $key['product_id'], $all_selected_products ) ) {
+							return $valid;
+						}
+					}
+					
+					else {
+						// display a custom coupon error message if the coupon is invalid
+						add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_not_matching_any_of_the_products' ] , 10, 3 );
 					}
 				}
 				return false;
@@ -184,10 +193,13 @@ class CouponUsageRestrictionTabController extends BaseController
 				if ( in_array( $product_categories_single_id, $all_selected_categories ) ) {
 					return $valid;
 				}
+				else {
+					// display a custom coupon error message if the coupon is invalid
+					add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_not_matching_with_product_categories' ] , 10, 3 );
+				}
 			}
 
 			return false;
-
 		}
 	}
 
@@ -217,6 +229,10 @@ class CouponUsageRestrictionTabController extends BaseController
 					if ( in_array( $user_role, $selected_customer_group ) ) {
 						return $valid;
 					}
+					else {
+						// display a custom coupon error message if the coupon is invalid
+						add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_allowed_grp_of_user' ] , 10, 3 );
+					}
 				}
 			}
 
@@ -227,39 +243,14 @@ class CouponUsageRestrictionTabController extends BaseController
 
 				foreach ( $user_roles as $user_role ) {
 					if ( in_array( $user_role, $selected_customer_group ) ) {
+						// display a custom coupon error message if the coupon is invalid
+						add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_disallowed_grp_of_user' ] , 10, 3 );
+
 						return false;
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method show_user_id
-	 * @return array
-	 * Retrieve the ID of all users.
-	 */
-	private function show_user_id()
-	{
-		// Query all users
-		$args = [
-			'fields' => 'all', // Get all fields of each user.
-		];
-		$user_query = new \WP_User_Query($args);
-
-		$all_users_id = [];
-		// Check if there are users found
-		if ( ! empty( $user_query->results ) ) {
-			// Loop through the users and retrieve their 'ID'.
-			foreach ( $user_query->results as $user ) {
-				$all_users_id[] = $user->ID;
-			}
-		}
-
-		return $all_users_id;
 	}
 
 	/**
@@ -276,24 +267,26 @@ class CouponUsageRestrictionTabController extends BaseController
 		$allowed_individual_customer = get_post_meta( $coupon->get_id(), 'allowed_individual_customer', true );
 		$selected_individual_customer = get_post_meta( $coupon->get_id(), 'selected_individual_customer', true );
 
-		$all_users_id = $this->show_user_id();
+		$current_user_id = get_current_user_id(); // get current logged-in user id
 
 		if ( ! empty( $allowed_or_restricted_individual_customer ) && 'yes' === $allowed_or_restricted_individual_customer ) {
 			// Check if coupon allowed for selected customers
 			if ( 'allowed_for_customers' === $allowed_individual_customer ) {
-				foreach ( $all_users_id as $user_id ) {
-					if ( in_array( $user_id, $selected_individual_customer ) ) {
-						return $valid;
-					}
+				if ( in_array( $current_user_id, $selected_individual_customer ) ) {
+					return $valid;
+				}
+				else {
+					// display a custom coupon error message if the coupon is invalid
+					add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_individual_user' ] , 10, 2 );
 				}
 			}
 
 			// Check if coupon restricted for selected customers
 			if ( 'restricted_for_customers' === $allowed_individual_customer ) {
-				foreach ( $all_users_id as $user_id ) {
-					if ( in_array( $user_id, $selected_individual_customer ) ) {
-						return false;
-					}
+				if ( in_array( $current_user_id, $selected_individual_customer ) ) {
+					// display a custom coupon error message if the coupon is invalid
+					add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_individual_user' ] , 10, 2 );
+					return false;
 				}
 			}
 		}
@@ -316,25 +309,17 @@ class CouponUsageRestrictionTabController extends BaseController
 		$apply_cart_condition_on_customer_grp = $this->apply_cart_condition_on_customer_grp( $valid, $coupon );
 		$apply_cart_condition_on_individual_customer = $this->apply_cart_condition_on_individual_customer( $valid, $coupon );
 
-		if ( is_null( $apply_cart_condition_on_product ) || is_null( $apply_cart_condition_on_categories ) || is_null( $apply_cart_condition_on_customer_grp ) || is_null( $apply_cart_condition_on_individual_customer ) ) {
-			if ( $apply_cart_condition_on_product || $apply_cart_condition_on_categories || $apply_cart_condition_on_customer_grp || $apply_cart_condition_on_individual_customer )	{
-				return $valid;
-			}
-
+		if ( is_null( $apply_cart_condition_on_product ) && is_null( $apply_cart_condition_on_categories ) && is_null( $apply_cart_condition_on_customer_grp ) && is_null( $apply_cart_condition_on_individual_customer ) ) {
 			return $valid;
 		}
 
-		if ( $apply_cart_condition_on_product && $apply_cart_condition_on_categories && $apply_cart_condition_on_customer_grp && $apply_cart_condition_on_individual_customer )	{
-			return $valid;
+		elseif ( false === $apply_cart_condition_on_product || false === $apply_cart_condition_on_categories || false === $apply_cart_condition_on_customer_grp || false === $apply_cart_condition_on_individual_customer ) {
+			return false;
 		}
 
 		else {
-			// display a custom coupon error message if the coupon is invalid
-			add_filter( 'woocommerce_coupon_error', [ $this, 'custom_change_invalid_coupon_error_message' ] , 10, 2 );
+			return $valid;
 		}
-
-		return false;
-
 	}
 
 	/**
@@ -383,17 +368,182 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @package hexcoupon
 	 * @author Wphex
 	 * @since 1.0.0
-	 * @method custom_change_invalid_coupon_error_message
+	 * @method invalid_error_message_for_not_matching_all_products
 	 * @param string $err
 	 * @param int $err_code
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
-	public function custom_change_invalid_coupon_error_message( $err, $err_code )
+	public function invalid_error_message_for_not_matching_all_products( $err, $err_code, $coupon )
+	{
+		// get value of 'all_selected_products' meta field
+		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
+
+		$all_product_single_string = '';
+
+		if ( ! empty( $all_selected_products ) ) {
+			foreach ( $all_selected_products as $product ) {
+				$all_product_single_string .= get_the_title( $product ) . ', ';
+			}
+		}
+
+		$all_product_single_string = rtrim( $all_product_single_string, ', ' );
+
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. to apply this coupon please add all of these products to your cart "' . $all_product_single_string . '".', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method invalid_error_message_for_not_matching_any_of_the_products
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function invalid_error_message_for_not_matching_any_of_the_products( $err, $err_code, $coupon )
+	{
+		// get value of 'all_selected_products' meta field
+		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
+
+		$all_product_single_string = '';
+
+		if ( ! empty( $all_selected_products ) ) {
+			foreach ( $all_selected_products as $product ) {
+				$all_product_single_string .= get_the_title( $product ) . ', ';
+			}
+		}
+
+		$all_product_single_string = rtrim( $all_product_single_string, ', ' );
+
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. To apply this coupon please add any of these products to your cart "' . $all_product_single_string . '".', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method invalid_error_message_for_not_matching_with_product_categories
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function invalid_error_message_for_not_matching_with_product_categories( $err, $err_code, $coupon )
+	{
+		// get the value of 'all_selected_categories'
+		$all_selected_categories = get_post_meta( $coupon->get_id(), 'all_selected_categories', true );
+
+		$category_string = ''; // initialize an empty string
+
+		if ( ! empty( $all_selected_categories ) ) {
+			foreach ( $all_selected_categories as $category ) {
+				$category_string .= get_the_category_by_ID( $category ) . ', ';
+			}
+		}
+
+		$category_string = rtrim( $category_string, ', ' );
+
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. To apply this coupon please add products from any of these categories to your cart "' . $category_string . '".', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method invalid_error_message_for_disallowed_grp_of_user
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function invalid_error_message_for_disallowed_grp_of_user( $err, $err_code, $coupon )
+	{
+		// get the value of 'all_selected_categories'
+		$selected_customer_group = get_post_meta( $coupon->get_id(), 'selected_customer_group', true );
+
+		$customer_string = ''; // initialize an empty string
+
+		if ( ! empty( $selected_customer_group ) ) {
+			foreach ( $selected_customer_group as $customer ) {
+				$customer_string .= $customer . ', ';
+			}
+		}
+
+		$customer_string = rtrim( $customer_string, ', ' );
+
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon, this coupon is not valid for these group of users "' . $customer_string . '".', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method invalid_error_message_for_individual_user
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function invalid_error_message_for_individual_user( $err, $err_code )
 	{
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. cart condition does not match.', 'hexcoupon');
+			$err = esc_html__( 'Invalid coupon, sorry you are not allowed to use this coupon.', 'hexcoupon');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method invalid_error_message_for_allowed_grp_of_user
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function invalid_error_message_for_allowed_grp_of_user( $err, $err_code, $coupon )
+	{
+		// get the value of 'all_selected_categories'
+		$selected_customer_group = get_post_meta( $coupon->get_id(), 'selected_customer_group', true );
+
+		$customer_string = ''; // initialize an empty string
+
+		if ( ! empty( $selected_customer_group ) ) {
+			foreach ( $selected_customer_group as $customer ) {
+				$customer_string .= $customer . ', ';
+			}
+		}
+
+		$customer_string = rtrim( $customer_string, ', ' );
+
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon, this coupon is only valid for these group of users "' . $customer_string . '".', 'hexcoupon');
 		}
 
 		return $err;

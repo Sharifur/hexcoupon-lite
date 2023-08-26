@@ -51,10 +51,10 @@ class CouponSingleUsageLimits {
 
 		echo '<div class="options_group reset_limit">';
 		?>
-			<p data-reset-value="annually">Reset Annually</p>
-			<p data-reset-value="monthly">Reset Monthly</p>
-			<p data-reset-value="weekly">Reset Weekly</p>
-			<p data-reset-value="daily">Reset Daily</p>
+			<p data-reset-value="annually"><?php echo esc_html__( 'Reset Annually', 'hexcoupon' ); ?></p>
+			<p data-reset-value="monthly"><?php echo esc_html__( 'Reset Monthly', 'hexcoupon' ); ?></p>
+			<p data-reset-value="weekly"><?php echo esc_html__( 'Reset Weekly', 'hexcoupon' ); ?></p>
+			<p data-reset-value="daily"><?php echo esc_html__( 'Reset Daily', 'hexcoupon' ); ?></p>
 		<?php
 		echo '</div>';
 	}

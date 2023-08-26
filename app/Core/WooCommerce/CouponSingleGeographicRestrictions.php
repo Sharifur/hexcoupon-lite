@@ -70,7 +70,7 @@ class CouponSingleGeographicRestrictions {
 		);
 
 		$restricted_shipping_zones = get_post_meta( get_the_ID(),'restricted_shipping_zones',true );
-		$restricted_shipping_zones = ! empty( $restricted_shipping_zones ) ? $restricted_shipping_zones : '';
+		$restricted_shipping_zones = ! empty( $restricted_shipping_zones ) ? $restricted_shipping_zones : [];
 
 		$output ='<div class="restricted_shipping_zones">';
 
@@ -93,6 +93,7 @@ class CouponSingleGeographicRestrictions {
 		echo '</div>';
 
 		$restricted_countries = get_post_meta( get_the_ID(),'restricted_countries',true );
+		$restricted_countries = ! empty( $restricted_countries ) ? $restricted_countries : [];
 
 		$output ='<div class="restricted_countries">';
 
@@ -105,7 +106,7 @@ class CouponSingleGeographicRestrictions {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_countries',
-			'placeholder' => __('Search for countries')
+			'placeholder' => esc_html__( 'Search for countries', 'hexcoupon' )
 		] );
 
 		echo '<span class="restricted_countries_tooltip">'.wc_help_tip( esc_html__( 'Select countries that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';

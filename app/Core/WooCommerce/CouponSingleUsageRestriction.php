@@ -11,9 +11,9 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method register
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method register
+	 * @return void
 	 * Registers all hooks that are needed.
 	 */
 	public function register()
@@ -24,9 +24,9 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method get_user_role_names
 	 * @return array
-	 * @since 1.0.0
 	 * Retrieve all available role names.
 	 */
 	private function get_user_role_names()
@@ -43,37 +43,38 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method show_all_products
 	 * @return array
-	 * @since 1.0.0
 	 * Retrieve all available WoCommerce products.
 	 */
 	public function show_all_products()
 	{
-		$all_product_titles = [];
+		$all_product_titles = []; // initialize an empty array
 
 		$products = get_posts( [
 			'post_type' => 'product',
-			'posts_per_page' => -1,
+			'numberposts' => -1,
 		] );
 
 		foreach ( $products as $product ) {
 			$all_product_titles[$product->ID] = get_the_title( $product );
 		}
-		return $all_product_titles;
+
+		return $all_product_titles; // return all products id
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method show_all_categories
 	 * @return array
-	 * @since 1.0.0
 	 * Retrieve all available WoCommerce product categories.
 	 */
 	private function show_all_categories()
 	{
-		$all_categories = [];
+		$all_categories = []; // initialize an empty array
 
 		$product_categories = get_terms( [
 			'taxonomy'   => 'product_cat',
@@ -83,46 +84,48 @@ class CouponSingleUsageRestriction {
 		if ( ! empty($product_categories) && ! is_wp_error( $product_categories ) ) {
 			foreach ( $product_categories as $category ) {
 				$cat_id = $category->term_id;
-				$all_categories[$cat_id] = $category->name;
+				$all_categories[ $cat_id ] = $category->name;
 			}
 		}
-		return $all_categories;
+
+		return $all_categories; // return all categories id
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method show_user_names
 	 * @return array
-	 * @since 1.0.0
 	 * Display name of the users.
 	 */
 	private function show_user_names()
 	{
-		// Query all users
+		// query all users
 		$args = [
-			'fields' => 'all', // Get all fields of each user.
+			'fields' => 'all', // get all fields of each user.
 		];
-		$user_query = new \WP_User_Query($args);
+		$user_query = new \WP_User_Query( $args );
 
-		$all_users_name = [];
+		$all_users_name = []; // initialize an empty array
+
 		// Check if there are users found
 		if ( ! empty( $user_query->results ) ) {
 			// Loop through the users and retrieve their 'first_name', 'last_name', and 'ID'.
 			foreach ( $user_query->results as $user ) {
-				$all_users_name[$user->ID] = $user->first_name . ' ' . $user->last_name . ' ('.$user->user_email.')';
+				$all_users_name[ $user->ID ] = $user->first_name . ' ' . $user->last_name . ' (' . $user->user_email . ')';
 			}
 		}
 
-		return $all_users_name;
+		return $all_users_name; // return all users id
 	}
 
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method product_cart_condition
 	 * @return void
-	 * @since 1.0.0
 	 * Display meta fields for product cart condition.
 	 */
 	private function product_cart_condition()
@@ -160,13 +163,7 @@ class CouponSingleUsageRestriction {
 		);
 		echo '</div>';
 
-		//		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel">';
-
-
-
 		$all_selected_products = get_post_meta( $post->ID, 'all_selected_products', true );
-
-
 
 		echo '<div class="all_selected_products">';
 
@@ -179,22 +176,22 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'all_selected_products',
-			'placeholder' => __('Search for Product'),
+			'placeholder' => esc_html__( 'Search for Products' , 'hexcoupon' ),
 		] );
 
 		echo '<span class="all_selected_products_tooltip">'.wc_help_tip( esc_html__( 'Products that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
 
 		$output .= '</div>';
 
-		echo '<div name="all_selected_products" id="selectedValuesContainer">';
-		if ( ! empty( $all_selected_products ) ) {
-			foreach ( $all_selected_products as $single_product ) {
-				echo '<div class="whole"><span class="select2-selection__choice"></span>';
-				echo get_the_title( $single_product );
-				echo "<div class='product_min_max'><input name='product_min_quantity[]' placeholder='No minimum' type='number' style='float:left; width:50% !important;'><input name='product_max_quantity[]' style='width:50% !important;' placeholder='No maximum' type='number'><a class='remove_product'>X</a></div></div>";
-			}
-		}
-		echo '</div>';
+//		echo '<div name="all_selected_products" id="selectedValuesContainer">';
+//		if ( ! empty( $all_selected_products ) ) {
+//			foreach ( $all_selected_products as $single_product ) {
+//				echo '<div class="whole"><span class="select2-selection__choice"></span>';
+//				echo get_the_title( $single_product );
+//				echo "<div class='product_min_max'><input name='product_min_quantity[]' placeholder='No minimum' type='number' style='float:left; width:50% !important;'><input name='product_max_quantity[]' style='width:50% !important;' placeholder='No maximum' type='number'><a class='remove_product'>X</a></div></div>";
+//			}
+//		}
+//		echo '</div>';
 
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
@@ -208,12 +205,12 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method category_cart_condition
 	 * @return void
-	 * @since 1.0.0
 	 * Display meta fields for category cart condition.
 	 */
-	public function category_cart_condition()
+	private function category_cart_condition()
 	{
 		global $post;
 
@@ -244,7 +241,7 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'all_selected_categories',
-			'placeholder' => __('Search for category'),
+			'placeholder' => esc_html__('Search for category', 'hexcoupon' ),
 		] );
 
 		echo '<span class="all_selected_categories_tooltip">'.wc_help_tip( esc_html__( 'Categories that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
@@ -256,12 +253,12 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method allowed_or_restricted_customer
 	 * @return void
-	 * @since 1.0.0
 	 * Display meta fields for allowed or restricted customer.
 	 */
-	public function allowed_or_restricted_customer()
+	private function allowed_or_restricted_customer()
 	{
 		global $post;
 
@@ -295,8 +292,6 @@ class CouponSingleUsageRestriction {
 			]
 		);
 
-		//		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel">';
-
 		$selected_customer_group = get_post_meta( $post->ID, 'selected_customer_group', true );
 
 		$output = FormHelpers::Init( [
@@ -308,12 +303,11 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'selected_customer_group',
-			'placeholder' => __('Search for customer group'),
+			'placeholder' => esc_html__( 'Search for customer group', 'hexcoupon' ),
 		] );
 
 		echo '<span class="selected_customer_group_tooltip">'.wc_help_tip( esc_html__( 'Groups that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
 
-//		$output .= '</div>';
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
 		echo '</div>';
@@ -359,7 +353,7 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'selected_individual_customer',
-			'placeholder' => __('Search for customers'),
+			'placeholder' => esc_html__( 'Search for customers', 'hexcoupon' ),
 		] );
 
 		echo '<span class="selected_individual_customer_tooltip">'.wc_help_tip( esc_html__( 'Individual customer that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
@@ -372,21 +366,20 @@ class CouponSingleUsageRestriction {
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method product_cart_condition_for_customer
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method coupon_usage_restriction_meta_fields
+	 * @return void
 	 * Display all the meta fields in the coupon usage restriction tab.
 	 */
 	public function coupon_usage_restriction_meta_fields()
 	{
-		// product cart condition
+		// show all fields of product cart condition
 		$this->product_cart_condition();
 
-		// categories cart condition
+		// show all fields of categories cart condition
 		$this->category_cart_condition();
 
-		// allowed or restricted customers
+		// show all fields of allowed or restricted customers
 		$this->allowed_or_restricted_customer();
-
 	}
 }
