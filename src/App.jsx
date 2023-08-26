@@ -1,17 +1,31 @@
 import { useState } from 'react'
-import logo from './logo.svg?url';
-import './App.css'
-import Sidebar from "./components/sidebar";
-import MainContainer from "./components/MainContainer";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/HexSidebar/sidebar';
+import Dashboard from './components/Pages/Dashboard/Dashboard';
+import StoreCredit from './components/Pages/StoreCredit/StoreCredit';
+import Coupon from './components/Pages/Coupon/Coupon';
+// import MainContainer from './components/HexMainContainer/MainContainer';
+
+
 function App() {
-	const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0);
 
 	return (
-		<div className="HxcAppWrapper">
-			<Sidebar/>
-			<MainContainer/>
-		</div>
+		<BrowserRouter>
+			<div className="HxcAppWrapper">
+				<Sidebar />
+				{/* <MainContainer /> */}
+				<Routes>
+					<Route element={<Dashboard />} path="/" />
+					<Route element={<StoreCredit />} path="/store-credit" />
+					<Route element={<Coupon/> } path="/coupon" />
+					{/* <Route element={<LoyaltyProgramme /> } path="/loyalty-programme" /> */}
+					{/* <Route element={<GiftCards /> } path="/gift-cards" /> */}
+					{/* <Route element={<Automations /> } path="/automations" /> */}
+				</Routes>
+			</div>
+		</BrowserRouter>
 	)
 }
 
-export default App
+export default App;

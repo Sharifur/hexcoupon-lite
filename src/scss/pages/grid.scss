@@ -1,0 +1,22 @@
+.hex-grid-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr); /* This creates 4 columns of equal width */
+	gap: 24px; /* This is the space between each grid item */
+	/* Additional styling like padding or margin if needed */
+	&.column-6 {
+		grid-template-columns: repeat(6, 1fr); /* This creates 4 columns of equal width */
+	}
+	&.column-5 {
+		grid-template-columns: repeat(5, 1fr); /* This creates 4 columns of equal width */
+	}
+	&.column-3 {
+		grid-template-columns: repeat(3, 1fr); /* This creates 4 columns of equal width */
+	}
+	&.column-2 {
+		grid-template-columns: repeat(2, 1fr); /* This creates 4 columns of equal width */
+	}
+	.grid-item {
+		/* Styles specific to each grid item */
+	}
+}
+

@@ -1,9 +1,26 @@
-/* Sections */
-@import "./sections/typgraphy";
-@import "./sections/grid";
-@import "./sections/common";
-@import "./sections/dashbaord";
+
+//== Abstract page
+@import "abstracts/mixins";
+@import "abstracts/variables";
+
+/* Base */
+@import "./pages/typgraphy";
+@import "./base/common";
+
+/* Components */
+@import "./components/reactSelect";
+@import "./components/custom_table";
+@import "./components/button";
+@import "./components/action";
+@import "./components/pagination";
+
+/* Pages */
+@import "./pages/grid";
+@import "./pages/dashbaord";
+@import "./pages/promo";
+@import "./pages/dashboardCard";
+@import "./pages/giftCard";
+@import "./pages/storeCredit";
+@import "./pages/itemHeader";
 
 
-/* Elements */
-@import "./elements/dashbox";
