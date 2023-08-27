@@ -9,8 +9,7 @@ import imgGift from '../../HexGiftCard/img/gift.png';
 
 const Dashboard = () => {
     return (
-        <div className="MainContainer">
-            
+        <>            
             <HexGiftCard giftPara='Zahid and 12 Customers has birthdays, anniversary today' giftSendLink='Send Them Gift Cards' imgGift={imgGift} />
 
             <HexPointPromo />
@@ -23,7 +22,7 @@ const Dashboard = () => {
 
             <HexPromo />
 
-        </div>
+        </>
     );
 };
 

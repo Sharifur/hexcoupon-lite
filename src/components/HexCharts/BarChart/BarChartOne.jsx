@@ -9,7 +9,11 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import HexCardHeader from '../../HexCardHeader/HexCardHeader';
+// import HexCardHeader from '../../HexCardHeader/HexCardHeader';
+import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
+import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
+import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
+import SingleSelect from '../../Global/FormComponent/SingleSelect/SingleSelect';
 
 ChartJS.register(
     CategoryScale,
@@ -22,6 +26,13 @@ ChartJS.register(
 
 const BarChartOne = () => {
 
+    const SelectOptions = [
+      { value: 'month', label: 'Last month' },
+      { value: 'Year', label: 'Last Year' },
+      { value: 'Week', label: 'Last Week' },
+      { value: 'Yesterday', label: 'Yesterday' },
+      { value: 'Today', label: 'Today' },
+    ]
 
     const data = {
         type: 'bar',
@@ -104,12 +115,23 @@ const BarChartOne = () => {
     };
 
     return (
-        <>
-             <div className="hexDashboard__card mt-4 radius-10">
-                <HexCardHeader titleHeading="Coupon Insights" />
+      <>
+        <div className="hexDashboard__card mt-4 radius-10">
+            <div className="hexDashboard__card__header">
+                <div className="hexDashboard__card__header__flex">
+                    <HexCardHeaderLeft>
+                        <HexCardHeaderTitle titleHeading="Coupon Insights" />
+                    </HexCardHeaderLeft>
+                    <HexCardHeaderRight>
+                        <SingleSelect options={SelectOptions}  />
+                    </HexCardHeaderRight>
+                </div>
+            </div>  
+            <div className="hexDashboard__card__inner mt-4">              
                 <Bar data={data} options={options} />
             </div>
-        </>
+        </div>
+      </>
     );
 };
 

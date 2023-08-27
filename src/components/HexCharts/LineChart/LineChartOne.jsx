@@ -10,7 +10,11 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import HexCardHeader from '../../HexCardHeader/HexCardHeader';
+// import HexCardHeader from '../../HexCardHeader/HexCardHeader';
+import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
+import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
+import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
+import SingleSelect from '../../Global/FormComponent/SingleSelect/SingleSelect';
 
 ChartJS.register (
   LineElement,
@@ -23,6 +27,14 @@ ChartJS.register (
 )
 
 const LineChartOne = () => {
+
+  const SelectOptions = [
+    { value: 'month', label: 'Last month' },
+    { value: 'Year', label: 'Last Year' },
+    { value: 'Week', label: 'Last Week' },
+    { value: 'Yesterday', label: 'Yesterday' },
+    { value: 'Today', label: 'Today' },
+  ]
   
   const data = {    
     type: 'line',
@@ -93,14 +105,25 @@ const LineChartOne = () => {
 		},
   }
 
-    return (
-      <>
-        <div className="hexDashboard__card mt-4 radius-10">
-          <HexCardHeader  titleHeading="Points Insights" />
-          <Line data={data} options={options} />
-        </div>
-      </>
-    )
+  return (
+    <>
+      <div className="hexDashboard__card mt-4 radius-10">
+          <div className="hexDashboard__card__header">
+              <div className="hexDashboard__card__header__flex">
+                  <HexCardHeaderLeft>
+                      <HexCardHeaderTitle titleHeading="Points Insights" />
+                  </HexCardHeaderLeft>
+                  <HexCardHeaderRight>
+                      <SingleSelect options={SelectOptions} />
+                  </HexCardHeaderRight>
+              </div>
+          </div>
+          <div className="hexDashboard__card__inner mt-4">              
+            <Line data={data} options={options} />
+          </div>
+      </div>
+    </>
+  )
 };
 
 export default LineChartOne;

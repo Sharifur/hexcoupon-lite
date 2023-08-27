@@ -1,219 +1,93 @@
 /* Custom Form */
 
-.input-form {}
-
-.single-flex-input {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-grow: 1;
-    @include responsive(xxs) {
+.single__input,
+.single_input,
+.single--input,
+.single-input,
+.form-group {
+    width: 100%;
+    .label__title,
+    &__label {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 20px;
         display: block;
-        flex-wrap: wrap;
-    }
-}
-
-.custom-form {
-    .single-flex-input {
-        &:not(:first-child) {
-            margin-top: 25px;
+        margin-bottom: 10px;
+        color: var(--hex-heading-color);
+        @include responsive(xxs) {
+            font-size: 15px;
         }
-        .single-input,
-        .form-group {
-            margin-top: 0 !important;
-            .js_nice_select {
-                width: 100%;
-            }
+        @include responsive(vxxs) {
+            font-size: 14px;
         }
     }
-    .single-input,
-    .form-group {
+    &__small {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: var(--hex-paragraph-color);
+    }
+    .form__control,
+    .form_control,
+    .form--control,
+    .form-control {
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+            -moz-appearance: textfield;
+        }
+        -moz-appearance: textfield;
         width: 100%;
-        &:not(:first-child) {
-            margin-top: 25px;
+        height: 48px;
+        line-height: 48px;
+        padding: 0 15px;
+        border: 1px solid var(--hex-border-color);
+        background-color: unset;
+        outline: none;
+        color: var(--hex-paragraph-color);
+        @include transition(300ms);
+        @include box-shadow(0, 0, 10px, var(--hex-box-shadow));
+        transition: all .3s;
+        &:focus {
+            border-color: rgba(var(--hex-main-color-one-rgb), .3);
+            @include box-shadow(0, 0, 10px, rgba(var(--hex-main-color-one-rgb), .1));
         }
-        .label-title {
-            font-size: 16px;
-            line-height: 24px;
-            font-weight: 500;
-            display: block;
-            margin-bottom: 10px;
-            color: var(--heading-color);
-            @include responsive(xxs) {
-                font-size: 15px;
-            }
-            @include responsive(vxxs) {
-                font-size: 14px;
-            }
+        @include responsive(xxs) {
+            font-size: 15px;
         }
-        .input-icon {
+        @include responsive(vxxs) {
+            font-size: 14px;
+        }
+        &textarea {
+            height: unset;
+        }
+    }
+    textarea {
+        height: unset !important;
+        width: 100%;
+        line-height: 24px;
+        padding: 5px 15px;
+    }
+    &__item {
+        position: relative;
+    }
+    &__icon {
+        &::after {
+            content: "";
             position: absolute;
-            bottom: 15px;
-            left: 15px;
+            height: 55px;
+            width: 2px;
+            background-color: var(--hex-search-bg);
+            bottom: 0;
+            left: 40px;
         }
-        .iti {
-            width: 100%;
-        }
+        .form__control,
+        .form_control,
         .form--control,
         .form-control {
-            &.input-padding-left {
-                padding-left: 45px;
-            }
-            &#phone {
-                width: 100%;
-                padding-left: 50px;
-            }
-            &::-webkit-outer-spin-button,
-            &::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-                -moz-appearance: textfield;
-            }
-            -moz-appearance: textfield;
-            width: 100%;
-            height: 55px;
-            line-height: 55px;
-            padding: 0 15px;
-            border: 1px solid var(--border-color);
-            background-color: unset;
-            outline: none;
-            color: var(--paragraph-color);
-            @include transition(300ms);
-            @include box-shadow(0, 0, 10px, rgba($white, .1));
-            &:focus {
-                border-color: rgba(var(--main-color-one-rgb), .3);
-                @include box-shadow(0, 0, 10px, rgba(var(--main-color-one-rgb), .1));
-            }
-            @include responsive(xxs) {
-                font-size: 15px;
-            }
-            @include responsive(vxxs) {
-                font-size: 14px;
-            }
-            &.readonly {
-                background-color: var(--section-bg-1);
-                font-size: 20px;
-                font-weight: 600;
-                color: var(--heading-color);
-            }
-        }
-        .form-message {
-            width: 100%;
-            line-height: 24px;
-            padding: 5px 15px;
-            border: 1px solid var(--border-color);
-            background-color: unset;
-            outline: none;
-            color: var(--paragraph-color);
-            @include transition(300ms);
-            @include box-shadow(0, 0, 10px, rgba($white, .1));
-            &:focus {
-                border-color: rgba(var(--main-color-one-rgb), .3);
-                @include box-shadow(0, 0, 10px, rgba(var(--main-color-one-rgb), .1));
-            }
-            &.textarea-height {
-                height: 100px;
-            }
-        }
-        &-icon {
+            padding-left: 50px;
             position: relative;
-            &::after {
-                content: "";
-                position: absolute;
-                height: 55px;
-                width: 2px;
-                background-color: #f3f3f3;
-                bottom: 0;
-                left: 40px;
-            }
-            .form--control,
-            .form-control {
-                padding-left: 50px;
-                position: relative;
-            }
         }
     }
-    .submit-btn {
-        margin-top: 25px;
-    }
-}
-
-.submit-btn {
-    border: 2px solid var(--main-color-one);
-    background-color: var(--main-color-one);
-    color: $white;
-    padding: 12px 20px;
-    @include transition(300ms);
-    &:hover {
-        background-color: rgba(var(--main-color-one-rgb), .9);
-    }
-}
-
-.photo-uploaded {
-    background-color: #f3f3f3;
-    border-radius: 10px;
-    border: 2px dashed #ddd;
-    cursor: pointer;
-    position: relative;
-    flex-grow: 1;
-    padding: 10px;
-    &-padding {
-        padding: 20px;
-    }
-    &.center-text {
-        .photo-uploaded {
-            &-flex {
-                justify-content: center;
-            }
-        }
-    }
-    &-flex {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-    }
-    &-icon {
-        font-size: 28px;
-        color: var(--light-color);
-    }
-    &-para {
-        font-size: 16px;
-        color: var(--paragraph-color);
-    }
-    &-file {
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        cursor: pointer;
-        opacity: 0;
-    }
-}
-
-
-/* Toggle Password hide Show */
-
-.single-input {
-    position: relative;
-}
-
-.toggle-password {
-    position: absolute;
-    bottom: 13px;
-    right: 20px;
-    cursor: pointer;
-}
-
-.hide-icon {
-    display: none;
-}
-
-.toggle-password.show-pass .hide-icon {
-    display: block;
-}
-
-.toggle-password.show-pass .show-icon {
-    display: none;
 }
