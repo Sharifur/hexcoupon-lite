@@ -1,9 +1,10 @@
 import React from 'react';
 
-const ItemHeader = ({hexItemClass, hexHeaderTitle, hexBtnText, hexBtnIcon, hexBtnClass}) => {
+const ItemHeader = ({hexItemClass, hexHeaderTitle, hexBtnText, hexBtnIcon, hexBtnClass,children}) => {
     return (
         <>
             <div className={hexItemClass}>
+                {children}
                 <div className="hexItem__header__flex">
                     <div className="hexItem__header__left">
                         <h4 className="hexItem__header__title">{hexHeaderTitle}</h4>

@@ -5,7 +5,7 @@ import { MdHome, MdCreditCard, MdLocalOffer, MdEmojiEvents, MdCardGiftcard, MdSe
 import LogoImg from '../../../img/logo.png';
 
 
-const Sidebar = () => {
+const Sidebar = ({ searchParam }) => {
 	const { __ } = useI18n();
 
     const [activeLink, setActiveLink] = useState('/');
@@ -33,7 +33,7 @@ const Sidebar = () => {
             <ul className='hexpDashboard__list mt-4'>
                 {sidebarLinks.map((link) => (
                     <li key={link.path} className='hexpDashboard__list__item'>
-                        <Link to={link.path} className={`hexpDashboard__list__item__link ${activeLink === link.path ? 'active' : ''}`} onClick={() => handleLinkClick(link.path)}>
+                        <Link to={link.path + searchParam } className={`hexpDashboard__list__item__link ${activeLink === link.path ? 'active' : ''}`} onClick={() => handleLinkClick(link.path)}>
                             <link.LinkIcon className='hexpDashboard__list__item__link__icon' />
                             {link.text}
                         </Link>

@@ -6,9 +6,10 @@ import HexCardHeaderTitle from '../HexCardHeader/HexCardHeaderTitle';
 import HexCardHeaderPara from '../HexCardHeader/HexCardHeaderPara';
 import GrantCouponItem from './GrantCouponItem';
 import { TbCashBanknote,TbCoins,TbShare3,TbTargetArrow,TbJewishStar,TbThumbUp,TbGift,TbMessage,TbCake } from 'react-icons/tb';
-import { useEffect,useState } from 'react';
+import { useState } from 'react';
+import Button from '../Global/Button/Button';
 
-const GrantCoupon = () => {
+const GrantCoupon = ({searchParam}) => {
     const giftPara = 'Premium features boost sales by an impressive 30%';
     const giftPara2 = 'on our special 40% discount';
     const giftSendLink = 'Get Premium Now';
@@ -16,16 +17,16 @@ const GrantCoupon = () => {
     const titleHeading = 'Grant Coupons';
 
     const [grantCouponContent, setGrantCouponContent] = useState([
-        { labelId: 0,isActive: false, spanText: 'Send Coupons for', titleText: 'Min. Cash Spending', grantIcon: <TbCashBanknote /> },
-        { labelId: 1,isActive: false, spanText: 'Send Coupons for', titleText: 'Product Purchase', grantIcon: <TbCoins /> },
-        { labelId: 2,isActive: false, spanText: 'Send Coupons for', titleText: 'Customer Referrals', grantIcon: <TbShare3 /> },
-        { labelId: 3,isActive: false, spanText: 'Send Coupons for', titleText: 'Milestone Achievement', grantIcon: <TbTargetArrow /> },
-        { labelId: 4,isActive: false, spanText: 'Send Coupons for', titleText: 'Product Reviews', grantIcon: <TbJewishStar /> },
-        { labelId: 5,isActive: false, spanText: 'Send Coupons for', titleText: 'Social Media Engagement', grantIcon: <TbThumbUp /> },
-        { labelId: 6,isActive: false, spanText: 'Send Coupons for', titleText: 'Welcome Bonus', grantIcon: <TbGift /> },
-        { labelId: 7,isActive: false, spanText: 'Send Coupons for', titleText: 'Encourage Comeback', grantIcon: <TbThumbUp /> },
-        { labelId: 8,isActive: false, spanText: 'Send Coupons for', titleText: 'Blog Post Comments', grantIcon: <TbMessage /> },
-        { labelId: 9,isActive: false, spanText: 'Send Coupons for', titleText: 'Birthdays/Occasions ', grantIcon: <TbCake /> },
+        { labelId: 0, isActive: false, spanText: 'Send Coupons for', titleText: 'Min. Cash Spending', grantIcon: <TbCashBanknote /> },
+        { labelId: 1, isActive: false, spanText: 'Send Coupons for', titleText: 'Product Purchase', grantIcon: <TbCoins /> },
+        { labelId: 2, isActive: false, spanText: 'Send Coupons for', titleText: 'Customer Referrals', grantIcon: <TbShare3 /> },
+        { labelId: 3, isActive: false, spanText: 'Send Coupons for', titleText: 'Milestone Achievement', grantIcon: <TbTargetArrow /> },
+        { labelId: 4, isActive: false, spanText: 'Send Coupons for', titleText: 'Product Reviews', grantIcon: <TbJewishStar /> },
+        { labelId: 5, isActive: false, spanText: 'Send Coupons for', titleText: 'Social Media Engagement', grantIcon: <TbThumbUp /> },
+        { labelId: 6, isActive: false, spanText: 'Send Coupons for', titleText: 'Welcome Bonus', grantIcon: <TbGift /> },
+        { labelId: 7, isActive: false, spanText: 'Send Coupons for', titleText: 'Encourage Comeback', grantIcon: <TbThumbUp /> },
+        { labelId: 8, isActive: false, spanText: 'Send Coupons for', titleText: 'Blog Post Comments', grantIcon: <TbMessage /> },
+        { labelId: 9, isActive: false, spanText: 'Send Coupons for', titleText: 'Birthdays/Occasions ', grantIcon: <TbCake /> },
     ]);
 
     return (
@@ -46,6 +47,10 @@ const GrantCoupon = () => {
                                 <GrantCouponItem isActive={item.isActive} grantCouponContent={grantCouponContent} setGrantCouponContent={setGrantCouponContent} grantInputId={item.labelId} grantLabelId={item.labelId}  grantIconItem={item.grantIcon} grantSpanText={item.spanText} grantTitleText={item.titleText} />
                             </div>
                         ))}
+                    </div>
+                    <div className="btn_wrapper d-flex border_top_1 mt-4 pt-4">
+                        <Button ButtonClass='cmn_btn btn_border radius-5' ButtonText='Back'/>
+                        <Button ButtonClass='cmn_btn btn_bg_1 radius-5' ButtonText='Continue'/>
                     </div>
                 </div>
             </div>

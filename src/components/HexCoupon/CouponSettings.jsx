@@ -3,10 +3,10 @@ import SingleInput from '../Global/FormComponent/SingleInput/SingleInput';
 import SingleSelect from '../Global/FormComponent/SingleSelect/SingleSelect';
 import Button from '../Global/Button/Button';
 import { Link } from 'react-router-dom';
-import GrantCoupon from '../GrantCoupon/GrantCoupon';
 
+const windowParams = window.location.search;
 
-const CouponForm = () => {
+const CouponSettings = () => {
 
     const selectOptions = [
         { value: '0', label: 'Automated Coupon' },
@@ -27,7 +27,7 @@ const CouponForm = () => {
 
     return (
         <>
-            <div className="hexDashboard__card mt-4 radius-10">
+            <div className="hexDashboard__card radius-10">
                 <div className="hex-grid-container column-sm-2">
                     <div className="grid-item">
                         <SingleSelect options={selectOptions} selectLabel='Automation type' />
@@ -47,7 +47,7 @@ const CouponForm = () => {
                 <div className="btn_wrapper d-flex border_top_1 mt-4 pt-4">
                     <Button ButtonClass='cmn_btn btn_border radius-5' ButtonText='Back'/>
 
-                    <Link to='/grant-coupon' element={<GrantCoupon />} className='cmn_btn btn_bg_1 radius-5'>
+                    <Link to={'/grant-coupon' + windowParams} className='cmn_btn btn_bg_1 radius-5'>
                         {ButtonText='Continue'}
                     </Link>
                 </div>
@@ -56,4 +56,4 @@ const CouponForm = () => {
     );
 };
 
-export default CouponForm;
+export default CouponSettings;

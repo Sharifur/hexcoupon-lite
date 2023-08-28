@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MdMoreHoriz, MdModeEdit, MdDeleteOutline, MdHelpOutline, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { MdMoreHoriz, MdModeEdit, MdDeleteOutline, MdHelpOutline, MdKeyboardArrowLeft, MdKeyboardArrowRight,MdOutlineRemoveRedEye } from 'react-icons/md';
 import Actions from '../TableData/Actions/Actions';
 import Names from '../TableData/Names/Names';
 import Amount from '../TableData/Amount/Amount';
@@ -10,8 +10,9 @@ import HelpBtnHover from '../TableData/HelpBtnHover/HelpBtnHover';
 import Pagination from '../Global/Pagination/Pagination';
 
 const actionLinik = [
-    {  LinkIcon: MdModeEdit, LinkName: 'Edit' },
-    { LinkIcon: MdDeleteOutline, LinkName: 'Delete' }
+    {  LinkIcon: <MdOutlineRemoveRedEye/>, LinkName: 'View' },
+    {  LinkIcon: <MdModeEdit/>, LinkName: 'Edit' },
+    { LinkIcon: <MdDeleteOutline/>, LinkName: 'Delete' }
 ]
 
 class DataTable extends Component {
