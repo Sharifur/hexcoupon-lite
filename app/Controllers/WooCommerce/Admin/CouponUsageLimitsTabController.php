@@ -85,6 +85,8 @@ class CouponUsageLimitsTabController extends BaseController {
 
 		$coupon->set_usage_limit_per_user( null ); // set 'usage_limit_per_user' value to null
 
+		$coupon->set_limit_usage_to_x_items( null ); // set 'set_limit_usage_to_x_items' value to null
+
 		$coupon->save(); // finally save the value
 	}
 

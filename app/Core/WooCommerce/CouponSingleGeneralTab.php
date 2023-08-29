@@ -67,7 +67,7 @@ class CouponSingleGeneralTab
 		// Adding coupon type select input field
 		woocommerce_wp_select( [
 			'class' => 'select short',
-			'label' => 'Coupon type',
+			'label' => esc_html__( 'Coupon type', 'hexcoupon' ),
 			'id' => 'coupon_type',
 			'name' => 'discount_type',
 			'options' => [
@@ -88,7 +88,7 @@ class CouponSingleGeneralTab
 		woocommerce_wp_radio(
 			[
 				'id' => 'customer_purchases',
-				'label' => 'Customer purchases',
+				'label' => esc_html__( 'Customer purchases', 'hexcoupon' ),
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
@@ -158,7 +158,7 @@ class CouponSingleGeneralTab
 		woocommerce_wp_radio(
 			[
 				'id' => 'customer_gets_as_free',
-				'label' => 'Customer gets as free',
+				'label' => esc_html__( 'Customer gets as free', 'hexcoupon' ),
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
@@ -191,22 +191,6 @@ class CouponSingleGeneralTab
 		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
-
-		echo '</div>';
-
-		$automatically_add_bogo_deal_product = get_post_meta( $post->ID, 'automatically_add_bogo_deal_product', true );
-		$automatically_add_bogo_deal_product = ! empty( $automatically_add_bogo_deal_product ) ? $automatically_add_bogo_deal_product : '';
-
-		echo '<div class="options_group bogo_deal_checkboxes">';
-
-		woocommerce_wp_checkbox(
-			[
-				'id' => 'automatically_add_bogo_deal_product',
-				'label' => esc_html__( 'Automatically add product', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to automatically add the BOGO deals product to the customers cart', 'hexcoupon' ),
-				'value' => $automatically_add_bogo_deal_product,
-			]
-		);
 
 		echo '</div>';
 

@@ -235,6 +235,61 @@ p.output-url-text {
 		width: 30%;
 		margin: 10px 10px !important;
 	}
+
+	.restricted_shipping_zones span.select2-container,
+	.restricted_countries span.select2-container {
+		width: 36% !important;
+	}
+}
+
+@media only screen and (max-width: 1440px) {
+	.woocommerce_options_panel .customer_purchases .customer_purchases_field ul,
+	.woocommerce_options_panel .customer_gets_as_free .customer_gets_as_free_field ul {
+		width: 54% !important;
+	}
+
+	.restricted_shipping_zones span.select2-container,
+	.restricted_countries span.select2-container {
+		width: 44% !important;
+	}
+}
+
+@media only screen and (max-width: 1300px) {
+	.customer_purchases ul li,
+	.customer_gets_as_free ul li {
+		width: 100% !important;
+	}
+
+	/* select2 input field width */
+	.add_specific_product_to_purchase ul li {
+		width: 33% !important;
+	}
+
+	.restricted_shipping_zones span.select2-container,
+	.restricted_countries span.select2-container {
+		width: 52% !important;
+	}
+}
+
+@media only screen and (max-width: 1280px) {
+	.add_specific_product_to_purchase .options_group span.select2-container,
+	.payment_and_shipping_method span.select2-container {
+		width: 80% !important;
+	}
+
+	.apply_geographic_restriction ul li {
+		width: 100% !important;
+	}
+
+	.restricted_shipping_zones span.select2-container,
+	.restricted_countries span.select2-container {
+		width: 40% !important;
+	}
+
+	.restricted_shipping_zones span ul li,
+	.restricted_countries span ul li {
+		width: 50% !important;
+	}
 }
 
 @media only screen and (max-width: 1100px) {
@@ -252,6 +307,11 @@ p.output-url-text {
 	.reset_limit {
 		margin-left: 160px;
 	}
+
+	.add_specific_product_to_purchase ul li {
+		width: 80% !important;
+		text-align: center;
+	}
 }
 
 @media only screen and (max-width: 850px) {
@@ -259,12 +319,31 @@ p.output-url-text {
 		width: 72%;
 		margin: 10px 0 !important;
 	}
+
+	.add_specific_product_to_purchase ul li {
+		width: 40% !important;
+		text-align: center;
+	}
+}
+
+@media only screen and (max-width: 782px) {
+	.customer_purchases li label input,
+	.customer_gets_as_free li label input {
+		width: 25px !important;
+	}
 }
 
 @media only screen and (max-width: 700px) {
 	.reset_limit p {
 		width: 70%;
 		margin: 10px 0 !important;
+	}
+}
+
+@media only screen and (max-width: 650px) {
+	.woocommerce_options_panel .customer_purchases .customer_purchases_field ul,
+	.woocommerce_options_panel .customer_gets_as_free .customer_gets_as_free_field ul {
+		width: 100% !important;
 	}
 }
 
@@ -286,7 +365,7 @@ p.output-url-text {
 
 .restricted_shipping_zones .select2-container,
 .restricted_countries .select2-container {
-	width: 28% !important;
+	width: 30% !important;
 }
 
 .restricted_countries .select2-container:last-child {
@@ -318,3 +397,10 @@ p.output-url-text {
 .bogo_use_limit {
 	border-bottom: none !important;
 }
+
+#woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_options a::before,
+#woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before,
+#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before {
+	content: '\f111'
+}
+

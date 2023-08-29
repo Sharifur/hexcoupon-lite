@@ -126,21 +126,40 @@ class CouponSingleSharableUrl {
 		);
 
 		// get 'redirect_link' meta field data
-		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
+//		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
+//
+//		woocommerce_wp_text_input(
+//			[
+//				'id' => 'redirect_link',
+//				'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
+//				'desc_tip' => true,
+//				'description' => esc_html__( 'Set the coupon redirect url link. E.g: http://yourwebsite.com/cart or http://yourwebsite.com/checkout', 'hexcoupon' ),
+//				'type' => 'text',
+//				'value' => $redirect_link,
+//				'class' => 'redirect_link form-control',
+//				'placeholder' => esc_html( 'https://www.example.com/cart' ),
+//				'data_type' => 'url',
+//			]
+//		);
 
-		woocommerce_wp_text_input(
-			[
-				'id' => 'redirect_link',
-				'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
-				'desc_tip' => true,
-				'description' => esc_html__( 'Set the coupon redirect url link. E.g: http://yourwebsite.com/cart or http://yourwebsite.com/checkout', 'hexcoupon' ),
-				'type' => 'text',
-				'value' => $redirect_link,
-				'class' => 'redirect_link form-control',
-				'placeholder' => esc_html( 'https://www.example.com/cart' ),
-				'data_type' => 'url',
-			]
-		);
+		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
+		$redirect_link = ! empty( $redirect_link ) ? $redirect_link : '';
+
+		$cart_url = wc_get_cart_url();
+		$checkout_url = wc_get_checkout_url();
+
+		// Adding coupon type select input field
+		woocommerce_wp_select( [
+			'class' => 'select short',
+			'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
+			'id' => 'redirect_link',
+			'name' => 'redirect_link',
+			'options' => [
+				esc_url( $cart_url ) => 'Cart Page',
+				esc_url( $checkout_url ) => 'Checkout Page',
+			],
+			'value' => $redirect_link,
+		] );
 
 		echo '</div></div>';
 	}

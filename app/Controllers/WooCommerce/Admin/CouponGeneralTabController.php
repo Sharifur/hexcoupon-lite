@@ -242,9 +242,14 @@ class CouponGeneralTabController extends BaseController
 
 			// Give same items as free which was added by the admin as BOGO deal
 			if ( 'same_product_added_to_cart' === $customer_gets_as_free ) {
+				if ((is_admin() && !defined('DOING_AJAX')))
+					return;
+
+				if (did_action('woocommerce_before_calculate_totals') >= 2)
+					return;
+
 				foreach ( $main_product_id as $main_product_single ) {
 					$main_product_single = intval( $main_product_single );
-
 					foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 						if ( $cart_item['product_id'] === $main_product_single ) {
 							// Get the current quantity
@@ -254,7 +259,7 @@ class CouponGeneralTabController extends BaseController
 							$new_quantity = $current_quantity + 1;
 
 							// Update the cart with the new quantity
-//							WC()->cart->set_quantity( $cart_item_key, $new_quantity );
+							WC()->cart->set_quantity( $cart_item_key, $new_quantity );
 
 							break; // Exit the loop since we have found our product
 						}
@@ -350,9 +355,16 @@ class CouponGeneralTabController extends BaseController
 		$free_items_id = ! empty( $this->add_free_items_to_cart() ) ? $this->add_free_items_to_cart() : [];
 
 		// Deduct the price of the free items from the cart total
-		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+		foreach ( $cart->get_cart() as $cart_item ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
-				$cart_item['data']->set_price( 0 );
+				$quantity = $cart_item['quantity'];
+				if ( $quantity >= 1 ) {
+					$discounted_price = $cart_item['data']->get_price() / $quantity * ( $quantity - 1 );
+					$cart_item['data']->set_price( $discounted_price );
+				}
+				else {
+					$cart_item['data']->set_price( 0 );
+				}
 			}
 		}
 	}
@@ -379,7 +391,7 @@ class CouponGeneralTabController extends BaseController
 
 		if ( ! empty( $free_items ) ) {
 			echo '<tr class="free-items-row">';
-			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name" style="font-weight: bold;">' . esc_html( $free_items ) . '</td>';
+			echo '<th>' . esc_html__( 'Free Items', 'hexcoupon' ) . '</th><td class="free-items-name">' . esc_html( $free_items ) . '</td>';
 			echo '</tr>';
 		}
 	}
@@ -469,7 +481,6 @@ class CouponGeneralTabController extends BaseController
 			[ 'add_specific_category', 'string' ],
 			[ 'customer_gets_as_free', 'string' ],
 			[ 'add_specific_product_for_free', 'string' ],
-			[ 'automatically_add_bogo_deal_product', 'string' ],
 		];
 
 		foreach ( $meta_fields_data as $meta_field_data ) {

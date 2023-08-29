@@ -4,6 +4,17 @@
 
 		/*
        ========================================
+           Mixed Code
+       ========================================
+       */
+
+		// Select hexcoupon shortcode field
+		$(".shortcode_column").click(function(){
+			this.select();
+		});
+
+		/*
+       ========================================
            General Tab
        ========================================
        */
@@ -16,39 +27,65 @@
 		// Remove discounts type default select input field
 		$(".discount_type_field").remove();
 
+		const couponTypeField = $(".coupon_type_field");
+		const couponAmountField = $(".coupon_amount_field");
+
 		// Place coupon type select input field before the coupon amount input field
-		$(".coupon_type_field").insertBefore(".coupon_amount_field");
+		couponTypeField.insertBefore(couponAmountField);
 
 		// Place customer purchases radio buttons before the coupon type select input
-		$(".customer_purchases").insertAfter(".coupon_type_field");
+
+		const customerPurchasesDiv = $(".customer_purchases");
+
+		const addSpecificProductToPurchaseClass = $(".add_specific_product_to_purchase");
+
+		const addSpecificProductToPurchaseId = $("#add_specific_product_to_purchase");
+
+		customerPurchasesDiv.insertAfter(couponTypeField);
+
+		const customerPurchasesField = $(".customer_purchases_field");
 
 		// Place add a specific product to purchase select2 field after the customer purchases radio buttons
-		$(".add_specific_product_to_purchase").insertAfter(".customer_purchases_field");
-		$("#add_specific_product_to_purchase").insertAfter(".add_specific_product_to_purchase label");
+		addSpecificProductToPurchaseClass.insertAfter(customerPurchasesField);
+		addSpecificProductToPurchaseId.insertAfter(".add_specific_product_to_purchase label");
 
 
 		// Place the tooltip of add a specific product to purchase select2 field
 		$(".add_specific_product_to_purchase_tooltip").insertAfter(".add_specific_product_to_purchase span.select2-container");
 
-		// category free
+		const addCategoriesToPurchase = $(".add_categories_to_purchase");
+
+		// Place the add categories select2 input fields after the customer purchases field
+		addCategoriesToPurchase.insertAfter(customerPurchasesField);
 		$(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
-		$(".add_categories_to_purchase").insertAfter(".add_specific_product_to_purchase");
 
-		//
-		$(".customer_gets_as_free").insertAfter(".customer_purchases");
+		const customerGetsAsFreeClass = $(".customer_gets_as_free");
 
-		$(".add_specific_product_for_free").insertAfter(".customer_gets_as_free_field");
-		$("#add_specific_product_for_free").insertAfter(".add_specific_product_for_free label");
+		// Place the customer gets as free after the customer purchases
+		customerGetsAsFreeClass.insertAfter(customerPurchasesDiv);
+
+		const addSpecificProductForFreeClass = $(".add_specific_product_for_free");
+		const addSpecificProductForFreeID = $("#add_specific_product_for_free");
+
+		addSpecificProductForFreeClass.insertAfter(".customer_gets_as_free_field");
+		addSpecificProductForFreeID.insertAfter(".add_specific_product_for_free label");
 
 		$(".add_specific_product_for_free_tooltip").insertAfter(".add_specific_product_for_free span.select2-container");
 
-
+		const bogoDealCheckboxes = $(".bogo_deal_checkboxes");
 		// Place the bogo deal checkboxes after the customer gets as free div
-		$(".bogo_deal_checkboxes").insertAfter(".customer_gets_as_free");
+		bogoDealCheckboxes.insertAfter(customerGetsAsFreeClass);
 
 
 		// Remove all other fields if BOGO is selected
 		const discountTypeField = $("select[name^='discount_type']");
+
+		const freeShippingField = $(".free_shipping_field");
+		const expiryDateField = $(".expiry_date_field");
+		const messageForCouponExpiryDateField = $(".message_for_coupon_expiry_date_field");
+		const couponStartingDateField = $(".coupon_starting_date_field");
+		const messageForCouponStartingDateField = $(".message_for_coupon_starting_date_field");
+		const applyDaysHoursOfWeekField = $(".apply_days_hours_of_week_field");
 
 		// if ("buy_x_get_x_bogo" === $(discount_type_field).val()) {
 		// 	$(".customer_purchases").show()
@@ -66,30 +103,30 @@
 
 		discountTypeField.on("change",function (){
 			if("buy_x_get_x_bogo" === this.value){
-				$(".customer_purchases").show()
-				$(".customer_gets_as_free").show()
-				$(".bogo_deal_checkboxes").show()
+				customerPurchasesDiv.show()
+				customerGetsAsFreeClass.show()
+				bogoDealCheckboxes.show()
 
-				$(".coupon_amount_field").hide();
-				$(".free_shipping_field").hide();
-				$(".expiry_date_field").hide();
-				$(".message_for_coupon_expiry_date_field").hide();
-				$(".coupon_starting_date_field").hide();
-				$(".message_for_coupon_starting_date_field").hide();
-				$(".apply_days_hours_of_week_field").hide();
+				couponAmountField.hide();
+				freeShippingField.hide();
+				expiryDateField.hide();
+				messageForCouponExpiryDateField.hide();
+				couponStartingDateField.hide();
+				messageForCouponStartingDateField.hide();
+				applyDaysHoursOfWeekField.hide();
 			}
 			else {
-				$(".customer_purchases").hide()
-				$(".customer_gets_as_free").hide()
-				$(".bogo_deal_checkboxes").hide()
+				customerPurchasesDiv.hide()
+				customerGetsAsFreeClass.hide()
+				bogoDealCheckboxes.hide()
 
-				$(".coupon_amount_field").show();
-				$(".free_shipping_field").show();
-				$(".expiry_date_field").show();
-				$(".message_for_coupon_expiry_date_field").show();
-				$(".coupon_starting_date_field").show();
-				$(".message_for_coupon_starting_date_field").show();
-				$(".apply_days_hours_of_week_field").show();
+				couponAmountField.show();
+				freeShippingField.show();
+				expiryDateField.show();
+				messageForCouponExpiryDateField.show();
+				couponStartingDateField.show();
+				messageForCouponStartingDateField.show();
+				applyDaysHoursOfWeekField.show();
 			}
 		});
 
@@ -101,32 +138,49 @@
 
 		// Show or hide product selection and category selection input fields if product categories type is selected
 		customerPurchases.on("change",function(){
-			if($(this).is(":checked") && "product_categories" === $(this).val()){
-				$(".add_categories_to_purchase").show();
-				$(".add_specific_product_to_purchase").hide();
-			}else{
-				$(".add_categories_to_purchase").hide();
-				$(".add_specific_product_to_purchase").show();
+			if("product_categories" === $(this).val()){
+				addCategoriesToPurchase.show();
+				addSpecificProductToPurchaseClass.hide();
+			}else {
+				addCategoriesToPurchase.hide();
+				addSpecificProductToPurchaseClass.show();
 			}
 		});
 
+		// Control number of result selection if a specific product type is selected
+		customerPurchases.on("change",function(){
+			if("a_specific_product" === $(this).val()){
+				addSpecificProductToPurchaseId.select2({
+					maximumSelectionLength: 1 // Set maximum selection to 1
+				});
+			}else {
+				addSpecificProductToPurchaseId.select2({
+					maximumSelectionLength: 0 // Set maximum selection to unlimited
+				});
+			}
+		});
+
+		// Trigger the change on page load
 		customerPurchases.trigger("change");
 
-		// Control number of result selection if a specific product type is selected
-		// customerPurchases.on("change",function(){
-		// 	if("a_specific_product" === $(this).val()){
-		// 		$("#add_specific_product_to_purchase").select2({
-		// 			maximumSelectionLength: 1 // Set maximum selection to 1
-		// 		});
-		// 	}else {
-		// 		$("#add_specific_product_to_purchase").select2({
-		// 			maximumSelectionLength: 0 // Set maximum selection to unlimited
-		// 		});
-		// 	}
-		// });
-		//
-		// // Trigger the change on page load
-		// customerPurchases.trigger("change");
+		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
+		$('input[name="customer_purchases"]').on('change', function() {
+			// Check if the radio button is checked and its value is 'a_specific_product'
+			if ($(this).is(':checked') && $(this).val() === 'a_specific_product') {
+				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
+				$('.add_specific_product_to_purchase .select2-selection__choice').slice(1).remove();
+
+				// $('select[name="add_specific_product_to_purchase"] option:selected').slice(1).remove();
+
+				var selectedOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
+
+				// Remove the selected attribute from all options except the first selected one
+				$('select[name="add_specific_product_to_purchase"] option:selected:not(:first)').removeAttr('selected');
+
+				// Reset the selected option back to the first one
+				selectedOption.prop('selected', true);
+			}
+		});
 
 		// Don't allow more than one product selection on selecting a specific product from the customer gets as free field
 		const customerGetsAsFree = $("input[name='customer_gets_as_free']");
@@ -134,9 +188,9 @@
 		// Show or hide product selection and category selection input fields if product categories type is selected
 		customerGetsAsFree.on("change",function(){
 			if($(this).is(":checked") && "same_product_added_to_cart" === $(this).val()){
-				$(".add_specific_product_for_free").hide();
+				addSpecificProductForFreeClass.hide();
 			}else{
-				$(".add_specific_product_for_free").show();
+				addSpecificProductForFreeClass.show();
 			}
 		});
 
@@ -145,15 +199,27 @@
 		// Control number of result selection if a specific product type is selected
 		customerGetsAsFree.on("change",function(){
 			if("a_specific_product" === $(this).val()){
-				$("#add_specific_product_for_free").select2({
+				addSpecificProductForFreeID.select2({
 					maximumSelectionLength: 1 // Set maximum selection to 1
 				});
 			}else {
-				$("#add_specific_product_for_free").select2({
+				addSpecificProductForFreeID.select2({
 					maximumSelectionLength: 0 // Set maximum selection to unlimited
 				});
 			}
 		});
+
+		customerGetsAsFree.trigger("change");
+
+		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
+		$('input[name="customer_gets_as_free"]').on('change', function() {
+			// Check if the radio button is checked and its value is 'a_specific_product'
+			if ($(this).is(':checked') && $(this).val() === 'a_specific_product') {
+				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
+				$('.customer_gets_as_free .select2-selection__choice').slice(1).remove();
+			}
+		});
+
 
 		// customerGetsAsFree.on("change",function(){
 		// 	if("same_product_added_to_cart" === $(this).val()){
@@ -175,62 +241,10 @@
 
 		/*
        ========================================
-           Usage Limits
-       ========================================
-       */
-
-		// On page load
-		var resetOptionValue = $("#reset_option_value").val(); // Get the value of 'reset_option_value' input
-
-		// Find all p elements within the specified div
-		var paragraphs = $(".reset_limit").find("p");
-
-		// Loop through each p element and compare data-reset-value attribute
-		paragraphs.each(function() {
-			var dataResetValue = $(this).attr("data-reset-value");
-			if (dataResetValue === resetOptionValue) {
-				$(this).addClass("usage_limit_p_background");
-			}
-		});
-
-		// On clicking the p element
-		$(".reset_limit p").click(function (){
-			$(".reset_limit p").removeClass("usage_limit_p_background");
-
-			$(this).addClass("usage_limit_p_background");
-
-			// Get the reset value from the data attribute
-			const resetValue = $(this).data('reset-value');
-			// Update the hidden input field value
-			$('#reset_option_value').val(resetValue);
-		});
-
-		var resetUsageLimit = $("#reset_usage_limit");
-
-		// On clicking the checkbox
-		$(resetUsageLimit).on("change",function (){
-			if($(this).is(":checked")){
-				$(".reset_limit").show();
-			}
-			else {
-				$(".reset_limit").hide();
-			}
-		});
-
-		// On page load
-		if($(resetUsageLimit).is(":checked")){
-			$(".reset_limit").show();
-		}
-		else {
-			$(".reset_limit").hide();
-		}
-
-
-		/*
-       ========================================
            Usage Restriction
        ========================================
        */
+
 		const cartConditionCB = $(".cart-condition").prop("outerHTML");
 		$(".cart-condition").remove();
 		$("select[name^='product_ids']").parent().after(cartConditionCB);
@@ -291,34 +305,34 @@
 		// 	}
 		// });
 
-		// working code
-		$(".all_selected_products").on("select2:select", function(event) {
-			var selectedValues = $(this).val(); // Get an array of selected values
-
-			if (selectedValues) {
-				// Clear the container before adding new selections
-				$("#selectedValuesContainer").empty();
-
-				// Loop through selected values and add them to the container
-				selectedValues.forEach(function(value) {
-					var text = $(".all_selected_products option[value='" + value + "']").text();
-
-					$("#selectedValuesContainer").append("<div class='whole'><span class='select2-selection__choice'>" + text + "</span><div class='product_min_max'><input name='product_min_quantity[]' placeholder='No minimum' type='number' style='float:left; width:50% !important;'><input name='product_max_quantity[]' style='width:50% !important;' placeholder='No maximum' type='number'><a class='remove_product'>X</a></div></div>");
-				});
-
-				// Update the original input field value with the selected values
-				$(this).val(selectedValues).trigger("change");
-			}
-		});
-
-		// Add click event handler for the .remove_product class
-		$(document).on("click", ".remove_product", function() {
-			// Remove the parent .whole element when .remove_product is clicked
-			$(this).closest(".whole").remove();
-		});
-
-
-		$(".all_selected_products ul.select2-selection__rendered").remove();
+		// working code, code add min and max item all selected product
+		// $(".all_selected_products").on("select2:select", function(event) {
+		// 	var selectedValues = $(this).val(); // Get an array of selected values
+		//
+		// 	if (selectedValues) {
+		// 		// Clear the container before adding new selections
+		// 		$("#selectedValuesContainer").empty();
+		//
+		// 		// Loop through selected values and add them to the container
+		// 		selectedValues.forEach(function(value) {
+		// 			var text = $(".all_selected_products option[value='" + value + "']").text();
+		//
+		// 			$("#selectedValuesContainer").append("<div class='whole'><span class='select2-selection__choice'>" + text + "</span><div class='product_min_max'><input name='product_min_quantity[]' placeholder='No minimum' type='number' style='float:left; width:50% !important;'><input name='product_max_quantity[]' style='width:50% !important;' placeholder='No maximum' type='number'><a class='remove_product'>X</a></div></div>");
+		// 		});
+		//
+		// 		// Update the original input field value with the selected values
+		// 		$(this).val(selectedValues).trigger("change");
+		// 	}
+		// });
+		//
+		// // Add click event handler for the .remove_product class
+		// $(document).on("click", ".remove_product", function() {
+		// 	// Remove the parent .whole element when .remove_product is clicked
+		// 	$(this).closest(".whole").remove();
+		// });
+		//
+		//
+		// $(".all_selected_products ul.select2-selection__rendered").remove();
 
 
 		// function displaySelectedValues() {
@@ -347,21 +361,77 @@
 		// 	$(this).val(null).trigger("change");
 		// });
 
+		/*
+       ========================================
+           Usage Limits
+       ========================================
+       */
+
+		// On page load
+		const resetOptionValue = $("#reset_option_value").val(); // Get the value of 'reset_option_value' input
+
+		// Find all p elements within the specified div
+		const paragraphs = $(".reset_limit").find("p");
+
+		// Loop through each p element and compare data-reset-value attribute
+		paragraphs.each(function() {
+			var dataResetValue = $(this).attr("data-reset-value");
+			if (dataResetValue === resetOptionValue) {
+				$(this).addClass("usage_limit_p_background");
+			}
+		});
+
+		const resetLimitP = $(".reset_limit p");
+
+		// On clicking the p element
+		resetLimitP.click(function (){
+			resetLimitP.removeClass("usage_limit_p_background");
+
+			$(this).addClass("usage_limit_p_background");
+
+			// Get the reset value from the data attribute
+			const resetValue = $(this).data('reset-value');
+			// Update the hidden input field value
+			$('#reset_option_value').val(resetValue);
+		});
+
+		var resetUsageLimit = $("#reset_usage_limit");
+
+		// On clicking the checkbox
+		$(resetUsageLimit).on("change",function (){
+			if($(this).is(":checked")){
+				paragraphs.show();
+			}
+			else {
+				paragraphs.hide();
+			}
+		});
+
+		// On page load
+		if($(resetUsageLimit).is(":checked")){
+			paragraphs.show();
+		}
+		else {
+			paragraphs.hide();
+		}
+
 
 		/*
        ========================================
            Geographic Restriction
        ========================================
        */
-		var applyGeographicRestriction = $("input[name='apply_geographic_restriction']");
+		const applyGeographicRestriction = $("input[name='apply_geographic_restriction']");
+		const restrictedShippingZones = $(".restricted_shipping_zones");
+		const restrictedCountries = $(".restricted_countries");
 
 		applyGeographicRestriction.on("change", function() {
 			if ($(this).is(":checked") && $(this).val() === 'restrict_by_shipping_zones') {
-				$(".restricted_shipping_zones").show();
-				$(".restricted_countries").hide();
+				restrictedShippingZones.show();
+				restrictedCountries.hide();
 			} else if ($(this).is(":checked") && $(this).val() === 'restrict_by_countries') {
-				$(".restricted_shipping_zones").hide();
-				$(".restricted_countries").show();
+				restrictedShippingZones.hide();
+				restrictedCountries.show();
 			}
 		});
 
@@ -390,13 +460,14 @@
        ========================================
        */
 		// Show or hide redirect link input field upon changing the radio button
-		var applyRedirectSharableLink = $("input[name='apply_redirect_sharable_link']");
+		const applyRedirectSharableLink = $("input[name='apply_redirect_sharable_link']");
+		const redirectLinkField = $(".redirect_link_field");
 
 		applyRedirectSharableLink.on("change", function() {
 			if ($(this).is(":checked") && $(this).val() === 'redirect_back_to_origin') {
-				$(".redirect_link_field").hide();
+				redirectLinkField.hide();
 			} else if ($(this).is(":checked") && $(this).val() === 'redirect_to_custom_link') {
-				$(".redirect_link_field").show();
+				redirectLinkField.show();
 			}
 		});
 
@@ -420,24 +491,34 @@
 		});
 
 
+		/*
+       ========================================
+           	Days & Hours in General Tab
+       ========================================
+       */
 
-		// Select hexcoupon shortcode field
-		$(".shortcode_column").click(function(){
-			this.select();
-		});
+		const applyDaysHoursOfWeek = $("#apply_days_hours_of_week");
+		const dayTimeHoursBlock = $(".day_time_hours_block");
+		const totalHoursCountSaturday = $("#total_hours_count_saturday");
+		const totalHoursCountSunday = $("#total_hours_count_sunday");
+		const totalHoursCountMonday = $("#total_hours_count_monday");
+		const totalHoursCountTuesday = $("#total_hours_count_tuesday");
+		const totalHoursCountWednesday = $("#total_hours_count_wednesday");
+		const totalHoursCountThursday = $("#total_hours_count_thursday");
+		const totalHoursCountFriday = $("#total_hours_count_friday");
 
 		// Show hide days and hours on page load
-		if($("#apply_days_hours_of_week").is(":checked")) {
-			$(".day_time_hours_block").show();
+		if(applyDaysHoursOfWeek.is(":checked")) {
+			dayTimeHoursBlock.show();
 		} else {
-			$(".day_time_hours_block").hide();
-			$("#total_hours_count_saturday").val('0');
-			$("#total_hours_count_sunday").val('0');
-			$("#total_hours_count_monday").val('0');
-			$("#total_hours_count_tuesday").val('0');
-			$("#total_hours_count_wednesday").val('0');
-			$("#total_hours_count_thursday").val('0');
-			$("#total_hours_count_friday").val('0');
+			dayTimeHoursBlock.hide();
+			totalHoursCountSaturday.val('0');
+			totalHoursCountSunday.val('0');
+			totalHoursCountMonday.val('0');
+			totalHoursCountTuesday.val('0');
+			totalHoursCountWednesday.val('0');
+			totalHoursCountThursday.val('0');
+			totalHoursCountFriday.val('0');
 		}
 
 		// Show hide products cart condition on page load
@@ -513,13 +594,6 @@
 			}
 		});
 
-
-		/*
-	   ========================================
-		   Days and Hours fields for Saturday
-	   ========================================
-	   */
-
 		// Function for enabling flatpickr
 		function flatPicker(day) {
 			$(".time-picker-"+day).flatpickr({
@@ -547,6 +621,12 @@
 			}
 		}
 
+		/*
+	   ========================================
+		   Days and Hours fields for Saturday
+	   ========================================
+	   */
+
 		// Enable flatpicker on saturday default input fields
 		flatPicker('saturday');
 
@@ -559,24 +639,24 @@
 		});
 
 		// Add input field dynamically for saturday.
-		let totalHoursCountSaturday = $("#total_hours_count_saturday").val();
+		let totalHoursCountSaturdayVal = totalHoursCountSaturday.val();
 		$(document).on("click","#sat_add_more_hours",function(){
-			totalHoursCountSaturday++;
+			totalHoursCountSaturdayVal++;
 
-			let appendedElementSaturday = "<span class='appededItem first-input'><input type='text' class='time-picker-saturday' name='sat_coupon_start_time_"+totalHoursCountSaturday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday' name='sat_coupon_expiry_time_"+totalHoursCountSaturday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_saturday cross-hour'>X</a></span>";
+			let appendedElementSaturday = "<span class='appededItem first-input'><input type='text' class='time-picker-saturday' name='sat_coupon_start_time_"+totalHoursCountSaturdayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday' name='sat_coupon_expiry_time_"+totalHoursCountSaturdayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_saturday cross-hour'>X</a></span>";
 
 
 			$(".saturday").append(appendedElementSaturday);
-			$("#total_hours_count_saturday").val(totalHoursCountSaturday);
+			totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
 			flatPicker('saturday');
 		});
 
 		// Remove each input item of saturday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_saturday", function (){
-			let totalHoursCountSaturday = $("#total_hours_count_saturday").val();
+			let totalHoursCountSaturdayVal = totalHoursCountSaturday.val();
 			$(this).closest("span").remove();
-			totalHoursCountSaturday -= 1;
-			$("#total_hours_count_saturday").val(totalHoursCountSaturday);
+			totalHoursCountSaturdayVal -= 1;
+			totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
 		})
 
 		/*
@@ -597,24 +677,24 @@
 		});
 
 		// Add input field dynamically for sunday.
-		let totalHoursCountSunday = $("#total_hours_count_sunday").val();
+		let totalHoursCountSundayVal = totalHoursCountSunday.val();
 		$(document).on("click","#sun_add_more_hours",function(){
-			totalHoursCountSunday++;
+			totalHoursCountSundayVal++;
 
-			let appendedElementSunday = "<span class='appededItem first-input'><input type='text' class='time-picker-sunday' name='sun_coupon_start_time_"+totalHoursCountSunday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday' name='sun_coupon_expiry_time_"+totalHoursCountSunday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_sunday cross-hour'>X</a></span>";
+			let appendedElementSunday = "<span class='appededItem first-input'><input type='text' class='time-picker-sunday' name='sun_coupon_start_time_"+totalHoursCountSundayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday' name='sun_coupon_expiry_time_"+totalHoursCountSundayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_sunday cross-hour'>X</a></span>";
 
 
 			$(".sunday").append(appendedElementSunday);
-			$("#total_hours_count_sunday").val(totalHoursCountSunday);
+			totalHoursCountSunday.val(totalHoursCountSundayVal);
 			flatPicker('sunday');
 		});
 
 		// Remove each input item of sunday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_sunday", function (){
-			let totalHoursCountSunday = $("#total_hours_count_sunday").val();
+			let totalHoursCountSundayVal = totalHoursCountSunday.val();
 			$(this).closest("span").remove();
-			totalHoursCountSunday -= 1;
-			$("#total_hours_count_sunday").val(totalHoursCountSunday);
+			totalHoursCountSundayVal -= 1;
+			totalHoursCountSunday.val(totalHoursCountSundayVal);
 		})
 
 		/*
@@ -635,24 +715,24 @@
 		});
 
 		// Add input field dynamically for monday.
-		let totalHoursCountMonday = $("#total_hours_count_monday").val();
+		let totalHoursCountMondayVal = totalHoursCountMonday.val();
 		$(document).on("click","#mon_add_more_hours",function(){
-			totalHoursCountMonday++;
+			totalHoursCountMondayVal++;
 
-			let appendedElementMonday = "<span class='appededItem first-input'><input type='text' class='time-picker-monday' name='mon_coupon_start_time_"+totalHoursCountMonday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday' name='mon_coupon_expiry_time_"+totalHoursCountMonday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_monday cross-hour'>X</a></span>";
+			let appendedElementMonday = "<span class='appededItem first-input'><input type='text' class='time-picker-monday' name='mon_coupon_start_time_"+totalHoursCountMondayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday' name='mon_coupon_expiry_time_"+totalHoursCountMondayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_monday cross-hour'>X</a></span>";
 
 
 			$(".monday").append(appendedElementMonday);
-			$("#total_hours_count_monday").val(totalHoursCountMonday);
+			totalHoursCountMonday.val(totalHoursCountMondayVal);
 			flatPicker('monday');
 		});
 
 		// Remove each input item of monday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_monday", function (){
-			let totalHoursCountMonday = $("#total_hours_count_monday").val();
+			let totalHoursCountMondayVal = totalHoursCountMonday.val();
 			$(this).closest("span").remove();
-			totalHoursCountMonday -= 1;
-			$("#total_hours_count_monday").val(totalHoursCountMonday);
+			totalHoursCountMondayVal -= 1;
+			totalHoursCountMonday.val(totalHoursCountMondayVal);
 		})
 
 		/*
@@ -673,24 +753,24 @@
 		});
 
 		// Add input field dynamically for tuesday.
-		let totalHoursCountTuesday = $("#total_hours_count_tuesday").val();
+		let totalHoursCountTuesdayVal = $("#total_hours_count_tuesday").val();
 		$(document).on("click","#tue_add_more_hours",function(){
-			totalHoursCountTuesday++;
+			totalHoursCountTuesdayVal++;
 
-			let appendedElementTuesday = "<span class='appededItem first-input'><input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_"+totalHoursCountTuesday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday' name='tue_coupon_expiry_time_"+totalHoursCountTuesday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_tuesday cross-hour'>X</a></span>";
+			let appendedElementTuesday = "<span class='appededItem first-input'><input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_"+totalHoursCountTuesdayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday' name='tue_coupon_expiry_time_"+totalHoursCountTuesdayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_tuesday cross-hour'>X</a></span>";
 
 
 			$(".tuesday").append(appendedElementTuesday);
-			$("#total_hours_count_tuesday").val(totalHoursCountTuesday);
+			totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
 			flatPicker('tuesday');
 		});
 
 		// Remove each input item of tuesday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_tuesday", function (){
-			let totalHoursCountTusday = $("#total_hours_count_tuesday").val();
+			let totalHoursCountTuesdayVal = totalHoursCountTuesday.val();
 			$(this).closest("span").remove();
-			totalHoursCountTusday -= 1;
-			$("#total_hours_count_tuesday").val(totalHoursCountTusday);
+			totalHoursCountTuesdayVal -= 1;
+			totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
 		})
 
 		/*
@@ -711,24 +791,24 @@
 		});
 
 		// Add input field dynamically for tuesday.
-		let totalHoursCountWednesday = $("#total_hours_count_wednesday").val();
+		let totalHoursCountWednesdayVal = $("#total_hours_count_wednesday").val();
 		$(document).on("click","#wed_add_more_hours",function(){
-			totalHoursCountWednesday++;
+			totalHoursCountWednesdayVal++;
 
-			let appendedElementWednesday = "<span class='appededItem first-input'><input type='text' class='time-picker-wednesday' name='tue_coupon_start_time_"+totalHoursCountWednesday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday' name='wed_coupon_expiry_time_"+totalHoursCountWednesday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_wednesday cross-hour'>X</a></span>";
+			let appendedElementWednesday = "<span class='appededItem first-input'><input type='text' class='time-picker-wednesday' name='tue_coupon_start_time_"+totalHoursCountWednesdayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday' name='wed_coupon_expiry_time_"+totalHoursCountWednesdayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_wednesday cross-hour'>X</a></span>";
 
 
 			$(".wednesday").append(appendedElementWednesday);
-			$("#total_hours_count_wednesday").val(totalHoursCountWednesday);
+			totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
 			flatPicker('wednesday');
 		});
 
 		// Remove each input item of tuesday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_wednesday", function (){
-			let totalHoursCountWednesday = $("#total_hours_count_wednesday").val();
+			let totalHoursCountWednesdayVal = totalHoursCountWednesday.val();
 			$(this).closest("span").remove();
-			totalHoursCountWednesday -= 1;
-			$("#total_hours_count_wednesday").val(totalHoursCountWednesday);
+			totalHoursCountWednesdayVal -= 1;
+			totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
 		})
 
 		/*
@@ -749,24 +829,24 @@
 		});
 
 		// Add input field dynamically for thursday.
-		let totalHoursCountThursday = $("#total_hours_count_thursday").val();
+		let totalHoursCountThursdayVal = totalHoursCountThursday.val();
 		$(document).on("click","#thu_add_more_hours",function(){
-			totalHoursCountThursday++;
+			totalHoursCountThursdayVal++;
 
-			let appendedElementThursday = "<span class='appededItem first-input'><input type='text' class='time-picker-thursday' name='tue_coupon_start_time_"+totalHoursCountThursday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday' name='thu_coupon_expiry_time_"+totalHoursCountThursday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_thursday cross-hour'>X</a></span>";
+			let appendedElementThursday = "<span class='appededItem first-input'><input type='text' class='time-picker-thursday' name='tue_coupon_start_time_"+totalHoursCountThursdayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday' name='thu_coupon_expiry_time_"+totalHoursCountThursdayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_thursday cross-hour'>X</a></span>";
 
 
 			$(".thursday").append(appendedElementThursday);
-			$("#total_hours_count_thursday").val(totalHoursCountThursday);
+			totalHoursCountThursday.val(totalHoursCountThursdayVal);
 			flatPicker('thursday');
 		});
 
 		// Remove each input item of thursday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_thursday", function (){
-			let totalHoursCountThursday = $("#total_hours_count_thursday").val();
+			let totalHoursCountThursdayVal = totalHoursCountThursday.val();
 			$(this).closest("span").remove();
-			totalHoursCountThursday -= 1;
-			$("#total_hours_count_thursday").val(totalHoursCountThursday);
+			totalHoursCountThursdayVal -= 1;
+			totalHoursCountThursday.val(totalHoursCountThursdayVal);
 		})
 
 		/*
@@ -787,24 +867,24 @@
 		});
 
 		// Add input field dynamically for friday.
-		let totalHoursCountFriday = $("#total_hours_count_friday").val();
+		let totalHoursCountFridayVal = totalHoursCountFriday.val();
 		$(document).on("click","#fri_add_more_hours",function(){
-			totalHoursCountFriday++;
+			totalHoursCountFridayVal++;
 
-			let appendedElementFriday = "<span class='appededItem first-input'><input type='text' class='time-picker-friday' name='fri_coupon_start_time_"+totalHoursCountFriday+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday' name='fri_coupon_expiry_time_"+totalHoursCountFriday+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_friday cross-hour'>X</a></span>";
+			let appendedElementFriday = "<span class='appededItem first-input'><input type='text' class='time-picker-friday' name='fri_coupon_start_time_"+totalHoursCountFridayVal+"' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday' name='fri_coupon_expiry_time_"+totalHoursCountFridayVal+"'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='cross_hour_friday cross-hour'>X</a></span>";
 
 
 			$(".friday").append(appendedElementFriday);
-			$("#total_hours_count_friday").val(totalHoursCountFriday);
+			totalHoursCountFriday.val(totalHoursCountFridayVal);
 			flatPicker('friday');
 		});
 
 		// Remove each input item of thursday after clicking  the cross icon.
 		$(document).on("click", ".cross_hour_friday", function (){
-			let totalHoursCountFriday = $("#total_hours_count_friday").val();
+			let totalHoursCountFridayVal = totalHoursCountFriday.val();
 			$(this).closest("span").remove();
-			totalHoursCountFriday -= 1;
-			$("#total_hours_count_friday").val(totalHoursCountFriday);
+			totalHoursCountFridayVal -= 1;
+			totalHoursCountFriday.val(totalHoursCountFridayVal);
 		})
 
 		$('.toggle-input').on('change', function() {
@@ -814,4 +894,3 @@
 
 	});
 })(jQuery);
-
