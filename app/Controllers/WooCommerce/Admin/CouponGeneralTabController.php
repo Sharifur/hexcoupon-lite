@@ -773,6 +773,16 @@ class CouponGeneralTabController extends BaseController
 	{
 		$days_hours_of_week = get_post_meta( $coupon_id, 'apply_days_hours_of_week', true );
 
+		$coupon_apply_on_day = [
+			'coupon_apply_on_saturday',
+			'coupon_apply_on_sunday',
+			'coupon_apply_on_monday',
+			'coupon_apply_on_tuesday',
+			'coupon_apply_on_wednesday',
+			'coupon_apply_on_thursday',
+			'coupon_apply_on_friday',
+		];
+
 		$meta_start_key =  [
 			'sat_coupon_start_time',
 			'sun_coupon_start_time',
@@ -805,11 +815,15 @@ class CouponGeneralTabController extends BaseController
 
 		if ( empty( $days_hours_of_week ) ) {
 			foreach( $meta_start_key as $value ) {
-				delete_post_meta( $coupon_id,$value );
+				delete_post_meta( $coupon_id, $value );
 			}
 
 			foreach ( $meta_expiry_key as $value ) {
-				delete_post_meta( $coupon_id,$value );
+				delete_post_meta( $coupon_id, $value );
+			}
+
+			foreach ( $coupon_apply_on_day as $value ) {
+				delete_post_meta( $coupon_id, $value );
 			}
 		}
 

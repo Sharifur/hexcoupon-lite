@@ -595,7 +595,7 @@ class CouponSingleGeneralTab
 
 							<?php
 							for ($i = 1; $i <= $total_hours_count_wednesday; $i++) {
-								$start_time = get_post_meta( $post->ID, 'we_coupon_start_time_' . $i, true );
+								$start_time = get_post_meta( $post->ID, 'wed_coupon_start_time_' . $i, true );
 								$expiry_time = get_post_meta( $post->ID, 'wed_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>

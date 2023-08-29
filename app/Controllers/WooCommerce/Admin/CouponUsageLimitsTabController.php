@@ -20,10 +20,35 @@ class CouponUsageLimitsTabController extends BaseController {
 	 */
 	public function register()
 	{
+		add_action( 'wp_loaded', [ $this, 'get_all_post_meta' ] );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_usage_limit' ] );
 		add_action( 'woocommerce_coupon_options_save', [ $this, 'perform_resetting_task_of_usage_limit' ], 10, 2 );
 		add_action( 'coupon_periodic_task_hook', [ $this, 'reset_usage_limit'] );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_post_meta
+	 * @return array
+	 * Get all coupon meta values
+	 */
+	public function get_all_post_meta( $coupon )
+	{
+		$all_meta_data = [];
+
+		$meta_fields_data = [
+			'reset_usage_limit',
+			'reset_option_value',
+		];
+
+		foreach( $meta_fields_data as $meta_value ) {
+			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
+		}
+
+		return $all_meta_data;
 	}
 
 	/**
@@ -38,9 +63,11 @@ class CouponUsageLimitsTabController extends BaseController {
 	 */
 	public function perform_resetting_task_of_usage_limit( $post_id, $coupon )
 	{
-		$reset_usage_limit = get_post_meta( $coupon->get_id(), 'reset_usage_limit', true );
+		$all_meta_values = $this->get_all_post_meta( $coupon );
 
-		$reset_option_value = get_post_meta( $coupon->get_id(), 'reset_option_value', true );
+		$reset_usage_limit = $all_meta_values['reset_usage_limit'];
+
+		$reset_option_value = $all_meta_values['reset_option_value'];
 		$reset_option_value = ! empty( $reset_option_value ) ? $reset_option_value : '';
 
 		$days_count = 0; // Initialize $days_count to a default value
@@ -143,7 +170,9 @@ class CouponUsageLimitsTabController extends BaseController {
 	 */
 	public function delete_meta_value( $coupon_id )
 	{
-		$reset_usage_limit = get_post_meta( $coupon_id, 'reset_usage_limit', true );
+		$all_meta_values = $this->get_all_post_meta( $coupon_id );
+
+		$reset_usage_limit = $all_meta_values['reset_usage_limit'];
 		$reset_usage_limit = ! empty( $reset_usage_limit ) ? 'yes' : '';
 
 		// Delete the reset_option_value meta value if reset_usage_limit meta values is not set.

@@ -230,6 +230,53 @@ p.output-url-text {
 	margin-right: 15px !important;
 }
 
+/* Geographic restrictions */
+.restricted_shipping_zones label,
+.restricted_countries label {
+	margin: 0 20px 0 12px;
+}
+
+.restricted_shipping_zones .select2-container,
+.restricted_countries .select2-container {
+	width: 30% !important;
+}
+
+.restricted_countries .select2-container:last-child {
+	margin-left: 34px;
+}
+
+/* Sharable url */
+#sharable_url_coupon_tab .apply_automatic_coupon_by_url_field {
+	padding: 0 !important;
+	margin-left: 12px !important;
+}
+
+/* General Tab */
+.customer_purchases li,
+.customer_gets_as_free li,
+.bogo_use_limit li {
+	width: 50% !important;
+	float: left;
+	font-size: 13px;
+}
+
+.add_specific_product_to_purchase span.select2-container,
+.add_specific_product_for_free span.select2-container,
+.add_categories_to_purchase span.select2-container,
+.add_categories_as_free span.select2-container {
+	width: 50% !important;
+}
+
+.bogo_use_limit {
+	border-bottom: none !important;
+}
+
+#woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_options a::before,
+#woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before,
+#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before {
+	content: '\f111'
+}
+
 @media only screen and (max-width: 1650px) {
 	.reset_limit p {
 		width: 30%;
@@ -356,51 +403,3 @@ p.output-url-text {
 		margin-left: 20px;
 	}
 }
-
-/* Geographic restrictions */
-.restricted_shipping_zones label,
-.restricted_countries label {
-	margin: 0 20px 0 12px;
-}
-
-.restricted_shipping_zones .select2-container,
-.restricted_countries .select2-container {
-	width: 30% !important;
-}
-
-.restricted_countries .select2-container:last-child {
-	margin-left: 34px;
-}
-
-/* Sharable url */
-#sharable_url_coupon_tab .apply_automatic_coupon_by_url_field {
-	padding: 0 !important;
-	margin-left: 12px !important;
-}
-
-/* General Tab */
-.customer_purchases li,
-.customer_gets_as_free li,
-.bogo_use_limit li {
-	width: 50% !important;
-	float: left;
-	font-size: 13px;
-}
-
-.add_specific_product_to_purchase span.select2-container,
-.add_specific_product_for_free span.select2-container,
-.add_categories_to_purchase span.select2-container,
-.add_categories_as_free span.select2-container {
-	width: 50% !important;
-}
-
-.bogo_use_limit {
-	border-bottom: none !important;
-}
-
-#woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_options a::before,
-#woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before,
-#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before {
-	content: '\f111'
-}
-

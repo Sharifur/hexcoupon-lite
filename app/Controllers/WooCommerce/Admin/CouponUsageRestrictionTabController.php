@@ -21,9 +21,43 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	public function register()
 	{
+		add_action( 'wp_loaded', [ $this, 'get_all_post_meta' ] );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_cart_condition' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_cart_condition' ], 10, 2 );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this,'delete_post_meta' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_post_meta
+	 * @return array
+	 * Get all coupon meta values
+	 */
+	public function get_all_post_meta( $coupon )
+	{
+		$all_meta_data = [];
+
+		$meta_fields_data = [
+			'apply_cart_condition_for_customer_on_products',
+			'all_selected_products',
+			'apply_on_listed_product',
+			'apply_cart_condition_for_customer_on_categories',
+			'all_selected_categories',
+			'allowed_or_restricted_customer_group',
+			'allowed_group_of_customer',
+			'selected_customer_group',
+			'allowed_or_restricted_individual_customer',
+			'allowed_individual_customer',
+			'selected_individual_customer',
+		];
+
+		foreach( $meta_fields_data as $meta_value ) {
+			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
+		}
+
+		return $all_meta_data;
 	}
 
 	/**
@@ -98,14 +132,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	private function apply_cart_condition_on_product( $valid, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon ); // get coupon all meta values
+
 		// get value of 'apply_cart_condition_for_customer_on_products' meta field
-		$apply_cart_condition_on_products = get_post_meta( $coupon->get_id(), 'apply_cart_condition_for_customer_on_products', true );
+		$apply_cart_condition_on_products = $all_meta_values['apply_cart_condition_for_customer_on_products'];
 
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
+		$all_selected_products = $all_meta_values['all_selected_products'];
 
 		// get value of 'apply_on_listed_product' meta field
-		$apply_on_listed_product = get_post_meta( $coupon->get_id(), 'apply_on_listed_product', true );
+		$apply_on_listed_product = $all_meta_values['apply_on_listed_product'];
 
 		// get all cart items
 		$cart_items = WC()->cart->get_cart();
@@ -138,7 +174,7 @@ class CouponUsageRestrictionTabController extends BaseController
 							return $valid;
 						}
 					}
-					
+
 					else {
 						// display a custom coupon error message if the coupon is invalid
 						add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_not_matching_any_of_the_products' ] , 10, 3 );
@@ -162,11 +198,13 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	private function apply_cart_condition_on_categories( $valid, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get the value of 'apply_cart_condition_for_customer_on_categories' meta field
-		$apply_cart_condition_on_categories = get_post_meta( $coupon->get_id(), 'apply_cart_condition_for_customer_on_categories', true );
+		$apply_cart_condition_on_categories = $all_meta_values['apply_cart_condition_for_customer_on_categories'];
 
 		// get the value of 'all_selected_categories'
-		$all_selected_categories = get_post_meta( $coupon->get_id(), 'all_selected_categories', true );
+		$all_selected_categories = $all_meta_values['all_selected_categories'];
 
 		// get all cart items
 		$cart_items = WC()->cart->get_cart();
@@ -215,9 +253,11 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	private function apply_cart_condition_on_customer_grp( $valid, $coupon )
 	{
-		$allowed_or_restricted_customer_group = get_post_meta( $coupon->get_id(), 'allowed_or_restricted_customer_group', true );
-		$allowed_group_of_customer = get_post_meta( $coupon->get_id(), 'allowed_group_of_customer', true );
-		$selected_customer_group = get_post_meta( $coupon->get_id(), 'selected_customer_group', true );
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
+		$allowed_or_restricted_customer_group = $all_meta_values['allowed_or_restricted_customer_group'];
+		$allowed_group_of_customer = $all_meta_values['allowed_group_of_customer'];
+		$selected_customer_group = $all_meta_values['selected_customer_group'];
 
 		// Check if coupon allowed for selected customer group
 		if ( ! empty( $allowed_or_restricted_customer_group ) && 'yes' === $allowed_or_restricted_customer_group ) {
@@ -263,9 +303,11 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	private function apply_cart_condition_on_individual_customer( $valid, $coupon )
 	{
-		$allowed_or_restricted_individual_customer = get_post_meta( $coupon->get_id(), 'allowed_or_restricted_individual_customer', true );
-		$allowed_individual_customer = get_post_meta( $coupon->get_id(), 'allowed_individual_customer', true );
-		$selected_individual_customer = get_post_meta( $coupon->get_id(), 'selected_individual_customer', true );
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
+		$allowed_or_restricted_individual_customer = $all_meta_values['allowed_or_restricted_individual_customer'];
+		$allowed_individual_customer = $all_meta_values['allowed_individual_customer'];
+		$selected_individual_customer = $all_meta_values['selected_individual_customer'];
 
 		$current_user_id = get_current_user_id(); // get current logged-in user id
 
@@ -371,13 +413,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_not_matching_all_products
 	 * @param string $err
 	 * @param int $err_code
+	 * @param int $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_not_matching_all_products( $err, $err_code, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
+		$all_selected_products = $all_meta_values['all_selected_products'];
 
 		$all_product_single_string = '';
 
@@ -404,13 +449,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_not_matching_any_of_the_products
 	 * @param string $err
 	 * @param int $err_code
+	 * @param int $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_not_matching_any_of_the_products( $err, $err_code, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = get_post_meta( $coupon->get_id(), 'all_selected_products', true );
+		$all_selected_products = $all_meta_values['all_selected_products'];
 
 		$all_product_single_string = '';
 
@@ -437,13 +485,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_not_matching_with_product_categories
 	 * @param string $err
 	 * @param int $err_code
+	 * @param $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_not_matching_with_product_categories( $err, $err_code, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get the value of 'all_selected_categories'
-		$all_selected_categories = get_post_meta( $coupon->get_id(), 'all_selected_categories', true );
+		$all_selected_categories = $all_meta_values['all_selected_categories'];
 
 		$category_string = ''; // initialize an empty string
 
@@ -470,13 +521,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_disallowed_grp_of_user
 	 * @param string $err
 	 * @param int $err_code
+	 * @param int $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_disallowed_grp_of_user( $err, $err_code, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get the value of 'all_selected_categories'
-		$selected_customer_group = get_post_meta( $coupon->get_id(), 'selected_customer_group', true );
+		$selected_customer_group = $all_meta_values['selected_customer_group'];
 
 		$customer_string = ''; // initialize an empty string
 
@@ -523,13 +577,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_allowed_grp_of_user
 	 * @param string $err
 	 * @param int $err_code
+	 * @param $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_allowed_grp_of_user( $err, $err_code, $coupon )
 	{
+		$all_meta_values = $this->get_all_post_meta( $coupon );
+
 		// get the value of 'all_selected_categories'
-		$selected_customer_group = get_post_meta( $coupon->get_id(), 'selected_customer_group', true );
+		$selected_customer_group = $all_meta_values['selected_customer_group'];
 
 		$customer_string = ''; // initialize an empty string
 
