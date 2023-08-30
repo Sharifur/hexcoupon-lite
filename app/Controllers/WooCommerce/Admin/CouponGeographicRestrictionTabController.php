@@ -115,7 +115,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		global $woocommerce;
 
-		$all_meta_data = $this->get_all_post_meta( $coupon ); // get the meta values
+		$all_meta_data = $this->get_all_post_meta( $coupon->get_id() ); // get the meta values
 
 		$all_cities = ! empty( $all_meta_data['restricted_shipping_zones'] ) ? $all_meta_data['restricted_shipping_zones'] : [];
 
@@ -148,7 +148,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		global $woocommerce;
 
-		$all_meta_data = $this->get_all_post_meta( $coupon ); // get all meta values
+		$all_meta_data = $this->get_all_post_meta( $coupon->get_id() ); // get all meta values
 
 		$billing_country = $woocommerce->customer->get_billing_country();
 

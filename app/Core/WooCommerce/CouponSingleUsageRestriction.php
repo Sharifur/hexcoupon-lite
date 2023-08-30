@@ -183,23 +183,36 @@ class CouponSingleUsageRestriction {
 
 		$output .= '</div>';
 
-//		echo '<div name="all_selected_products" id="selectedValuesContainer">';
-//		if ( ! empty( $all_selected_products ) ) {
-//			foreach ( $all_selected_products as $single_product ) {
-//				echo '<div class="whole"><span class="select2-selection__choice"></span>';
-//				echo get_the_title( $single_product );
-//				echo "<div class='product_min_max'><input name='product_min_quantity[]' placeholder='No minimum' type='number' style='float:left; width:50% !important;'><input name='product_max_quantity[]' style='width:50% !important;' placeholder='No maximum' type='number'><a class='remove_product'>X</a></div></div>";
-//			}
-//		}
-//		echo '</div>';
-
+		echo '<div id="selectedValuesContainer">';
+		if ( ! empty( $all_selected_products ) ) {
+			foreach ( $all_selected_products as $single_product ) {
+				echo '<div class="product-item-whole">';
+				echo '<div class="product_title">'.get_the_title( $single_product ).'</div>';
+				?>
+				<div class="product_min_max_main">
+					<div class='product_min product-wrap'>
+						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hexcoupon' ); ?></span>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hexcoupon' ); ?></p>
+							<input class="product-quantity-input" placeholder='No minimum' type='number' readonly>
+						</div>
+					</div>
+					<div class="product_max product-wrap">
+						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hexcoupon' ); ?></span>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'max quantity', 'hexcoupon' ); ?></p>
+							<input class="product-quantity-input" placeholder='No maximum' type='number' readonly>
+						</div>
+						<a href="javascript:void(0)" class='remove_product'>X</a>
+					</div>
+				</div>
+				<?php
+				echo '</div>';
+			}
+		}
+		echo '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
-
-//		echo '</div>';
-
-
-
 	}
 
 	/**

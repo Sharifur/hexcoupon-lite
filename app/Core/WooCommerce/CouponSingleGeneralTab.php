@@ -13,9 +13,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method register
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method register
+	 * @return void
 	 * Registers all hooks that are needed.
 	 */
 	public function register()
@@ -26,9 +26,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @since 1.0.0
 	 * @method show_categories
 	 * @return array
-	 * @since 1.0.0
 	 * Show all the categories of the product.
 	 */
 	private function show_categories()
@@ -37,8 +37,8 @@ class CouponSingleGeneralTab
 
 		$product_categories = get_categories(
 			[
-				'taxonomy'     => 'product_cat',
-				'orderby'      => 'name',
+				'taxonomy' => 'product_cat',
+				'orderby' => 'name',
 			]
 		);
 
@@ -52,9 +52,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method expiry_date_message_field
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method expiry_date_message_field
+	 * @return void
 	 * Add coupon expiry date message textarea field.
 	 */
 	private function expiry_date_message_field()
@@ -209,9 +209,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method starting_date_field
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method starting_date_field
+	 * @return void
 	 * Add coupon starting date input field.
 	 */
 	private function starting_date_field()
@@ -238,9 +238,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method starting_date_message_filed
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method starting_date_message_filed
+	 * @return void
 	 * Add coupon starting date input field.
 	 */
 	private function starting_date_message_filed()
@@ -262,9 +262,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_date_hours_checkbox
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_date_hours_checkbox
+	 * @return void
 	 * Add coupon day and hours applicable checkbox field.
 	 */
 	private function add_coupon_apply_date_hours_checkbox()
@@ -287,9 +287,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_saturday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_saturday_fields
+	 * @return void
 	 * Add coupon apply on saturday all fields.
 	 */
 	private function add_coupon_apply_on_saturday_fields()
@@ -340,7 +340,8 @@ class CouponSingleGeneralTab
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours">
+							<span class="add_more_hours_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="sat_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -356,9 +357,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_sunday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_sunday_fields
+	 * @return void
 	 * Add coupon apply on sunday all fields.
 	 */
 	private function add_coupon_apply_on_sunday_fields()
@@ -422,9 +423,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_monday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_monday_fields
+	 * @return void
 	 * Add coupon apply on monday all fields.
 	 */
 	private function add_coupon_apply_on_monday_fields()
@@ -488,9 +489,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_tuesday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_tuesday_fields
+	 * @return void
 	 * Add coupon apply on tuesday all fields.
 	 */
 	private function add_coupon_apply_on_tuesday_fields()
@@ -554,9 +555,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_wednesday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_wednesday_fields
+	 * @return void
 	 * Add coupon apply on wednesday all fields.
 	 */
 	private function add_coupon_apply_on_wednesday_fields()
@@ -620,9 +621,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_thursday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_thursday_fields
+	 * @return void
 	 * Add coupon apply on thursday all fields.
 	 */
 	private function add_coupon_apply_on_thursday_fields()
@@ -686,9 +687,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_apply_on_friday_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_apply_on_friday_fields
+	 * @return void
 	 * Add coupon apply on friday all fields.
 	 */
 	private function add_coupon_apply_on_friday_fields()
@@ -752,9 +753,9 @@ class CouponSingleGeneralTab
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_extra_fields
-	 * @return mixed
 	 * @since 1.0.0
+	 * @method add_coupon_extra_fields
+	 * @return void
 	 * Add coupon expiry date message textarea field.
 	 */
 	public function add_coupon_extra_fields()

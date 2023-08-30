@@ -63,7 +63,7 @@ class CouponUsageLimitsTabController extends BaseController {
 	 */
 	public function perform_resetting_task_of_usage_limit( $post_id, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon );
+		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		$reset_usage_limit = $all_meta_values['reset_usage_limit'];
 

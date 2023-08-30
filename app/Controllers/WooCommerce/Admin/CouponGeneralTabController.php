@@ -22,6 +22,7 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function register()
 	{
+		add_action('wp_loaded', [ $this, 'get_all_post_meta' ] );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_general_tab_meta_field_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon' ], 10, 2 );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
@@ -31,6 +32,37 @@ class CouponGeneralTabController extends BaseController
 		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
 		add_action('wp_loaded', [ $this, 'display_exceeded_quantity_notice_for_free_item' ] );
 		add_filter( 'woocommerce_update_cart_action_cart_updated', [ $this, 'clear_notices_on_cart_update' ], 10, 1 );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_post_meta
+	 * @return array
+	 * Get all coupon meta values
+	 */
+	public function get_all_post_meta( $coupon )
+	{
+		$all_meta_data = [];
+
+		$meta_fields_data = [
+			'customer_purchases',
+			'add_specific_product_to_purchase',
+			'add_specific_product_for_free',
+			'customer_gets_as_free',
+			'add_categories_to_purchase',
+			'coupon_starting_date',
+			'apply_days_hours_of_week',
+			'discount_type',
+			'message_for_coupon_starting_date',
+		];
+
+		foreach( $meta_fields_data as $meta_value ) {
+			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
+		}
+
+		return $all_meta_data;
 	}
 
 	/**
@@ -172,14 +204,16 @@ class CouponGeneralTabController extends BaseController
 	{
 		$coupon_id = $this->coupon_id(); // get the id of applied coupon from the cart page
 
-		$customer_purchases = get_post_meta( $coupon_id, 'customer_purchases', true );
+		$all_meta_values = $this->get_all_post_meta( $coupon_id );
 
-		$selected_products_to_purchase = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true ); // get purchasable selected product
-		$selected_products_as_free = get_post_meta( $coupon_id, 'add_specific_product_for_free', true ); // get free selected product
+		$customer_purchases = $all_meta_values['customer_purchases'];
 
-		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true ); // get meta value of customer gets as free
+		$selected_products_to_purchase = $all_meta_values['add_specific_product_to_purchase']; // get purchasable selected product
+		$selected_products_as_free = $all_meta_values['add_specific_product_for_free']; // get free selected product
 
-		$add_categories_to_purchase = get_post_meta( $coupon_id, 'add_categories_to_purchase', true ); // get the meta-value of coupon purchasable product categories
+		$customer_gets_as_free = $all_meta_values['customer_gets_as_free']; // get meta value of customer gets as free
+
+		$add_categories_to_purchase = $all_meta_values['add_categories_to_purchase']; // get the meta-value of coupon purchasable product categories
 
 		// Product IDs
 		$main_product_id = ! empty( $selected_products_to_purchase ) ? $selected_products_to_purchase : []; // product ids that has to be existed in the cart to apply BOGO deals
@@ -250,6 +284,7 @@ class CouponGeneralTabController extends BaseController
 
 				foreach ( $main_product_id as $main_product_single ) {
 					$main_product_single = intval( $main_product_single );
+
 					foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 						if ( $cart_item['product_id'] === $main_product_single ) {
 							// Get the current quantity
@@ -258,8 +293,11 @@ class CouponGeneralTabController extends BaseController
 							// Increase the quantity by one
 							$new_quantity = $current_quantity + 1;
 
+							$generate_free_item_id =  WC()->cart->generate_cart_id( $main_product_single ); // generate id of free item
+							$free_single_item_key = WC()->cart->find_product_in_cart( $generate_free_item_id ); // find the item key
+
 							// Update the cart with the new quantity
-							WC()->cart->set_quantity( $cart_item_key, $new_quantity );
+							WC()->cart->set_quantity( $free_single_item_key, $new_quantity );
 
 							break; // Exit the loop since we have found our product
 						}
@@ -437,7 +475,6 @@ class CouponGeneralTabController extends BaseController
 	private function save_dynamic_meta_data( $day, $key, $data_type, $coupon_id )
 	{
 		if ( isset( $_POST['total_hours_count_'.$day] ) ) {
-			$total_hours_count = intval( $_POST['total_hours_count_'.$day] );
 			$total_hours_count = intval( $_POST['total_hours_count_'.$day] );
 
 			// Loop through the input values and save them as post meta
@@ -815,11 +852,11 @@ class CouponGeneralTabController extends BaseController
 
 		if ( empty( $days_hours_of_week ) ) {
 			foreach( $meta_start_key as $value ) {
-				delete_post_meta( $coupon_id, $value );
+				delete_post_meta( $coupon_id,$value );
 			}
 
 			foreach ( $meta_expiry_key as $value ) {
-				delete_post_meta( $coupon_id, $value );
+				delete_post_meta( $coupon_id,$value );
 			}
 
 			foreach ( $coupon_apply_on_day as $value ) {
