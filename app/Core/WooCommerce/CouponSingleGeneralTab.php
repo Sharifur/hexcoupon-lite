@@ -334,14 +334,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-saturday' name='sat_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday' name='sat_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_saturday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_saturday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field add-more-hours">
-							<span class="add_more_hours_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
+						<p class="form-field add-more-hours-sat">
+							<span class="add_more_hours_sat_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="sat_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -403,13 +403,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-sunday' name='sun_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday' name='sun_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_sunday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_sunday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-sun">
+							<span class="add_more_hours_sun_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="sun_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -469,13 +470,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-monday' name='mon_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday' name='mon_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_monday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_monday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-mon">
+							<span class="add_more_hours_mon_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="mon_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -535,13 +537,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday' name='tue_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_tuesday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_tuesday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-tue">
+							<span class="add_more_hours_tue_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="tue_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -601,13 +604,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday' name='wed_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_wednesday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_wednesday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-wed">
+							<span class="add_more_hours_wed_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="wed_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -667,13 +671,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-thursday' name='thu_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                       <span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday' name='thu_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                      <a href='javascript:void(0)' class='cross_hour_thursday cross-hour'>X</a>
+                                                      <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_thursday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-thu">
+							<span class="add_more_hours_thu_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="thu_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>
@@ -733,13 +738,14 @@ class CouponSingleGeneralTab
 								$appendedElement = "<span class='appededItem first-input'>
                                                   <input type='text' class='time-picker-friday' name='fri_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
                                                   <span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday' name='fri_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
-                                                  <a href='javascript:void(0)' class='cross_hour_friday cross-hour'>X</a>
+                                                  <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_friday cross-hour'></a>
                                                 </span>";
 								echo $appendedElement;
 							}
 							?>
 						</p>
-						<p class="form-field">
+						<p class="form-field add-more-hours-fri">
+							<span class="add_more_hours_fri_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
 							<a id="fri_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
 						</p>
 					</div>

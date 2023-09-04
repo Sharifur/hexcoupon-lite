@@ -203,7 +203,7 @@ class CouponSingleUsageRestriction {
 							<p class="product-wrap-para"><?php echo esc_html__( 'max quantity', 'hexcoupon' ); ?></p>
 							<input class="product-quantity-input" placeholder='No maximum' type='number' readonly>
 						</div>
-						<a href="javascript:void(0)" class='remove_product'>X</a>
+						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product'></a>
 					</div>
 				</div>
 				<?php

@@ -80,11 +80,10 @@ input:checked + .slider:before {
 }
 .options_group__saturdayWrap .cross-hour {
 	position: absolute;
-	right: -12px;
+	right: -25px;
 	z-index: 2;
 	text-decoration: none;
 	color: #EB4747;
-	font-weight: bold;
 }
 
 .options_group__saturdayWrap .cross-hour:hover {
@@ -323,14 +322,13 @@ p.output-url-text {
 	width: 120px !important;
 }
 .remove_product {
-	font-size: 16px;
-	color: red;
+	font-size: 20px;
+	color: #EB4747;
 	text-decoration: none;
 	padding: 4px;
-	font-weight: bold;
 }
 .remove_product:hover {
-	color: red;
+	color: #EB4747;
 }
 .product-wrap-pro {
 	text-align: center;
@@ -353,10 +351,22 @@ p.output-url-text {
 	visibility: visible;
 	opacity: 1;
 }
-.add-more-hours {
+.add-more-hours-sat,
+.add-more-hours-sun,
+.add-more-hours-mon,
+.add-more-hours-tue,
+.add-more-hours-wed,
+.add-more-hours-thu,
+.add-more-hours-fri {
 	position: relative;
 }
-.add_more_hours_pro_text {
+.add_more_hours_sat_pro_text,
+.add_more_hours_sun_pro_text,
+.add_more_hours_mon_pro_text,
+.add_more_hours_tue_pro_text,
+.add_more_hours_wed_pro_text,
+.add_more_hours_thu_pro_text,
+.add_more_hours_fri_pro_text {
 	text-align: center;
 	position: absolute;
 	bottom: 120%;

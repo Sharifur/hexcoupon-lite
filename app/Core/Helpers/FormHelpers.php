@@ -26,6 +26,7 @@ class FormHelpers
 			'class' => 'short',
 			'select2' => false
 		];
+
 		$this->args = array_merge( $defaults, $args );
 	}
 	/**
@@ -117,9 +118,11 @@ class FormHelpers
 						$selected = in_array($opt,$value) ? 'selected' : '';
 					}
 
-					$markup .= '<option value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
+					$markup .= '<option data-option-value="'. esc_html($val) .'" value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
 				}
+
 				$markup .= '</select>';
+
 				if (!empty($this->args['description'])){
 					$markup .= '<span class="description">'.$this->getDescription().'</span>';
 				}
