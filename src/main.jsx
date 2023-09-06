@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { I18nProvider } from '@wordpress/react-i18n';
 import App from './App'
-import './index.css';
+// import './index.css';
 import "./scss/main.scss";
 
 // import { createI18n }  from '@wordpress/react-i18n';
