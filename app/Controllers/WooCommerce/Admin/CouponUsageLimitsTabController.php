@@ -32,21 +32,13 @@ class CouponUsageLimitsTabController extends BaseController {
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method get_all_post_meta
+	 * @param int $coupon
 	 * @return array
 	 * Get all coupon meta values
 	 */
 	public function get_all_post_meta( $coupon )
 	{
-		$all_meta_data = [];
-
-		$meta_fields_data = [
-			'reset_usage_limit',
-			'reset_option_value',
-		];
-
-		foreach( $meta_fields_data as $meta_value ) {
-			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
-		}
+		$all_meta_data = get_post_meta( $coupon, 'usage_limits', true );
 
 		return $all_meta_data;
 	}
@@ -65,10 +57,9 @@ class CouponUsageLimitsTabController extends BaseController {
 	{
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
-		$reset_usage_limit = $all_meta_values['reset_usage_limit'];
+		$reset_usage_limit = ! empty( $all_meta_values['reset_usage_limit'] ) ? $all_meta_values['reset_usage_limit'] : '';
 
-		$reset_option_value = $all_meta_values['reset_option_value'];
-		$reset_option_value = ! empty( $reset_option_value ) ? $reset_option_value : '';
+		$reset_option_value = ! empty( $reset_option_value['reset_option_value'] ) ? $reset_option_value['reset_option_value'] : '';
 
 		$days_count = 0; // Initialize $days_count to a default value
 
@@ -156,7 +147,7 @@ class CouponUsageLimitsTabController extends BaseController {
 	public function save_coupon_usage_limit( $coupon_id )
 	{
 		// save 'reset_usage_limit' meta-data
-		$this->save_coupon_usage_limits_meta_data( 'reset_usage_limit', 'string', $coupon_id );
+		$this->save_coupon_usage_limits_meta_data( 'usage_limits', 'array', $coupon_id );
 	}
 
 	/**
@@ -172,12 +163,12 @@ class CouponUsageLimitsTabController extends BaseController {
 	{
 		$all_meta_values = $this->get_all_post_meta( $coupon_id );
 
-		$reset_usage_limit = $all_meta_values['reset_usage_limit'];
-		$reset_usage_limit = ! empty( $reset_usage_limit ) ? 'yes' : '';
+		$reset_usage_limit = ! empty( $all_meta_values['reset_usage_limit'] ) ? 'yes' : '';
 
 		// Delete the reset_option_value meta value if reset_usage_limit meta values is not set.
 		if ( 'yes' != $reset_usage_limit ) {
-			delete_post_meta( $coupon_id, 'reset_option_value' );
+			unset( $all_meta_values['reset_option_value'] );
+			update_post_meta( $coupon_id, 'usage_limits', $all_meta_values );
 		}
 	}
 }

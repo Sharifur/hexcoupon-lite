@@ -118,7 +118,7 @@ class FormHelpers
 						$selected = in_array($opt,$value) ? 'selected' : '';
 					}
 
-					$markup .= '<option data-option-value="'. esc_html($val) .'" value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
+					$markup .= '<option title="'.esc_html($val).'" value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
 				}
 
 				$markup .= '</select>';

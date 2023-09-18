@@ -56,13 +56,16 @@ class CouponSingleSharableUrl {
 		global $post;
 
 		// get 'apply_automatic_coupon_by_url' meta field data
-		$apply_automatic_coupon_by_url = get_post_meta( $post->ID, 'apply_automatic_coupon_by_url', true );
+		$sharable_url_coupon = get_post_meta( $post->ID, 'sharable_url_coupon', true );
+
+		$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? $sharable_url_coupon['apply_automatic_coupon_by_url'] :'' ;
 
 		echo '<div id="sharable_url_coupon_tab" class="panel woocommerce_options_panel sharable_url_coupon_tab">';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'apply_automatic_coupon_by_url',
+				'name' => 'sharable_url_coupon[apply_automatic_coupon_by_url]',
 				'label' => '',
 				'description' => esc_html__( 'Check this box to allow customers automatically apply the current coupon by visiting a URL', 'hexcoupon' ),
 				'value' => $apply_automatic_coupon_by_url,
@@ -78,6 +81,7 @@ class CouponSingleSharableUrl {
 		woocommerce_wp_text_input(
 			[
 				'id' => 'sharable_url',
+				'name' => 'sharable_url_coupon[sharable_url]',
 				'label' => esc_html__( 'Edit URL link', 'hexcoupon' ),
 				'desc_tip' => true,
 				'description' => esc_html__( 'Please update the page to implement the url and afterwards copy the url and give to the users.', 'hexcoupon' ),
@@ -95,11 +99,12 @@ class CouponSingleSharableUrl {
 
 		<?php
 		// get 'message_for_coupon_discount_url' meta field data
-		$message_for_coupon_discount_url = get_post_meta( $post->ID, 'message_for_coupon_discount_url', true );
+		$message_for_coupon_discount_url = ! empty( $sharable_url_coupon['message_for_coupon_discount_url'] ) ? $sharable_url_coupon['message_for_coupon_discount_url'] : '';
 
 		woocommerce_wp_textarea_input(
 			[
 				'id' => 'message_for_coupon_discount_url',
+				'name' => 'sharable_url_coupon[message_for_coupon_discount_url]',
 				'label' => '',
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set a message for customers about the coupon discount they got.', 'hexcoupon' ),
@@ -109,13 +114,14 @@ class CouponSingleSharableUrl {
 		);
 
 		// get 'apply_redirect_sharable_link' meta field data
-		$apply_redirect_sharable_link = get_post_meta( $post->ID, 'apply_redirect_sharable_link', true );
+		$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
 
 		echo '<div class="options_group redirect_url">';
 
 		woocommerce_wp_radio(
 			[
 				'id' => 'apply_redirect_sharable_link',
+				'name' => 'sharable_url_coupon[apply_redirect_sharable_link]',
 				'label' => '',
 				'options' => [
 					'redirect_to_custom_link' => esc_html__( 'Redirect to a custom URL', 'hexcoupon' ),
@@ -125,25 +131,7 @@ class CouponSingleSharableUrl {
 			]
 		);
 
-		// get 'redirect_link' meta field data
-//		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
-//
-//		woocommerce_wp_text_input(
-//			[
-//				'id' => 'redirect_link',
-//				'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
-//				'desc_tip' => true,
-//				'description' => esc_html__( 'Set the coupon redirect url link. E.g: http://yourwebsite.com/cart or http://yourwebsite.com/checkout', 'hexcoupon' ),
-//				'type' => 'text',
-//				'value' => $redirect_link,
-//				'class' => 'redirect_link form-control',
-//				'placeholder' => esc_html( 'https://www.example.com/cart' ),
-//				'data_type' => 'url',
-//			]
-//		);
-
-		$redirect_link = get_post_meta( $post->ID, 'redirect_link', true );
-		$redirect_link = ! empty( $redirect_link ) ? $redirect_link : '';
+		$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
 
 		$cart_url = wc_get_cart_url();
 		$checkout_url = wc_get_checkout_url();
@@ -153,7 +141,7 @@ class CouponSingleSharableUrl {
 			'class' => 'select short',
 			'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
 			'id' => 'redirect_link',
-			'name' => 'redirect_link',
+			'name' => 'sharable_url_coupon[redirect_link]',
 			'options' => [
 				esc_url( $cart_url ) => 'Cart Page',
 				esc_url( $checkout_url ) => 'Checkout Page',

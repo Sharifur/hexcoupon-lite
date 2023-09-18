@@ -32,32 +32,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method get_all_post_meta
+	 * @param int $coupon
 	 * @return array
 	 * Get all coupon meta values
 	 */
 	public function get_all_post_meta( $coupon )
 	{
-		$all_meta_data = [];
+		$all_meta_data = get_post_meta( $coupon, 'usage_restriction', true );
 
-		$meta_fields_data = [
-			'apply_cart_condition_for_customer_on_products',
-			'all_selected_products',
-			'apply_on_listed_product',
-			'apply_cart_condition_for_customer_on_categories',
-			'all_selected_categories',
-			'allowed_or_restricted_customer_group',
-			'allowed_group_of_customer',
-			'selected_customer_group',
-			'allowed_or_restricted_individual_customer',
-			'allowed_individual_customer',
-			'selected_individual_customer',
-		];
-
-		foreach( $meta_fields_data as $meta_value ) {
-			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
-		}
-
-		return $all_meta_data;
+		if ( ! empty( $all_meta_data ) )
+			return $all_meta_data;
 	}
 
 	/**
@@ -97,25 +81,7 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	public function save_coupon_cart_condition( $coupon_id )
 	{
-		// initialize the array
-		$meta_data_list = [
-			[ 'apply_cart_condition_for_customer_on_products', 'string' ],
-			[ 'apply_on_listed_product', 'string' ],
-			[ 'all_selected_products', 'array' ],
-			[ 'apply_cart_condition_for_customer_on_categories', 'string' ],
-			[ 'all_selected_categories', 'array' ],
-			[ 'allowed_or_restricted_customer_group', 'string' ],
-			[ 'allowed_group_of_customer', 'string' ],
-			[ 'selected_customer_group', 'array' ],
-			[ 'allowed_or_restricted_individual_customer', 'string' ],
-			[ 'allowed_individual_customer', 'string' ],
-			[ 'selected_individual_customer', 'array' ],
-		];
-
-		// save coupon usage restriction meta field values
-		foreach ( $meta_data_list as $meta_data ) {
-			$this->save_coupon_usage_restriction_meta_data( $meta_data[0], $meta_data[1], $coupon_id );
-		}
+		$this->save_coupon_usage_restriction_meta_data( 'usage_restriction', 'array', $coupon_id );
 	}
 
 	/**
@@ -133,13 +99,13 @@ class CouponUsageRestrictionTabController extends BaseController
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() ); // get coupon all meta values
 
 		// get value of 'apply_cart_condition_for_customer_on_products' meta field
-		$apply_cart_condition_on_products = $all_meta_values['apply_cart_condition_for_customer_on_products'];
+		$apply_cart_condition_on_products = ! empty( $all_meta_values['apply_cart_condition_for_customer_on_products'] ) ? $all_meta_values['apply_cart_condition_for_customer_on_products'] : '';
 
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = $all_meta_values['all_selected_products'];
+		$all_selected_products = ! empty( $all_meta_values['all_selected_products'] ) ? $all_meta_values['all_selected_products'] : [];
 
 		// get value of 'apply_on_listed_product' meta field
-		$apply_on_listed_product = $all_meta_values['apply_on_listed_product'];
+		$apply_on_listed_product = ! empty( $all_meta_values['apply_on_listed_product'] ) ? $all_meta_values['apply_on_listed_product'] : '';
 
 		// get all cart items
 		$cart_items = WC()->cart->get_cart();
@@ -167,10 +133,8 @@ class CouponUsageRestrictionTabController extends BaseController
 
 			if ( 'any_of_the_product' === $apply_on_listed_product ) {
 				foreach ( $cart_items as $item => $key ) {
-					if ( ! empty( $all_selected_products ) ) {
-						if ( in_array( $key['product_id'], $all_selected_products ) ) {
-							return $valid;
-						}
+					if ( ! empty( $all_selected_products ) && in_array( $key['product_id'], $all_selected_products ) ) {
+						return $valid;
 					}
 
 					else {
@@ -199,10 +163,10 @@ class CouponUsageRestrictionTabController extends BaseController
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get the value of 'apply_cart_condition_for_customer_on_categories' meta field
-		$apply_cart_condition_on_categories = $all_meta_values['apply_cart_condition_for_customer_on_categories'];
+		$apply_cart_condition_on_categories = ! empty( $all_meta_values['apply_cart_condition_for_customer_on_categories'] ) ? $all_meta_values['apply_cart_condition_for_customer_on_categories'] : '';
 
 		// get the value of 'all_selected_categories'
-		$all_selected_categories = $all_meta_values['all_selected_categories'];
+		$all_selected_categories = ! empty( $all_meta_values['all_selected_categories'] ) ? $all_meta_values['all_selected_categories'] : '';
 
 		// get all cart items
 		$cart_items = WC()->cart->get_cart();
@@ -253,9 +217,10 @@ class CouponUsageRestrictionTabController extends BaseController
 	{
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
-		$allowed_or_restricted_customer_group = $all_meta_values['allowed_or_restricted_customer_group'];
-		$allowed_group_of_customer = $all_meta_values['allowed_group_of_customer'];
-		$selected_customer_group = $all_meta_values['selected_customer_group'];
+		$allowed_or_restricted_customer_group = ! empty( $all_meta_values['allowed_or_restricted_customer_group'] ) ? $all_meta_values['allowed_or_restricted_customer_group'] : [];
+
+		$allowed_group_of_customer = ! empty( $all_meta_values['allowed_group_of_customer'] ) ? $all_meta_values['allowed_group_of_customer'] : [];
+		$selected_customer_group = ! empty( $all_meta_values['selected_customer_group'] ) ? $all_meta_values['selected_customer_group'] : [];
 
 		// Check if coupon allowed for selected customer group
 		if ( ! empty( $allowed_or_restricted_customer_group ) && 'yes' === $allowed_or_restricted_customer_group ) {
@@ -303,9 +268,9 @@ class CouponUsageRestrictionTabController extends BaseController
 	{
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
-		$allowed_or_restricted_individual_customer = $all_meta_values['allowed_or_restricted_individual_customer'];
-		$allowed_individual_customer = $all_meta_values['allowed_individual_customer'];
-		$selected_individual_customer = $all_meta_values['selected_individual_customer'];
+		$allowed_or_restricted_individual_customer = ! empty( $all_meta_values['allowed_or_restricted_individual_customer'] ) ? $all_meta_values['allowed_or_restricted_individual_customer'] : [];
+		$allowed_individual_customer = ! empty( $all_meta_values['allowed_individual_customer'] ) ? $all_meta_values['allowed_individual_customer'] : [];
+		$selected_individual_customer = ! empty( $all_meta_values['selected_individual_customer'] ) ? $all_meta_values['selected_individual_customer'] : [];
 
 		$current_user_id = get_current_user_id(); // get current logged-in user id
 
@@ -373,35 +338,25 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	public function delete_post_meta( $coupon_id )
 	{
-		$meta_keys = [
-			'apply_cart_condition_for_customer_on_products' => [
-				'apply_on_listed_product',
-				'all_selected_products'
-			],
-			'apply_cart_condition_for_customer_on_categories' => [
-				'all_selected_categories'
-			],
-			'allowed_or_restricted_customer_group' => [
-				'allowed_group_of_customer',
-				'selected_customer_group'
-			],
-			'allowed_or_restricted_individual_customer' => [
-				'allowed_individual_customer',
-				'selected_individual_customer'
-			],
-		];
+		$all_meta_values = $this->get_all_post_meta( $coupon_id );
 
-		// loop through all the meta_keys and get their value
-		foreach ( $meta_keys as $meta_key => $related_meta_keys ) {
-			$meta_value = get_post_meta( $coupon_id, $meta_key, true );
-
-			// if any of the meta_key's value is empty then delete another meta_key's values which are co-related
-			if ( empty( $meta_value ) ) {
-				foreach ( $related_meta_keys as $related_meta_key ) {
-					delete_post_meta( $coupon_id, $related_meta_key );
-				}
-			}
+		if ( empty( $all_meta_values['apply_cart_condition_for_customer_on_products'] ) ) {
+			unset( $all_meta_values['apply_on_listed_product'], $all_meta_values['all_selected_products'] );
 		}
+
+		if ( empty( $all_meta_values['apply_cart_condition_for_customer_on_categories'] ) ) {
+			unset( $all_meta_values['all_selected_categories'] );
+		}
+
+		if ( empty( $all_meta_values['allowed_or_restricted_customer_group'] ) ) {
+			unset( $all_meta_values['allowed_group_of_customer'], $all_meta_values['selected_customer_group'] );
+		}
+
+		if ( empty( $all_meta_values['allowed_or_restricted_individual_customer'] ) ) {
+			unset( $all_meta_values['allowed_individual_customer'], $all_meta_values['selected_individual_customer'] );
+		}
+
+		update_post_meta( $coupon_id, 'usage_restriction', $all_meta_values );
 	}
 
 	/**
@@ -411,16 +366,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_not_matching_all_products
 	 * @param string $err
 	 * @param int $err_code
-	 * @param int $coupon
+	 * @param object $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_not_matching_all_products( $err, $err_code, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon );
+		$all_meta_values = $this->get_all_post_meta( $coupon->id );
 
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = $all_meta_values['all_selected_products'];
+		$all_selected_products = ! empty( $all_meta_values['all_selected_products'] ) ? $all_meta_values['all_selected_products'] : [];
 
 		$all_product_single_string = '';
 
@@ -447,16 +402,16 @@ class CouponUsageRestrictionTabController extends BaseController
 	 * @method invalid_error_message_for_not_matching_any_of_the_products
 	 * @param string $err
 	 * @param int $err_code
-	 * @param int $coupon
+	 * @param object $coupon
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
 	public function invalid_error_message_for_not_matching_any_of_the_products( $err, $err_code, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon );
+		$all_meta_values = $this->get_all_post_meta( $coupon->id );
 
 		// get value of 'all_selected_products' meta field
-		$all_selected_products = $all_meta_values['all_selected_products'];
+		$all_selected_products = ! empty( $all_meta_values['all_selected_products'] ) ? $all_meta_values['all_selected_products'] : [];
 
 		$all_product_single_string = '';
 
@@ -492,7 +447,7 @@ class CouponUsageRestrictionTabController extends BaseController
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get the value of 'all_selected_categories'
-		$all_selected_categories = $all_meta_values['all_selected_categories'];
+		$all_selected_categories = ! empty( $all_meta_values['all_selected_categories'] ) ? $all_meta_values['all_selected_categories'] : [];
 
 		$category_string = ''; // initialize an empty string
 
@@ -528,7 +483,7 @@ class CouponUsageRestrictionTabController extends BaseController
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get the value of 'all_selected_categories'
-		$selected_customer_group = $all_meta_values['selected_customer_group'];
+		$selected_customer_group = ! empty( $all_meta_values['selected_customer_group'] ) ? $all_meta_values['selected_customer_group'] : [];
 
 		$customer_string = ''; // initialize an empty string
 
@@ -584,7 +539,7 @@ class CouponUsageRestrictionTabController extends BaseController
 		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get the value of 'all_selected_categories'
-		$selected_customer_group = $all_meta_values['selected_customer_group'];
+		$selected_customer_group = ! empty( $all_meta_values['selected_customer_group'] ) ? $all_meta_values['selected_customer_group'] : [];
 
 		$customer_string = ''; // initialize an empty string
 

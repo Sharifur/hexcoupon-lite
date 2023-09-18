@@ -108,12 +108,14 @@ class CouponPaymentandShipping
 	{
 		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel payment_and_shipping_method">';
 
-		$selected_payment_methods = get_post_meta( get_the_ID(),'permitted_payment_methods',true );
+		$payment_and_shipping = get_post_meta( get_the_ID(),'payment_and_shipping',true );
+
+		$permitted_payment_methods = ! empty( $payment_and_shipping['permitted_payment_methods'] ) ? $payment_and_shipping['permitted_payment_methods'] : [];
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Apply Payment Methods', 'hexcoupon' ),
-			'name' => 'permitted_payment_methods',
-			'value' => $selected_payment_methods,
+			'name' => 'payment_and_shipping[permitted_payment_methods]',
+			'value' => $permitted_payment_methods,
 			'type' => 'select',
 			'options' => $this->get_all_payment_methods(), //if the field is select, this param will be here
 			'multiple' => true,
@@ -124,12 +126,12 @@ class CouponPaymentandShipping
 
 		echo '<span class="permitted_payment_methods_tooltip">'.wc_help_tip( esc_html__( 'Select payment methods that you want to apply to the coupon.', 'hexcoupon' ) ).'</span>';
 
-		$selected_shipping_methods = get_post_meta( get_the_ID(),'permitted_shipping_methods',true );
+		$permitted_shipping_methods = ! empty( $payment_and_shipping['permitted_shipping_methods'] ) ? $payment_and_shipping['permitted_shipping_methods'] : [];
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Apply Shipping Methods', 'hexcoupon' ),
-			'name' => 'permitted_shipping_methods',
-			'value' => $selected_shipping_methods,
+			'name' => 'payment_and_shipping[permitted_shipping_methods]',
+			'value' => $permitted_shipping_methods,
 			'type' => 'select',
 			'options' => $this->get_all_shipping_methods(), //if the field is select, this param will be here
 			'multiple' => true,

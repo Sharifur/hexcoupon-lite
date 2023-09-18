@@ -32,22 +32,13 @@ class CouponGeographicRestrictionTabController extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method get_all_post_meta
+	 * @param int $coupon
 	 * @return array
 	 * Get all coupon meta values
 	 */
 	public function get_all_post_meta( $coupon )
 	{
-		$all_meta_data = [];
-
-		$meta_fields_data = [
-			'apply_geographic_restriction',
-			'restricted_shipping_zones',
-			'restricted_countries'
-		];
-
-		foreach( $meta_fields_data as $meta_value ) {
-			$all_meta_data[$meta_value] = get_post_meta( $coupon, $meta_value, true );
-		}
+		$all_meta_data = get_post_meta( $coupon, 'geographic_restriction', true );
 
 		return $all_meta_data;
 	}
@@ -90,15 +81,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	public function save_coupon_all_meta_data( $coupon_id )
 	{
 		// Assign all meta fields key and their data type
-		$meta_fields_data = [
-			[ 'apply_geographic_restriction', 'string' ],
-			[ 'restricted_shipping_zones', 'array' ],
-			[ 'restricted_countries', 'array' ],
-		];
-
-		foreach ( $meta_fields_data as $meta_field_data ) {
-			$this->save_coupon_meta_data( $meta_field_data[0], $meta_field_data[1], $coupon_id ); // finally save the values
-		}
+		$this->save_coupon_meta_data( 'geographic_restriction', 'array', $coupon_id );
 	}
 
 	/**
@@ -123,12 +106,14 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
 
-		if ( 'restrict_by_shipping_zones' === $all_meta_data['apply_geographic_restriction'] ) {
-			if ( empty( $selected_restricted_shipping_zones ) ) {
+		if ( ! empty( $all_meta_data['apply_geographic_restriction'] ) && 'restrict_by_shipping_zones' === $all_meta_data['apply_geographic_restriction'] ) {
+			if ( empty( $all_meta_data['restricted_shipping_zones'] ) ) {
+				echo 'hello true';
 				return $valid;
 			}
 
 			if ( str_contains( $all_cities, $billing_city ) ) {
+				echo 'hello false';
 				return false;
 			}
 		}
@@ -152,7 +137,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$billing_country = $woocommerce->customer->get_billing_country();
 
-		if ( 'restrict_by_countries' === $all_meta_data['apply_geographic_restriction'] ) {
+		if ( ! empty( $all_meta_data['apply_geographic_restriction'] ) && 'restrict_by_countries' === $all_meta_data['apply_geographic_restriction'] ) {
 			if ( empty( $all_meta_data['restricted_countries'] ) ) {
 				return $valid;
 			}
@@ -177,7 +162,9 @@ class CouponGeographicRestrictionTabController extends BaseController
 	public function apply_coupon_meta_data( $valid, $coupon )
 	{
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
+
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
+
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
@@ -218,10 +205,20 @@ class CouponGeographicRestrictionTabController extends BaseController
 		$all_meta_data = $this->get_all_post_meta( $coupon_id ); // get all meta values
 
 		if ( 'restrict_by_shipping_zones'  === $all_meta_data['apply_geographic_restriction'] ) {
-			delete_post_meta( $coupon_id, 'restricted_countries' );
+			if( ! empty( $all_meta_data ) && is_array( $all_meta_data ) ) {
+				unset( $all_meta_data['restricted_countries'] );
+
+				// Update the post meta with the modified array
+				update_post_meta( $coupon_id, 'geographic_restriction', $all_meta_data );
+			}
 		} else {
-			delete_post_meta( $coupon_id, 'restricted_shipping_zones' );
+			if( ! empty( $all_meta_data ) && is_array( $all_meta_data ) ) {
+				unset( $all_meta_data['restricted_shipping_zones'] );
+				// Update the post meta with the modified array
+				update_post_meta( $coupon_id, 'geographic_restriction', $all_meta_data );
+			}
 		}
+
 	}
 
 	/**

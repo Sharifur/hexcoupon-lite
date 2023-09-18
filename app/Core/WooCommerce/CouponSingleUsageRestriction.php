@@ -132,12 +132,13 @@ class CouponSingleUsageRestriction {
 	{
 		global $post;
 
-		$apply_cart_condition_on_products = get_post_meta( $post->ID, 'apply_cart_condition_for_customer_on_products', true );
-		$apply_cart_condition_on_products = ! empty( $apply_cart_condition_on_products ) ? 'yes' : '';
+		$usage_restriction = get_post_meta( $post->ID, 'usage_restriction', true );
+		$apply_cart_condition_on_products = ! empty( $usage_restriction['apply_cart_condition_for_customer_on_products'] ) ? 'yes' : '';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'apply_cart_condition_for_customer_on_products',
+				'name' => 'usage_restriction[apply_cart_condition_for_customer_on_products]',
 				'label' => esc_html__( 'Product Cart Condition', 'hexcoupon' ),
 				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on product.', 'hexcoupon' ),
 				'value' => $apply_cart_condition_on_products,
@@ -145,14 +146,14 @@ class CouponSingleUsageRestriction {
 			]
 		);
 
-		$apply_on_listed_product = get_post_meta( $post->ID, 'apply_on_listed_product', true );
-		$apply_on_listed_product = ! empty( $apply_on_listed_product ) ? $apply_on_listed_product : '';
+		$apply_on_listed_product = ! empty( $usage_restriction['apply_on_listed_product'] ) ? $usage_restriction['apply_on_listed_product'] : '';
 
 		echo '<div class="apply_on_listed_product">';
 
 		woocommerce_wp_radio(
 			[
 				'id' => 'apply_on_listed_product',
+				'name' => 'usage_restriction[apply_on_listed_product]',
 				'label' => '',
 				'options' => [
 					'any_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains any of the product listed below', 'hexcoupon' ),
@@ -163,13 +164,14 @@ class CouponSingleUsageRestriction {
 		);
 		echo '</div>';
 
-		$all_selected_products = get_post_meta( $post->ID, 'all_selected_products', true );
+		$all_selected_products = ! empty( $usage_restriction['all_selected_products'] ) ? $usage_restriction['all_selected_products']: [];
 
 		echo '<div class="all_selected_products">';
 
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Products', 'hexcoupon' ),
-			'name' => 'all_selected_products',
+			'id' => 'all_selected_products',
+			'name' => 'usage_restriction[all_selected_products]',
 			'value' => $all_selected_products,
 			'type' => 'select',
 			'options' => $this->show_all_products(), //if the field is select, this param will be here
@@ -227,12 +229,13 @@ class CouponSingleUsageRestriction {
 	{
 		global $post;
 
-		$apply_cart_condition_on_categories = get_post_meta( $post->ID, 'apply_cart_condition_for_customer_on_categories', true );
-		$apply_cart_condition_on_categories = ! empty( $apply_cart_condition_on_categories ) ? 'yes' : '';
+		$usage_restriction = get_post_meta( $post->ID, 'usage_restriction', true );
+		$apply_cart_condition_on_categories = ! empty( $usage_restriction['apply_cart_condition_for_customer_on_categories'] ) ? 'yes' : '';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'apply_cart_condition_for_customer_on_categories',
+				'name' => 'usage_restriction[apply_cart_condition_for_customer_on_categories]',
 				'label' => esc_html__( 'Category Cart Condition', 'hexcoupon' ),
 				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on category.', 'hexcoupon' ),
 				'value' => $apply_cart_condition_on_categories,
@@ -240,14 +243,12 @@ class CouponSingleUsageRestriction {
 			]
 		);
 
-		//		$output ='<div id="custom_coupon_tab" class="panel woocommerce_options_panel">';
-
-		$all_selected_categories = get_post_meta( $post->ID, 'all_selected_categories', true );
+		$all_selected_categories = ! empty( $usage_restriction['all_selected_categories'] ) ? $usage_restriction['all_selected_categories']: [];
 
 		echo '<div class="all_selected_categories">';
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Product Categories', 'hexcoupon' ),
-			'name' => 'all_selected_categories',
+			'name' => 'usage_restriction[all_selected_categories]',
 			'value' => $all_selected_categories,
 			'type' => 'select',
 			'options' => $this->show_all_categories(), //if the field is select, this param will be here
@@ -275,26 +276,27 @@ class CouponSingleUsageRestriction {
 	{
 		global $post;
 
-		$allowed_or_restricted_customer_group = get_post_meta( $post->ID, 'allowed_or_restricted_customer_group', true );
-		$allowed_or_restricted_customer_group = ! empty( $allowed_or_restricted_customer_group ) ? 'yes' : '';
+		$usage_restriction = get_post_meta( $post->ID, 'usage_restriction', true );
+		$allowed_or_restricted_customer_group = ! empty( $usage_restriction['allowed_or_restricted_customer_group'] ) ? 'yes' : '';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'allowed_or_restricted_customer_group',
+				'name' => 'usage_restriction[allowed_or_restricted_customer_group]',
 				'label' => esc_html__( 'Allowed/Restricted customer', 'hexcoupon' ),
 				'description' => esc_html__( 'Check this box to to add groups of Allowed/Restricted customers.', 'hexcoupon' ),
 				'value' => $allowed_or_restricted_customer_group,
 			]
 		);
 
-		$allowed_grp_of_customer = get_post_meta( $post->ID, 'allowed_group_of_customer', true );
-		$allowed_grp_of_customer = ! empty( $allowed_grp_of_customer ) ? $allowed_grp_of_customer : '';
+		$allowed_grp_of_customer = ! empty( $usage_restriction['allowed_group_of_customer'] ) ? $usage_restriction['allowed_group_of_customer'] : '';
 
 		echo '<div class="options_group allowed_group_of_customer">';
 
 		woocommerce_wp_radio(
 			[
 				'id' => 'allowed_group_of_customer',
+				'name' => 'usage_restriction[allowed_group_of_customer]',
 				'label' => '',
 				'wrapper_class' => 'allowed_group_of_customer',
 				'options' => [
@@ -305,11 +307,11 @@ class CouponSingleUsageRestriction {
 			]
 		);
 
-		$selected_customer_group = get_post_meta( $post->ID, 'selected_customer_group', true );
+		$selected_customer_group = ! empty( $usage_restriction['selected_customer_group'] ) ? $usage_restriction['selected_customer_group'] : [];
 
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Customer Group', 'hexcoupon' ),
-			'name' => 'selected_customer_group',
+			'name' => 'usage_restriction[selected_customer_group]',
 			'value' => $selected_customer_group,
 			'type' => 'select',
 			'options' => $this->get_user_role_names(), //if the field is select, this param will be here
@@ -325,26 +327,26 @@ class CouponSingleUsageRestriction {
 
 		echo '</div>';
 
-		$allowed_or_restricted_individual_customer = get_post_meta( $post->ID, 'allowed_or_restricted_individual_customer', true );
-		$allowed_or_restricted_individual_customer = ! empty( $allowed_or_restricted_individual_customer ) ? 'yes' : '';
+		$allowed_or_restricted_individual_customer = ! empty( $usage_restriction['allowed_or_restricted_individual_customer'] ) ? 'yes' : '';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'allowed_or_restricted_individual_customer',
+				'name' => 'usage_restriction[allowed_or_restricted_individual_customer]',
 				'label' => '',
 				'description' => esc_html__( 'Check this box to to add individual of Allowed/Restricted customers.', 'hexcoupon' ),
 				'value' => $allowed_or_restricted_individual_customer,
 			]
 		);
 
-		$allowed_individual_customer = get_post_meta( $post->ID, 'allowed_individual_customer', true );
-		$allowed_individual_customer = ! empty( $allowed_individual_customer ) ? $allowed_individual_customer : '';
+		$allowed_individual_customer = ! empty( $usage_restriction['allowed_individual_customer'] ) ? $usage_restriction['allowed_individual_customer'] : '';
 
 		echo '<div class="options_group allowed_individual_customer">';
 
 		woocommerce_wp_radio(
 			[
 				'id' => 'allowed_individual_customer',
+				'name' => 'usage_restriction[allowed_individual_customer]',
 				'wrapper_class' => 'allowed_individual_customer',
 				'label' => '',
 				'options' => [
@@ -355,11 +357,11 @@ class CouponSingleUsageRestriction {
 			]
 		);
 
-		$selected_individual_customer = get_post_meta( $post->ID, 'selected_individual_customer', true );
+		$selected_individual_customer = ! empty( $usage_restriction['selected_individual_customer'] ) ? $usage_restriction['selected_individual_customer'] : [];
 
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Individual Customer', 'hexcoupon' ),
-			'name' => 'selected_individual_customer',
+			'name' => 'usage_restriction[selected_individual_customer]',
 			'value' => $selected_individual_customer,
 			'type' => 'select',
 			'options' => $this->show_user_names(), //if the field is select, this param will be here

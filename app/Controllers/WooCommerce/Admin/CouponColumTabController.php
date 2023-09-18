@@ -61,11 +61,8 @@ class CouponColumTabController extends BaseController
 	 */
 	public function save_coupon_all_meta_data( $post_id )
 	{
-		// Save coupon permitted payment method meta field data
-		$this->save_coupon_meta_data( 'permitted_payment_methods', 'array', $post_id );
-
-		// Save coupon permitted shipping method meta field data
-		$this->save_coupon_meta_data( 'permitted_shipping_methods', 'array', $post_id );
+		// Save coupon permitted payment method and shipping method meta field data
+		$this->save_coupon_meta_data( 'payment_and_shipping', 'array', $post_id );
 	}
 
 	/**
@@ -78,10 +75,10 @@ class CouponColumTabController extends BaseController
 	 * @return bool
 	 * Apply coupon to user selected payment methods only.
 	 */
-	private function apply_selected_payments_method_to_coupon( $valid, $coupon )
+	private function apply_selected_payments_method_to_coupon($valid, $coupon, $payment_and_shipping )
 	{
 		// get saved selected permitted payment methods meta data
-		$selected_permitted_payment_methods = get_post_meta( $coupon->get_id(), 'permitted_payment_methods', true );
+		$selected_permitted_payment_methods = ! empty( $payment_and_shipping['permitted_payment_methods'] ) ? $payment_and_shipping['permitted_payment_methods'] : [];
 
 		// check if is it empty
 		if ( empty( $selected_permitted_payment_methods ) ) {
@@ -109,10 +106,10 @@ class CouponColumTabController extends BaseController
 	 * @return bool
 	 * Apply coupon to user selected shipping methods only.
 	 */
-	private function apply_selected_shipping_methods_to_coupon( $valid, $coupon )
+	private function apply_selected_shipping_methods_to_coupon( $valid, $coupon, $payment_and_shipping )
 	{
 		// get permitted shipping methods meta field data
-		$selected_shipping_methods = get_post_meta( $coupon->get_id(), 'permitted_shipping_methods', true );
+		$selected_shipping_methods = ! empty( $payment_and_shipping['permitted_shipping_methods'] ) ? $payment_and_shipping['permitted_shipping_methods'] : [];
 
 		// check if is it empty
 		if ( empty( $selected_shipping_methods ) ) {
@@ -148,8 +145,10 @@ class CouponColumTabController extends BaseController
 	 */
 	public function apply_coupon_meta_data( $valid, $coupon )
 	{
-		$selectedPaymentMethod = $this->apply_selected_payments_method_to_coupon( $valid, $coupon );
-		$selectedShippingMethods = $this->apply_selected_shipping_methods_to_coupon( $valid, $coupon );
+		$payment_and_shipping = get_post_meta( $coupon->get_id(), 'payment_and_shipping', true );
+
+		$selectedPaymentMethod = $this->apply_selected_payments_method_to_coupon( $valid, $coupon, $payment_and_shipping );
+		$selectedShippingMethods = $this->apply_selected_shipping_methods_to_coupon( $valid, $coupon, $payment_and_shipping );
 
 		if ( ! $selectedPaymentMethod && ! $selectedShippingMethods ) {
 			return $valid;

@@ -244,7 +244,6 @@
            Usage Restriction
        ========================================
        */
-
 		const cartConditionCB = $(".cart-condition").prop("outerHTML");
 		$(".cart-condition").remove();
 		$("select[name^='product_ids']").parent().after(cartConditionCB);
@@ -260,9 +259,6 @@
 
 		$(".all_selected_products_tooltip").insertAfter(".all_selected_products span.select2-container");
 
-
-
-
 		const cartConditionCategory = $(".category-cart-condition").prop("outerHTML");
 		$(".category-cart-condition").remove();
 		$("select[name^='exclude_product_categories']").parent().before(cartConditionCategory);
@@ -275,20 +271,9 @@
 		$(".selected_customer_group_tooltip").insertAfter(".selected_customer_group");
 		$(".selected_individual_customer_tooltip").insertAfter(".selected_individual_customer");
 
-
-
-
-
-
-
-
-
-		// $(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
-		// $(".add_categories_to_purchase").insertAfter(".customer_purchases");
-
-
 		// place the 'selectedValuesContainer' container after the all_selected_products option grp input field
 		$("#selectedValuesContainer").insertAfter(".all_selected_products .options_group");
+
 
 		// show premium feature text clicking on min max input field
 		$(document).on('click','.product-quantity-input', function (){
@@ -299,23 +284,70 @@
 			$('.product-wrap-pro').removeClass('show');
 		});
 
-		// remove the selected li items from the search input field
-		// $(".all_selected_products li.select2-selection__choice").remove();
+		$(document).on("click",".remove_product", function (){
+			// get value from remove product element
+			let value = $(this).attr("data-value");
+			// now find this title inside select box element and option
+			$(`#all_selected_products option[value=${value}]`).removeAttr("selected");
+			$(`#all_selected_products`).trigger('change');
 
+			// call this function for handlingAllProductSection task
+			removeProductItemCard($(this));
+		});
 
+		$(document).on("change","#all_selected_products", function (){
+			// call this function for handlingAllProductSection task
+			handleSelectProductChange();
+		});
 
+		function removeProductItemCard(element){
+			element.closest(".product-item-whole").remove();
+		}
 
+		function handleSelectProductChange(){
+			// get all selected products and store those data inside a temp variable
+			let selectedProducts = $("#all_selected_products option:selected");
+			// run a loop for doing all necessary action that will be needed.
+			// define a temp variable for storing html
+			let productItems = "";
+			selectedProducts.each(function (){
+				productItems += addProductItem($(this));
+			})
 
+			$("#selectedValuesContainer").html(productItems);
+		}
 
+		function convertTitleToName(title){
+			return title.replace(" ","_").replace("-","_").toLowerCase();
+		}
 
+		function addProductItem(element, min = null, max = null){
+			const title = element.attr("title");
+			const value = element.attr("value");
 
-
-
-
-
-
-
-
+			return `
+				<div class="product-item-whole">
+					<div class="product_title">${title}</div>
+						<div class="product_min_max_main">
+							<div class="product_min product-wrap">
+								<span class="product-wrap-pro">This feature is only available on Pro</span>
+								<div class="product-wrap-inner">
+									<p class="product-wrap-para">min quantity</p>
+									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No minimum" type="number" readonly="">
+								</div>
+							</div>
+							<div class="product_max product-wrap">
+								<span class="product-wrap-pro">This feature is only available on Pro</span>
+								<div class="product-wrap-inner">
+								<p class="product-wrap-para">max quantity</p>
+								<input name="product_max[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No maximum" type="number" readonly="">
+							</div>
+							<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
+						</div>
+					</div>
+				</div>
+			`;
+		}
 
 		/*
        ========================================
@@ -371,13 +403,12 @@
 			paragraphs.hide();
 		}
 
-
 		/*
        ========================================
            Geographic Restriction
        ========================================
        */
-		const applyGeographicRestriction = $("input[name='apply_geographic_restriction']");
+		const applyGeographicRestriction = $("input[name='geographic_restriction[apply_geographic_restriction]']");
 		const restrictedShippingZones = $(".restricted_shipping_zones");
 		const restrictedCountries = $(".restricted_countries");
 
@@ -416,7 +447,7 @@
        ========================================
        */
 		// Show or hide redirect link input field upon changing the radio button
-		const applyRedirectSharableLink = $("input[name='apply_redirect_sharable_link']");
+		const applyRedirectSharableLink = $("input[name='sharable_url_coupon[apply_redirect_sharable_link]']");
 		const redirectLinkField = $(".redirect_link_field");
 
 		applyRedirectSharableLink.on("change", function() {
@@ -445,7 +476,6 @@
 			tempInput.remove(); // Remove the temporary input element
 			alert("URL copied to clipboard: " + text); // Show an alert
 		});
-
 
 		/*
        ========================================

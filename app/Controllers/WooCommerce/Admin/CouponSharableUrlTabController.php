@@ -62,18 +62,7 @@ class CouponSharableUrlTabController extends BaseController {
 	 */
 	public function save_coupon_all_meta_data( $coupon_id )
 	{
-		// assign all the meta key and their data type
-		$meta_data_list = [
-			[ 'apply_automatic_coupon_by_url', 'string' ],
-			[ 'sharable_url', 'string' ],
-			[ 'message_for_coupon_discount_url', 'string' ],
-			[ 'apply_redirect_sharable_link', 'string' ],
-			[ 'redirect_link', 'string' ],
-		];
-
-		foreach ( $meta_data_list as $meta_data ) {
-			$this->save_coupon_meta_data( $meta_data[0], $meta_data[1], $coupon_id ); // finally save the meta values
-		}
+		$this->save_coupon_meta_data( 'sharable_url_coupon', 'array', $coupon_id );
 	}
 
 	/**
@@ -81,7 +70,7 @@ class CouponSharableUrlTabController extends BaseController {
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method apply_coupon_activation_via_url
-	 * @return mixed
+	 * @return void
 	 * Apply coupon automatically after visiting a custom url.
 	 */
 	public function apply_coupon_activation_via_url()
@@ -90,9 +79,11 @@ class CouponSharableUrlTabController extends BaseController {
 			$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
 			$coupon = new \WC_Coupon( $coupon_code );
 
-			$redirect_link = get_post_meta( $coupon->get_id(), 'redirect_link', true );
+			$sharable_url_coupon = get_post_meta( $coupon->get_id(), 'sharable_url_coupon', true );
 
-			$apply_redirect_sharable_link = get_post_meta( $coupon->get_id(), 'apply_redirect_sharable_link', true );
+			$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
+
+			$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
 
 			if ( 'redirect_back_to_origin' === $apply_redirect_sharable_link ) {
 				// Get the referring URL
@@ -109,7 +100,7 @@ class CouponSharableUrlTabController extends BaseController {
 			$response = $discounts->is_coupon_valid( $coupon );
 
 			// Check if the given url has the right coupon code
-			$sharable_url = get_post_meta( $coupon->get_id(), 'sharable_url', true );
+			$sharable_url = ! empty( $sharable_url_coupon['sharable_url'] ) ? $sharable_url_coupon['sharable_url'] : '';
 			$coupon_code_search = str_contains( $sharable_url, 'coupon_code=' . $coupon_code );
 
 			if ( $coupon_code_search ) {
@@ -133,11 +124,14 @@ class CouponSharableUrlTabController extends BaseController {
 	 */
 	public function delete_post_meta( $coupon_id )
 	{
-		$apply_redirect_sharable_link = get_post_meta( $coupon_id, 'apply_redirect_sharable_link', true );
+		$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
+
+		$apply_redirect_sharable_link = $sharable_url_coupon['apply_redirect_sharable_link'];
 
 		// check if redirect sharable link matches with 'redirect_back_to_origin' or not
 		if ( 'redirect_back_to_origin'  === $apply_redirect_sharable_link ) {
-			delete_post_meta( $coupon_id, 'redirect_link' );
+			unset( $sharable_url_coupon['redirect_link'] );
+			update_post_meta( $coupon_id, 'sharable_url_coupon', $sharable_url_coupon );
 		}
 	}
 

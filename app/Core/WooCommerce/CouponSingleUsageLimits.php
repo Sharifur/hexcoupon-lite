@@ -34,12 +34,14 @@ class CouponSingleUsageLimits {
 	{
 		global $post;
 
-		$reset_usage_limit = get_post_meta( $post->ID, 'reset_usage_limit', true );
-		$reset_option_value = get_post_meta( $post->ID, 'reset_option_value', true );
+		$usage_limits = get_post_meta( $post->ID, 'usage_limits', true );
+		$reset_usage_limit = ! empty( $usage_limits['reset_usage_limit'] ) ? $usage_limits['reset_usage_limit'] : '';
+		$reset_option_value = ! empty( $usage_limits['reset_option_value'] ) ? $usage_limits['reset_option_value'] : '';
 
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'reset_usage_limit',
+				'name' => 'usage_limits[reset_usage_limit]',
 				'label' => esc_html__( 'Reset Usage', 'hexcoupon' ),
 				'description' => esc_html__( 'Check this box to reset usage limit after a period', 'hexcoupon' ),
 				'value' => $reset_usage_limit,
@@ -47,7 +49,7 @@ class CouponSingleUsageLimits {
 		);
 
 		// Add a hidden input field to store the selected reset option value
-		echo '<input type="hidden" id="reset_option_value" name="reset_option_value" value="'. esc_attr( $reset_option_value ) .'" />';
+		echo '<input type="hidden" id="reset_option_value" name="usage_limits[reset_option_value]" value="'. esc_attr( $reset_option_value ) .'" />';
 
 		echo '<div class="options_group reset_limit">';
 		?>
