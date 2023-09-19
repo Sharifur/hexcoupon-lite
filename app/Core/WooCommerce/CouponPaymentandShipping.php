@@ -115,6 +115,7 @@ class CouponPaymentandShipping
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Apply Payment Methods', 'hexcoupon' ),
 			'name' => 'payment_and_shipping[permitted_payment_methods]',
+			'id' => 'permitted_payment_methods',
 			'value' => $permitted_payment_methods,
 			'type' => 'select',
 			'options' => $this->get_all_payment_methods(), //if the field is select, this param will be here
@@ -131,6 +132,7 @@ class CouponPaymentandShipping
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Apply Shipping Methods', 'hexcoupon' ),
 			'name' => 'payment_and_shipping[permitted_shipping_methods]',
+			'id' => 'permitted_shipping_methods',
 			'value' => $permitted_shipping_methods,
 			'type' => 'select',
 			'options' => $this->get_all_shipping_methods(), //if the field is select, this param will be here

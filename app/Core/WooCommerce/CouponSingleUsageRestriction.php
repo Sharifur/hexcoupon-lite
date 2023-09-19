@@ -170,8 +170,8 @@ class CouponSingleUsageRestriction {
 
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Products', 'hexcoupon' ),
-			'id' => 'all_selected_products',
 			'name' => 'usage_restriction[all_selected_products]',
+			'id' => 'all_selected_products',
 			'value' => $all_selected_products,
 			'type' => 'select',
 			'options' => $this->show_all_products(), //if the field is select, this param will be here
@@ -249,6 +249,7 @@ class CouponSingleUsageRestriction {
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Product Categories', 'hexcoupon' ),
 			'name' => 'usage_restriction[all_selected_categories]',
+			'id' => 'all_selected_categories',
 			'value' => $all_selected_categories,
 			'type' => 'select',
 			'options' => $this->show_all_categories(), //if the field is select, this param will be here
@@ -312,6 +313,7 @@ class CouponSingleUsageRestriction {
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Customer Group', 'hexcoupon' ),
 			'name' => 'usage_restriction[selected_customer_group]',
+			'id' => 'selected_customer_group',
 			'value' => $selected_customer_group,
 			'type' => 'select',
 			'options' => $this->get_user_role_names(), //if the field is select, this param will be here
@@ -362,6 +364,7 @@ class CouponSingleUsageRestriction {
 		$output = FormHelpers::Init( [
 			'label' => esc_html__( 'Individual Customer', 'hexcoupon' ),
 			'name' => 'usage_restriction[selected_individual_customer]',
+			'id' => 'selected_individual_customer',
 			'value' => $selected_individual_customer,
 			'type' => 'select',
 			'options' => $this->show_user_names(), //if the field is select, this param will be here

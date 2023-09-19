@@ -78,6 +78,7 @@ class CouponSingleGeographicRestrictions {
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add shipping zones', 'hexcoupon' ),
 			'name' => 'geographic_restriction[restricted_shipping_zones]',
+			'id' => 'restricted_shipping_zones',
 			'value' => $restricted_shipping_zones,
 			'type' => 'select',
 			'options' => $this->get_all_shipping_zones(), //if the field is select, this param will be here
@@ -100,6 +101,7 @@ class CouponSingleGeographicRestrictions {
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add countries', 'hexcoupon' ),
 			'name' => 'geographic_restriction[restricted_countries]',
+			'id' => 'restricted_countries',
 			'value' => $restricted_countries,
 			'type' => 'select',
 			'options' => $this->get_all_countries_name(), //if the field is select, this param will be here

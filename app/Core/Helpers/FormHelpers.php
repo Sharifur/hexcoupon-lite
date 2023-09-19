@@ -17,6 +17,7 @@ class FormHelpers
 		$defaults = [
 			'label' => esc_html__('label','hexcoupon'),
 			'name' => 'name',
+			'id' => '',
 			'parent_class' => 'options_group',
 			'input_class' => '',
 			'input_wrapper_class' => 'form-field',
@@ -37,6 +38,10 @@ class FormHelpers
 	private function getName()
 	{
 		return $this->args['name'];
+	}
+	private function getId()
+	{
+		return $this->args['id'];
 	}
 	private function getClass()
 	{
@@ -109,7 +114,7 @@ class FormHelpers
 				$placeholderData = !empty($this->args['placeholder']) && $this->args['placeholder'] ?  'data-placeholder="'.$this->args['placeholder'].'"' : '';
 				$search = '';
 				$multipleArrayAppend = $multiple === 'multiple' ? '[]' : '';
-				$markup .= '<select '.$placeholderData.'  name="'.$this->getName().$multipleArrayAppend.'" id="'.$this->getName().'" class="select '.$this->getClass().' '.$select2.'" '.$multiple.' >';
+				$markup .= '<select '.$placeholderData.'  name="'.$this->getName().$multipleArrayAppend.'" id="'.$this->getId().'" class="select '.$this->getClass().' '.$select2.'" '.$multiple.' >';
 
 				foreach($options as $opt => $val){
 					$selected = ($opt === $value) ? 'selected' : '';

@@ -18,7 +18,7 @@ const Sidebar = ({ searchParam }) => {
         { path: '/', text: 'Dashboard', LinkIcon: MdHome },
         { path: '/store-credit', text: 'Store Credit', LinkIcon: MdCreditCard },
         { path: '/coupon', text: 'coupon', LinkIcon: MdLocalOffer },
-        { path: '/loyalty-rogramme', text: 'Loyalty Programme', LinkIcon: MdEmojiEvents },
+        { path: '/loyalty-programme', text: 'Loyalty Programme', LinkIcon: MdEmojiEvents },
         { path: '/gift-cards', text: 'Gift Cards/Voucher', LinkIcon: MdCardGiftcard },
         { path: '/automations', text: 'Automations', LinkIcon: MdSettings },
     ];

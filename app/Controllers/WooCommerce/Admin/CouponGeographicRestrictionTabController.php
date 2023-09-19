@@ -204,7 +204,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		$all_meta_data = $this->get_all_post_meta( $coupon_id ); // get all meta values
 
-		if ( 'restrict_by_shipping_zones'  === $all_meta_data['apply_geographic_restriction'] ) {
+		if ( ! empty( $all_meta_data['apply_geographic_restriction'] ) && 'restrict_by_shipping_zones'  === $all_meta_data['apply_geographic_restriction'] ) {
 			if( ! empty( $all_meta_data ) && is_array( $all_meta_data ) ) {
 				unset( $all_meta_data['restricted_countries'] );
 

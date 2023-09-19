@@ -1,6 +1,7 @@
 <?php
 namespace HexCoupon\App\Core\WooCommerce;
 
+use CodesVault\Howdyqb\DB;
 use HexCoupon\App\Core\Helpers\FormHelpers;
 use HexCoupon\App\Core\Helpers\RenderHelpers;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
@@ -21,6 +22,23 @@ class CouponSingleGeneralTab
 	public function register()
 	{
 		add_action( 'woocommerce_coupon_options', [ $this, 'add_coupon_extra_fields' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_all_post_meta
+	 * @return array
+	 * Get all coupon meta values
+	 */
+	public function get_all_post_meta()
+	{
+		global $post;
+
+		$all_meta_data = get_post_meta( $post->ID, 'geographic_restriction', true );
+
+		return $all_meta_data;
 	}
 
 	/**
@@ -109,6 +127,7 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
 			'name' => 'add_specific_product_to_purchase',
+			'id' => 'add_specific_product_to_purchase',
 			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
@@ -133,6 +152,7 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
 			'name' => 'add_categories_to_purchase',
+			'id' => 'add_categories_to_purchase',
 			'value' => $add_categories_to_purchase,
 			'type' => 'select',
 			'options' => $this->show_categories(), //if the field is select, this param will be here
@@ -179,6 +199,7 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
 			'name' => 'add_specific_product_for_free',
+			'id' => 'add_specific_product_for_free',
 			'value' => $add_specific_product_for_free,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
@@ -194,9 +215,12 @@ class CouponSingleGeneralTab
 
 		echo '</div>';
 
+		$all_meta_values = $this->get_all_post_meta();
+
 		woocommerce_wp_textarea_input(
 			[
 				'id' => 'message_for_coupon_expiry_date',
+				'name' => 'message_for_coupon_expiry_date',
 				'label' => '',
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set a message for customers about the coupon expiry date.', 'hexcoupon' ),
