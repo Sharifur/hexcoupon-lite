@@ -38,7 +38,7 @@ const BarChartOne = () => {
         type: 'bar',
         labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         backgroundColor: ['#A760FE', '#03AB67', '#4D77FF', '#98A2B3'],
-        datasets: [                    
+        datasets: [
             {
                 label: "Created",
                 backgroundColor: '#A760FE',
@@ -126,8 +126,8 @@ const BarChartOne = () => {
                         <SingleSelect options={SelectOptions}  />
                     </HexCardHeaderRight>
                 </div>
-            </div>  
-            <div className="hexDashboard__card__inner mt-4">              
+            </div>
+            <div className="hexDashboard__card__inner mt-4">
                 <Bar data={data} options={options} />
             </div>
         </div>

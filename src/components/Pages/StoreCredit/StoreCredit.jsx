@@ -38,8 +38,8 @@ const StoreCredit = () => {
                 </div>
             </ItemHeaderMain>
 
-            <TableOne />
-            
+            <TableOne  />
+
         </>
     );
 };

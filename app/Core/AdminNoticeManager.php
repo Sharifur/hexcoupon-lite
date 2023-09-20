@@ -114,8 +114,7 @@ class AdminNoticeManager
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method show_`install`ation_notice_for_woocommerce
-	 * @return string
+	 * @method show_`install`action_notice_for_woocommerce
 	 * @since 1.0.0
 	 * Display the 'WooCommerce' installation notice after 'Hexcoupon' plugin activation.
 	 */
@@ -210,7 +209,6 @@ class AdminNoticeManager
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method wordpress_version_notice
-	 * @return string
 	 * @since 1.0.0
 	 * Renders admin notice for WordPress version checking.
 	 * */
@@ -237,7 +235,6 @@ class AdminNoticeManager
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method woocommerce_version_notice
-	 * @return string
 	 * @since 1.0.0
 	 * Renders admin notice for WooCommerce version checking.
 	 * */
@@ -263,7 +260,6 @@ class AdminNoticeManager
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method php_version_notice
-	 * @return string
 	 * @since 1.0.0
 	 * Renders admin notice for PHP version checking.
 	 * */

@@ -9,10 +9,9 @@ import CouponSettings from './components/HexCoupon/CouponSettings';
 
 
 function App() {
-
 	const windowLocation = window.location.pathname;
 	const windowParams = window.location.search;
-	
+
 	return (
 		<>
 			<BrowserRouter basename={windowLocation}>

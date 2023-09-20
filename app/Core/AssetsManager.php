@@ -126,6 +126,18 @@ class AssetsManager
 			"all"
 		);
 
+		//todo:: admin panel url, rest api url
+
+		wp_localize_script(Hxc_prefix('main'), 'hexCuponData', array(
+			'ajaxUrl' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('hexCuponData-react_none'),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+			'translate_array' => [
+
+			]
+		));
+
+
 		//load css only on the plugin page
 
 		$screen = get_current_screen();
