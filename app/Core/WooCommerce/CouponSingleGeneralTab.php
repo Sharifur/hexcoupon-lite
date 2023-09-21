@@ -1,7 +1,6 @@
 <?php
 namespace HexCoupon\App\Core\WooCommerce;
 
-use CodesVault\Howdyqb\DB;
 use HexCoupon\App\Core\Helpers\FormHelpers;
 use HexCoupon\App\Core\Helpers\RenderHelpers;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
@@ -22,23 +21,6 @@ class CouponSingleGeneralTab
 	public function register()
 	{
 		add_action( 'woocommerce_coupon_options', [ $this, 'add_coupon_extra_fields' ] );
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method get_all_post_meta
-	 * @return array
-	 * Get all coupon meta values
-	 */
-	public function get_all_post_meta()
-	{
-		global $post;
-
-		$all_meta_data = get_post_meta( $post->ID, 'geographic_restriction', true );
-
-		return $all_meta_data;
 	}
 
 	/**
@@ -127,7 +109,6 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
 			'name' => 'add_specific_product_to_purchase',
-			'id' => 'add_specific_product_to_purchase',
 			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
@@ -152,7 +133,6 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
 			'name' => 'add_categories_to_purchase',
-			'id' => 'add_categories_to_purchase',
 			'value' => $add_categories_to_purchase,
 			'type' => 'select',
 			'options' => $this->show_categories(), //if the field is select, this param will be here
@@ -199,7 +179,6 @@ class CouponSingleGeneralTab
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
 			'name' => 'add_specific_product_for_free',
-			'id' => 'add_specific_product_for_free',
 			'value' => $add_specific_product_for_free,
 			'type' => 'select',
 			'options' => CouponSingleUsageRestriction::getInstance()->show_all_products(), //if the field is select, this param will be here
@@ -215,19 +194,14 @@ class CouponSingleGeneralTab
 
 		echo '</div>';
 
-		$all_meta_values = $this->get_all_post_meta();
-
-		$message_for_coupon_expiry_date_value = ! empty( $all_meta_values['message_for_coupon_expiry_date'] ) ? $all_meta_values['message_for_coupon_expiry_date'] : '';
-
 		woocommerce_wp_textarea_input(
 			[
 				'id' => 'message_for_coupon_expiry_date',
-				'name' => 'general[message_for_coupon_expiry_date]',
 				'label' => '',
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set a message for customers about the coupon expiry date.', 'hexcoupon' ),
 				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has been expired.', 'hexcoupon' ),
-				'value' => $message_for_coupon_expiry_date_value,
+				'value' => get_post_meta( $post->ID, 'message_for_coupon_expiry_date', true ),
 			]
 		);
 	}
@@ -244,19 +218,14 @@ class CouponSingleGeneralTab
 	{
 		global $post;
 
-		$all_meta_values = $this->get_all_post_meta();
-
-		$coupon_starting_date_value = ! empty( $all_meta_values['coupon_starting_date'] ) ? $all_meta_values['coupon_starting_date'] : '';
-
 		woocommerce_wp_text_input(
 			[
 				'id' => 'coupon_starting_date',
-				'name' => 'general[coupon_starting_date]',
 				'label' => esc_html__( 'Coupon starting date', 'hexcoupon' ),
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set the coupon starting date.', 'hexcoupon' ),
 				'type' => 'text',
-				'value' => $coupon_starting_date_value,
+				'value' => get_post_meta( $post->ID, 'coupon_starting_date', true ),
 				'class' => 'date-picker',
 				'placeholder' => esc_html( 'YYYY-MM-DD' ),
 				'custom_attributes' => [
@@ -278,19 +247,14 @@ class CouponSingleGeneralTab
 	{
 		global $post;
 
-		$all_meta_values = $this->get_all_post_meta();
-
-		$message_for_coupon_starting_date_value = ! empty( $all_meta_values['message_for_coupon_starting_date'] ) ? $all_meta_values['message_for_coupon_starting_date'] : '';
-
 		woocommerce_wp_textarea_input(
 			[
 				'id' => 'message_for_coupon_starting_date',
-				'name' => 'general[message_for_coupon_starting_date]',
 				'label' => '',
 				'desc_tip' => true,
 				'description' => esc_html__( 'Set a message for customers about the coupon starting date.', 'hexcoupon' ),
 				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has not been started yet.', 'hexcoupon' ),
-				'value' => $message_for_coupon_starting_date_value,
+				'value' => get_post_meta( $post->ID, 'message_for_coupon_starting_date', true ),
 			]
 		);
 	}

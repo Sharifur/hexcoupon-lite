@@ -126,16 +126,44 @@ class AssetsManager
 			"all"
 		);
 
-		//todo:: admin panel url, rest api url
+		$coupon_dashboard_label_text = [
+			'couponsCreatedLabel' => esc_html__( 'Coupons Created', 'hexcoupon' ),
+			'couponsRedeemedLabel' => esc_html__( 'Coupons Redeemed', 'hexcoupon' ),
+			'couponsActiveLabel' => esc_html__( 'Coupons Active', 'hexcoupon' ),
+			'couponsExpiredLabel' => esc_html__( 'Coupons Expired', 'hexcoupon' ),
+			'redeemedCouponValueLabel' => esc_html__( 'Redeemed Coupon Amount', 'hexcoupon' ),
+			'sharableUrlCouponsLabel' => esc_html__( 'Sharable Url Coupons', 'hexcoupon' ),
+			'bogoCouponlabel' => esc_html__( 'Bogo Coupons', 'hexcoupon' ),
+			'geographicRestrictionLabel' => esc_html__( 'Geographically Restricted', 'hexcoupon' ),
+			'couponInsightsLabel' => esc_html__( 'Coupon Insights', 'hexcoupon' ),
+			'thisYearLabel' => esc_html__( 'This Year', 'hexcoupon' ),
+			'thisMonthLabel' => esc_html__( 'This Month', 'hexcoupon' ),
+			'thisWeekLabel' => esc_html__( 'This Week', 'hexcoupon' ),
+			'yesterdayLabel' => esc_html__( 'Yesterday', 'hexcoupon' ),
+			'todayLabel' => esc_html__( 'Today', 'hexcoupon' ),
+		];
 
-		wp_localize_script(Hxc_prefix('main'), 'hexCuponData', array(
+		wp_localize_script(Hxc_prefix('main'), 'hexCuponData', [
 			'ajaxUrl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('hexCuponData-react_none'),
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
 			'translate_array' => [
-
+				'couponsCreatedLabel' => $coupon_dashboard_label_text['couponsCreatedLabel'],
+				'couponsRedeemedLabel' => $coupon_dashboard_label_text['couponsRedeemedLabel'],
+				'couponsActiveLabel' => $coupon_dashboard_label_text['couponsActiveLabel'],
+				'couponsExpiredLabel' => $coupon_dashboard_label_text['couponsExpiredLabel'],
+				'redeemedCouponValueLabel' => $coupon_dashboard_label_text['redeemedCouponValueLabel'],
+				'sharableUrlCouponsLabel' => $coupon_dashboard_label_text['sharableUrlCouponsLabel'],
+				'bogoCouponlabel' => $coupon_dashboard_label_text['bogoCouponlabel'],
+				'geographicRestrictionLabel' => $coupon_dashboard_label_text['geographicRestrictionLabel'],
+				'couponInsightsLabel' => $coupon_dashboard_label_text['couponInsightsLabel'],
+				'thisYearLabel' => $coupon_dashboard_label_text['thisYearLabel'],
+				'thisMonthLabel' => $coupon_dashboard_label_text['thisMonthLabel'],
+				'thisWeekLabel' => $coupon_dashboard_label_text['thisWeekLabel'],
+				'yesterdayLabel' => $coupon_dashboard_label_text['yesterdayLabel'],
+				'todayLabel' => $coupon_dashboard_label_text['todayLabel'],
 			]
-		));
+		]);
 
 
 		//load css only on the plugin page

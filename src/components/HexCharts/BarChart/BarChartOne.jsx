@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 // import HexCardHeader from '../../HexCardHeader/HexCardHeader';
@@ -14,125 +14,150 @@ import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
 import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
 import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
 import SingleSelect from '../../Global/FormComponent/SingleSelect/SingleSelect';
+import {getDataForCharJS, getDayList, getMonthList, getSingleDayList, getWeekList} from "../../../helpers/helpers";
+import axios from "axios";
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend
+);
 
 const BarChartOne = () => {
+	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
 
-    const SelectOptions = [
-      { value: 'month', label: 'Last month' },
-      { value: 'Year', label: 'Last Year' },
-      { value: 'Week', label: 'Last Week' },
-      { value: 'Yesterday', label: 'Yesterday' },
-      { value: 'Today', label: 'Today' },
-    ]
+	const SelectOptions = [
+		{ value: 'Year', label: translate_array.thisYearLabel },
+		{ value: 'Month', label: translate_array.thisMonthLabel },
+		{ value: 'Week', label: translate_array.thisWeekLabel },
+		{ value: 'Yesterday', label: translate_array.yesterdayLabel },
+		{ value: 'Today', label: translate_array.todayLabel },
+	]
 
-    const data = {
-        type: 'bar',
-        labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        backgroundColor: ['#A760FE', '#03AB67', '#4D77FF', '#98A2B3'],
-        datasets: [
-            {
-                label: "Created",
-                backgroundColor: '#A760FE',
-                data: [1333, 821, 1983, 478, 2200, 900, 1700],
-                barThickness: 10,
-                hoverBackgroundColor: 'transparent',
-                hoverBorderColor: '#A760FE',
-                borderColor: '#A760FE',
-                borderWidth: 1,
-            }, {
-                label: "Redeemed",
-                backgroundColor: '#03AB67',
-                data: [708, 1247, 975, 734, 1600, 250, 1300],
-                barThickness: 10,
-                hoverBackgroundColor: 'transparent',
-                hoverBorderColor: '#03AB67',
-                borderColor: '#03AB67',
-                borderWidth: 1,
-            }, {
-                label: "Active",
-                backgroundColor: '#4D77FF',
-                data: [1708, 347, 1355, 304, 1200, 700, 2300],
-                barThickness: 10,
-                hoverBackgroundColor: 'transparent',
-                hoverBorderColor: '#4D77FF',
-                borderColor: '#4D77FF',
-                borderWidth: 1,
-            }, {
-                label: "Expired",
-                backgroundColor: '#98A2B3',
-                data: [1708, 847, 1355, 304, 1500, 1100, 1900],
-                barThickness: 10,
-                hoverBackgroundColor: 'transparent',
-                hoverBorderColor: '#98A2B3',
-                borderColor: '#98A2B3',
-                borderWidth: 1,
-            },
-        ],
-    };
+	let labels = getWeekList;
+	let dataSet = {
+		created: [1333, 821, 1983, 478, 2200,1333, 821, 1983, 478, 2200, 900, 1700],
+		redeemed: [708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600, 250, 1300],
+		active: [1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200, 700, 2300],
+		expired: [1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500, 1100, 1900],
+	};
 
-    const options = {
-        indexAxis: 'x',
-        elements: {
-          bar: {
-            borderWidth: 2,
-          },
-        },
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: false,
-            text: 'Bar Chart One',
-          },
-        },
-		scales: {
-		  x: {
-			display: true,
-			beginAtZero: true,
-			grid: {
-			  drawOnChartArea: false,
+	let dataSetForMonth = {
+		created: [1333, 821, 1983, 478, 2200,1333, 821, 1983, 478, 2200,1333, 821, 1983, 478, 2200,1333, 821, 1983, 478, 2200, 900, 1700,2200,1333, 821, 1983, 478, 2200, 900, 1700],
+		redeemed: [708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600],
+		active: [1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,],
+		expired: [1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,],
+	}
+
+	let dataSetForYesterday = {
+		created: [1333],
+		redeemed: [708],
+		active: [1708],
+		expired: [1708],
+	}
+
+	let dataSetForToday = {
+		created: [1333],
+		redeemed: [708],
+		active: [1708],
+		expired: [1708],
+	}
+
+	const [barChartData, setBarChartData] = useState(getDataForCharJS(labels, dataSet));
+
+	const options = {
+		indexAxis: 'x',
+		elements: {
+			bar: {
+				borderWidth: 2,
 			},
-		  },
-		  y: {
-			display: true,
-			beginAtZero: true,
-			grid: {
-			  drawOnChartArea: true,
-			},
-		  },
 		},
-    };
+		responsive: true,
+		plugins: {
+			legend: {
+				position: 'top',
+			},
+			title: {
+				display: false,
+				text: 'Bar Chart One',
+			},
+		},
+		scales: {
+			x: {
+				display: true,
+				beginAtZero: true,
+				grid: {
+					drawOnChartArea: false,
+				},
+			},
+			y: {
+				display: true,
+				beginAtZero: true,
+				grid: {
+					drawOnChartArea: true,
+				},
+			},
+		},
+	};
 
-    return (
-      <>
-        <div className="hexDashboard__card mt-4 radius-10">
-            <div className="hexDashboard__card__header">
-                <div className="hexDashboard__card__header__flex">
-                    <HexCardHeaderLeft>
-                        <HexCardHeaderTitle titleHeading="Coupon Insights" />
-                    </HexCardHeaderLeft>
-                    <HexCardHeaderRight>
-                        <SingleSelect options={SelectOptions}  />
-                    </HexCardHeaderRight>
-                </div>
-            </div>
-            <div className="hexDashboard__card__inner mt-4">
-                <Bar data={data} options={options} />
-            </div>
-        </div>
-      </>
-    );
+	function handleChangeSelect(value){
+		// call api for getting coupon according to selected value
+		// todo:: do api request here
+
+		// todo:: call this function inside success method of ajax request
+		changeBarchartData(getMonthList,dataSet, value);
+	}
+
+	function changeBarchartData(getMonthList, dataSet, type){
+		// now check value is monthly
+		if(type === 'Year'){
+			// now change this state value barchartLabel
+			setBarChartData(getDataForCharJS(getMonthList, dataSet));
+		}
+		if(type === 'Week'){
+			// now change this state value barchartLabel
+			setBarChartData(getDataForCharJS(getWeekList, dataSet));
+		}
+		if(type === 'Month'){
+			// now change this state value barchartLabel
+			setBarChartData(getDataForCharJS(getDayList, dataSetForMonth));
+		}
+		if(type === 'Yesterday'){
+			// now change this state value barchartLabel
+			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForYesterday));
+		}
+		if(type === 'Today'){
+			// now change this state value barchartLabel
+			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
+		}
+	}
+
+	// useEffect(function (){
+	//
+	// },[barchartLabel])
+
+	return (
+		<>
+			<div className="hexDashboard__card mt-4 radius-10">
+				<div className="hexDashboard__card__header">
+					<div className="hexDashboard__card__header__flex">
+						<HexCardHeaderLeft>
+							<HexCardHeaderTitle titleHeading={translate_array.couponInsightsLabel} />
+						</HexCardHeaderLeft>
+						<HexCardHeaderRight>
+							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} />
+						</HexCardHeaderRight>
+					</div>
+				</div>
+				<div className="hexDashboard__card__inner mt-4">
+					{barChartData && <Bar data={barChartData} options={options}/>}
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default BarChartOne;

@@ -10,18 +10,18 @@ import imgGift from '../../HexGiftCard/img/gift.png';
 const Dashboard = () => {
 
     return (
-        <>            
-            <HexGiftCard giftPara='Zahid and 12 Customers has birthdays, anniversary today' giftSendLink='Send Them Gift Cards' imgGift={imgGift} />
+        <>
+            {/*<HexGiftCard giftPara='Zahid and 12 Customers has birthdays, anniversary today' giftSendLink='Send Them Gift Cards' imgGift={imgGift} />*/}
 
-            <HexPointPromo />
+            {/*<HexPointPromo />*/}
 
-            <LineChartOne />
+            {/*<LineChartOne />*/}
 
             <HexCouponPromo />
 
             <BarChartOne />
 
-            <HexPromo />
+            {/*<HexPromo />*/}
 
         </>
     );
