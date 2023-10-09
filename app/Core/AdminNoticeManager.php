@@ -123,17 +123,22 @@ class AdminNoticeManager
 	{
 		$plugin_file = 'woocommerce/woocommerce.php';
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+
+		$install_notice_message = $this->get_woocommerce_install_notice_message();
+
+		$active_notice_message = $this->get_woocommerce_active_notice_message();
+
 		if ( ! class_exists( 'WooCommerce' ) && ! file_exists( $plugin_path ) ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), $this->get_woocommerce_install_notice_message() ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), esc_html( $install_notice_message ) ); ?></p>
 			</div>
 			<?php
 		}
 		elseif ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), $this->get_woocommerce_active_notice_message() ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), esc_html( $active_notice_message ) ); ?></p>
 			</div>
 			<?php
 		}

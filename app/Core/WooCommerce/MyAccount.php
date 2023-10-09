@@ -94,7 +94,7 @@ class MyAccount
 		foreach ( $coupon_posts as $coupon_post ) {
 			?>
 				<P>
-				<?php printf( esc_html__( '%s', 'hexcoupon' ),  $coupon_post->post_title); ?>
+				<?php printf( esc_html__( '%s', 'hexcoupon' ),  esc_html( $coupon_post->post_title ) ); ?>
 				</P>
 			<?php
 		}
