@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 define( 'HXC_DIR_PATH', plugin_dir_path( HXC_FILE ) );
 define( 'HXC_PLUGIN_URL', plugins_url( '/', HXC_FILE ) );
