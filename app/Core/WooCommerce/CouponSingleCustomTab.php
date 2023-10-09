@@ -13,7 +13,7 @@ class CouponSingleCustomTab
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method register
-	 * @return string
+	 * @return mixed
 	 * @since 1.0.0
 	 * Registers all hooks that are needed to create custom tab on 'Coupon Single' page.
 	 */
@@ -21,10 +21,6 @@ class CouponSingleCustomTab
 	{
 		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_custom_coupon_tab' ] );
 		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_custom_coupon_tab_content' ] );
-		// Hook into the 'save_post' action to save the selected values
-
-//		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_selected_payments_method_to_coupon' ], 10, 2 );
-		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_to_selected_user_roles' ], 10, 2 );
 	}
 
 	/**
@@ -57,7 +53,7 @@ class CouponSingleCustomTab
 	public function add_custom_coupon_tab_content( $tabs )
 	{
 		$tabs['custom_coupon_tab'] = array(
-			'label'    => __( 'HexCoupon', 'hexcoupon' ),
+			'label'    => esc_html__( 'HexCoupon', 'hexcoupon' ),
 			'target'   => 'custom_coupon_tab',
 			'class'    => array( 'show_if_coupon_usage_limits' ),
 		);
@@ -70,11 +66,12 @@ class CouponSingleCustomTab
 	 * @method get_all_payment_methods
 	 * @return array
 	 * @since 1.0.0
-	 * Retrieve all payment methods of WooCommerce
+	 * Retrieve all payment methods of 'WooCommerce' that are enabled
 	 */
-	public function get_all_payment_methods() {
-		$payment_gateways = WC()->payment_gateways->payment_gateways();
-		$payment_options = array();
+	public function get_all_payment_methods()
+	{
+		$payment_gateways = WC()->payment_gateways->get_available_payment_gateways();
+		$payment_options = [];
 
 		foreach ( $payment_gateways as $gateway_id => $gateway ) {
 			$payment_options[ $gateway_id ] = $gateway->get_title();
@@ -86,25 +83,39 @@ class CouponSingleCustomTab
 	/**
 	 * @package hexcoupon
 	 * @author Wphex
-	 * @method display_payment_method_options
-	 * @return string
+	 * @method get_all_shipping_methods
+	 * @return mixed
 	 * @since 1.0.0
-	 * Displays the payment method options in a Select2 field.
+	 * Retrieve all shipping methods of 'WooCommerce' that are enabled.
 	 */
-	public function display_payment_method_options()
+	public function get_all_shipping_methods()
 	{
-		$payment_methods = $this->get_all_payment_methods();
-		$selected_payment_methods = get_post_meta( get_the_ID(),'permitted_methods',true );
-		if ( ! empty( $payment_methods ) ) {
-			echo '<select name="permitted_methods[]" id="permitted_methods" class="short permitted_roles_select2" multiple="multiple">';
-			foreach ( $payment_methods as $method_id => $method_label ) {
-				$selected = in_array( $method_id, $selected_payment_methods ) ? 'selected' : '';
-				echo '<option value="' . esc_attr( $method_id ) . '" ' . esc_attr( $selected ) . ' >' . esc_html( $method_label ) . '</option>';
+		$shipping_methods = \WC_Shipping_Zones::get_zones();
+
+		// Show the names of the enabled shipping methods only.
+		$shipping_method_names = [];
+		foreach ($shipping_methods as $shipping_method) {
+			foreach ($shipping_method['shipping_methods'] as $shipping_method) {
+				if ( 'Free shipping' === $shipping_method->get_method_title() ) {
+					$shipping_method_index = 1;
+					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
+				}
+				if ( 'Flat rate' === $shipping_method->get_method_title() ) {
+					$shipping_method_index = 2;
+					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
+				}
+				if ( 'Local pickup' === $shipping_method->get_method_title() ) {
+					$shipping_method_index = 3;
+					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;
+				}
+
+				if ( 'yes' === $shipping_method->enabled ) {
+					$shipping_method_names[$shipping_method_id] = $shipping_method->title;
+				}
 			}
-			echo '</select>';
-		} else {
-			echo 'No payment methods found .';
 		}
+
+		return $shipping_method_names;
 	}
 
 	/**
@@ -121,53 +132,44 @@ class CouponSingleCustomTab
 
 		$selected_permitted_roles = get_post_meta( get_the_ID(), 'permitted_roles', true );
 
-		$output .= FormHelpers::Init([
+		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Apply Roles', 'hexcoupon' ),
 			'name' => 'permitted_roles',
 			'value' => $selected_permitted_roles,
 			'type' => 'select',
-			'options' => $this->get_user_role_names(),//if the field is select, this param will be here
+			'options' => $this->get_user_role_names(), //if the field is select, this param will be here
 			'multiple' => true,
-			'select2' => true
-		]);
+			'select2' => true,
+		] );
+
+		$selected_payment_methods = get_post_meta( get_the_ID(),'permitted_payment_methods',true );
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Apply Payment Methods', 'hexcoupon' ),
+			'name' => 'permitted_payment_methods',
+			'value' => $selected_payment_methods,
+			'type' => 'select',
+			'options' => $this->get_all_payment_methods(), //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+		] );
+
+		$selected_shipping_methods = get_post_meta( get_the_ID(),'permitted_shipping_methods',true );
+
+		$output .= FormHelpers::Init( [
+			'label' => esc_html__( 'Apply Shipping Methods', 'hexcoupon' ),
+			'name' => 'permitted_shipping_methods',
+			'value' => $selected_shipping_methods,
+			'type' => 'select',
+			'options' => $this->get_all_shipping_methods(), //if the field is select, this param will be here
+			'multiple' => true,
+			'select2' => true,
+		] );
 
 		$output .= '</div>';
-		echo wp_kses($output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms());
+		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 	?>
 
 	<?php
 	}
-
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @method apply_coupon_to_selected_payment_methods
-	 * @param mixed $valid
-	 * @param string $coupon
-	 * @since 1.0.0
-	 * @return bool
-	 * Apply coupon to user selected payment methods only.
-	 */
-	function apply_selected_payments_method_to_coupon( $valid, $coupon ) : bool
-	{
-		$selected_permitted_payment_methods = get_post_meta( $coupon->get_id(), 'permitted_methods', true );
-		if ( empty( $selected_permitted_payment_methods ) ) {
-			return $valid;
-		}
-
-		$current_payment_method = WC()->session->get( 'chosen_payment_method' );
-
-		if ( in_array( $current_payment_method, $selected_permitted_payment_methods ) ) {
-			return $valid;
-		}
-
-		return false;
-	}
-
 }
-
-
-
-
-

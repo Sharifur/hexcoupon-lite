@@ -7,29 +7,26 @@ use function Automattic\Jetpack\Extensions\Business_Hours\render;
 
 class FormHelpers
 {
-	public static function Init( array $ags )
+	public static function Init( array $args )
 	{
-		return ( new self( $ags ) )->render();
+		return ( new self( $args ) )->render();
 	}
 	protected array $args;
 	public function __construct( array $args )
 	{
 		$defaults = [
-			'label' => __('label','hexcoupon'),
+			'label' => esc_html__('label','hexcoupon'),
 			'name' => 'name',
 			'parent_class' => 'options_group',
 			'input_class' => '',
 			'input_wrapper_class' => 'form-field',
 			'input_wrapper_tag' => 'p',
 			'value' => null,
-			'type' => 'input', //select ,
-			// 'options' => ['value' => __('name ee','text-domain')], ,//if the field is select, this param will be here
+			'type' => 'input', // select
 			'class' => 'short',
 			'select2' => false
-//			'default' => '' //
-//			'checked' => true ,,//if the field is checkbox or radio, this param will be here
 		];
-		$this->args = array_merge( $defaults,$args );
+		$this->args = array_merge( $defaults, $args );
 	}
 	/**
 	 * return field name
@@ -74,11 +71,13 @@ class FormHelpers
 	{
 		return $this->args['input_wrapper_tag'];
 	}
-	private function getValue(){
+	private function getValue()
+	{
 		$default =  $this->args['default'] ?? '';
 		return $this->args['value'] ?? $default;
 	}
-	private function getType(){
+	private function getType()
+	{
 		return $this->args['type'] ?? '';
 	}
 	private function renderFields() : string
@@ -111,7 +110,6 @@ class FormHelpers
 				$markup .= '<select name="'.$this->getName().$multipleArrayAppend.'" id="'.$this->getName().'" class="select '.$this->getClass().' '.$select2.'" '.$multiple.' >';
 
 				foreach($options as $opt => $val){
-					//todo, select multiple value if it is multiple select supported
 					$selected = ($opt === $value) ? 'selected' : '';
 
 					if ( $multiple === 'multiple' && is_array($value) ){

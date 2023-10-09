@@ -8,6 +8,6 @@ class Auth extends Middleware
 {
 	public function handle()
 	{
-		// dump($this->getRequestParams(), 'Auth middleware called...');
+
 	}
 }

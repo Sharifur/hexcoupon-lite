@@ -17,7 +17,6 @@ class AssetsManager
 
 		$this->before_register_assets();
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
-		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 	}
 
 	private function before_register_assets()
@@ -30,38 +29,34 @@ class AssetsManager
 
 	public function admin_scripts()
 	{
-//		wp_enqueue_style(
-//			Hxc_prefix( 'admin-css' ),
-//			Hxc_asset_url( "/dist/admin.css" ),
-//			[],
-//			$this->version
-//		);
 		$folder_prefix = Hxc_get_config('dev_mode') ? '/dev' : '/dist';
-		//todo filter so that this js only load on wooCommerce coupon create/edit/update page
-		wp_enqueue_script(
-			Hxc_prefix( 'admin-js' ),
-			Hxc_asset_url( $folder_prefix."/admin/js/admin.js" ),
-			['jquery','select2'],
-			$this->version,
-			true
-		);
-	}
 
-	public function public_scripts()
-	{
-		wp_enqueue_style(
-			Hxc_prefix( 'public-css' ),
-			Hxc_asset_url( "/dist/public.css" ),
-			[],
-			$this->version
+		if ( '/dev' == $folder_prefix ) {
+			wp_enqueue_script(
+				Hxc_prefix( 'admin-js' ),
+				Hxc_asset_url( $folder_prefix."/admin/js/admin.js" ),
+				['jquery','select2'],
+				$this->version,
+				true
+			);
+		}
+
+		if ( '/dist' == $folder_prefix ) {
+			wp_enqueue_script(
+				Hxc_prefix( 'admin-js' ),
+				Hxc_asset_url( $folder_prefix."/admin/js/admin.min.js" ),
+				[ 'jquery','select2' ],
+				$this->version,
+				true
+			);
+		}
+
+		$select2_placeholder_data = array(
+			'escapedPlaceholderText1' => esc_html__( 'Select Roles', 'hexcoupon' ),
+			'escapedPlaceholderText2' => esc_html__( 'Select Payment Methods', 'hexcoupon' ),
+			'escapedPlaceholderText3' => esc_html__( 'Select Shipping Methods', 'hexcoupon' ),
 		);
 
-		wp_enqueue_script(
-			Hxc_prefix( 'public-js' ),
-			Hxc_asset_url( "/dist/public.js" ),
-			[],
-			$this->version,
-			true
-		);
+		wp_localize_script( Hxc_prefix( 'admin-js' ), 'escapedData', $select2_placeholder_data );
 	}
 }
