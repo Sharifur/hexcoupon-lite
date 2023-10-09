@@ -36,7 +36,7 @@ class CouponSingleCustomTab
 		global $wp_roles;
 
 		if ( ! isset( $wp_roles ) ) {
-			$wp_roles = new WP_Roles();
+			$wp_roles = new \WP_Roles();
 		}
 
 		return $wp_roles->get_names();
@@ -94,8 +94,9 @@ class CouponSingleCustomTab
 
 		// Show the names of the enabled shipping methods only.
 		$shipping_method_names = [];
-		foreach ($shipping_methods as $shipping_method) {
-			foreach ($shipping_method['shipping_methods'] as $shipping_method) {
+
+		foreach ( $shipping_methods as $shipping_method ) {
+			foreach ( $shipping_method['shipping_methods'] as $shipping_method ) {
 				if ( 'Free shipping' === $shipping_method->get_method_title() ) {
 					$shipping_method_index = 1;
 					$shipping_method_id = $shipping_method->id . ':' . $shipping_method_index;

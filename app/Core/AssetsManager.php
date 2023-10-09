@@ -13,7 +13,7 @@ class AssetsManager
 
 	public function register()
 	{
-		$this->configs = Hxc_get_config();
+		$this->configs = hexcoupon_get_config();
 
 		$this->before_register_assets();
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
@@ -29,12 +29,12 @@ class AssetsManager
 
 	public function admin_scripts()
 	{
-		$folder_prefix = Hxc_get_config('dev_mode') ? '/dev' : '/dist';
+		$folder_prefix = hexcoupon_get_config('dev_mode') ? '/dev' : '/dist';
 
 		if ( '/dev' == $folder_prefix ) {
 			wp_enqueue_script(
-				Hxc_prefix( 'admin-js' ),
-				Hxc_asset_url( $folder_prefix."/admin/js/admin.js" ),
+				hexcoupon_prefix( 'admin' ),
+				hexcoupon_asset_url( $folder_prefix."/admin/js/admin.js" ),
 				['jquery','select2'],
 				$this->version,
 				true
@@ -43,8 +43,8 @@ class AssetsManager
 
 		if ( '/dist' == $folder_prefix ) {
 			wp_enqueue_script(
-				Hxc_prefix( 'admin-js' ),
-				Hxc_asset_url( $folder_prefix."/admin/js/admin.min.js" ),
+				hexcoupon_prefix( 'admin-js' ),
+				hexcoupon_asset_url( $folder_prefix."/admin/js/admin.min.js" ),
 				[ 'jquery','select2' ],
 				$this->version,
 				true
@@ -57,6 +57,6 @@ class AssetsManager
 			'escapedPlaceholderText3' => esc_html__( 'Select Shipping Methods', 'hexcoupon' ),
 		);
 
-		wp_localize_script( Hxc_prefix( 'admin-js' ), 'escapedData', $select2_placeholder_data );
+		wp_localize_script( hexcoupon_prefix( 'admin-js' ), 'escapedData', $select2_placeholder_data );
 	}
 }

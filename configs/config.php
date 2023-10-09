@@ -7,10 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @package hexcoupon
  */
 return array(
-	'plugin_prefix'		=> 'Hxc',
-	'plugin_slug'		=> 'Hxc',
+	'plugin_prefix'		=> 'hexcoupon',
+	'plugin_slug'		=> 'hexcoupon',
 	'namaspace_root'	=> 'HexCoupon',
-	'plugin_version'	=> '1.0.3',
+	'plugin_version'	=> '1.0.4',
 	'plugin_name'		=> 'HexCoupon',
 	'dev_mode'			=> false,
 	'root_dir'			=> dirname(__DIR__),

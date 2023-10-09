@@ -13,7 +13,7 @@ class ActivationService
 	{
 		// activation event handler
 		\register_activation_hook(
-			HXC_FILE,
+			HEXCOUPON_FILE,
 			[ __CLASS__, 'activate' ]
 		);
 	}

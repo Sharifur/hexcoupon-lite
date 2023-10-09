@@ -5,7 +5,7 @@
  * Plugin Name: HexCoupon
  * Plugin URI: https://wordpress.org/plugins/hexcoupon
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: WpHex
  * Requires at least: 5.4
  * Tested up to: 6.2.2
@@ -23,12 +23,12 @@ use HexCoupon\App\Core\Core;
 
 if ( ! defined( 'ABSPATH' ) ) die();
 
-define( 'HXC_FILE', __FILE__ );
+define( 'HEXCOUPON_FILE', __FILE__ );
 
 require_once __DIR__ . '/configs/bootstrap.php';
 
-if ( file_exists( HXC_DIR_PATH . '/vendor/autoload.php' ) ) {
-	require_once HXC_DIR_PATH . '/vendor/autoload.php';
+if ( file_exists( HEXCOUPON_DIR_PATH . '/vendor/autoload.php' ) ) {
+	require_once HEXCOUPON_DIR_PATH . '/vendor/autoload.php';
 }
 
 Core::getInstance();
