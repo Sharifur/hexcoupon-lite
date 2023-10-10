@@ -20,9 +20,9 @@ class CouponColumTabController extends BaseController
 	 */
 	public function register()
 	{
-		add_action( 'save_post', [ $this, 'save_coupon_role_meta_data' ] );
-		add_action( 'save_post', [ $this, 'save_coupon_payment_methods_meta_data' ] );
-		add_action( 'save_post', [ $this, 'save_coupon_shipping_methods_meta_data' ] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_role_meta_data' ] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_payment_methods_meta_data' ] );
+		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_shipping_methods_meta_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_selected_user_roles_to_coupon' ], 10, 2 );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_selected_payments_method_to_coupon' ], 10, 2 );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_selected_shipping_methods_to_coupon' ], 10, 2 );
@@ -45,7 +45,13 @@ class CouponColumTabController extends BaseController
 		] );
 		$error = $validator->error();
 		if ( $error ) {
-			echo esc_html__( 'An error occured', 'hexcoupon' );
+			?>
+			<div class="notice notice-info is-dismissible">
+				<p>
+					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+				</p>
+			</div>
+			<?php
 		}
 		$data = $validator->getData();
 
@@ -69,7 +75,13 @@ class CouponColumTabController extends BaseController
 		] );
 		$error = $validator->error();
 		if ( $error ) {
-			echo esc_html__( 'An error occured', 'hexcoupon' );
+			?>
+			<div class="notice notice-info is-dismissible">
+				<p>
+					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+				</p>
+			</div>
+			<?php
 		}
 		$data = $validator->getData();
 
@@ -93,7 +105,13 @@ class CouponColumTabController extends BaseController
 		] );
 		$error = $validator->error();
 		if ( $error ) {
-			echo esc_html__( 'An error occured', 'hexcoupon' );
+			?>
+			<div class="notice notice-info is-dismissible">
+				<p>
+					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+				</p>
+			</div>
+			<?php
 		}
 		$data = $validator->getData();
 

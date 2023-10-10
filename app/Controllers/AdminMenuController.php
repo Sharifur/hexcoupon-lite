@@ -57,8 +57,8 @@ class AdminMenuController extends BaseController
 	public function add_hexcoupon_menu()
 	{
 		add_menu_page(
-			esc_html__( 'HexCoupon', 'hexcoupon' ),
-			esc_html__( 'HexCoupon', 'hexcoupon' ),
+			esc_html__( 'HexCoupon', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'HexCoupon', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'manage_options',
 			'hexcoupon-page',
 			[ $this, 'render_all_coupons_submenu' ],
@@ -68,8 +68,8 @@ class AdminMenuController extends BaseController
 		// duplicate of menu page to create a different title for the first submenu which is by default a duplicate of the main menu
 		add_submenu_page(
 			'hexcoupon-page', // slug of the menu which will be used for this submenu
-			esc_html__( 'All Coupons', 'hexcoupon' ),
-			esc_html__( 'All Coupons', 'hexcoupon' ),
+			esc_html__( 'All Coupons', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'All Coupons', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'manage_options',
 			'hexcoupon-page' // slug of the menu page file
 		);
@@ -87,8 +87,8 @@ class AdminMenuController extends BaseController
 	{
 		add_submenu_page(
 			'hexcoupon-page',
-			esc_html__( 'Add Coupon', 'hexcoupon' ),
-			esc_html__( 'Add Coupon', 'hexcoupon' ),
+			esc_html__( 'Add Coupon', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'Add Coupon', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'manage_options',
 			'add_new_coupon',
 			[ $this, 'render_addnew_coupon_submenu' ],
@@ -107,8 +107,8 @@ class AdminMenuController extends BaseController
 	{
 		add_submenu_page(
 			'hexcoupon-page',
-			esc_html__( 'Coupon Category', 'hexcoupon' ),
-			esc_html__( 'Coupon Category', 'hexcoupon' ),
+			esc_html__( 'Coupon Category', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'Coupon Category', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'manage_options',
 			'coupon_category',
 			[ $this, 'render_coupon_category_submenu' ],

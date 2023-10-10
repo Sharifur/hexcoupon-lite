@@ -53,7 +53,7 @@ class CouponSingleCustomTab
 	public function add_custom_coupon_tab_content( $tabs )
 	{
 		$tabs['custom_coupon_tab'] = array(
-			'label'    => esc_html__( 'HexCoupon', 'hexcoupon' ),
+			'label'    => esc_html__( 'HexCoupon', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'target'   => 'custom_coupon_tab',
 			'class'    => array( 'show_if_coupon_usage_limits' ),
 		);
@@ -134,7 +134,7 @@ class CouponSingleCustomTab
 		$selected_permitted_roles = get_post_meta( get_the_ID(), 'permitted_roles', true );
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Apply Roles', 'hexcoupon' ),
+			'label' => esc_html__( 'Apply Roles', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'name' => 'permitted_roles',
 			'value' => $selected_permitted_roles,
 			'type' => 'select',
@@ -146,7 +146,7 @@ class CouponSingleCustomTab
 		$selected_payment_methods = get_post_meta( get_the_ID(),'permitted_payment_methods',true );
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Apply Payment Methods', 'hexcoupon' ),
+			'label' => esc_html__( 'Apply Payment Methods', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'name' => 'permitted_payment_methods',
 			'value' => $selected_payment_methods,
 			'type' => 'select',
@@ -158,7 +158,7 @@ class CouponSingleCustomTab
 		$selected_shipping_methods = get_post_meta( get_the_ID(),'permitted_shipping_methods',true );
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Apply Shipping Methods', 'hexcoupon' ),
+			'label' => esc_html__( 'Apply Shipping Methods', 'hexcoupon-advance-coupons-for-woocommerce' ),
 			'name' => 'permitted_shipping_methods',
 			'value' => $selected_shipping_methods,
 			'type' => 'select',

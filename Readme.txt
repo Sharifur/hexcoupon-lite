@@ -1,12 +1,12 @@
-=== HexCoupon - The ultimate plugin for using the Woocommerce coupon system ===
-Contributors: palashwpdev
+=== HexCoupon Advance Coupons For WooCommerce - The ultimate solution for the Woocommerce coupon system ===
+Contributors: wphex
 Donate link: https://example.com/
-Tags: HexCoupon, WooCommerce
+Tags: HexCoupon, WooCommerce, Advance Coupons for WooCommerce, WooCommerce Coupon, Coupons For WooCommerce
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.2.2
-Version: 1.0.0
-Stable tag: 1.0.0
+Version: 1.0.4
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,13 +18,13 @@ Extend the default WooCommerce coupon system and add new functionality to contro
 
 **The easy way.**
 
-Go to your WordPress Dashboard. Navigate to Plugins > Add New and then search for "HexCoupon". Click on Install and then Activate the Plugin.
+Go to your WordPress Dashboard. Navigate to Plugins > Add New and then search for "HexCoupon Advance Coupons For WooCommerce". Click on Install and then Activate the Plugin.
 
-That's it, HexCoupon Plugin is now activated on your site!
+That's it, HexCoupon - Advance Coupons For WooCommerce Plugin is now activated on your site!
 
 **The hard way..**
 
-Download "HexCoupon"  and then extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page.
+Download "HexCoupon - Advance Coupons For WooCommerce"  and then extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page.
 
 == Frequently Asked Questions ==
 =  Is this plugin compatible on latest WordPress ?  =

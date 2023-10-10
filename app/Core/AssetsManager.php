@@ -52,9 +52,9 @@ class AssetsManager
 		}
 
 		$select2_placeholder_data = array(
-			'escapedPlaceholderText1' => esc_html__( 'Select Roles', 'hexcoupon' ),
-			'escapedPlaceholderText2' => esc_html__( 'Select Payment Methods', 'hexcoupon' ),
-			'escapedPlaceholderText3' => esc_html__( 'Select Shipping Methods', 'hexcoupon' ),
+			'escapedPlaceholderText1' => esc_html__( 'Select Roles', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			'escapedPlaceholderText2' => esc_html__( 'Select Payment Methods', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			'escapedPlaceholderText3' => esc_html__( 'Select Shipping Methods', 'hexcoupon-advance-coupons-for-woocommerce' ),
 		);
 
 		wp_localize_script( hexcoupon_prefix( 'admin-js' ), 'escapedData', $select2_placeholder_data );
