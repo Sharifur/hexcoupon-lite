@@ -5,8 +5,8 @@ Tags: HexCoupon, WooCommerce, Advance Coupons for WooCommerce, WooCommerce Coupo
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.2.2
-Version: 1.0.5
-Stable tag: 1.0.5
+Version: 1.0.6
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
