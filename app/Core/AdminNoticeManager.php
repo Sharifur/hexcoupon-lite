@@ -70,7 +70,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon-advance-coupons-for-woocommerce.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = $plugin_data['RequiresWP'];
 
 		return $plugin_version;
@@ -88,7 +88,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon-advance-coupons-for-woocommerce.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = ! empty( $plugin_data['WC requires at least'] ) ? $plugin_data['WC requires at least'] : '';
 
 		return $plugin_version;
@@ -106,7 +106,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon-advance-coupons-for-woocommerce.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = $plugin_data['RequiresPHP'];
 		return $plugin_version;
 	}
@@ -174,7 +174,7 @@ class AdminNoticeManager
 	{
 		$install_url = wp_nonce_url( admin_url( 'update.php?action=install-plugin&plugin=woocommerce' ), 'install-plugin_woocommerce' );
 
-		return sprintf( __( 'WooCommerce plugin is not installed. Please <a href="%s">install the WooCommerce plugin</a> to use Hexcoupon features.','hexcoupon-advance-coupons-for-woocommerce' ), esc_url( $install_url ) );
+		return sprintf( __( 'WooCommerce plugin is not installed. Please <a href="%s">install the WooCommerce plugin</a> to use Hexcoupon features.','hex-coupon-for-woocommerce' ), esc_url( $install_url ) );
 	}
 
 	/**
@@ -190,7 +190,7 @@ class AdminNoticeManager
 		$plugin_wp_version = $this->get_plugin_wp_version();
 
 		return sprintf(
-			esc_html__( 'This plugin requires at least WordPress version of %s', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'This plugin requires at least WordPress version of %s', 'hex-coupon-for-woocommerce' ),
 			esc_html( $plugin_wp_version )
 		);
 	}
@@ -208,7 +208,7 @@ class AdminNoticeManager
 		$plugin_wc_version = $this->get_plugin_wc_version();
 
 		return sprintf(
-			esc_html__( 'This plugin requires at least WooCommerce version of %s', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'This plugin requires at least WooCommerce version of %s', 'hex-coupon-for-woocommerce' ),
 			esc_html( $plugin_wc_version )
 		);
 	}
@@ -226,7 +226,7 @@ class AdminNoticeManager
 		$php_version = $this->get_plugin_php_version();
 
 		return sprintf(
-			esc_html__( 'This plugin requires at least PHP version of %s', 'hexcoupon-advance-coupons-for-woocommerce' ),
+			esc_html__( 'This plugin requires at least PHP version of %s', 'hex-coupon-for-woocommerce' ),
 			esc_html( $php_version )
 		);
 	}
@@ -251,7 +251,7 @@ class AdminNoticeManager
 		?>
 		<div class="notice notice-info is-dismissible">
 			<p>
-				<?php printf( esc_html__( '%s', 'hexcoupon-advance-coupons-for-woocommerce' ), esc_html( $wp_version_notice_message ) ); ?>
+				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $wp_version_notice_message ) ); ?>
 			</p>
 		</div>
 		<?php
@@ -270,14 +270,14 @@ class AdminNoticeManager
 	{
 		$plugin_wc_version = $this->get_plugin_wc_version();
 
-		if ( class_exists( 'WooCommerce' ) && version_compare( WC_VERSION, $plugin_wc_version, '<' ) ) {
+		if ( defined('WC_VERSION') &&  class_exists( 'WooCommerce' ) && version_compare( WC_VERSION, $plugin_wc_version, '<' ) ) {
 			$wc_version_notice_message = $this->get_woocommerce_version_message();
 		}
 		if ( ! empty( $wc_version_notice_message ) ) {
 			?>
 			<div class="notice notice-info is-dismissible">
 				<p>
-					<?php printf( esc_html__( '%s', 'hexcoupon-advance-coupons-for-woocommerce' ), esc_html( $wc_version_notice_message ) ); ?>
+					<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $wc_version_notice_message ) ); ?>
 				</p>
 			</div>
 			<?php
@@ -304,7 +304,7 @@ class AdminNoticeManager
 		?>
 		<div class="notice notice-info is-dismissible">
 			<p>
-				<?php printf( esc_html__( '%s', 'hexcoupon-advance-coupons-for-woocommerce' ), esc_html( $php_version_notice_message ) ); ?>
+				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $php_version_notice_message ) ); ?>
 			</p>
 		</div>
 		<?php

@@ -48,7 +48,7 @@ class CouponColumTabController extends BaseController
 			?>
 			<div class="notice notice-info is-dismissible">
 				<p>
-					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+					<?php esc_html_e( 'An error occured while saving the value', 'hex-coupon-for-woocommerce' ); ?>
 				</p>
 			</div>
 			<?php
@@ -78,7 +78,7 @@ class CouponColumTabController extends BaseController
 			?>
 			<div class="notice notice-info is-dismissible">
 				<p>
-					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+					<?php esc_html_e( 'An error occured while saving the value', 'hex-coupon-for-woocommerce' ); ?>
 				</p>
 			</div>
 			<?php
@@ -108,7 +108,7 @@ class CouponColumTabController extends BaseController
 			?>
 			<div class="notice notice-info is-dismissible">
 				<p>
-					<?php esc_html_e( 'An error occured while saving the value', 'hexcoupon-advance-coupons-for-woocommerce' ); ?>
+					<?php esc_html_e( 'An error occured while saving the value', 'hex-coupon-for-woocommerce' ); ?>
 				</p>
 			</div>
 			<?php

@@ -1,4 +1,4 @@
-=== HexCoupon - Advance Coupons For WooCommerce - The ultimate solution for the Woocommerce coupon system ===
+=== HexCoupon - Advance Coupons For WooCommerce ===
 Contributors: wphex
 Donate link: https://example.com/
 Tags: HexCoupon, WooCommerce, Advance Coupons for WooCommerce, WooCommerce Coupon, Coupons For WooCommerce

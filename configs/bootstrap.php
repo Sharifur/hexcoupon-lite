@@ -100,10 +100,10 @@ if ( ! function_exists( 'hexcoupon_render_template' ) ) {
 	{
 		$file = HEXCOUPON_DIR_PATH . "app" . $file_path;
 		if ( ! file_exists( $file ) ) {
-			throw new \Exception( "File not found" );
+			throw new \Exception( esc_html__("File not found",'hex-coupon-for-woocommerce') );
 		}
 		if ( ! is_array( $data ) ) {
-			throw new \Exception( "Expected array as data" );
+			throw new \Exception( esc_html__("Expected array as data" ,'hex-coupon-for-woocommerce'));
 		}
 		extract( $data, EXTR_PREFIX_SAME, hexcoupon_get_config('plugin_prefix') );	// @phpcs:ignore
 
