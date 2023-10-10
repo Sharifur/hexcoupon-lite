@@ -10,7 +10,7 @@ return array(
 	'plugin_prefix'		=> 'hexcoupon',
 	'plugin_slug'		=> 'hexcoupon',
 	'namaspace_root'	=> 'HexCoupon',
-	'plugin_version'	=> '1.0.4',
+	'plugin_version'	=> '1.0.5',
 	'plugin_name'		=> 'HexCoupon - Advance Coupons For WooCommerce',
 	'dev_mode'			=> false,
 	'root_dir'			=> dirname(__DIR__),
