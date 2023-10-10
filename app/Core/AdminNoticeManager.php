@@ -121,21 +121,45 @@ class AdminNoticeManager
 	 */
 	public function show_active_and_installation_notice_for_woocommerce()
 	{
-		$install_notice_message = $this->get_woocommerce_install_notice_message();
+		$all_plugins_list = get_plugins();
 
-		$allowed_tags = [
+		$install_notice_message = $this->get_woocommerce_install_notice_message();
+		$active_notice_message = $this->get_woocommerce_active_notice_message();
+
+		$allowed_html_tags = [
 			'a' => [
 				'href' => [],
 			],
 		];
 
-		if ( ! class_exists( 'WooCommerce' ) ) {
+		if( ! array_key_exists( 'woocommerce/woocommerce.php', $all_plugins_list ) ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo wp_kses( $install_notice_message, $allowed_tags ); ?></p>
+				<p><?php echo wp_kses( $install_notice_message, $allowed_html_tags ); ?></p>
 			</div>
 			<?php
 		}
+		elseif ( ! class_exists( 'WooCommerce' ) ) {
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo wp_kses( $active_notice_message, $allowed_html_tags ); ?></p>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method get_woocommerce_active_notice_message
+	 * @return string
+	 * @since 1.0.0
+	 * Renders a message for WooCommerce activation notice for the users.
+	 * */
+	private function get_woocommerce_active_notice_message()
+	{
+		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . urlencode( $this->woocommerce_plugin_url ) ), 'activate-plugin_' . $this->woocommerce_plugin_url );
+		return sprintf( __( 'WooCommerce plugin is not active. Please <a href="%s">activate the WooCommerce</a> plugin to use HexCoupon features.','hexcoupon' ), esc_url( $activate_url ) );
 	}
 
 	/**
