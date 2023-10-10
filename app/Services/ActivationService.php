@@ -20,6 +20,5 @@ class ActivationService
 
 	public static function activate()
 	{
-		CacheMigration::getInstance();
 	}
 }
