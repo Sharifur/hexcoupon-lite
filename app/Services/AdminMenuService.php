@@ -12,7 +12,7 @@ class AdminMenuService extends Service
 	public function getData()
 	{
 		$data = [
-			'plugin_name' => 'HexCoupon',
+			'plugin_name' => 'HexCoupon - Advance Coupons For WooCommerce',
 			'developed'   => 'Author',
 			'author_name' => 'WpHex',
 			'author_link' => 'https://wphex.com/',
