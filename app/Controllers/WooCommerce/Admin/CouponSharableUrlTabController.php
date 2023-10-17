@@ -48,7 +48,7 @@ class CouponSharableUrlTabController extends BaseController {
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hexcoupon' ), $this->error_message ); ?></p>
+				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), $this->error_message ); ?></p>
 			</div>
 			<?php
 		}

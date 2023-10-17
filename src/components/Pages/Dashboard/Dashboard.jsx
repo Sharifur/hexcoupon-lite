@@ -8,21 +8,10 @@ import HexPromo from '../../HexPromo/HexPromo/HexPromo';
 import imgGift from '../../HexGiftCard/img/gift.png';
 
 const Dashboard = () => {
-
     return (
         <>
-            {/*<HexGiftCard giftPara='Zahid and 12 Customers has birthdays, anniversary today' giftSendLink='Send Them Gift Cards' imgGift={imgGift} />*/}
-
-            {/*<HexPointPromo />*/}
-
-            {/*<LineChartOne />*/}
-
-            <HexCouponPromo />
-
+			<HexCouponPromo />
             <BarChartOne />
-
-            {/*<HexPromo />*/}
-
         </>
     );
 };

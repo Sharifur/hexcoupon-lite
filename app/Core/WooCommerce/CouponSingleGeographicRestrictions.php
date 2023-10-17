@@ -34,7 +34,7 @@ class CouponSingleGeographicRestrictions {
 	public function add_geographic_restriction_tab( $tabs )
 	{
 		$tabs['geographic_restriction_tab'] = array(
-			'label'    => esc_html__( 'Geographic restrictions', 'hexcoupon' ),
+			'label'    => esc_html__( 'Geographic restrictions', 'hex-coupon-for-woocommerce' ),
 			'target'   => 'geographic_restriction_tab',
 			'class'    => array( 'geographic_restriction' ),
 		);
@@ -64,8 +64,8 @@ class CouponSingleGeographicRestrictions {
 				'name' => 'geographic_restriction[apply_geographic_restriction]',
 				'label' => '',
 				'options' => [
-					'restrict_by_shipping_zones' => esc_html__( 'Restrict coupon based on shipping zones', 'hexcoupon' ),
-					'restrict_by_countries' => esc_html__( 'Restrict coupon by specific countries', 'hexcoupon' ),
+					'restrict_by_shipping_zones' => esc_html__( 'Restrict coupon based on shipping zones', 'hex-coupon-for-woocommerce' ),
+					'restrict_by_countries' => esc_html__( 'Restrict coupon by specific countries', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $apply_geographic_restriction,
 			]
@@ -76,7 +76,7 @@ class CouponSingleGeographicRestrictions {
 		$output ='<div class="restricted_shipping_zones">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add shipping zones', 'hexcoupon' ),
+			'label' => esc_html__( 'Add shipping zones', 'hex-coupon-for-woocommerce' ),
 			'name' => 'geographic_restriction[restricted_shipping_zones]',
 			'id' => 'restricted_shipping_zones',
 			'value' => $restricted_shipping_zones,
@@ -85,7 +85,7 @@ class CouponSingleGeographicRestrictions {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_shipping_zones',
-			'placeholder' => esc_html__( 'Search for shipping zone', 'hexcoupon' )
+			'placeholder' => esc_html__( 'Search for shipping zone', 'hex-coupon-for-woocommerce' )
 		] );
 
 		echo '<span class="restricted_shipping_zones_tooltip">'.wc_help_tip( esc_html__( 'Select zones that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';

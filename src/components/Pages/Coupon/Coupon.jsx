@@ -22,9 +22,6 @@ const Coupon = () => {
 
     return (
         <>
-
-            <HexGiftCard giftPara={giftPara} giftPara2={giftPara2} giftSendLink={giftSendLink} imgGift={imgGift} />
-
             <ItemHeaderMain hexItemClass='hexItem__header'>
                 <div className="hexItem__header__flex">
                     <ItemHeaderLeft hexHeaderTitle='Coupon History' />
@@ -34,14 +31,14 @@ const Coupon = () => {
                             <Link to={'/grant-coupon' + windowParams} className='cmn_btn btn_bg_1  radius-5' >
                                 {ButtonText='Grant Credits'}
                             </Link>
-                            
+
                         </ItemHeaderRightItem>
 
-                        <ItemHeaderRightItem>                        
+                        <ItemHeaderRightItem>
                             <Link to={'/coupon-settings' + windowParams} className='hexItem__header__right__item__icon  radius-5'>
                                 <MdOutlineSettings />
                             </Link>
-                        </ItemHeaderRightItem>                    
+                        </ItemHeaderRightItem>
                     </ItemHeaderRight>
                 </div>
             </ItemHeaderMain>

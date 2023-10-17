@@ -70,7 +70,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = $plugin_data['RequiresWP'];
 
 		return $plugin_version;
@@ -88,7 +88,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = ! empty( $plugin_data['WC requires at least'] ) ? $plugin_data['WC requires at least'] : '';
 
 		return $plugin_version;
@@ -106,7 +106,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hex-coupon-for-woocommerce.php' );
 		$plugin_version = $plugin_data['RequiresPHP'];
 		return $plugin_version;
 	}
@@ -125,14 +125,14 @@ class AdminNoticeManager
 		if ( ! class_exists( 'WooCommerce' ) && ! file_exists( $plugin_path ) ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), $this->get_woocommerce_install_notice_message() ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), $this->get_woocommerce_install_notice_message() ); ?></p>
 			</div>
 			<?php
 		}
 		else if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php printf( esc_html__( '%s', 'hexcoupon' ), $this->get_woocommerce_active_notice_message() ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), $this->get_woocommerce_active_notice_message() ); ?></p>
 			</div>
 			<?php
 		}

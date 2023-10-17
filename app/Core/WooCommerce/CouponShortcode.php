@@ -40,7 +40,7 @@ class CouponShortcode
 
 		// Check if the 'code' attribute is provided.
 		if ( empty( $atts['code'] ) ) {
-			return esc_html__( 'Please provide a coupon code.', 'hexcoupon' );
+			return esc_html__( 'Please provide a coupon code.', 'hex-coupon-for-woocommerce' );
 		}
 
 		// Get the coupon object using the provided coupon code.
@@ -48,7 +48,7 @@ class CouponShortcode
 
 		// Check if the coupon exists and is valid.
 //		if( $coupon->get_date_expires() ) {
-//			return esc_html__( 'Invalid or expired coupon code.', 'hexcoupon' );
+//			return esc_html__( 'Invalid or expired coupon code.', 'hex-coupon-for-woocommerce' );
 //		}
 
 		// Get coupon information.
@@ -60,9 +60,9 @@ class CouponShortcode
 
 		// Build the HTML output for the coupon information.
 		$output = '<div class="coupon-info">';
-		$output .= '<p>' . esc_html__( 'Coupon Code: ', 'hexcoupon' ) . esc_html( $coupon_code ) . '</p>';
-		$output .= '<p>' . esc_html__( 'Description: ', 'hexcoupon' ) . esc_html( $coupon_description ) . '</p>';
-		$output .= '<p>' . esc_html__( 'Discount: ', 'hexcoupon' ) . esc_html( $coupon_discount ) . '</p>';
+		$output .= '<p>' . esc_html__( 'Coupon Code: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_code ) . '</p>';
+		$output .= '<p>' . esc_html__( 'Description: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_description ) . '</p>';
+		$output .= '<p>' . esc_html__( 'Discount: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_discount ) . '</p>';
 		$output .= '</div>';
 
 		return $output;
@@ -93,7 +93,7 @@ class CouponShortcode
 	 */
 	public function custom_coupon_list_table_columns( $columns )
 	{
-		$columns['coupon_shortcode'] = esc_html__( 'Shortcode', 'hexcoupon' );
+		$columns['coupon_shortcode'] = esc_html__( 'Shortcode', 'hex-coupon-for-woocommerce' );
 		return $columns;
 	}
 

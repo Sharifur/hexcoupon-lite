@@ -56,7 +56,7 @@ class CouponDuplicatePost
 			'duplicate_nonce'
 		);
 
-		$actions['duplicate'] = '<a href="' . esc_url( $url ) . '" title="Duplicate this item" rel="permalink">' . esc_html__( 'Duplicate Coupon', 'hexcoupon' ) . '</a>';
+		$actions['duplicate'] = '<a href="' . esc_url( $url ) . '" title="Duplicate this item" rel="permalink">' . esc_html__( 'Duplicate Coupon', 'hex-coupon-for-woocommerce' ) . '</a>';
 
 		return $actions;
 	}
@@ -179,7 +179,7 @@ class CouponDuplicatePost
 		// Checks if settings updated
 		if ( isset( $saved ) && 'post_duplication_created' == $saved ) {
 			?>
-			<div class="notice notice-success is-dismissible"><p><?php echo esc_html__( 'Duplicate Coupon Created.', 'hexcoupon' ); ?></p></div>
+			<div class="notice notice-success is-dismissible"><p><?php echo esc_html__( 'Duplicate Coupon Created.', 'hex-coupon-for-woocommerce' ); ?></p></div>
 			<?php
 		}
 	}

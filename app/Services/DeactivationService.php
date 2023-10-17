@@ -12,7 +12,7 @@ class DeactivationService
 	{
 		// deactivation event handler
 		\register_deactivation_hook(
-			HXC_FILE,
+			HEXCOUPON_FILE,
 			[ __CLASS__, 'deactivate' ]
 		);
 	}

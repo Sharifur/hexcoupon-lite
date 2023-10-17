@@ -15,7 +15,7 @@ class FormHelpers
 	public function __construct( array $args )
 	{
 		$defaults = [
-			'label' => esc_html__('label','hexcoupon'),
+			'label' => esc_html__('label','hex-coupon-for-woocommerce'),
 			'name' => 'name',
 			'id' => '',
 			'parent_class' => 'options_group',

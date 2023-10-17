@@ -13,7 +13,7 @@ class AssetsManager
 
 	public function register()
 	{
-		$this->configs = Hxc_get_config();
+		$this->configs = hexcoupon_get_config();
 
 		$this->before_register_assets();
 
@@ -31,38 +31,38 @@ class AssetsManager
 
 	public function admin_scripts()
 	{
-		$folder_prefix = Hxc_get_config('dev_mode') ? '/dev' : '/dist';
+		$folder_prefix = hexcoupon_get_config('dev_mode') ? '/dev' : '/dist';
 
 		if ( ( str_contains( $_SERVER['REQUEST_URI'], 'post-new.php' ) && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'shop_coupon') ||
 			( isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) ) {
 
 			wp_enqueue_script(
-				Hxc_prefix( 'admin-js' ),
-				Hxc_asset_url( $folder_prefix . "/admin/js/admin.js" ),
+				hexcoupon_prefix( 'admin-js' ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/js/admin.js" ),
 				['jquery', 'select2', 'wp-i18n'],
 				$this->version,
 				true
 			);
 
 			wp_enqueue_script(
-				Hxc_prefix( 'flatpickr' ),
-				Hxc_asset_url( $folder_prefix . "/admin/js/flatpickr.min.js" ),
+				hexcoupon_prefix( 'flatpickr' ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/js/flatpickr.min.js" ),
 				[ 'jquery'],
 				$this->version,
 				true
 			);
 
 			wp_enqueue_style(
-				Hxc_prefix( 'admin' ),
-				Hxc_asset_url( $folder_prefix. "/admin/css/admin.css" ),
+				hexcoupon_prefix( 'admin' ),
+				hexcoupon_asset_url( $folder_prefix. "/admin/css/admin.css" ),
 				array(),
 				$this->version,
 				'all'
 			);
 
 			wp_enqueue_style(
-				Hxc_prefix( 'flatpickr' ),
-				Hxc_asset_url( $folder_prefix . "/admin/css/flatpickr.min.css" ),
+				hexcoupon_prefix( 'flatpickr' ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/css/flatpickr.min.css" ),
 				array(),
 				$this->version,
 				'all'
@@ -75,16 +75,16 @@ class AssetsManager
 
 		if ( $screen->base === "toplevel_page_hexcoupon-page" ){
 			wp_enqueue_script(
-				Hxc_prefix( 'main' ),
-				Hxc_url( "/dist/assets/index.js" ),
+				hexcoupon_prefix( 'main' ),
+				hexcoupon_url( "/dist/assets/index.js" ),
 				['jquery','wp-element'],
 				$this->version,
 				true
 			);
 
 			wp_enqueue_style(
-				Hxc_prefix( 'main' ),
-				Hxc_url( "/dist/assets/index.css" ),
+				hexcoupon_prefix( 'main' ),
+				hexcoupon_url( "/dist/assets/index.css" ),
 				[],
 				$this->version,
 				"all"
@@ -92,23 +92,23 @@ class AssetsManager
 		}
 
 		$coupon_dashboard_label_text = [
-			'couponsCreatedLabel' => esc_html__( 'Coupons Created', 'hexcoupon' ),
-			'couponsRedeemedLabel' => esc_html__( 'Coupons Redeemed', 'hexcoupon' ),
-			'couponsActiveLabel' => esc_html__( 'Coupons Active', 'hexcoupon' ),
-			'couponsExpiredLabel' => esc_html__( 'Coupons Expired', 'hexcoupon' ),
-			'redeemedCouponValueLabel' => esc_html__( 'Redeemed Coupon Amount', 'hexcoupon' ),
-			'sharableUrlCouponsLabel' => esc_html__( 'Sharable Url Coupons', 'hexcoupon' ),
-			'bogoCouponlabel' => esc_html__( 'Bogo Coupons', 'hexcoupon' ),
-			'geographicRestrictionLabel' => esc_html__( 'Geographically Restricted', 'hexcoupon' ),
-			'couponInsightsLabel' => esc_html__( 'Coupon Insights', 'hexcoupon' ),
-			'thisYearLabel' => esc_html__( 'This Year', 'hexcoupon' ),
-			'thisMonthLabel' => esc_html__( 'This Month', 'hexcoupon' ),
-			'thisWeekLabel' => esc_html__( 'This Week', 'hexcoupon' ),
-			'yesterdayLabel' => esc_html__( 'Yesterday', 'hexcoupon' ),
-			'todayLabel' => esc_html__( 'Today', 'hexcoupon' ),
+			'couponsCreatedLabel' => esc_html__( 'Coupons Created', 'hex-coupon-for-woocommerce' ),
+			'couponsRedeemedLabel' => esc_html__( 'Coupons Redeemed', 'hex-coupon-for-woocommerce' ),
+			'couponsActiveLabel' => esc_html__( 'Coupons Active', 'hex-coupon-for-woocommerce' ),
+			'couponsExpiredLabel' => esc_html__( 'Coupons Expired', 'hex-coupon-for-woocommerce' ),
+			'redeemedCouponValueLabel' => esc_html__( 'Redeemed Coupon Amount', 'hex-coupon-for-woocommerce' ),
+			'sharableUrlCouponsLabel' => esc_html__( 'Sharable Url Coupons', 'hex-coupon-for-woocommerce' ),
+			'bogoCouponlabel' => esc_html__( 'Bogo Coupons', 'hex-coupon-for-woocommerce' ),
+			'geographicRestrictionLabel' => esc_html__( 'Geographically Restricted', 'hex-coupon-for-woocommerce' ),
+			'couponInsightsLabel' => esc_html__( 'Coupon Insights', 'hex-coupon-for-woocommerce' ),
+			'thisYearLabel' => esc_html__( 'This Year', 'hex-coupon-for-woocommerce' ),
+			'thisMonthLabel' => esc_html__( 'This Month', 'hex-coupon-for-woocommerce' ),
+			'thisWeekLabel' => esc_html__( 'This Week', 'hex-coupon-for-woocommerce' ),
+			'yesterdayLabel' => esc_html__( 'Yesterday', 'hex-coupon-for-woocommerce' ),
+			'todayLabel' => esc_html__( 'Today', 'hex-coupon-for-woocommerce' ),
 		];
 
-		wp_localize_script( Hxc_prefix( 'main' ), 'hexCuponData', [
+		wp_localize_script( hexcoupon_prefix( 'main' ), 'hexCuponData', [
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
@@ -135,19 +135,19 @@ class AssetsManager
 
 	public function public_scripts()
 	{
-		$folder_prefix = Hxc_get_config( 'dev_mode' ) ? '/dev' : '/dist';
+		$folder_prefix = hexcoupon_get_config( 'dev_mode' ) ? '/dev' : '/dist';
 
 		wp_enqueue_script(
-			Hxc_prefix( 'public' ),
-			Hxc_asset_url( $folder_prefix . "/public/js/public.js" ),
+			hexcoupon_prefix( 'public' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/js/public.js" ),
 			[],
 			$this->version,
 			true
 		);
 
 		wp_enqueue_style(
-			Hxc_prefix( 'public' ),
-			Hxc_asset_url( $folder_prefix . "/public/css/public.css" ),
+			hexcoupon_prefix( 'public' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/css/public.css" ),
 			array(),
 			$this->version,
 			'all'

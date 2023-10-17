@@ -66,7 +66,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hexcoupon' ), $this->error_message ); ?></p>
+				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), $this->error_message ); ?></p>
 			</div>
 			<?php
 		}
@@ -241,7 +241,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your shipping zone does not support this coupon.', 'hexcoupon');
+			$err = esc_html__( 'Invalid coupon. Your shipping zone does not support this coupon.', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;
@@ -261,7 +261,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your country does not support this coupon.', 'hexcoupon');
+			$err = esc_html__( 'Invalid coupon. Your country does not support this coupon.', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;
