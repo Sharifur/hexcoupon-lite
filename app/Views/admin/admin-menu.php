@@ -333,35 +333,97 @@
 //	}
 //}
 
+//
+//// Get the current date
+//$current_date = date('Y-m-d');
+//
+//// Get the coupons
+//$args = array(
+//	'post_type' => 'shop_coupon', // Replace 'coupon' with your custom post type name
+//	'posts_per_page' => -1, // Get all coupons
+//);
+//
+//$coupons = new WP_Query($args);
+//
+//// Initialize a counter for active coupons
+//$active_coupons_count = 0;
+//
+//// Loop through the coupons
+//if ($coupons->have_posts()) {
+//	while ($coupons->have_posts()) {
+//		$coupons->the_post();
+//
+//		// Get the expiry date for the current coupon
+//		$expiry_date = get_post_meta(get_the_ID(), 'expiry_date', true);
+//
+//		// Check if the expiry date matches today's date (active) or is in the past (expired)
+//		if ($expiry_date != $current_date) {
+//			$active_coupons_count++;
+//		}
+//	}
+//
+//	// Reset post data
+//	wp_reset_postdata();
+//}
 
-// Get the current date
-$current_date = date('Y-m-d');
 
-// Get the coupons
-$args = array(
-	'post_type' => 'shop_coupon', // Replace 'coupon' with your custom post type name
-	'posts_per_page' => -1, // Get all coupons
-);
 
-$coupons = new WP_Query($args);
+// Calculate the start date of the current week (Sunday)
+//$current_date = date('Y-m-d');
+//$week_start = date('Y-m-d', strtotime('last Sunday', strtotime($current_date)));
+//
+//// Initialize an array to store counts of active and expired coupons for each day of the current week
+//$daily_coupon_counts_current_week = array();
+//
+//// Define an array to map day numbers to day names
+//$day_names = array(
+//	0 => 'Sun',
+//	1 => 'Mon',
+//	2 => 'Tue',
+//	3 => 'Wed',
+//	4 => 'Thu',
+//	5 => 'Fri',
+//	6 => 'Sat',
+//);
+//
+//// Loop through each day of the current week (from Sunday to Saturday)
+//foreach ($day_names as $day_index => $day_name) {
+//	// Calculate the date for the current day in 'Y-m-d' format
+//	$day_date = date('Y-m-d', strtotime("+$day_index days", strtotime($week_start)));
+//
+//	// Get counts of active and expired coupons for the current day
+//	$args = array(
+//		'post_type' => 'shop_coupon',
+//		'post_status' => 'publish',
+//		'posts_per_page' => -1, // Retrieve all coupons
+//		'meta_query' => array(
+//			'relation' => 'AND',
+//			array(
+//				'key' => 'expiry_date',
+//				'value' => $day_date,
+//				'compare' => '==', // Expires on or after the current day
+//				'type' => 'DATE',
+//			),
+//		),
+//	);
+//
+//	$active_coupons_query = new WP_Query($args);
+//
+//	$args['meta_query'][0]['compare'] = '<'; // Expires before the current day
+//	$expired_coupons_query = new WP_Query($args);
+//
+//	// Store counts of active and expired coupons for the current day
+//	$daily_coupon_counts_current_week[$day_name]['active'] = $active_coupons_query->found_posts;
+//	$daily_coupon_counts_current_week[$day_name]['expired'] = $expired_coupons_query->found_posts;
+//}
+//
+//// Output counts of active and expired coupons for each day of the week
+//foreach ($day_names as $day_name) {
+//	echo "Total active coupons for {$day_name}: {$daily_coupon_counts_current_week[$day_name]['active']}\n";
+//	echo "Total expired coupons for {$day_name}: {$daily_coupon_counts_current_week[$day_name]['expired']}\n";
+//}
 
-// Initialize a counter for active coupons
-$active_coupons_count = 0;
 
-// Loop through the coupons
-if ($coupons->have_posts()) {
-	while ($coupons->have_posts()) {
-		$coupons->the_post();
 
-		// Get the expiry date for the current coupon
-		$expiry_date = get_post_meta(get_the_ID(), 'expiry_date', true);
 
-		// Check if the expiry date matches today's date (active) or is in the past (expired)
-		if ($expiry_date != $current_date) {
-			$active_coupons_count++;
-		}
-	}
 
-	// Reset post data
-	wp_reset_postdata();
-}

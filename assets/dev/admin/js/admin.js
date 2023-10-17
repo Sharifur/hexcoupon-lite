@@ -2,6 +2,9 @@
 	"use strict";
 	$(document).ready(function(){
 
+		// destructuring internationalization functions for making text translatable
+		const { __, _x, _n, _nx } = wp.i18n;
+
 		/*
        ========================================
            Mixed Code
@@ -49,7 +52,6 @@
 		addSpecificProductToPurchaseClass.insertAfter(customerPurchasesField);
 		addSpecificProductToPurchaseId.insertAfter(".add_specific_product_to_purchase label");
 
-
 		// Place the tooltip of add a specific product to purchase select2 field
 		$(".add_specific_product_to_purchase_tooltip").insertAfter(".add_specific_product_to_purchase span.select2-container");
 
@@ -76,7 +78,6 @@
 		// Place the bogo deal checkboxes after the customer gets as free div
 		bogoDealCheckboxes.insertAfter(customerGetsAsFreeClass);
 
-
 		// Remove all other fields if BOGO is selected
 		const discountTypeField = $("select[name^='discount_type']");
 
@@ -86,20 +87,6 @@
 		const couponStartingDateField = $(".coupon_starting_date_field");
 		const messageForCouponStartingDateField = $(".message_for_coupon_starting_date_field");
 		const applyDaysHoursOfWeekField = $(".apply_days_hours_of_week_field");
-
-		// if ("buy_x_get_x_bogo" === $(discount_type_field).val()) {
-		// 	$(".customer_purchases").show()
-		// 	$(".customer_gets_as_free").show()
-		// 	$(".bogo_deal_checkboxes").show()
-		//
-		// 	$(".coupon_amount_field").hide();
-		// 	$(".free_shipping_field").hide();
-		// 	$(".expiry_date_field").hide();
-		// 	$(".message_for_coupon_expiry_date_field").hide();
-		// 	$(".coupon_starting_date_field").hide();
-		// 	$(".message_for_coupon_starting_date_field").hide();
-		// 	$(".apply_days_hours_of_week_field").hide();
-		// }
 
 		discountTypeField.on("change",function (){
 			if("buy_x_get_x_bogo" === this.value){
@@ -170,8 +157,6 @@
 				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
 				$('.add_specific_product_to_purchase .select2-selection__choice').slice(1).remove();
 
-				// $('select[name="add_specific_product_to_purchase"] option:selected').slice(1).remove();
-
 				var selectedOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
 
 				// Remove the selected attribute from all options except the first selected one
@@ -220,25 +205,6 @@
 			}
 		});
 
-
-		// customerGetsAsFree.on("change",function(){
-		// 	if("same_product_added_to_cart" === $(this).val()){
-		// 		$(".add_specific_product_for_free").hide();
-		// 	}
-		// });
-
-
-		// Trigger the change on page load
-		// customerGetsAsFree.trigger("change");
-
-		// customerGetsAsFree.on("change",function(){
-		// 	if("same_product_added_to_cart" === $(this).val()){
-		// 		$(".add_specific_product_for_free").hide();
-		// 	}
-		// });
-
-		// customerGetsAsFree.trigger("change");
-
 		/*
        ========================================
            Usage Restriction
@@ -273,7 +239,6 @@
 
 		// place the 'selectedValuesContainer' container after the all_selected_products option grp input field
 		$("#selectedValuesContainer").insertAfter(".all_selected_products .options_group");
-
 
 		// show premium feature text clicking on min max input field
 		$(document).on('click','.product-quantity-input', function (){
@@ -330,16 +295,16 @@
 					<div class="product_title">${title}</div>
 						<div class="product_min_max_main">
 							<div class="product_min product-wrap">
-								<span class="product-wrap-pro">This feature is only available on Pro</span>
+								<span class="product-wrap-pro">__( "This feature is only available on Pro", "hexcoupon" )</span>
 								<div class="product-wrap-inner">
-									<p class="product-wrap-para">min quantity</p>
+									<p class="product-wrap-para"__( "min quantity", "hexcoupon" )</p>
 									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No minimum" type="number" readonly="">
 								</div>
 							</div>
 							<div class="product_max product-wrap">
-								<span class="product-wrap-pro">This feature is only available on Pro</span>
+								<span class="product-wrap-pro">__( "This feature is only available on Pro" , "hexcoupon" )</span>
 								<div class="product-wrap-inner">
-								<p class="product-wrap-para">max quantity</p>
+								<p class="product-wrap-para">__( "max quantity", "hexcoupon" )</p>
 								<input name="product_max[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No maximum" type="number" readonly="">
 							</div>
 							<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
@@ -474,7 +439,8 @@
 			document.execCommand("copy"); // Copy the selected text
 
 			tempInput.remove(); // Remove the temporary input element
-			alert("URL copied to clipboard: " + text); // Show an alert
+			const alertText = __( "URL copied to clipboard:", "hexcoupon" );
+			alert(alertText + text); // Show an alert
 		});
 
 		/*
@@ -482,7 +448,6 @@
            	Days & Hours in General Tab
        ========================================
        */
-
 		const applyDaysHoursOfWeek = $("#apply_days_hours_of_week");
 		const dayTimeHoursBlock = $(".day_time_hours_block");
 		const totalHoursCountSaturday = $("#total_hours_count_saturday");
@@ -537,7 +502,6 @@
 			$(".allowed_individual_customer").hide();
 		}
 
-
 		// Show hide days and hours on the basis of clicking the checkbox
 		applyDaysHoursOfWeek.on("change", function () {
 			if ($(this).is(":checked")) {
@@ -557,7 +521,6 @@
 		} else {
 			applyDaysHoursOfWeekField.hide();
 		}
-
 
 		$(discountTypeField).on("change",function(){
 			// Get the currently selected option's value

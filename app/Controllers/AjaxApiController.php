@@ -23,10 +23,31 @@ class AjaxApiController extends Controller
 		add_action('wp_ajax_full_coupon_creation_data', [$this, 'full_coupon_creation_data']);
 		add_action('wp_ajax_weekly_coupon_creation_data', [$this, 'weekly_coupon_creation_data']);
 		add_action('wp_ajax_monthlyCouponCountInYear', [$this, 'monthlyCouponCountInYear']);
-		add_action('wp_ajax_todayActiveExpiredCoupon', [$this, 'todayActiveExpiredCoupon']);
+		add_action('wp_ajax_todayActiveExpiredCoupon', [$this, 'todayYesterdayActiveExpiredCoupon']);
+		add_action('wp_ajax_weeklyCouponActiveExpiredCoupon', [$this, 'weeklyCouponActiveExpiredCoupon']);
 	}
 
-	public function todayActiveExpiredCoupon() {
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method weeklyCouponActiveExpiredCoupon
+	 * @return void
+	 * Show all the categories of the product.
+	 */
+	public function weeklyCouponActiveExpiredCoupon() {
+
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method todayYesterdayActiveExpiredCoupon
+	 * @return void
+	 * Show all the categories of the product.
+	 */
+	public function todayYesterdayActiveExpiredCoupon() {
 		// Get the current date
 		$current_date = date('Y-m-d');
 
@@ -98,6 +119,15 @@ class AjaxApiController extends Controller
 		}
 
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method total_coupon_created_and_redeemed
+	 * @return void
+	 * Show all the categories of the product.
+	 */
 	public function total_coupon_created_and_redeemed()
 	{
 		$result = DB::select('posts.post_status')
@@ -145,6 +175,14 @@ class AjaxApiController extends Controller
 
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method weekly_coupon_creation_data
+	 * @return void
+	 * Show all the categories of the product.
+	 */
 	public function weekly_coupon_creation_data() {
 		// Get the current date
 		$current_date = date('Y-m-d');
@@ -213,6 +251,14 @@ class AjaxApiController extends Controller
 		}
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_additional_data
+	 * @return void
+	 * Show all the categories of the product.
+	 */
 	public function get_additional_data() {
 		// Get the current date in the format 'Y-m-d'
 		$current_time = time();
@@ -222,18 +268,6 @@ class AjaxApiController extends Controller
 
 		// Initialize an array to store daily counts for the current week
 		$daily_counts_current_week = array();
-
-		// Initialize an array to store yesterday coupon active counts
-		$yesterday_active_coupon = array();
-
-		// Initialize an array to store today's active counts
-		$today_active_coupon =  array();
-
-		// Initialize an array to store today expired coupon counts
-		$yesterday_expired_coupon = array();
-
-		// Initialize an array to store today's expired counts
-		$today_expired_coupon =  array();
 
 		// Query the database to get all coupon posts and their expiration dates
 		$coupon_query = new \WP_Query( [
@@ -300,8 +334,6 @@ class AjaxApiController extends Controller
 				if ( date('W', $expiry_timestamp) == $current_week_number ) {
 					// Coupon is within the current week
 
-
-
 					// Calculate the day of the week for the expiry date (0 = Sunday, 6 = Saturday)
 					$day_of_week = date('w', $expiry_timestamp);
 
@@ -350,9 +382,7 @@ class AjaxApiController extends Controller
 				'msg' => __( 'Additional data fetched successfully' ),
 				'type' => 'success',
 				'active' => __( $active_coupons ),
-				'activeCouponForCurrentWeek' => __(  ),
 				'expired' => __( $expired_coupons ),
-				'expiredCouponForCurrentWeek' => __(  ),
 				'redeemed' => __( $total_redeemed ),
 				'sharableUrlPost' => __( $sharable_url_post_count ),
 				'bogoCoupon' => __( $bogo_coupon_count ),
@@ -366,6 +396,14 @@ class AjaxApiController extends Controller
 		}
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method full_coupon_creation_data
+	 * @return void
+	 * Show all the categories of the product.
+	 */
 	public function full_coupon_creation_data() {
 		// Get the current month and year
 		$current_month = date('n');
@@ -456,6 +494,14 @@ class AjaxApiController extends Controller
 		}
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method monthlyCouponCountInYear
+	 * @return void
+	 * Show all the categories of the product.
+	 */
 	public function monthlyCouponCountInYear() {
 		$current_year = date('Y');
 		// Initialize an array to store monthly post counts

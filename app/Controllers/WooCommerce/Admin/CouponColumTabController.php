@@ -10,6 +10,8 @@ class CouponColumTabController extends BaseController
 {
 	use SingleTon;
 
+	private $error_message = 'An error occured when saving the payment and shipping value';
+
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
@@ -43,7 +45,11 @@ class CouponColumTabController extends BaseController
 
 		$error = $validator->error();
 		if ( $error ) {
-
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo sprintf( esc_html__( '%s', 'hexcoupon' ), $this->error_message ); ?></p>
+			</div>
+			<?php
 		}
 		$data = $validator->getData();
 

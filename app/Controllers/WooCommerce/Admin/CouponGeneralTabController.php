@@ -12,6 +12,8 @@ class CouponGeneralTabController extends BaseController
 {
 	use SingleTon;
 
+	private $error_message = 'An error occured while saving the coupon general tab meta data value';
+
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
@@ -453,7 +455,11 @@ class CouponGeneralTabController extends BaseController
 
 		$error = $validator->error();
 		if ( $error ) {
-
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo sprintf( esc_html__( '%s', 'hexcoupon' ), $this->error_message ); ?></p>
+			</div>
+			<?php
 		}
 		$data = $validator->getData();
 
@@ -484,7 +490,11 @@ class CouponGeneralTabController extends BaseController
 				] );
 				$error = $validator->error();
 				if ( $error ) {
-
+					?>
+					<div class="notice notice-error is-dismissible">
+						<p><?php echo sprintf( esc_html__( '%s', 'hexcoupon' ), $this->error_message ); ?></p>
+					</div>
+					<?php
 				}
 				$data = $validator->getData();
 

@@ -70,7 +70,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../plugin.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
 		$plugin_version = $plugin_data['RequiresWP'];
 
 		return $plugin_version;
@@ -88,7 +88,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../plugin.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
 		$plugin_version = ! empty( $plugin_data['WC requires at least'] ) ? $plugin_data['WC requires at least'] : '';
 
 		return $plugin_version;
@@ -106,7 +106,7 @@ class AdminNoticeManager
 	{
 		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../plugin.php' );
+		$plugin_data = get_plugin_data( plugin_dir_path(__FILE__) . '../../hexcoupon.php' );
 		$plugin_version = $plugin_data['RequiresPHP'];
 		return $plugin_version;
 	}
