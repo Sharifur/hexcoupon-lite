@@ -48,7 +48,7 @@ class CouponSharableUrlTabController extends BaseController {
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), $this->error_message ); ?></p>
+				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -132,7 +132,7 @@ class CouponSharableUrlTabController extends BaseController {
 	{
 		$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
 
-		$apply_redirect_sharable_link = $sharable_url_coupon['apply_redirect_sharable_link'];
+		$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
 
 		// check if redirect sharable link matches with 'redirect_back_to_origin' or not
 		if ( 'redirect_back_to_origin'  === $apply_redirect_sharable_link ) {

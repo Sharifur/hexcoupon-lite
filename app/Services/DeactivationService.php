@@ -21,7 +21,7 @@ class DeactivationService
 	{
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php echo esc_html__( 'Plugin is deactivated', 'hexcoupon'); ?></p>
+			<p><?php echo esc_html__( 'Plugin is deactivated', 'hex-coupon-for-woocommerce'); ?></p>
 		</div>
 		<?php
 	}

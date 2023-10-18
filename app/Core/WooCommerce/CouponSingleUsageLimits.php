@@ -42,8 +42,8 @@ class CouponSingleUsageLimits {
 			[
 				'id' => 'reset_usage_limit',
 				'name' => 'usage_limits[reset_usage_limit]',
-				'label' => esc_html__( 'Reset Usage', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to reset usage limit after a period', 'hexcoupon' ),
+				'label' => esc_html__( 'Reset Usage', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Check this box to reset usage limit after a period', 'hex-coupon-for-woocommerce' ),
 				'value' => $reset_usage_limit,
 			]
 		);
@@ -53,10 +53,10 @@ class CouponSingleUsageLimits {
 
 		echo '<div class="options_group reset_limit">';
 		?>
-			<p data-reset-value="annually"><?php echo esc_html__( 'Reset Annually', 'hexcoupon' ); ?></p>
-			<p data-reset-value="monthly"><?php echo esc_html__( 'Reset Monthly', 'hexcoupon' ); ?></p>
-			<p data-reset-value="weekly"><?php echo esc_html__( 'Reset Weekly', 'hexcoupon' ); ?></p>
-			<p data-reset-value="daily"><?php echo esc_html__( 'Reset Daily', 'hexcoupon' ); ?></p>
+			<p data-reset-value="annually"><?php echo esc_html__( 'Reset Annually', 'hex-coupon-for-woocommerce' ); ?></p>
+			<p data-reset-value="monthly"><?php echo esc_html__( 'Reset Monthly', 'hex-coupon-for-woocommerce' ); ?></p>
+			<p data-reset-value="weekly"><?php echo esc_html__( 'Reset Weekly', 'hex-coupon-for-woocommerce' ); ?></p>
+			<p data-reset-value="daily"><?php echo esc_html__( 'Reset Daily', 'hex-coupon-for-woocommerce' ); ?></p>
 		<?php
 		echo '</div>';
 	}

@@ -100,7 +100,7 @@
 				messageForCouponExpiryDateField.hide();
 				couponStartingDateField.hide();
 				messageForCouponStartingDateField.hide();
-				applyDaysHoursOfWeekField.hide();
+				// applyDaysHoursOfWeekField.hide();
 			}
 			else {
 				customerPurchasesDiv.hide()
@@ -113,7 +113,7 @@
 				messageForCouponExpiryDateField.show();
 				couponStartingDateField.show();
 				messageForCouponStartingDateField.show();
-				applyDaysHoursOfWeekField.show();
+				// applyDaysHoursOfWeekField.show();
 			}
 		});
 
@@ -295,16 +295,16 @@
 					<div class="product_title">${title}</div>
 						<div class="product_min_max_main">
 							<div class="product_min product-wrap">
-								<span class="product-wrap-pro">__( "This feature is only available on Pro", "hexcoupon" )</span>
+								<span class="product-wrap-pro">${__( "This feature is only available on Pro", "hex-coupon-for-woocommerce" )}</span>
 								<div class="product-wrap-inner">
-									<p class="product-wrap-para"__( "min quantity", "hexcoupon" )</p>
+									<p class="product-wrap-para">${__("min quantity", "hex-coupon-for-woocommerce")}</p>
 									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No minimum" type="number" readonly="">
 								</div>
 							</div>
 							<div class="product_max product-wrap">
-								<span class="product-wrap-pro">__( "This feature is only available on Pro" , "hexcoupon" )</span>
+								<span class="product-wrap-pro">${__( "This feature is only available on Pro" , "hex-coupon-for-woocommerce" )}</span>
 								<div class="product-wrap-inner">
-								<p class="product-wrap-para">__( "max quantity", "hexcoupon" )</p>
+								<p class="product-wrap-para">${__("max quantity", "hex-coupon-for-woocommerce")}</p>
 								<input name="product_max[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No maximum" type="number" readonly="">
 							</div>
 							<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
@@ -439,7 +439,7 @@
 			document.execCommand("copy"); // Copy the selected text
 
 			tempInput.remove(); // Remove the temporary input element
-			const alertText = __( "URL copied to clipboard:", "hexcoupon" );
+			const alertText = __( "URL copied to clipboard:", "hex-coupon-for-woocommerce" );
 			alert(alertText + text); // Show an alert
 		});
 
@@ -514,25 +514,6 @@
 		// Show hide days and hours and apply days & hour on the basis of clicking the discount_type select input
 		// Get the currently selected option's value
 		var selectedValue = $(discountTypeField).val();
-
-		// Check if the selected option has the 'selected' attribute
-		if (selectedValue === "fixed_cart") {
-			applyDaysHoursOfWeekField.show();
-		} else {
-			applyDaysHoursOfWeekField.hide();
-		}
-
-		$(discountTypeField).on("change",function(){
-			// Get the currently selected option's value
-			var selectedValue = $(this).val();
-
-			// Check if the selected option has the 'selected' attribute
-			if (selectedValue === "fixed_cart") {
-				applyDaysHoursOfWeekField.show();
-			} else {
-				applyDaysHoursOfWeekField.hide();
-			}
-		});
 
 		// Show hide fields in cart product condition on the basis of clicking the checkbox
 		$("#apply_cart_condition_for_customer_on_products").on("change", function () {

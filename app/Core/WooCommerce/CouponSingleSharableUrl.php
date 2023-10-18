@@ -35,7 +35,7 @@ class CouponSingleSharableUrl {
 	public function add_sharable_url_coupon_tab( $tabs )
 	{
 		$tabs['sharable_url_coupon_tab'] = array(
-			'label'    => esc_html__( 'Sharable URL coupon', 'hexcoupon' ),
+			'label'    => esc_html__( 'Sharable URL coupon', 'hex-coupon-for-woocommerce' ),
 			'target'   => 'sharable_url_coupon_tab',
 			'class'    => array( 'sharable_url_coupon' ),
 		);
@@ -67,7 +67,7 @@ class CouponSingleSharableUrl {
 				'id' => 'apply_automatic_coupon_by_url',
 				'name' => 'sharable_url_coupon[apply_automatic_coupon_by_url]',
 				'label' => '',
-				'description' => esc_html__( 'Check this box to allow customers automatically apply the current coupon by visiting a URL', 'hexcoupon' ),
+				'description' => esc_html__( 'Check this box to allow customers automatically apply the current coupon by visiting a URL', 'hex-coupon-for-woocommerce' ),
 				'value' => $apply_automatic_coupon_by_url,
 			]
 		);
@@ -82,9 +82,9 @@ class CouponSingleSharableUrl {
 			[
 				'id' => 'sharable_url',
 				'name' => 'sharable_url_coupon[sharable_url]',
-				'label' => esc_html__( 'Edit URL link', 'hexcoupon' ),
+				'label' => esc_html__( 'Edit URL link', 'hex-coupon-for-woocommerce' ),
 				'desc_tip' => true,
-				'description' => esc_html__( 'Please update the page to implement the url and afterwards copy the url and give to the users.', 'hexcoupon' ),
+				'description' => esc_html__( 'Please update the page to implement the url and afterwards copy the url and give to the users.', 'hex-coupon-for-woocommerce' ),
 				'type' => 'text',
 				'value' => $sharable_url,
 				'class' => 'sharable-url form-control',
@@ -95,7 +95,7 @@ class CouponSingleSharableUrl {
 		?>
 
 		<p class="output-url-text"><span><?php echo esc_url ( $sharable_url ); ?></span></p>
-		<p class="copy-sharable-url"><?php echo esc_html__( 'Copy URL', 'hexcoupon' ); ?></p>
+		<p class="copy-sharable-url"><?php echo esc_html__( 'Copy URL', 'hex-coupon-for-woocommerce' ); ?></p>
 
 		<?php
 		// get 'message_for_coupon_discount_url' meta field data
@@ -107,8 +107,8 @@ class CouponSingleSharableUrl {
 				'name' => 'sharable_url_coupon[message_for_coupon_discount_url]',
 				'label' => '',
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set a message for customers about the coupon discount they got.', 'hexcoupon' ),
-				'placeholder' => esc_html__( 'Message for customer e.g. Congratulations you got 20% discount.', 'hexcoupon' ),
+				'description' => esc_html__( 'Set a message for customers about the coupon discount they got.', 'hex-coupon-for-woocommerce' ),
+				'placeholder' => esc_html__( 'Message for customer e.g. Congratulations you got 20% discount.', 'hex-coupon-for-woocommerce' ),
 				'value' => $message_for_coupon_discount_url,
 			]
 		);
@@ -124,8 +124,8 @@ class CouponSingleSharableUrl {
 				'name' => 'sharable_url_coupon[apply_redirect_sharable_link]',
 				'label' => '',
 				'options' => [
-					'redirect_to_custom_link' => esc_html__( 'Redirect to a custom URL', 'hexcoupon' ),
-					'redirect_back_to_origin' => esc_html__( 'Redirect back to original', 'hexcoupon' ),
+					'redirect_to_custom_link' => esc_html__( 'Redirect to a custom URL', 'hex-coupon-for-woocommerce' ),
+					'redirect_back_to_origin' => esc_html__( 'Redirect back to original', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $apply_redirect_sharable_link,
 			]
@@ -139,7 +139,7 @@ class CouponSingleSharableUrl {
 		// Adding coupon type select input field
 		woocommerce_wp_select( [
 			'class' => 'select short',
-			'label' => esc_html__( 'Enter redirect URL', 'hexcoupon' ),
+			'label' => esc_html__( 'Enter redirect URL', 'hex-coupon-for-woocommerce' ),
 			'id' => 'redirect_link',
 			'name' => 'sharable_url_coupon[redirect_link]',
 			'options' => [

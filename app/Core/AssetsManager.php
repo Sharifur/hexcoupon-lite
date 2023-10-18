@@ -37,7 +37,7 @@ class AssetsManager
 			( isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) ) {
 
 			wp_enqueue_script(
-				hexcoupon_prefix( 'admin-js' ),
+				hexcoupon_prefix( 'admin' ),
 				hexcoupon_asset_url( $folder_prefix . "/admin/js/admin.js" ),
 				['jquery', 'select2', 'wp-i18n'],
 				$this->version,
@@ -130,7 +130,7 @@ class AssetsManager
 			]
 		] );
 
-		wp_set_script_translations( 'admin-js', 'hexcoupon', plugin_dir_path( __FILE__ ) . 'languages' );
+		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 
 	public function public_scripts()

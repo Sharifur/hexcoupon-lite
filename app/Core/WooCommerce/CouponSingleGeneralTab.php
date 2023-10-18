@@ -67,7 +67,7 @@ class CouponSingleGeneralTab
 		// Adding coupon type select input field
 		woocommerce_wp_select( [
 			'class' => 'select short',
-			'label' => esc_html__( 'Coupon type', 'hexcoupon' ),
+			'label' => esc_html__( 'Coupon type', 'hex-coupon-for-woocommerce' ),
 			'id' => 'coupon_type',
 			'name' => 'discount_type',
 			'options' => [
@@ -88,12 +88,12 @@ class CouponSingleGeneralTab
 		woocommerce_wp_radio(
 			[
 				'id' => 'customer_purchases',
-				'label' => esc_html__( 'Customer purchases', 'hexcoupon' ),
+				'label' => esc_html__( 'Customer purchases', 'hex-coupon-for-woocommerce' ),
 				'options' => [
-					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
-					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
-					'product_categories' => esc_html__( 'Any product from categories', 'hexcoupon' ),
-					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
+					'a_specific_product' => esc_html__( 'A specific product', 'hex-coupon-for-woocommerce' ),
+					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
+					'product_categories' => esc_html__( 'Any product from categories', 'hex-coupon-for-woocommerce' ),
+					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $customer_purchases,
 			]
@@ -107,7 +107,8 @@ class CouponSingleGeneralTab
 		$output ='<div class="add_specific_product_to_purchase">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
+			'label' => esc_html__( 'Add a specific product', 'hex-coupon-for-woocommerce' ),
+			'id' => 'add_specific_product_to_purchase',
 			'name' => 'add_specific_product_to_purchase',
 			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
@@ -118,7 +119,7 @@ class CouponSingleGeneralTab
 			'placeholder' => __('Search for specific product')
 		] );
 
-		echo '<span class="add_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="add_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -131,7 +132,7 @@ class CouponSingleGeneralTab
 		$output ='<div class="add_categories_to_purchase">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add categories', 'hexcoupon' ),
+			'label' => esc_html__( 'Add categories', 'hex-coupon-for-woocommerce' ),
 			'name' => 'add_categories_to_purchase',
 			'value' => $add_categories_to_purchase,
 			'type' => 'select',
@@ -142,7 +143,7 @@ class CouponSingleGeneralTab
 			'placeholder' => __('Search for categories')
 		] );
 
-		echo '<span class="add_categories_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer need to buy from.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="add_categories_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer need to buy from.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -158,12 +159,12 @@ class CouponSingleGeneralTab
 		woocommerce_wp_radio(
 			[
 				'id' => 'customer_gets_as_free',
-				'label' => esc_html__( 'Customer gets as free', 'hexcoupon' ),
+				'label' => esc_html__( 'Customer gets as free', 'hex-coupon-for-woocommerce' ),
 				'options' => [
-					'a_specific_product' => esc_html__( 'A specific product', 'hexcoupon' ),
-					'a_combination_of_products' => esc_html__( 'A combination of products', 'hexcoupon' ),
-					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hexcoupon' ),
-					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hexcoupon' ),
+					'a_specific_product' => esc_html__( 'A specific product', 'hex-coupon-for-woocommerce' ),
+					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
+					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
+					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $customer_gets_as_free,
 			]
@@ -177,7 +178,7 @@ class CouponSingleGeneralTab
 		$output ='<div class="add_specific_product_for_free">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add a specific product', 'hexcoupon' ),
+			'label' => esc_html__( 'Add a specific product', 'hex-coupon-for-woocommerce' ),
 			'name' => 'add_specific_product_for_free',
 			'value' => $add_specific_product_for_free,
 			'type' => 'select',
@@ -188,7 +189,7 @@ class CouponSingleGeneralTab
 			'placeholder' => __('Search for specific product')
 		] );
 
-		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -199,8 +200,8 @@ class CouponSingleGeneralTab
 				'id' => 'message_for_coupon_expiry_date',
 				'label' => '',
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set a message for customers about the coupon expiry date.', 'hexcoupon' ),
-				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has been expired.', 'hexcoupon' ),
+				'description' => esc_html__( 'Set a message for customers about the coupon expiry date.', 'hex-coupon-for-woocommerce' ),
+				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has been expired.', 'hex-coupon-for-woocommerce' ),
 				'value' => get_post_meta( $post->ID, 'message_for_coupon_expiry_date', true ),
 			]
 		);
@@ -221,9 +222,9 @@ class CouponSingleGeneralTab
 		woocommerce_wp_text_input(
 			[
 				'id' => 'coupon_starting_date',
-				'label' => esc_html__( 'Coupon starting date', 'hexcoupon' ),
+				'label' => esc_html__( 'Coupon starting date', 'hex-coupon-for-woocommerce' ),
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set the coupon starting date.', 'hexcoupon' ),
+				'description' => esc_html__( 'Set the coupon starting date.', 'hex-coupon-for-woocommerce' ),
 				'type' => 'text',
 				'value' => get_post_meta( $post->ID, 'coupon_starting_date', true ),
 				'class' => 'date-picker',
@@ -252,8 +253,8 @@ class CouponSingleGeneralTab
 				'id' => 'message_for_coupon_starting_date',
 				'label' => '',
 				'desc_tip' => true,
-				'description' => esc_html__( 'Set a message for customers about the coupon starting date.', 'hexcoupon' ),
-				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has not been started yet.', 'hexcoupon' ),
+				'description' => esc_html__( 'Set a message for customers about the coupon starting date.', 'hex-coupon-for-woocommerce' ),
+				'placeholder' => esc_html__( 'Message for customer e.g. This coupon has not been started yet.', 'hex-coupon-for-woocommerce' ),
 				'value' => get_post_meta( $post->ID, 'message_for_coupon_starting_date', true ),
 			]
 		);
@@ -277,8 +278,8 @@ class CouponSingleGeneralTab
 		woocommerce_wp_checkbox(
 			[
 				'id' => 'apply_days_hours_of_week',
-				'label' => esc_html__( 'Valid for days/hours', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to make coupon valid for specific days and hours of the week.', 'hexcoupon' ),
+				'label' => esc_html__( 'Valid for days/hours', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Check this box to make coupon valid for specific days and hours of the week.', 'hex-coupon-for-woocommerce' ),
 				'value' => $checked,
 			]
 		);
@@ -305,7 +306,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Saturday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Saturday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -341,12 +342,12 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-sat">
-							<span class="add_more_hours_sat_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="sat_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_sat_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="sat_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
 
-					<span id="sat_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Saturday', 'hexcoupon' ); ?></span>
+					<span id="sat_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Saturday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 			<span class="time-hours-border-bottom"></span>
@@ -375,7 +376,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Sunday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Sunday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -410,11 +411,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-sun">
-							<span class="add_more_hours_sun_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="sun_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_sun_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="sun_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="sun_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Sunday', 'hexcoupon' ); ?></span>
+					<span id="sun_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Sunday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>
@@ -442,7 +443,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Monday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Monday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -477,11 +478,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-mon">
-							<span class="add_more_hours_mon_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="mon_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_mon_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="mon_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="mon_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Monday', 'hexcoupon' ); ?></span>
+					<span id="mon_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Monday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>
@@ -509,7 +510,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Tuesday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Tuesday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -544,11 +545,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-tue">
-							<span class="add_more_hours_tue_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="tue_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_tue_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="tue_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="tue_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Tuesday', 'hexcoupon' ); ?></span>
+					<span id="tue_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Tuesday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>
@@ -576,7 +577,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Wednesday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Wednesday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -611,11 +612,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-wed">
-							<span class="add_more_hours_wed_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="wed_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_wed_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="wed_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="wed_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Wednesday', 'hexcoupon' ); ?></span>
+					<span id="wed_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Wednesday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>
@@ -643,7 +644,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Thursday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Thursday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -678,11 +679,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-thu">
-							<span class="add_more_hours_thu_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="thu_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_thu_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="thu_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="thu_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Thursday', 'hexcoupon' ); ?></span>
+					<span id="thu_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Thursday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>
@@ -710,7 +711,7 @@ class CouponSingleGeneralTab
 					<div class="time-hours-label-checkbox">
 						<p class="form-field form-day-field">
                             <span class="day-title">
-                                <?php esc_html_e( 'Friday', 'hexcoupon' ); ?>
+                                <?php esc_html_e( 'Friday', 'hex-coupon-for-woocommerce' ); ?>
                             </span>
 						</p>
 						<p class="form-field">
@@ -745,11 +746,11 @@ class CouponSingleGeneralTab
 							?>
 						</p>
 						<p class="form-field add-more-hours-fri">
-							<span class="add_more_hours_fri_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hexcoupon' ); ?></span>
-							<a id="fri_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hexcoupon' );?></a>
+							<span class="add_more_hours_fri_pro_text"><?php echo esc_html__( 'To add more hours switch to Pro version', 'hex-coupon-for-woocommerce' ); ?></span>
+							<a id="fri_add_more_hours" href="javascript:void(0)"><?php echo esc_html__( 'Add More Hours', 'hex-coupon-for-woocommerce' );?></a>
 						</p>
 					</div>
-					<span id="fri_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Friday', 'hexcoupon' ); ?></span>
+					<span id="fri_deactivated_text"><?php echo esc_html__( 'Coupon deactivated for Friday', 'hex-coupon-for-woocommerce' ); ?></span>
 				</div>
 			</div>
 		</div>

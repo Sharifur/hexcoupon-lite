@@ -88,7 +88,7 @@ class CouponSingleGeographicRestrictions {
 			'placeholder' => esc_html__( 'Search for shipping zone', 'hex-coupon-for-woocommerce' )
 		] );
 
-		echo '<span class="restricted_shipping_zones_tooltip">'.wc_help_tip( esc_html__( 'Select zones that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="restricted_shipping_zones_tooltip">'.wc_help_tip( esc_html__( 'Select zones that you want to restrict the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -99,7 +99,7 @@ class CouponSingleGeographicRestrictions {
 		$output ='<div class="restricted_countries">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add countries', 'hexcoupon' ),
+			'label' => esc_html__( 'Add countries', 'hex-coupon-for-woocommerce' ),
 			'name' => 'geographic_restriction[restricted_countries]',
 			'id' => 'restricted_countries',
 			'value' => $restricted_countries,
@@ -108,10 +108,10 @@ class CouponSingleGeographicRestrictions {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_countries',
-			'placeholder' => esc_html__( 'Search for countries', 'hexcoupon' )
+			'placeholder' => esc_html__( 'Search for countries', 'hex-coupon-for-woocommerce' )
 		] );
 
-		echo '<span class="restricted_countries_tooltip">'.wc_help_tip( esc_html__( 'Select countries that you want to restrict the coupon.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="restricted_countries_tooltip">'.wc_help_tip( esc_html__( 'Select countries that you want to restrict the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 

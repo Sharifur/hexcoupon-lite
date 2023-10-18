@@ -1,3 +1,5 @@
+<?php if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+
 <div id="vite-react-sample"></div>
 <?php
 //// Get the current month and year
@@ -422,6 +424,56 @@
 //	echo "Total active coupons for {$day_name}: {$daily_coupon_counts_current_week[$day_name]['active']}\n";
 //	echo "Total expired coupons for {$day_name}: {$daily_coupon_counts_current_week[$day_name]['expired']}\n";
 //}
+
+//// Get the current date
+//$current_date = date('Y-m-d');
+//
+//// Calculate yesterday's date
+//$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($current_date)));
+//
+//// Initialize a variable to store the total count of redeemed coupons for yesterday
+//$total_redeemed_coupons_yesterday = 0;
+//
+//// WP_Query arguments to count redeemed coupons
+//$args = array(
+//	'post_type' => 'shop_order',  // WooCommerce orders
+//	'post_status' => array('wc-completed', 'wc-processing'),  // Orders in completed and processing status
+//	'date_query' => array(
+//		array(
+//			'year' => date('Y', strtotime($yesterday)),
+//			'month' => date('n', strtotime($yesterday)),
+//			'day' => date('j', strtotime($yesterday)),
+//		),
+//	),
+//);
+//
+//// Create a new WP_Query instance
+//$query = new WP_Query($args);
+//
+//// Loop through the orders to count redeemed coupons
+//if ($query->have_posts()) {
+//	while ($query->have_posts()) {
+//		$query->the_post();
+//
+//		// Get order ID
+//		$order_id = get_the_ID();
+//
+//		// Get coupons used in the order
+//		$order = wc_get_order($order_id);
+//		$coupons = $order->get_used_coupons();
+//
+//		// Check if coupons were used in this order
+//		if (!empty($coupons)) {
+//			$total_redeemed_coupons_yesterday += count($coupons);
+//		}
+//	}
+//}
+//
+//// Reset post data
+//wp_reset_postdata();
+//
+//// Now, $total_redeemed_coupons_yesterday contains the total count of coupons redeemed yesterday
+//echo $total_redeemed_coupons_yesterday;
 
 
 

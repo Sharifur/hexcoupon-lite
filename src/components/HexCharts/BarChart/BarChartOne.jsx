@@ -31,11 +31,10 @@ const BarChartOne = () => {
 
 	const [todayCouponCreated, setTodayCouponCreated] = useState(0);
 	const [yesterdayCouponCreated, setYesterdayCouponCreated] = useState(0);
+	const [yesterdayRedeemedCoupon, setYesterdayRedeemedCoupon] = useState(0);
 	const [weeklyCouponCreated, setWeeklyCouponCreated] = useState([]);
 	const [monthlyCouponCountInYear, setMonthlyCouponCountInYear] = useState([]);
 	const [dailyCouponCreatedInMonth, setDailyCouponCreatedInMonth] = useState([]);
-
-
 
 	const [todayYesterdayCombinedData, setTodayYesterdayCombinedData] = useState({
 		todayActiveCoupons : 0,
@@ -43,6 +42,28 @@ const BarChartOne = () => {
 		yesterdayActiveCoupons : 0,
 		yesterdayExpiredCoupons : 0,
 	});
+
+	useEffect(() => {
+
+		axios
+			.get(ajaxUrl, {
+				params: {
+					nonce: nonce,
+					action: 'yesterdayRedeemedCoupon',
+				},
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			.then(({data}) => {
+				setYesterdayRedeemedCoupon(data.yesterdayRedeemedCoupon)
+				// Handle the response data
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+	}, []);
 
 	useEffect(() => {
 
@@ -175,7 +196,7 @@ const BarChartOne = () => {
 
 	let dataSetForYesterday = {
 		created: [yesterdayCouponCreated],
-		redeemed: [708],
+		redeemed: [yesterdayRedeemedCoupon],
 		active: [yesterdayActiveCoupons],
 		expired: [yesterdayExpiredCoupons],
 	}

@@ -31,4 +31,24 @@ if ( file_exists( HEXCOUPON_DIR_PATH . '/vendor/autoload.php' ) ) {
 	require_once HEXCOUPON_DIR_PATH . '/vendor/autoload.php';
 }
 
+/**
+ * Initialize the plugin tracker
+ *
+ * @return void
+ */
+function appsero_init_tracker_hex_coupon_for_woocommerce() {
+
+	if ( ! class_exists( 'Appsero\Client' ) ) {
+		require_once __DIR__ . '/appsero/src/Client.php';
+	}
+
+	$client = new Appsero\Client( 'c0ee1555-4851-4d71-8b6d-75b1872dd3d2', 'HexCoupon &#8211; Advance Coupons For WooCommerce(Free)', __FILE__ );
+
+	// Active insights
+	$client->insights()->init();
+
+}
+
+appsero_init_tracker_hex_coupon_for_woocommerce();
+
 Core::getInstance();

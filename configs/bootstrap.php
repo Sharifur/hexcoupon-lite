@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 define( 'HEXCOUPON_DIR_PATH', plugin_dir_path( HEXCOUPON_FILE ) );
 define( 'HEXCOUPON_PLUGIN_URL', plugins_url( '/', HEXCOUPON_FILE ) );

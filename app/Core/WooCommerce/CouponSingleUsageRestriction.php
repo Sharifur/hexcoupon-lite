@@ -139,8 +139,8 @@ class CouponSingleUsageRestriction {
 			[
 				'id' => 'apply_cart_condition_for_customer_on_products',
 				'name' => 'usage_restriction[apply_cart_condition_for_customer_on_products]',
-				'label' => esc_html__( 'Product Cart Condition', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on product.', 'hexcoupon' ),
+				'label' => esc_html__( 'Product Cart Condition', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on product.', 'hex-coupon-for-woocommerce' ),
 				'value' => $apply_cart_condition_on_products,
 				'wrapper_class' => 'cart-condition',
 			]
@@ -156,8 +156,8 @@ class CouponSingleUsageRestriction {
 				'name' => 'usage_restriction[apply_on_listed_product]',
 				'label' => '',
 				'options' => [
-					'any_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains any of the product listed below', 'hexcoupon' ),
-					'all_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains all of the product listed below', 'hexcoupon' ),
+					'any_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains any of the product listed below', 'hex-coupon-for-woocommerce' ),
+					'all_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains all of the product listed below', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $apply_on_listed_product,
 			]
@@ -169,7 +169,7 @@ class CouponSingleUsageRestriction {
 		echo '<div class="all_selected_products">';
 
 		$output = FormHelpers::Init( [
-			'label' => esc_html__( 'Products', 'hexcoupon' ),
+			'label' => esc_html__( 'Products', 'hex-coupon-for-woocommerce' ),
 			'name' => 'usage_restriction[all_selected_products]',
 			'id' => 'all_selected_products',
 			'value' => $all_selected_products,
@@ -178,10 +178,10 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'all_selected_products',
-			'placeholder' => esc_html__( 'Search for Products' , 'hexcoupon' ),
+			'placeholder' => esc_html__( 'Search for Products' , 'hex-coupon-for-woocommerce' ),
 		] );
 
-		echo '<span class="all_selected_products_tooltip">'.wc_help_tip( esc_html__( 'Products that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="all_selected_products_tooltip">'.wc_help_tip( esc_html__( 'Products that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		$output .= '</div>';
 
@@ -193,16 +193,16 @@ class CouponSingleUsageRestriction {
 				?>
 				<div class="product_min_max_main">
 					<div class='product_min product-wrap'>
-						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hexcoupon' ); ?></span>
+						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hex-coupon-for-woocommerce' ); ?></span>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hexcoupon' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='No minimum' type='number' readonly>
 						</div>
 					</div>
 					<div class="product_max product-wrap">
-						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hexcoupon' ); ?></span>
+						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hex-coupon-for-woocommerce' ); ?></span>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'max quantity', 'hexcoupon' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'max quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='No maximum' type='number' readonly>
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product'></a>
@@ -236,8 +236,8 @@ class CouponSingleUsageRestriction {
 			[
 				'id' => 'apply_cart_condition_for_customer_on_categories',
 				'name' => 'usage_restriction[apply_cart_condition_for_customer_on_categories]',
-				'label' => esc_html__( 'Category Cart Condition', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on category.', 'hexcoupon' ),
+				'label' => esc_html__( 'Category Cart Condition', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Check this box to to add a cart condition for the customer based on category.', 'hex-coupon-for-woocommerce' ),
 				'value' => $apply_cart_condition_on_categories,
 				'wrapper_class' => 'category-cart-condition'
 			]
@@ -247,7 +247,7 @@ class CouponSingleUsageRestriction {
 
 		echo '<div class="all_selected_categories">';
 		$output = FormHelpers::Init( [
-			'label' => esc_html__( 'Product Categories', 'hexcoupon' ),
+			'label' => esc_html__( 'Product Categories', 'hex-coupon-for-woocommerce' ),
 			'name' => 'usage_restriction[all_selected_categories]',
 			'id' => 'all_selected_categories',
 			'value' => $all_selected_categories,
@@ -256,10 +256,10 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'all_selected_categories',
-			'placeholder' => esc_html__('Search for category', 'hexcoupon' ),
+			'placeholder' => esc_html__('Search for category', 'hex-coupon-for-woocommerce' ),
 		] );
 
-		echo '<span class="all_selected_categories_tooltip">'.wc_help_tip( esc_html__( 'Categories that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="all_selected_categories_tooltip">'.wc_help_tip( esc_html__( 'Categories that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		$output .= '</div>';
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
@@ -284,8 +284,8 @@ class CouponSingleUsageRestriction {
 			[
 				'id' => 'allowed_or_restricted_customer_group',
 				'name' => 'usage_restriction[allowed_or_restricted_customer_group]',
-				'label' => esc_html__( 'Allowed/Restricted customer', 'hexcoupon' ),
-				'description' => esc_html__( 'Check this box to to add groups of Allowed/Restricted customers.', 'hexcoupon' ),
+				'label' => esc_html__( 'Allowed/Restricted customer', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Check this box to to add groups of Allowed/Restricted customers.', 'hex-coupon-for-woocommerce' ),
 				'value' => $allowed_or_restricted_customer_group,
 			]
 		);
@@ -301,8 +301,8 @@ class CouponSingleUsageRestriction {
 				'label' => '',
 				'wrapper_class' => 'allowed_group_of_customer',
 				'options' => [
-					'allowed_for_groups' => esc_html__( 'Coupon allowed for below groups', 'hexcoupon' ),
-					'restricted_for_groups' => esc_html__( 'Coupon restricted for below groups', 'hexcoupon' ),
+					'allowed_for_groups' => esc_html__( 'Coupon allowed for below groups', 'hex-coupon-for-woocommerce' ),
+					'restricted_for_groups' => esc_html__( 'Coupon restricted for below groups', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $allowed_grp_of_customer,
 			]
@@ -311,7 +311,7 @@ class CouponSingleUsageRestriction {
 		$selected_customer_group = ! empty( $usage_restriction['selected_customer_group'] ) ? $usage_restriction['selected_customer_group'] : [];
 
 		$output = FormHelpers::Init( [
-			'label' => esc_html__( 'Customer Group', 'hexcoupon' ),
+			'label' => esc_html__( 'Customer Group', 'hex-coupon-for-woocommerce' ),
 			'name' => 'usage_restriction[selected_customer_group]',
 			'id' => 'selected_customer_group',
 			'value' => $selected_customer_group,
@@ -320,10 +320,10 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'selected_customer_group',
-			'placeholder' => esc_html__( 'Search for customer group', 'hexcoupon' ),
+			'placeholder' => esc_html__( 'Search for customer group', 'hex-coupon-for-woocommerce' ),
 		] );
 
-		echo '<span class="selected_customer_group_tooltip">'.wc_help_tip( esc_html__( 'Groups that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="selected_customer_group_tooltip">'.wc_help_tip( esc_html__( 'Groups that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -336,7 +336,7 @@ class CouponSingleUsageRestriction {
 				'id' => 'allowed_or_restricted_individual_customer',
 				'name' => 'usage_restriction[allowed_or_restricted_individual_customer]',
 				'label' => '',
-				'description' => esc_html__( 'Check this box to to add individual of Allowed/Restricted customers.', 'hexcoupon' ),
+				'description' => esc_html__( 'Check this box to to add individual of Allowed/Restricted customers.', 'hex-coupon-for-woocommerce' ),
 				'value' => $allowed_or_restricted_individual_customer,
 			]
 		);
@@ -352,8 +352,8 @@ class CouponSingleUsageRestriction {
 				'wrapper_class' => 'allowed_individual_customer',
 				'label' => '',
 				'options' => [
-					'allowed_for_customers' => esc_html__( 'Coupon allowed for below customers', 'hexcoupon' ),
-					'restricted_for_customers' => esc_html__( 'Coupon restricted for below customers', 'hexcoupon' ),
+					'allowed_for_customers' => esc_html__( 'Coupon allowed for below customers', 'hex-coupon-for-woocommerce' ),
+					'restricted_for_customers' => esc_html__( 'Coupon restricted for below customers', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $allowed_individual_customer,
 			]
@@ -362,7 +362,7 @@ class CouponSingleUsageRestriction {
 		$selected_individual_customer = ! empty( $usage_restriction['selected_individual_customer'] ) ? $usage_restriction['selected_individual_customer'] : [];
 
 		$output = FormHelpers::Init( [
-			'label' => esc_html__( 'Individual Customer', 'hexcoupon' ),
+			'label' => esc_html__( 'Individual Customer', 'hex-coupon-for-woocommerce' ),
 			'name' => 'usage_restriction[selected_individual_customer]',
 			'id' => 'selected_individual_customer',
 			'value' => $selected_individual_customer,
@@ -371,10 +371,10 @@ class CouponSingleUsageRestriction {
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'selected_individual_customer',
-			'placeholder' => esc_html__( 'Search for customers', 'hexcoupon' ),
+			'placeholder' => esc_html__( 'Search for customers', 'hex-coupon-for-woocommerce' ),
 		] );
 
-		echo '<span class="selected_individual_customer_tooltip">'.wc_help_tip( esc_html__( 'Individual customer that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hexcoupon' ) ).'</span>';
+		echo '<span class="selected_individual_customer_tooltip">'.wc_help_tip( esc_html__( 'Individual customer that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 

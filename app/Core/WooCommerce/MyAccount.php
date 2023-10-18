@@ -45,7 +45,7 @@ class MyAccount
 	public function coupon_menu_in_my_account_page( $all_menu_links )
 	{
 		$all_menu_links = array_slice( $all_menu_links, 0, 5, true )
-			+ [ 'all-coupons' => esc_html__( 'All Coupons', 'hexcoupon' ) ]
+			+ [ 'all-coupons' => esc_html__( 'All Coupons', 'hex-coupon-for-woocommerce' ) ]
 			+ array_slice( $all_menu_links, 5, NULL, true );
 
 		return $all_menu_links;
@@ -94,7 +94,7 @@ class MyAccount
 		foreach ( $coupon_posts as $coupon_post ) {
 			?>
 				<P>
-				<?php printf( esc_html__( '%s', 'hexcoupon' ),  $coupon_post->post_title ); ?>
+				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
 				</P>
 			<?php
 		}
@@ -112,7 +112,7 @@ class MyAccount
 	{
 		?>
 			<header class="woocommerce-Address-title title">
-				<h3><?php echo esc_html__( 'All Available Coupons', 'hexcoupon' ); ?></h3>
+				<h3><?php echo esc_html__( 'All Available Coupons', 'hex-coupon-for-woocommerce' ); ?></h3>
 			</header>
 		<?php
 		$this->all_coupon_list();
