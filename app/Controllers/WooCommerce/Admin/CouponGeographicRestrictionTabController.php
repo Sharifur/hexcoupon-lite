@@ -266,4 +266,5 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		return $err;
 	}
+
 }

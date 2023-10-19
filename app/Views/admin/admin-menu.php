@@ -476,6 +476,53 @@
 //echo $total_redeemed_coupons_yesterday;
 
 
-
+//// Get the current date
+//$current_date = date( 'Y-m-d' );
+//
+//// Calculate yesterday's date
+////$current_date = date( 'Y-m-d', strtotime( '-1 day', strtotime( $current_date ) ) );
+//
+//// Initialize a variable to store the total count of redeemed coupons for yesterday
+//$total_redeemed_coupons_today = 0;
+//
+//// WP_Query arguments to count redeemed coupons
+//$args = [
+//	'post_type' => 'shop_order',  // WooCommerce orders
+//	'post_status' => [ 'wc-completed', 'wc-processing' ],  // Orders in completed and processing status
+//	'date_query' => [
+//		[
+//			'year' => date( 'Y', strtotime( $current_date ) ),
+//			'month' => date( 'n', strtotime( $current_date ) ),
+//			'day' => date( 'j', strtotime( $current_date ) ),
+//		],
+//	],
+//];
+//
+//// Create a new WP_Query instance
+//$query = new \WP_Query( $args );
+//
+//// Loop through the orders to count redeemed coupons
+//if ( $query->have_posts() ) {
+//	while ( $query->have_posts() ) {
+//		$query->the_post();
+//
+//		// Get order ID
+//		$order_id = get_the_ID();
+//
+//		// Get coupons used in the order
+//		$order = wc_get_order( $order_id );
+//		$coupons = $order->get_coupon_codes();
+//
+//		// Check if coupons were used in this order
+//		if ( ! empty( $coupons ) ) {
+//			$total_redeemed_coupons_today += count( $coupons );
+//		}
+//	}
+//}
+//
+//// Reset post data
+//wp_reset_postdata();
+//
+//echo $total_redeemed_coupons_today;
 
 

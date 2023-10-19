@@ -58,18 +58,18 @@ class CouponSingleGeographicRestrictions {
 
 		echo '<div id="geographic_restriction_tab" class="panel apply_geographic_restriction">';
 
-		woocommerce_wp_radio(
-			[
-				'id' => 'apply_geographic_restriction',
-				'name' => 'geographic_restriction[apply_geographic_restriction]',
-				'label' => '',
-				'options' => [
-					'restrict_by_shipping_zones' => esc_html__( 'Restrict coupon based on shipping zones', 'hex-coupon-for-woocommerce' ),
-					'restrict_by_countries' => esc_html__( 'Restrict coupon by specific countries', 'hex-coupon-for-woocommerce' ),
-				],
-				'value' => $apply_geographic_restriction,
-			]
-		);
+//		woocommerce_wp_radio(
+//			[
+//				'id' => 'apply_geographic_restriction',
+//				'name' => 'geographic_restriction[apply_geographic_restriction]',
+//				'label' => '',
+//				'options' => [
+//					'restrict_by_shipping_zones' => esc_html__( 'Restrict coupon based on shipping zones', 'hex-coupon-for-woocommerce' ),
+//					'restrict_by_countries' => esc_html__( 'Restrict coupon by specific countries', 'hex-coupon-for-woocommerce' ),
+//				],
+//				'value' => $apply_geographic_restriction,
+//			]
+//		);
 
 		$restricted_shipping_zones = ! empty( $geographic_restriction['restricted_shipping_zones'] ) ? $geographic_restriction['restricted_shipping_zones'] : [];
 

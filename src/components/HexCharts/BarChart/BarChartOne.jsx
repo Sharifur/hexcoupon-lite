@@ -30,6 +30,7 @@ const BarChartOne = () => {
 	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
 
 	const [todayCouponCreated, setTodayCouponCreated] = useState(0);
+	const [todayCouponRedeemed, setTodayCouponRedeemed] = useState(0);
 	const [yesterdayCouponCreated, setYesterdayCouponCreated] = useState(0);
 	const [yesterdayRedeemedCoupon, setYesterdayRedeemedCoupon] = useState(0);
 	const [weeklyCouponCreated, setWeeklyCouponCreated] = useState([]);
@@ -42,6 +43,28 @@ const BarChartOne = () => {
 		yesterdayActiveCoupons : 0,
 		yesterdayExpiredCoupons : 0,
 	});
+
+	useEffect(() => {
+
+		axios
+			.get(ajaxUrl, {
+				params: {
+					nonce: nonce,
+					action: 'todayRedeemedCoupon',
+				},
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			.then(({data}) => {
+				setTodayCouponRedeemed(data.todayRedeemedCoupon)
+				// Handle the response data
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+	}, []);
 
 	useEffect(() => {
 
@@ -203,7 +226,7 @@ const BarChartOne = () => {
 
 	let dataSetForToday = {
 		created: [todayCouponCreated],
-		redeemed: [708],
+		redeemed: [todayCouponRedeemed],
 		active: [todayActiveCoupons],
 		expired: [todayExpiredCoupons],
 	}

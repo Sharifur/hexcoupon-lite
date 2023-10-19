@@ -11,6 +11,10 @@
 	height: 24px;
 }
 
+.appededItem.first-input._3 {
+	display: none;
+}
+
 .switch input {
 	opacity: 0;
 	width: 0;
@@ -369,7 +373,7 @@ p.output-url-text {
 .add_more_hours_fri_pro_text {
 	text-align: center;
 	position: absolute;
-	bottom: 120%;
+	bottom: 0;
 	left: 0;
 	z-index: 2;
 	font-size: 12px;

@@ -611,16 +611,15 @@
 				totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
 				flatPicker('saturday');
 
-				$(document).on("click", "#sat_add_more_hours", function () {
-					if(totalHoursCountSaturdayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_sat_pro_text").show();
-					}
-					else if(totalHoursCountSaturdayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_sat_pro_text").hide();
-					}
-				});
+				if(totalHoursCountSaturdayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_sat_pro_text").show();
+				}
+				else if(totalHoursCountSaturdayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_sat_pro_text").hide();
+				}
+
 			}
 		}
 
@@ -677,16 +676,14 @@
 				totalHoursCountSunday.val(totalHoursCountSundayVal);
 				flatPicker('sunday');
 
-				$(document).on("click", "#sun_add_more_hours", function () {
-					if(totalHoursCountSundayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_sun_pro_text").show();
-					}
-					else if(totalHoursCountSundayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_sun_pro_text").hide();
-					}
-				});
+				if(totalHoursCountSundayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_sun_pro_text").show();
+				}
+				else if(totalHoursCountSundayVal < 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_sun_pro_text").hide();
+				}
 			}
 		}
 
@@ -743,16 +740,15 @@
 				totalHoursCountMonday.val(totalHoursCountMondayVal);
 				flatPicker('monday');
 
-				$(document).on("click", "#mon_add_more_hours", function () {
-					if(totalHoursCountMondayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_mon_pro_text").show();
-					}
-					else if(totalHoursCountMondayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_mon_pro_text").hide();
-					}
-				});
+				if(totalHoursCountMondayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_mon_pro_text").show();
+				}
+				else if(totalHoursCountMondayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_mon_pro_text").hide();
+				}
+
 			}
 		}
 
@@ -809,16 +805,15 @@
 				totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
 				flatPicker('tuesday');
 
-				$(document).on("click", "#tue_add_more_hours", function () {
-					if(totalHoursCountTuesdayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_tue_pro_text").show();
-					}
-					else if(totalHoursCountTuesdayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_tue_pro_text").hide();
-					}
-				});
+				if(totalHoursCountTuesdayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_tue_pro_text").show();
+				}
+				else if(totalHoursCountTuesdayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_tue_pro_text").hide();
+				}
+
 			}
 		}
 
@@ -875,16 +870,15 @@
 				totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
 				flatPicker('wednesday');
 
-				$(document).on("click", "#wed_add_more_hours", function () {
-					if(totalHoursCountWednesdayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_wed_pro_text").show();
-					}
-					else if(totalHoursCountWednesdayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_wed_pro_text").hide();
-					}
-				});
+				if(totalHoursCountWednesdayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_wed_pro_text").show();
+				}
+				else if(totalHoursCountWednesdayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_wed_pro_text").hide();
+				}
+
 			}
 		}
 
@@ -941,16 +935,14 @@
 				totalHoursCountThursday.val(totalHoursCountThursdayVal);
 				flatPicker('thursday');
 
-				$(document).on("click", "#thu_add_more_hours", function () {
-					if(totalHoursCountThursdayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_thu_pro_text").show();
-					}
-					else if(totalHoursCountThursdayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_thu_pro_text").hide();
-					}
-				});
+				if(totalHoursCountThursdayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_thu_pro_text").show();
+				}
+				else if(totalHoursCountThursdayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_thu_pro_text").hide();
+				}
 			}
 		}
 
@@ -1007,16 +999,14 @@
 				totalHoursCountFriday.val(totalHoursCountFridayVal);
 				flatPicker('friday');
 
-				$(document).on("click", "#fri_add_more_hours", function () {
-					if(totalHoursCountFridayVal >= 2){
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_fri_pro_text").show();
-					}
-					else if(totalHoursCountFridayVal < 2) {
-						// Show the additional hours div when adding hours
-						$(".add_more_hours_fri_pro_text").hide();
-					}
-				});
+				if(totalHoursCountFridayVal >= 2){
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_fri_pro_text").show();
+				}
+				else if(totalHoursCountFridayVal < 2) {
+					// Show the additional hours div when adding hours
+					$(".add_more_hours_fri_pro_text").hide();
+				}
 			}
 		}
 

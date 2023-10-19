@@ -27,6 +27,7 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_todayActiveExpiredCoupon', [ $this, 'todayYesterdayActiveExpiredCoupon'] );
 		add_action( 'wp_ajax_weeklyCouponActiveExpiredCoupon', [ $this, 'weeklyCouponActiveExpiredCoupon'] );
 		add_action( 'wp_ajax_yesterdayRedeemedCoupon', [ $this, 'yesterdayRedeemedCoupon'] );
+		add_action( 'wp_ajax_todayRedeemedCoupon', [ $this, 'todayRedeemedCoupon'] );
 	}
 
 	/**
@@ -54,9 +55,9 @@ class AjaxApiController extends Controller
 			'post_status' => [ 'wc-completed', 'wc-processing' ],  // Orders in completed and processing status
 			'date_query' => [
 				[
-					'year' => date('Y', strtotime($yesterday)),
-					'month' => date('n', strtotime($yesterday)),
-					'day' => date('j', strtotime($yesterday)),
+					'year' => date( 'Y', strtotime( $yesterday ) ),
+					'month' => date( 'n', strtotime( $yesterday ) ),
+					'day' => date( 'j', strtotime( $yesterday ) ),
 				],
 			],
 		];
@@ -94,6 +95,78 @@ class AjaxApiController extends Controller
 				'msg' => __('hello'),
 				'type' => 'success',
 				'yesterdayRedeemedCoupon' => __( $total_redeemed_coupons_yesterday ),
+
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method yesterdayRedeemedCoupon
+	 * @return void
+	 * Show total number of redeemed coupon for yesterday.
+	 */
+	public function todayRedeemedCoupon()
+	{
+		// Get the current date
+		$current_date = date( 'Y-m-d' );
+
+		// Initialize a variable to store the total count of redeemed coupons for yesterday
+		$total_redeemed_coupons_today = 0;
+
+		// WP_Query arguments to count redeemed coupons
+		$args = [
+			'post_type' => 'shop_order',  // WooCommerce orders
+			'post_status' => [ 'wc-completed', 'wc-processing' ],  // Orders in completed and processing status
+			'date_query' => [
+				[
+					'year' => date( 'Y', strtotime( $current_date ) ),
+					'month' => date( 'n', strtotime( $current_date ) ),
+					'day' => date( 'j', strtotime( $current_date ) ),
+				],
+			],
+		];
+
+		// Create a new WP_Query instance
+		$query = new \WP_Query( $args );
+
+		// Loop through the orders to count redeemed coupons
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+
+				// Get order ID
+				$order_id = get_the_ID();
+
+				// Get coupons used in the order
+				$order = wc_get_order( $order_id );
+				$coupons = $order->get_coupon_codes();
+
+				// Check if coupons were used in this order
+				if ( ! empty( $coupons ) ) {
+					$total_redeemed_coupons_today += count( $coupons );
+				}
+			}
+		}
+
+		// Reset post data
+		wp_reset_postdata();
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => __('hello'),
+				'type' => 'success',
+				'todayRedeemedCoupon' => __( $total_redeemed_coupons_today ),
 
 			], 200);
 		} else {
