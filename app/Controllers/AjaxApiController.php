@@ -409,7 +409,7 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method get_additional_data
-	 * @return void
+	 * @return mixed
 	 * Show all the categories of the product.
 	 */
 	public function get_additional_data()
@@ -457,6 +457,8 @@ class AjaxApiController extends Controller
 
 			$sharable_url_post = get_post_meta( get_the_ID(), 'sharable_url_coupon', true );
 
+			$apply_automatic_coupon_by_url = ! empty( $sharable_url_post['apply_automatic_coupon_by_url'] ) ? $sharable_url_post['apply_automatic_coupon_by_url'] : '';
+
 			$discount_type = get_post_meta( get_the_ID(), 'discount_type', true );
 
 			$geographic_restriction = get_post_meta( get_the_ID(), 'geographic_restriction', true );
@@ -466,7 +468,7 @@ class AjaxApiController extends Controller
 
 			if ( 'buy_x_get_x_bogo' === $discount_type ) $bogo_coupon_count++;
 
-			if ( $sharable_url_post ) {
+			if ( ! empty( $apply_automatic_coupon_by_url ) && 'yes' === $apply_automatic_coupon_by_url ) {
 				$sharable_url_post_count++;
 			}
 
@@ -476,11 +478,8 @@ class AjaxApiController extends Controller
 				$expiry_timestamp = strtotime( $expiry_date );
 
 				// Compare the expiry date with the current date
-				if ( strtotime( $expiry_date ) >= $current_time ) {
+				if ( strtotime( $expiry_date ) <= $current_time ) {
 					// Coupon is active
-					$active_coupons++;
-				} else {
-					// Coupon has expired
 					$expired_coupons++;
 				}
 
@@ -507,6 +506,8 @@ class AjaxApiController extends Controller
 						$daily_counts_current_week[$day_of_week]['expired']++;
 					}
 				}
+			} else {
+				$active_coupons++;
 			}
 
 			// Create an array with daily counts for the current week
@@ -548,6 +549,8 @@ class AjaxApiController extends Controller
 				'error' => 'Nonce verification failed',
 			], 403); // 403 Forbidden status code
 		}
+
+		return $active_coupons;
 	}
 
 	/**

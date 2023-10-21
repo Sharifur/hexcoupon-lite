@@ -106,7 +106,7 @@ const HexCouponPromo = () => {
 
     return (
         <>
-            <div className="promo__wrapper mt-4">
+            <div className="promo__wrapper">
                 <div className="hex-grid-container column-xxl-4 column-lg-3 column-sm-2">
                     {CounterItem.map((item, i) => (
                         <div className="grid-item" key={i}>

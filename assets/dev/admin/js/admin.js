@@ -373,23 +373,6 @@
            Geographic Restriction
        ========================================
        */
-		const applyGeographicRestriction = $("input[name='geographic_restriction[apply_geographic_restriction]']");
-		const restrictedShippingZones = $(".restricted_shipping_zones");
-		const restrictedCountries = $(".restricted_countries");
-
-		applyGeographicRestriction.on("change", function() {
-			if ($(this).is(":checked") && $(this).val() === 'restrict_by_shipping_zones') {
-				restrictedShippingZones.show();
-				restrictedCountries.hide();
-			} else if ($(this).is(":checked") && $(this).val() === 'restrict_by_countries') {
-				restrictedShippingZones.hide();
-				restrictedCountries.show();
-			}
-		});
-
-		// Trigger the change event initially to apply the appropriate visibility
-		applyGeographicRestriction.trigger("change");
-
 
 		$(".restricted_shipping_zones_tooltip").insertAfter(".restricted_shipping_zones span.select2-container");
 

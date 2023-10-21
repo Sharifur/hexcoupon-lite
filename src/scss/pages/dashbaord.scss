@@ -17,6 +17,11 @@
 		flex-shrink: 0;
 		height: calc(100vh - 57px );
 		padding: 12px;
+		.hexpDashboard__left__header {
+			.hexpDashboard__left__header__logo {
+				margin-bottom: 20px;
+			}
+		}
 		ul {
 			margin: 0;
 			list-style: none;

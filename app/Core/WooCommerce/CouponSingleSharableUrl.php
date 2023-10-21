@@ -58,7 +58,7 @@ class CouponSingleSharableUrl {
 		// get 'apply_automatic_coupon_by_url' meta field data
 		$sharable_url_coupon = get_post_meta( $post->ID, 'sharable_url_coupon', true );
 
-		$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? $sharable_url_coupon['apply_automatic_coupon_by_url'] :'' ;
+		$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? 'yes' : '';
 
 		echo '<div id="sharable_url_coupon_tab" class="panel woocommerce_options_panel sharable_url_coupon_tab">';
 

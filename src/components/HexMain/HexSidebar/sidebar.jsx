@@ -3,8 +3,6 @@ import { useI18n } from '@wordpress/react-i18n';
 import { Link } from 'react-router-dom';
 import { MdHome, MdCreditCard, MdLocalOffer, MdEmojiEvents, MdCardGiftcard, MdSettings } from 'react-icons/md';
 import LogoImg from '../../../img/logo.png';
-
-
 const Sidebar = ({ searchParam }) => {
 	const { __ } = useI18n();
 
@@ -16,7 +14,7 @@ const Sidebar = ({ searchParam }) => {
 
     const sidebarLinks = [
         { path: '/', text: 'Dashboard', LinkIcon: MdHome },
-        { path: '/coupon', text: 'coupon', LinkIcon: MdLocalOffer },
+        // { path: '/coupon', text: 'coupon', LinkIcon: MdLocalOffer },
     ];
 
     return (

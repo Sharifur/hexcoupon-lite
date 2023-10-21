@@ -20,7 +20,7 @@ function App() {
 					<MainContainer>
 						<Routes>
 							<Route element={<Dashboard />} path="/" />
-							<Route element={<Coupon /> } path="/coupon" />
+							{/*<Route element={<Coupon /> } path="/coupon" />*/}
 						</Routes>
 					</MainContainer>
 

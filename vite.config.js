@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-	base: '/hexcuopon/wp-content/plugins/hexcoupon/dist/',
+	base: '/hexcoupon/wp-content/plugins/hex-coupon-for-woocommerce/dist/',
 	build: {
 		rollupOptions: {
 			output: {

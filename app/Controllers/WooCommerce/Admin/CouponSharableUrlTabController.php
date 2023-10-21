@@ -96,7 +96,7 @@ class CouponSharableUrlTabController extends BaseController {
 				$redirect_link = wp_get_referer();
 
 				// If there's no referring URL or, it's the current page, redirect to the home page
-				if (!$redirect_link || $redirect_link === get_permalink()) {
+				if ( ! $redirect_link || $redirect_link === get_permalink() ) {
 					$redirect_link = home_url();
 				}
 			}
