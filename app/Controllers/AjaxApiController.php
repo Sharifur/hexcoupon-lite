@@ -23,6 +23,7 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
 		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'full_coupon_creation_data'] );
 		add_action( 'wp_ajax_weekly_coupon_creation_data', [ $this, 'weekly_coupon_creation_data'] );
+		add_action( 'wp_ajax_weekly_coupon_active_data', [ $this, 'weekly_coupon_active_data'] );
 		add_action( 'wp_ajax_monthlyCouponCountInYear', [ $this, 'monthlyCouponCountInYear'] );
 		add_action( 'wp_ajax_todayActiveExpiredCoupon', [ $this, 'todayYesterdayActiveExpiredCoupon'] );
 		add_action( 'wp_ajax_weeklyCouponActiveExpiredCoupon', [ $this, 'weeklyCouponActiveExpiredCoupon'] );
@@ -341,7 +342,7 @@ class AjaxApiController extends Controller
 		$current_date = date('Y-m-d');
 
 		// Calculate the start date of the current week (Sunday)
-		$week_start = date('Y-m-d', strtotime('last Sunday', strtotime($current_date)));
+		$week_start = date('Y-m-d', strtotime('this Sunday', strtotime($current_date)));
 
 		// Initialize an array to store daily post counts for the current week
 		$daily_post_counts_current_week = [];
@@ -384,6 +385,12 @@ class AjaxApiController extends Controller
 
 			// Store the post count for the current day in the array
 			$daily_post_counts_current_week[$day_name] = $query->post_count;
+
+			$final_array = [];
+
+			foreach ( $daily_post_counts_current_week as $value ) {
+				$final_array[] = $value;
+			}
 		}
 
 		// Check the nonce and action
@@ -393,7 +400,86 @@ class AjaxApiController extends Controller
 				// Your response data here
 				'msg' => __('hello'),
 				'type' => 'success',
-				'weeklyCouponCreated' => __( $daily_post_counts_current_week ),
+				'weeklyCouponCreated' => $final_array,
+
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method weekly_coupon_active_data
+	 * @return void
+	 * Show all active coupon for the current week.
+	 */
+	public function weekly_coupon_active_data()
+	{
+		// Get the current date
+		$current_date = date('Y m d' );
+
+		// Calculate the start date of the current week (Sunday)
+		$week_start = date( 'Y m d', strtotime( 'this Sunday', strtotime( $current_date ) ) );
+		$week_end = date( 'Y m d', strtotime( 'this Saturday', strtotime( $current_date ) ) );
+
+		// Initialize an array to store the count of active coupons for each day
+		$active_coupon_count_by_day = [
+			'Sun' => 0,
+			'Mon' => 0,
+			'Tue' => 0,
+			'Wed' => 0,
+			'Thu' => 0,
+			'Fri' => 0,
+			'Sat' => 0,
+		];
+
+		// WP_Query arguments to fetch all coupons
+		$args = array(
+			'post_type' => 'shop_coupon', // Replace with your post type if needed
+			'post_status' => 'publish',    // Retrieve only published coupons
+			'posts_per_page' => -1, // Retrieve all coupons
+		);
+
+		// Create a new WP_Query instance
+		$query = new \WP_Query($args);
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$expiry_date = get_post_meta( get_the_ID(), 'expiry_date', true );
+
+
+			// Loop through each day of the current week and compare expiry date
+			for ( $day = strtotime( $week_start ); $day <= strtotime( $week_end ); $day = strtotime( '+1 day', $day ) ) {
+				$day_name = date('D', $day);
+
+				if ( strtotime( $expiry_date ) <= $day ) {
+					$active_coupon_count_by_day[$day_name]++;
+				}
+			}
+		}
+		// Reset post data.
+		wp_reset_postdata();
+
+		$final_array = [];
+
+		foreach ( $active_coupon_count_by_day as $value ) {
+			$final_array[] = $value;
+		}
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => __( 'hello', 'hex-coupon-for-woocommerce' ),
+				'type' => 'success',
+				'weeklyActiveCoupon' => $final_array,
 
 			], 200);
 		} else {

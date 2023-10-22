@@ -9,7 +9,7 @@ import {
 	Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-// import HexCardHeader from '../../HexCardHeader/HexCardHeader';
+
 import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
 import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
 import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
@@ -34,6 +34,7 @@ const BarChartOne = () => {
 	const [yesterdayCouponCreated, setYesterdayCouponCreated] = useState(0);
 	const [yesterdayRedeemedCoupon, setYesterdayRedeemedCoupon] = useState(0);
 	const [weeklyCouponCreated, setWeeklyCouponCreated] = useState([]);
+	const [weeklyActiveCoupon, setWeeklyActiveCoupon] = useState([]);
 	const [monthlyCouponCountInYear, setMonthlyCouponCountInYear] = useState([]);
 	const [dailyCouponCreatedInMonth, setDailyCouponCreatedInMonth] = useState([]);
 
@@ -140,6 +141,28 @@ const BarChartOne = () => {
 			.get(ajaxUrl, {
 				params: {
 					nonce: nonce,
+					action: 'weekly_coupon_active_data',
+				},
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+			.then(({data}) => {
+				setWeeklyActiveCoupon(data.weeklyActiveCoupon)
+				// Handle the response data
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+	}, []);
+
+	useEffect(() => {
+
+		axios
+			.get(ajaxUrl, {
+				params: {
+					nonce: nonce,
 					action: 'monthlyCouponCountInYear',
 				},
 				headers: {
@@ -169,8 +192,6 @@ const BarChartOne = () => {
 				},
 			})
 			.then(({data}) => {
-
-
 				setTodayYesterdayCombinedData({
 					todayActiveCoupons: data.todayActiveCoupons,
 					todayExpiredCoupons: data.todayExpiredCoupons,
@@ -198,9 +219,9 @@ const BarChartOne = () => {
 	let labels = getWeekList;
 	let dataSet = {
 		created: weeklyCouponCreated,
-		redeemed: [708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600, 250, 1300],
-		active: [1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200, 700, 2300],
-		expired: [1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500, 1100, 1900],
+		redeemed: [15, 20, 5, 7, 9,13, 18],
+		active: weeklyActiveCoupon,
+		expired: [15, 20, 5, 7, 9,13, 18],
 	};
 
 	let dataSetForYear = {
@@ -299,10 +320,6 @@ const BarChartOne = () => {
 			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
 		}
 	}
-
-	// useEffect(function (){
-	//
-	// },[barchartLabel])
 
 	return (
 		<>

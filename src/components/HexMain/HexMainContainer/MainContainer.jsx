@@ -9,5 +9,4 @@ const MainContainer = ({children}) => {
 	);
 }
 
-
 export default MainContainer;

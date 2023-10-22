@@ -1,6 +1,5 @@
 import React from 'react';
 import CountUp from 'react-countup';
-
 const Counter = ({ leftIcon, start, end, duration, separator, rightIcon, counterPara, isAllowedDecimal }) => (
     <div className="hexpSingle__promo radius-10">
         <h2 className="hexpSingle__promo__title">
@@ -11,5 +10,4 @@ const Counter = ({ leftIcon, start, end, duration, separator, rightIcon, counter
         <p className="hexpSingle__promo__para mt-2">{counterPara}</p>
     </div>
 );
-
 export default Counter;

@@ -25,7 +25,7 @@ class MyAccount
 	 */
 	public function register()
 	{
-		// Action hook for adding 'All Coupons' menu page in the 'My Account' Page menu
+		// Action hook for adding 'All Coupons' menu page in the 'My Account' Page Menu
 		add_filter ( 'woocommerce_account_menu_items', [ $this, 'coupon_menu_in_my_account_page' ], 40 );
 		// Action hook for registering permalink endpoint
 		add_action( 'init', [ $this, 'coupon_menu_page_endpoint' ] );

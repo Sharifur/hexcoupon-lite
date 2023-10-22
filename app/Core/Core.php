@@ -19,7 +19,6 @@ use HexCoupon\App\Core\WooCommerce\CouponSingleGeographicRestrictions;
 use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
-use HexCoupon\App\Core\WooCommerce\CouponDuplicatePost;
 use HexCoupon\App\Core\WooCommerce\CouponShortcode;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Services\ActivationService;
@@ -43,7 +42,6 @@ final class Core extends BootManager
 			AdminNoticeManager::class,
 			MyAccount::class,
 			CouponCategory::class,
-			CouponDuplicatePost::class,
 			CouponShortcode::class,
 			CouponPaymentandShipping::class,
 			CouponColumTabController::class,
