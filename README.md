@@ -7,4 +7,4 @@ WooCommerce shop owners will be able to add specific users, payment method and s
 <br>
 
 ## Documentation
-Documentation is available at [kathamo.dev](https://hexcoupon.com)
+Documentation is available at [hexcoupon.com](https://hexcoupon.com)
