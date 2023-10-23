@@ -2,10 +2,10 @@
 /**
  * @package hexcoupon
  *
- * Plugin Name: HexCoupon - Advance Coupons For WooCommerce
+ * Plugin Name: HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.0.0
+ * Version: 1.0.7
  * Author: WpHex
  * Requires at least: 5.4
  * Tested up to: 6.3

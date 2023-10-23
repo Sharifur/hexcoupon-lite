@@ -3,7 +3,7 @@ import { useI18n } from '@wordpress/react-i18n';
 import { Link } from 'react-router-dom';
 import { MdHome } from 'react-icons/md';
 import LogoImg from '../../../img/logo.png';
-const Sidebar = ({ searchParam }) => {
+const Sidebar = () => {
 	const { __ } = useI18n();
 
     const [activeLink, setActiveLink] = useState('/');
@@ -26,7 +26,7 @@ const Sidebar = ({ searchParam }) => {
             <ul className='hexpDashboard__list mt-4'>
                 {sidebarLinks.map((link) => (
                     <li key={link.path} className='hexpDashboard__list__item'>
-                        <Link to={link.path + searchParam } className={`hexpDashboard__list__item__link ${activeLink === link.path ? 'active' : ''}`} onClick={() => handleLinkClick(link.path)}>
+                        <Link to={link.path} className={`hexpDashboard__list__item__link ${activeLink === link.path ? 'active' : ''}`} onClick={() => handleLinkClick(link.path)}>
                             <link.LinkIcon className='hexpDashboard__list__item__link__icon' />
                             {link.text}
                         </Link>

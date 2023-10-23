@@ -1,5 +1,4 @@
 <?php
-
 namespace HexCoupon\App\Controllers;
 
 use HexCoupon\App\Core\Lib\SingleTon;
@@ -19,16 +18,161 @@ class AjaxApiController extends Controller
 	 */
 	public function register()
 	{
+		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
 		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'full_coupon_creation_data'] );
-		add_action( 'wp_ajax_weekly_coupon_creation_data', [ $this, 'weekly_coupon_creation_data'] );
-		add_action( 'wp_ajax_weekly_coupon_active_data', [ $this, 'weekly_coupon_active_data'] );
-		add_action( 'wp_ajax_monthlyCouponCountInYear', [ $this, 'monthlyCouponCountInYear'] );
 		add_action( 'wp_ajax_todayActiveExpiredCoupon', [ $this, 'todayYesterdayActiveExpiredCoupon'] );
-		add_action( 'wp_ajax_weeklyCouponActiveExpiredCoupon', [ $this, 'weeklyCouponActiveExpiredCoupon'] );
-		add_action( 'wp_ajax_yesterdayRedeemedCoupon', [ $this, 'yesterdayRedeemedCoupon'] );
 		add_action( 'wp_ajax_todayRedeemedCoupon', [ $this, 'todayRedeemedCoupon'] );
+		add_action( 'wp_ajax_yesterdayRedeemedCoupon', [ $this, 'yesterdayRedeemedCoupon'] );
+		add_action( 'wp_ajax_weekly_coupon_creation_data', [ $this, 'weekly_coupon_creation_data'] );
+		add_action( 'wp_ajax_weekly_coupon_active_expired_data', [ $this, 'weekly_coupon_active_expired_data'] );
+		add_action( 'wp_ajax_weeklyCouponRedeemedData', [ $this, 'weeklyCouponRedeemedData'] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method all_combined_data
+	 * @return void
+	 * Get all data in a combined place.
+	 */
+	public function all_combined_data()
+	{
+		$total_coupon_created_and_redeemed = $this->total_coupon_created_and_redeemed();
+
+		$get_additional_date = $this->get_additional_data();
+
+		$full_coupon_creation_data = $this->full_coupon_creation_data();
+
+		$today_coupon_redeemed = $this->todayRedeemedCoupon();
+
+		$today_yesterday_active_expired_coupon = $this->todayYesterdayActiveExpiredCoupon();
+
+		$yesterday_redeemed_coupon = $this->yesterdayRedeemedCoupon();
+
+		$weekly_coupon_creation_data = $this->weekly_coupon_creation_data();
+
+		$weekly_coupon_redeemed_data = $this->weeklyCouponRedeemedData();
+
+		$weekly_coupon_active_expired_data = $this->weekly_coupon_active_expired_data();
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => __( 'hello' ),
+				'type' => 'success',
+				'created' => __( $total_coupon_created_and_redeemed[0] ),
+				'redeemedAmount' => $total_coupon_created_and_redeemed[1],
+				'active' => $get_additional_date[0],
+				'expired' => $get_additional_date[1],
+				'redeemed' => $get_additional_date[2],
+				'sharableUrlPost' => $get_additional_date[3],
+				'bogoCoupon' => $get_additional_date[4],
+				'geographicRestriction' => $get_additional_date[5],
+				'todayCouponCreated' => $full_coupon_creation_data[0],
+				'yesterdayCouponCreated' => $full_coupon_creation_data[1],
+				'todayRedeemedCoupon' => $today_coupon_redeemed,
+				'todayActiveCoupons' => $today_yesterday_active_expired_coupon[0],
+				'todayExpiredCoupons' => $today_yesterday_active_expired_coupon[1],
+				'yesterdayActiveCoupons' => $today_yesterday_active_expired_coupon[2],
+				'yesterdayExpiredCoupons' => $today_yesterday_active_expired_coupon[3],
+				'yesterdayRedeemedCoupon' => $yesterday_redeemed_coupon,
+				'weeklyCouponCreated' => $weekly_coupon_creation_data,
+				'weeklyCouponRedeemed' => $weekly_coupon_redeemed_data,
+				'weeklyActiveCoupon' => $weekly_coupon_active_expired_data[0],
+				'weeklyExpiredCoupon' => $weekly_coupon_active_expired_data[1],
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method weeklyCouponRedeemedData
+	 * @return array
+	 * Get all data in a combined place.
+	 */
+	public function weeklyCouponRedeemedData()
+	{
+		// Get the current date
+		$current_date = date( 'Y-m-d' );
+
+		// Calculate the start and end dates of the current week
+		$week_start = date( 'Y-m-d', strtotime( 'last Sunday', strtotime( $current_date ) ) );
+		$week_end = date( 'Y-m-d', strtotime( 'this Saturday', strtotime( $current_date ) ) );
+
+		// Initialize an array to store the coupon counts for each day of the week
+		$coupon_counts = [
+			'Sun' => 0,
+			'Mon' => 0,
+			'Tue' => 0,
+			'Wed' => 0,
+			'Thu' => 0,
+			'Fri' => 0,
+			'Sat' => 0,
+		];
+
+		// Loop through the days of the week
+		for ( $i = 0; $i < 7; $i++ ) {
+			$target_date = date( 'Y-m-d', strtotime( "+$i days", strtotime( $week_start ) ) );
+
+			// WP_Query arguments to count redeemed coupons for the target date
+			$args = [
+				'post_type' => 'shop_order',  // WooCommerce orders
+				'post_status' => ['wc-completed', 'wc-processing'],  // Orders in completed and processing status
+				'date_query' => [
+					[
+						'year' => date( 'Y', strtotime( $target_date ) ),
+						'month' => date( 'n', strtotime( $target_date ) ),
+						'day' => date( 'j', strtotime( $target_date ) ),
+					],
+				],
+			];
+
+			// Create a new WP_Query instance
+			$query = new \WP_Query( $args );
+
+			// Initialize the count for this day
+			$total_redeemed_coupons = 0;
+
+			// Loop through the orders to count redeemed coupons for the day
+			if ( $query->have_posts() ) {
+				while ( $query->have_posts() ) {
+					$query->the_post();
+
+					// Get order ID
+					$order_id = get_the_ID();
+
+					// Get coupons used in the order
+					$order = wc_get_order($order_id);
+					$coupons = $order->get_coupon_codes();
+
+					// Check if coupons were used in this order
+					if ( !empty( $coupons ) ) {
+						$total_redeemed_coupons += count( $coupons );
+					}
+				}
+			}
+
+			// Reset post data
+			wp_reset_postdata();
+
+			// Store the count for this day in the array
+			$day_of_week = date( 'D', strtotime( $target_date ) );
+			$coupon_counts[$day_of_week] = $total_redeemed_coupons;
+		}
+
+		return $coupon_counts;
 	}
 
 	/**
@@ -36,7 +180,7 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method yesterdayRedeemedCoupon
-	 * @return void
+	 * @return int
 	 * Show total number of redeemed coupon for yesterday.
 	 */
 	public function yesterdayRedeemedCoupon()
@@ -88,22 +232,7 @@ class AjaxApiController extends Controller
 		// Reset post data
 		wp_reset_postdata();
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __('hello'),
-				'type' => 'success',
-				'yesterdayRedeemedCoupon' => __( $total_redeemed_coupons_yesterday ),
-
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		return $total_redeemed_coupons_yesterday;
 	}
 
 	/**
@@ -111,8 +240,8 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method yesterdayRedeemedCoupon
-	 * @return void
-	 * Show total number of redeemed coupon for yesterday.
+	 * @return int
+	 * Show total number of redeemed coupon for today.
 	 */
 	public function todayRedeemedCoupon()
 	{
@@ -160,35 +289,7 @@ class AjaxApiController extends Controller
 		// Reset post data
 		wp_reset_postdata();
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __('hello'),
-				'type' => 'success',
-				'todayRedeemedCoupon' => __( $total_redeemed_coupons_today ),
-
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method weeklyCouponActiveExpiredCoupon
-	 * @return void
-	 * Show all the categories of the product.
-	 */
-	public function weeklyCouponActiveExpiredCoupon()
-	{
-
+		return $total_redeemed_coupons_today;
 	}
 
 	/**
@@ -196,8 +297,8 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method todayYesterdayActiveExpiredCoupon
-	 * @return void
-	 * Show all the categories of the product.
+	 * @return array
+	 * Show all active and expired coupon of today.
 	 */
 	public function todayYesterdayActiveExpiredCoupon()
 	{
@@ -251,25 +352,9 @@ class AjaxApiController extends Controller
 			wp_reset_postdata();
 		}
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __('hello'),
-				'type' => 'success',
-				'todayActiveCoupons' => __( $today_active_coupons ),
-				'todayExpiredCoupons' => __( $today_expired_coupons ),
-				'yesterdayActiveCoupons' => __( $yesterday_active_coupons ),
-				'yesterdayExpiredCoupons' => __( $yesterday_expired_coupons ),
+		$final_array = [ $today_active_coupons, $today_expired_coupons, $yesterday_active_coupons, $yesterday_expired_coupons ];
 
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		return $final_array;
 
 	}
 
@@ -278,8 +363,8 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method total_coupon_created_and_redeemed
-	 * @return void
-	 * Show all the categories of the product.
+	 * @return array
+	 * Show all the created and redeemed coupon total count.
 	 */
 	public function total_coupon_created_and_redeemed()
 	{
@@ -308,24 +393,9 @@ class AjaxApiController extends Controller
 			$total_redeemed_value += $discount_amount;
 		}
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __('hello'),
-				'type' => 'success',
-				'created' => __( $final_result ),
-				'redeemedAmount' => __( $total_redeemed_value ),
+		$final_array = [ $final_result, $total_redeemed_value ];
 
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
-
+		return $final_array;
 	}
 
 	/**
@@ -333,8 +403,8 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method weekly_coupon_creation_data
-	 * @return void
-	 * Show all the categories of the product.
+	 * @return array
+	 * Show all the coupon creation data of a week.
 	 */
 	public function weekly_coupon_creation_data()
 	{
@@ -359,7 +429,7 @@ class AjaxApiController extends Controller
 		];
 
 		// Loop through each day of the current week (from Sunday to Saturday)
-		for ($i = 0; $i < 7; $i++) {
+		for ( $i = 0; $i < 7; $i++ ) {
 			// Calculate the date for the current day in 'Y-m-d' format
 			$day_date = date('Y-m-d', strtotime("+$i days", strtotime($week_start)));
 
@@ -393,22 +463,7 @@ class AjaxApiController extends Controller
 			}
 		}
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __('hello'),
-				'type' => 'success',
-				'weeklyCouponCreated' => $final_array,
-
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		return $final_array;
 	}
 
 	/**
@@ -416,17 +471,14 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method weekly_coupon_active_data
-	 * @return void
-	 * Show all active coupon for the current week.
+	 * @return array
+	 * Show all active and expired coupon for the current week.
 	 */
-	public function weekly_coupon_active_data()
+	public function weekly_coupon_active_expired_data()
 	{
-		// Get the current date
-		$current_date = date('Y m d' );
-
-		// Calculate the start date of the current week (Sunday)
-		$week_start = date( 'Y m d', strtotime( 'this Sunday', strtotime( $current_date ) ) );
-		$week_end = date( 'Y m d', strtotime( 'this Saturday', strtotime( $current_date ) ) );
+		$current_date = date( 'Y-m-d' );
+		$week_start = date( 'Y-m-d', strtotime( 'last Sunday', strtotime( $current_date ) ) );
+		$week_end = date( 'Y-m-d', strtotime( 'this Saturday', strtotime( $current_date ) ) );
 
 		// Initialize an array to store the count of active coupons for each day
 		$active_coupon_count_by_day = [
@@ -438,56 +490,65 @@ class AjaxApiController extends Controller
 			'Fri' => 0,
 			'Sat' => 0,
 		];
+		$expired_coupon_count_by_day = [
+			'Sun' => 0,
+			'Mon' => 0,
+			'Tue' => 0,
+			'Wed' => 0,
+			'Thu' => 0,
+			'Fri' => 0,
+			'Sat' => 0,
+		];
 
-		// WP_Query arguments to fetch all coupons
 		$args = array(
-			'post_type' => 'shop_coupon', // Replace with your post type if needed
-			'post_status' => 'publish',    // Retrieve only published coupons
-			'posts_per_page' => -1, // Retrieve all coupons
+			'post_type' => 'shop_coupon',
+			'posts_per_page' => -1,
 		);
 
-		// Create a new WP_Query instance
-		$query = new \WP_Query($args);
+		$loop = new \WP_Query($args);
 
-		while ( $query->have_posts() ) {
-			$query->the_post();
-			$expiry_date = get_post_meta( get_the_ID(), 'expiry_date', true );
+		while ( $loop->have_posts() ) : $loop->the_post();
 
+			$title = get_the_title();
 
-			// Loop through each day of the current week and compare expiry date
-			for ( $day = strtotime( $week_start ); $day <= strtotime( $week_end ); $day = strtotime( '+1 day', $day ) ) {
-				$day_name = date('D', $day);
+			// Instantiate the WC_Coupon object with the coupon code
+			$coupon_code = $title;
+			$coupon = new \WC_Coupon($coupon_code);
 
-				if ( strtotime( $expiry_date ) <= $day ) {
-					$active_coupon_count_by_day[$day_name]++;
+			// Check if the coupon exists
+			if ( $coupon->get_id() > 0 ) {
+				// Retrieve coupon data
+				$expiry_date = $coupon->get_date_expires();
+
+				// Separate the date and time portion
+				$new_date = !empty( $expiry_date ) ? explode( 'T', $expiry_date ) : '';
+
+				$final_date = '';
+
+				if ( !empty( $new_date[0] ) ) {
+					$final_date = $new_date[0]; // Convert to Unix timestamp
+				}
+
+				// Loop through each day of the current week and compare expiry date
+				for ( $day = strtotime( $week_start ); $day <= strtotime( $week_end ); $day = strtotime( '+1 day', $day ) ) {
+					$day_name = date('D', $day);
+
+					if ( strtotime( $final_date ) <= $day && $final_date <= strtotime( '+1 day', $day ) ) {
+						$active_coupon_count_by_day[$day_name]++;
+					}
+					else {
+						$expired_coupon_count_by_day[$day_name]++;
+					}
 				}
 			}
-		}
-		// Reset post data.
+
+		endwhile;
+
 		wp_reset_postdata();
 
-		$final_array = [];
+		$final_array = [ $active_coupon_count_by_day, $expired_coupon_count_by_day ];
 
-		foreach ( $active_coupon_count_by_day as $value ) {
-			$final_array[] = $value;
-		}
-
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __( 'hello', 'hex-coupon-for-woocommerce' ),
-				'type' => 'success',
-				'weeklyActiveCoupon' => $final_array,
-
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		return $final_array;
 	}
 
 	/**
@@ -496,7 +557,7 @@ class AjaxApiController extends Controller
 	 * @since 1.0.0
 	 * @method get_additional_data
 	 * @return mixed
-	 * Show all the categories of the product.
+	 * Show all the active, expired, redeemed, sharable url coupon, bogo coupon, and geographically restricted coupon of all time.
 	 */
 	public function get_additional_data()
 	{
@@ -615,28 +676,9 @@ class AjaxApiController extends Controller
 		// Reset post data
 		wp_reset_postdata();
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __( 'Additional data fetched successfully' ),
-				'type' => 'success',
-				'active' => __( $active_coupons ),
-				'expired' => __( $expired_coupons ),
-				'redeemed' => __( $total_redeemed ),
-				'sharableUrlPost' => __( $sharable_url_post_count ),
-				'bogoCoupon' => __( $bogo_coupon_count ),
-				'geographicRestriction' => __( $geographic_restriction_count )
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		$final_array = [ $active_coupons, $expired_coupons, $total_redeemed, $sharable_url_post_count, $bogo_coupon_count, $geographic_restriction_count ];
 
-		return $active_coupons;
+		return $final_array;
 	}
 
 	/**
@@ -644,8 +686,8 @@ class AjaxApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method full_coupon_creation_data
-	 * @return void
-	 * Show all the categories of the product.
+	 * @return array
+	 * Show all the coupon creation data for yesterday and today.
 	 */
 	public function full_coupon_creation_data()
 	{
@@ -719,76 +761,9 @@ class AjaxApiController extends Controller
 
 		}
 
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __( 'Data fetched successfully'),
-				'type' => 'success',
-				'todayCouponCreated' => __( $today_count) ,
-				'yesterdayCouponCreated' => __( $yesterday_count ),
-				'dailyCouponCreatedInMonth' => __( $day_counts_for_month ),
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
-	}
+		$final_array = [ $today_count, $yesterday_count ];
 
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method monthlyCouponCountInYear
-	 * @return void
-	 * Show all the categories of the product.
-	 */
-	public function monthlyCouponCountInYear()
-	{
-		$current_year = date('Y');
-		// Initialize an array to store monthly post counts
-		$monthly_post_counts = [];
-
-		// Loop through each month of the year (from January to December)
-		for ( $month = 1; $month <= 12; $month++ ) {
-			// WP_Query arguments to count posts created in the current month
-			$args = [
-				'post_type' => 'shop_coupon',  // Replace with your post type if needed
-				'post_status' => 'publish',    // Retrieve only published posts
-				'date_query' => [
-					[
-						'year' => $current_year,
-						'month' => $month,
-					],
-				],
-				'fields' => 'ids',  // Optimize query to retrieve post IDs only
-			];
-
-			// Create a new WP_Query instance
-			$query = new \WP_Query( $args );
-
-			// Get the post count for the current month
-			$monthly_post_counts[date('F', mktime(0, 0, 0, $month, 1))] = $query->post_count;
-		}
-
-		// Check the nonce and action
-		if ( $this->verify_nonce() ) {
-			// Nonce is valid, proceed with your code
-			wp_send_json( [
-				// Your response data here
-				'msg' => __( 'Data fetched successfully'),
-				'type' => 'success',
-				'monthlyCouponCountInYear' => __( $monthly_post_counts ),
-			], 200);
-		} else {
-			// Nonce verification failed, handle the error
-			wp_send_json( [
-				'error' => 'Nonce verification failed',
-			], 403); // 403 Forbidden status code
-		}
+		return $final_array;
 	}
 
 	private function verify_nonce()

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Counter from '../../Global/Counter/Counter';
 import axios from "axios";
 
-
 const HexCouponPromo = () => {
 	const [created, setCreated] = useState(0);
 	const [active, setActive] = useState(0);
@@ -16,12 +15,11 @@ const HexCouponPromo = () => {
 	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
 
 	useEffect(() => {
-
 		axios
 			.get(ajaxUrl, {
 				params: {
 					nonce: nonce,
-					action: 'coupon_data',
+					action: 'all_combined_data',
 				},
 				headers: {
 					'Content-Type': 'application/json',
@@ -30,6 +28,12 @@ const HexCouponPromo = () => {
 			.then(({data}) => {
 				setCreated(data.created)
 				setRedeemedAmount(data.redeemedAmount)
+				setActive(data.active)
+				setExpired(data.expired)
+				setRedeemed(data.redeemed)
+				setSharableUrlPost(data.sharableUrlPost)
+				setBogoCoupon(data.bogoCoupon)
+				setGeographicRestriction(data.geographicRestriction)
 				// Handle the response data
 			})
 			.catch((error) => {
@@ -37,35 +41,6 @@ const HexCouponPromo = () => {
 			});
 
 	}, []);
-
-	useEffect(() => {
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'get_additional_data', // Use the new action name
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({ data }) => {
-				if (data) {
-					// Handle the additional data here
-					setActive(data.active)
-					setExpired(data.expired)
-					setRedeemed(data.redeemed)
-					setSharableUrlPost(data.sharableUrlPost)
-					setBogoCoupon(data.bogoCoupon)
-					setGeographicRestriction(data.geographicRestriction)
-				}
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	}, []);
-
-
 
 	const CounterItem = [
         {

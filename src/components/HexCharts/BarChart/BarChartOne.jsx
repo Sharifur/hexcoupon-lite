@@ -14,7 +14,7 @@ import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
 import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
 import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
 import SingleSelect from '../../Global/FormComponent/SingleSelect/SingleSelect';
-import {getDataForCharJS, getDayList, getMonthList, getSingleDayList, getWeekList} from "../../../helpers/helpers";
+import {getDataForCharJS, getSingleDayList, getWeekList} from "../../../helpers/helpers";
 import axios from "axios";
 
 ChartJS.register(
@@ -31,71 +31,25 @@ const BarChartOne = () => {
 
 	const [todayCouponCreated, setTodayCouponCreated] = useState(0);
 	const [todayCouponRedeemed, setTodayCouponRedeemed] = useState(0);
+	const [todayActiveCoupons, setTodayActiveCoupons] = useState(0);
+	const [todayExpiredCoupons, setTodayExpiredCoupons] = useState(0);
+
 	const [yesterdayCouponCreated, setYesterdayCouponCreated] = useState(0);
 	const [yesterdayRedeemedCoupon, setYesterdayRedeemedCoupon] = useState(0);
+	const [yesterdayActiveCoupons, setYesterdayActiveCoupons] = useState(0);
+	const [yesterdayExpiredCoupons, setYesterdayExpiredCoupons] = useState(0);
+
 	const [weeklyCouponCreated, setWeeklyCouponCreated] = useState([]);
 	const [weeklyActiveCoupon, setWeeklyActiveCoupon] = useState([]);
-	const [monthlyCouponCountInYear, setMonthlyCouponCountInYear] = useState([]);
-	const [dailyCouponCreatedInMonth, setDailyCouponCreatedInMonth] = useState([]);
-
-	const [todayYesterdayCombinedData, setTodayYesterdayCombinedData] = useState({
-		todayActiveCoupons : 0,
-		todayExpiredCoupons : 0,
-		yesterdayActiveCoupons : 0,
-		yesterdayExpiredCoupons : 0,
-	});
+	const [weeklyExpiredCoupon, setWeeklyExpiredCoupon] = useState([]);
+	const [weeklyCouponRedeemed, setWeeklyCouponRedeemed] = useState([]);
 
 	useEffect(() => {
-
 		axios
 			.get(ajaxUrl, {
 				params: {
 					nonce: nonce,
-					action: 'todayRedeemedCoupon',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
-				setTodayCouponRedeemed(data.todayRedeemedCoupon)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'yesterdayRedeemedCoupon',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
-				setYesterdayRedeemedCoupon(data.yesterdayRedeemedCoupon)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'full_coupon_creation_data',
+					action: 'all_combined_data',
 				},
 				headers: {
 					'Content-Type': 'application/json',
@@ -103,52 +57,17 @@ const BarChartOne = () => {
 			})
 			.then(({data}) => {
 				setTodayCouponCreated(data.todayCouponCreated)
+				setTodayCouponRedeemed(data.todayRedeemedCoupon)
+				setTodayActiveCoupons(data.todayActiveCoupons)
+				setTodayExpiredCoupons(data.todayExpiredCoupons)
 				setYesterdayCouponCreated(data.yesterdayCouponCreated)
-				setDailyCouponCreatedInMonth(data.dailyCouponCreatedInMonth)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'weekly_coupon_creation_data',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
+				setYesterdayRedeemedCoupon(data.yesterdayRedeemedCoupon)
+				setYesterdayActiveCoupons(data.yesterdayActiveCoupons)
+				setYesterdayExpiredCoupons(data.yesterdayExpiredCoupons)
 				setWeeklyCouponCreated(data.weeklyCouponCreated)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'weekly_coupon_active_data',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
+				setWeeklyCouponRedeemed(data.weeklyCouponRedeemed)
 				setWeeklyActiveCoupon(data.weeklyActiveCoupon)
+				setWeeklyExpiredCoupon(data.weeklyExpiredCoupon)
 				// Handle the response data
 			})
 			.catch((error) => {
@@ -156,87 +75,21 @@ const BarChartOne = () => {
 			});
 
 	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'monthlyCouponCountInYear',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
-				setMonthlyCouponCountInYear(data.monthlyCouponCountInYear)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	useEffect(() => {
-
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'todayActiveExpiredCoupon',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
-				setTodayYesterdayCombinedData({
-					todayActiveCoupons: data.todayActiveCoupons,
-					todayExpiredCoupons: data.todayExpiredCoupons,
-					yesterdayActiveCoupons: data.yesterdayActiveCoupons,
-					yesterdayExpiredCoupons: data.yesterdayExpiredCoupons,
-				})
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-	}, []);
-
-	const { todayActiveCoupons, todayExpiredCoupons, yesterdayActiveCoupons, yesterdayExpiredCoupons } = todayYesterdayCombinedData;
 
 	const SelectOptions = [
-		{ value: 'Year', label: translate_array.thisYearLabel },
-		{ value: 'Month', label: translate_array.thisMonthLabel },
 		{ value: 'Week', label: translate_array.thisWeekLabel },
 		{ value: 'Yesterday', label: translate_array.yesterdayLabel },
 		{ value: 'Today', label: translate_array.todayLabel },
 	]
 
 	let labels = getWeekList;
+
 	let dataSet = {
 		created: weeklyCouponCreated,
-		redeemed: [15, 20, 5, 7, 9,13, 18],
+		redeemed: weeklyCouponRedeemed,
 		active: weeklyActiveCoupon,
-		expired: [15, 20, 5, 7, 9,13, 18],
+		expired: weeklyExpiredCoupon,
 	};
-
-	let dataSetForYear = {
-		created: monthlyCouponCountInYear,
-		redeemed: [708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600, 250, 1300],
-		active: [1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200, 700, 2300],
-		expired: [1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500, 1100, 1900],
-	};
-
-	let dataSetForMonth = {
-		created: dailyCouponCreatedInMonth,
-		redeemed: [708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600,708, 1247, 975, 734, 1600],
-		active: [1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,1708, 347, 1355, 304, 1200,],
-		expired: [1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,1708, 847, 1355, 304, 1500,],
-	}
 
 	let dataSetForYesterday = {
 		created: [yesterdayCouponCreated],
@@ -294,22 +147,13 @@ const BarChartOne = () => {
 		// todo:: do api request here
 
 		// todo:: call this function inside success method of ajax request
-		changeBarchartData(getMonthList,dataSet, value);
+		changeBarchartData(getWeekList,dataSet, value);
 	}
 
-	function changeBarchartData(getMonthList, dataSet, type){
-		// now check value is monthly
-		if(type === 'Year'){
-			// now change this state value barchartLabel
-			setBarChartData(getDataForCharJS(getMonthList, dataSetForYear));
-		}
+	function changeBarchartData(getWeekList, dataSet, type){
 		if(type === 'Week'){
 			// now change this state value barchartLabel
 			setBarChartData(getDataForCharJS(getWeekList, dataSet));
-		}
-		if(type === 'Month'){
-			// now change this state value barchartLabel
-			setBarChartData(getDataForCharJS(getDayList, dataSetForMonth));
 		}
 		if(type === 'Yesterday'){
 			// now change this state value barchartLabel
@@ -320,6 +164,16 @@ const BarChartOne = () => {
 			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
 		}
 	}
+
+	useEffect(() => {
+		// todo:: call this function inside success method of ajax request
+		changeBarchartData(getWeekList,{
+			created: weeklyCouponCreated,
+			redeemed: weeklyCouponRedeemed,
+			active: weeklyActiveCoupon,
+			expired: weeklyExpiredCoupon,
+		}, 'Week');
+	}, [weeklyExpiredCoupon])
 
 	return (
 		<>
