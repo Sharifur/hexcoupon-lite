@@ -1,10 +1,10 @@
-# Kathamo
-Kathamo is a framework for WordPress plugin development. It is a collection of components that work together in harmony. All important components developed by CodesVault team as composer packages.
+# HexCoupon
+HexCoupon – Advance Coupons For WooCommerce
 <br>
-And This is the repo where everything mix together like a chef's recipe and spread happiness.
-
-<br>
+Extend the default WooCommerce coupon system and add new functionality to control the coupon system.
+Every shop owner can now control and be able to extend the WooCommerce coupon furthermore.
+WooCommerce shop owners will be able to add specific users, payment method and shipping method as per their needs.
 <br>
 
 ## Documentation
-Documentation is available at [kathamo.dev](https://kathamo.dev)
+Documentation is available at [kathamo.dev](https://hexcoupon.com)
