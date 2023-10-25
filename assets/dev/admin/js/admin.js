@@ -649,7 +649,7 @@
 		// Function to add input field dynamically for sunday
 		function addSundayInputField(){
 			let totalHoursCountSundayVal = totalHoursCountSunday.val();
-
+			// restrict add days and hours
 			if (totalHoursCountSundayVal < 2) {
 				totalHoursCountSundayVal++;
 
