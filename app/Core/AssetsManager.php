@@ -70,6 +70,14 @@ class AssetsManager
 
 		}
 
+		wp_enqueue_style(
+			hexcoupon_prefix( 'hexcoupon-admin-notice' ),
+			hexcoupon_asset_url( $folder_prefix . "/admin/css/hex-dashboard-notice.css" ),
+			array(),
+			$this->version,
+			'all'
+		);
+
 		//load react js and css only on the hexcoupon plugin page
 		$screen = get_current_screen();
 

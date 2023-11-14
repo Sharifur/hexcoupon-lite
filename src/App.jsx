@@ -14,7 +14,6 @@ function App() {
 							<Route element={<Dashboard />} path="/" />
 						</Routes>
 					</MainContainer>
-
 				</div>
 			</HashRouter>
 		</>

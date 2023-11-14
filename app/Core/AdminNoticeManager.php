@@ -20,7 +20,7 @@ class AdminNoticeManager
 	 */
 	public function register()
 	{
-		// Hook for displaying a notice to activate and install the 'WooCommcrce' plugin
+		// Hook for displaying a notice to activate and install the 'WooCommerce' plugin
 		add_action( 'admin_notices', [ $this, 'show_active_and_installation_notice_for_woocommerce' ] );
 		// Hook for displaying a notice for checking the 'WordPress' version.
 		add_action('admin_notices', [ $this, 'wordpress_version_notice' ] );
@@ -129,19 +129,37 @@ class AdminNoticeManager
 			'a' => [
 				'href' => [],
 			],
+			'p' => [],
+			'b' => [
+
+			]
 		];
 
 		if( ! array_key_exists( 'woocommerce/woocommerce.php', $all_plugins_list ) ) {
+			$image_folder_link = plugin_dir_url( __FILE__ ).'../../assets/images/';
 			?>
-			<div class="notice notice-error is-dismissible">
-				<p><?php echo wp_kses( $install_notice_message, $allowed_html_tags ); ?></p>
+			<div class="notice notice-error is-dismissible hexcoupon-admin-notice">
+				<div class="hexcoupon-notice-icon">
+					<img src="<?php echo esc_url( $image_folder_link ); ?>hexcoupon-notice-icon.png" alt="Icon">
+				</div>
+				<div class="hexcoupon-notice-text">
+					<?php echo wp_kses( $install_notice_message, $allowed_html_tags ); ?>
+				</div>
 			</div>
+
+
 			<?php
 		}
 		elseif ( ! class_exists( 'WooCommerce' ) ) {
+			$image_folder_link = plugin_dir_url( __FILE__ ).'../../assets/images/';
 			?>
-			<div class="notice notice-error is-dismissible">
-				<p><?php echo wp_kses( $active_notice_message, $allowed_html_tags ); ?></p>
+			<div class="notice notice-error is-dismissible hexcoupon-admin-notice">
+				<div class="hexcoupon-notice-icon">
+					<img src="<?php echo esc_url( $image_folder_link ); ?>hexcoupon-notice-icon.png" alt="Icon">
+				</div>
+				<div class="hexcoupon-notice-text">
+					<?php echo wp_kses( $active_notice_message, $allowed_html_tags ); ?>
+				</div>
 			</div>
 			<?php
 		}
@@ -158,7 +176,8 @@ class AdminNoticeManager
 	private function get_woocommerce_active_notice_message()
 	{
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . urlencode( $this->woocommerce_plugin_url ) ), 'activate-plugin_' . $this->woocommerce_plugin_url );
-		return sprintf( __( 'WooCommerce plugin is not active. Please <a href="%s">activate the WooCommerce</a> plugin to use HexCoupon features.','hex-coupon-for-woocommerce' ), esc_url( $activate_url ) );
+		return sprintf( __( '<p><b>WooCommerce</b> plugin is not active! Please activate the WooCommerce plugin to use <b>HexCoupon</b> features.
+		</p><a href="%s">Activate WooCommerce</a>','hex-coupon-for-woocommerce' ), esc_url( $activate_url ) );
 	}
 
 	/**
@@ -172,7 +191,8 @@ class AdminNoticeManager
 	private function get_woocommerce_install_notice_message()
 	{
 		$install_url = wp_nonce_url( admin_url( 'update.php?action=install-plugin&plugin=woocommerce' ), 'install-plugin_woocommerce' );
-		return sprintf( __( 'WooCommerce plugin is not installed. Please <a href="%s">install the WooCommerce plugin</a> to use Hexcoupon features.','hex-coupon-for-woocommerce' ), esc_url( $install_url ) );
+		return sprintf( __( '<p><b>WooCommerce</b> plugin is not installed! Please install the WooCommerce plugin to use <b>HexCoupon</b> features.
+		</p><a href="%s">Install WooCommerce</a>','hex-coupon-for-woocommerce' ), esc_url( $install_url ) );
 	}
 
 	/**

@@ -1,8 +1,16 @@
 import { defineConfig } from "vite";
 import react from '@vitejs/plugin-react';
 
+const currentFilePath = new URL(import.meta.url).pathname;
+const regex = /[^\/\/]+(?=\/wp-content\/plugins\/hex-coupon-for-woocommerce)/;
+const match = currentFilePath.match(regex);
+var everythingBefore = '';
+if (match) {
+	 everythingBefore = match[0];
+}
+const basepath = `/${everythingBefore}/wp-content/plugins/hex-coupon-for-woocommerce/dist/`;
 export default defineConfig({
-	base: '/hexcoupon/wp-content/plugins/hex-coupon-for-woocommerce/dist/',
+	base: basepath,
 	build: {
 		rollupOptions: {
 			output: {

@@ -55,7 +55,6 @@ final class Core extends BootManager
 			CouponGeographicRestrictionTabController::class,
 			CouponSingleSharableUrl::class,
 			CouponSharableUrlTabController::class,
-			CouponEmailSMS::class,
 			AjaxApiController::class
 		];
 	}

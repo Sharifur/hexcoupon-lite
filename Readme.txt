@@ -4,9 +4,9 @@ Donate link: https://example.com/
 Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, discounts, dynamic pricing, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
-Tested up to: 6.3
-Version: 1.0.7
-Stable tag: 1.0.7
+Tested up to: 6.4.1
+Version: 1.0.8
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,9 +17,9 @@ Elevate your WooCommerce store with HexCoupon, a robust and intuitive coupon man
 <ul>
 	<li><strong>Discounts coupons</strong> - At the core HexCoupon is a versatile coupon system. Easily generate, manage and distribute coupons to your promotional needs.</li>
 	<li><strong>BOGO Deals</strong> - Simplify your Buy One, Get One deals. Whether it's a simple "buy one, get one free" or a more complex. Sky is our limit.</li>
-	<li><strong>Store Credit</strong> - Want to refund or reward customers with store credit? HexCoupon lets you issue credits seamlessly, ensuring happy customers and repeat business.</li>
-	<li><strong>Loyalty Program</strong> - Keep your customers coming back. Design a loyalty program tailored to your business, allowing shoppers to earn points for purchases, referrals, or other actions, redeemable for discounts or rewards.</li>
-	<li><strong>Easy Integration</strong> - Designed with WooCommerce in mind, HexCoupon integrates seamlessly with your existing setup, ensuring a smooth experience for both store owners and customers.</li>
+	<li><strong>Store Credit (Upcoming)[Pro]</strong> - Want to refund or reward customers with store credit? HexCoupon lets you issue credits seamlessly, ensuring happy customers and repeat business.</li>
+	<li><strong>Loyalty Program (Upcoming)[Pro]</strong> - Keep your customers coming back. Design a loyalty program tailored to your business, allowing shoppers to earn points for purchases, referrals, or other actions, redeemable for discounts or rewards.</li>
+	<li><strong>Easy Integration (Upcoming)[Pro]</strong> - Designed with WooCommerce in mind, HexCoupon integrates seamlessly with your existing setup, ensuring a smooth experience for both store owners and customers.</li>
 	<li><strong>User-Friendly Interface</strong> - With its intuitive dashboard, even those new to WooCommerce can dive in and design intricate deals without the hassle.</li>
 	<li><strong>Flexible Customization</strong> - Every store is unique, and HexCoupon offers flexibility in coupon parameters, ensuring that your promotions match your brand's voice and strategy.</li>
 </ul>
@@ -72,7 +72,7 @@ Elevate your WooCommerce store with HexCoupon, a robust and intuitive coupon man
     <li>A combination of products</li>
     <li>Any product from a list</li>
     <li>Same product added to cart</li>
-<ul>
+</ul>
 7. Usage Restriction Tab. Added few new options in the default usage restriction tab.
 7.1. Added product cart condition, for example if certain conditions are met then customers can apply the coupon. Options Are:
 <ul>
@@ -132,6 +132,9 @@ Yes
 =  Can a coupon be validated in a particular day and time ?  =
 Yes
 
+##USEFUL LINKS##
+**[HexCoupon Landing Page](https://hexcoupon.com/)** |  **[Need Support?](https://hexcoupon.com/support)** | **[Documentation](https://hexcoupon.com/docs/)**
+
 == Screenshots ==
 
 1. After activating the HexCoupon WooCommerce plugin WooCommerce shop owners will see a top level menu called HexCoupon where they can add new WooCommerce coupon, will see all WooCommerce coupons, and its coupon category page.
@@ -160,6 +163,10 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+
+== 1.0.8 ==
+* Checked compatibility with WordPress 6.4.1
+* Fixed some issues
 
 = 1.0.7 =
 * Added coupon starting date.

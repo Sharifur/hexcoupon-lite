@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import Counter from '../../Global/Counter/Counter';
 import axios from "axios";
+import {Skeleton} from "../../Skeleton";
 
 const HexCouponPromo = () => {
-	const [created, setCreated] = useState(0);
-	const [active, setActive] = useState(0);
-	const [expired, setExpired] = useState(0);
-	const [redeemed, setRedeemed] = useState(0);
-	const [redeemedAmount, setRedeemedAmount] = useState(0);
-	const [sharableUrlPost, setSharableUrlPost] = useState(0);
-	const [bogoCoupon, setBogoCoupon] = useState(0);
-	const [geographicRestriction, setGeographicRestriction] = useState(0);
 
-	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
+	const [couponData, setCouponData] = useState({
+		created: 0,
+		active: 0,
+		expired: 0,
+		redeemed: 0,
+		redeemedAmount: 0,
+		sharableUrlPost: 0,
+		bogoCoupon: 0,
+		geographicRestriction: 0,
+	});
+
+	const { restApiUrl, nonce, ajaxUrl, translate_array } = hexCuponData;
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		axios
@@ -25,22 +31,39 @@ const HexCouponPromo = () => {
 					'Content-Type': 'application/json',
 				},
 			})
-			.then(({data}) => {
-				setCreated(data.created)
-				setRedeemedAmount(data.redeemedAmount)
-				setActive(data.active)
-				setExpired(data.expired)
-				setRedeemed(data.redeemed)
-				setSharableUrlPost(data.sharableUrlPost)
-				setBogoCoupon(data.bogoCoupon)
-				setGeographicRestriction(data.geographicRestriction)
-				// Handle the response data
+			.then(({ data }) => {
+				// Update all the state values in one go
+				setCouponData({
+					created: data.created,
+					active: data.active,
+					expired: data.expired,
+					redeemed: data.redeemed,
+					redeemedAmount: data.redeemedAmount,
+					sharableUrlPost: data.sharableUrlPost,
+					bogoCoupon: data.bogoCoupon,
+					geographicRestriction: data.geographicRestriction,
+				});
+
+				// Handle the response data if needed
 			})
 			.catch((error) => {
 				console.error('Error:', error);
-			});
+			})
+			.finally(() => setIsLoading(false));
+	}, [couponData]);
 
-	}, []);
+	const {
+		created,
+		active,
+		expired,
+		redeemed,
+		redeemedAmount,
+		sharableUrlPost,
+		bogoCoupon,
+		geographicRestriction,
+	} = couponData;
+
+
 
 	const CounterItem = [
         {
@@ -85,15 +108,21 @@ const HexCouponPromo = () => {
                 <div className="hex-grid-container column-xxl-4 column-lg-3 column-sm-2">
                     {CounterItem.map((item, i) => (
                         <div className="grid-item" key={i}>
-                            <Counter
-                                start={item.counterSingle.start}
-                                end={item.counterSingle.end}
-                                duration={item.counterSingle.duration}
-                                separator={item.counterSingle.separator}
-								leftIcon={item.leftIcon}
-                                counterPara={item.counterPara}
-								isAllowedDecimal={item.isAllowedDecimal ?? false}
-                            />
+							{isLoading ? (
+								<Skeleton height={100} radius={10} />
+							) :
+								(
+								<Counter
+									start={item.counterSingle.start}
+									end={item.counterSingle.end}
+									duration={item.counterSingle.duration}
+									separator={item.counterSingle.separator}
+									leftIcon={item.leftIcon}
+									counterPara={item.counterPara}
+									isAllowedDecimal={item.isAllowedDecimal ?? false}
+								/>
+							)}
+
                         </div>
                     ))}
                 </div>

@@ -57,35 +57,37 @@ class CouponUsageLimitsTabController extends BaseController {
 	 */
 	public function perform_resetting_task_of_usage_limit( $post_id, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
+		if ( class_exists( 'WooCommerce' ) ) {
+			$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
-		$reset_usage_limit = ! empty( $all_meta_values['reset_usage_limit'] ) ? $all_meta_values['reset_usage_limit'] : '';
+			$reset_usage_limit = ! empty( $all_meta_values['reset_usage_limit'] ) ? $all_meta_values['reset_usage_limit'] : '';
 
-		$reset_option_value = ! empty( $reset_option_value['reset_option_value'] ) ? $reset_option_value['reset_option_value'] : '';
+			$reset_option_value = ! empty( $reset_option_value['reset_option_value'] ) ? $reset_option_value['reset_option_value'] : '';
 
-		$days_count = 0; // Initialize $days_count to a default value
+			$days_count = 0; // Initialize $days_count to a default value
 
-		switch ( $reset_option_value ) {
-			case 'annually':
-				$days_count = 365 * DAY_IN_SECONDS;
-				break;
-			case 'monthly':
-				$days_count = 30 * DAY_IN_SECONDS;
-				break;
-			case 'weekly':
-				$days_count = 7 * DAY_IN_SECONDS;
-				break;
-			case 'daily':
-				$days_count = DAY_IN_SECONDS;
-				break;
-		}
+			switch ( $reset_option_value ) {
+				case 'annually':
+					$days_count = 365 * DAY_IN_SECONDS;
+					break;
+				case 'monthly':
+					$days_count = 30 * DAY_IN_SECONDS;
+					break;
+				case 'weekly':
+					$days_count = 7 * DAY_IN_SECONDS;
+					break;
+				case 'daily':
+					$days_count = DAY_IN_SECONDS;
+					break;
+			}
 
-		// Check if the reset_usage_limit checkbox is enabled and if days count is set
-		if ( ! empty( $reset_usage_limit ) && 'yes' === $reset_usage_limit && $days_count > 0 ) {
-			// Check if there are any usage limit given
-			if ( $coupon->get_usage_limit() || $coupon->get_usage_limit_per_user() ) {
-				// Create a schedule event and hook that with 'coupon_periodic_task_hook' custom hook
-				wp_schedule_single_event( time() + $days_count, 'coupon_periodic_task_hook', array( $coupon ) );
+			// Check if the reset_usage_limit checkbox is enabled and if days count is set
+			if ( ! empty( $reset_usage_limit ) && 'yes' === $reset_usage_limit && $days_count > 0 ) {
+				// Check if there are any usage limit given
+				if ( $coupon->get_usage_limit() || $coupon->get_usage_limit_per_user() ) {
+					// Create a schedule event and hook that with 'coupon_periodic_task_hook' custom hook
+					wp_schedule_single_event( time() + $days_count, 'coupon_periodic_task_hook', array( $coupon ) );
+				}
 			}
 		}
 	}

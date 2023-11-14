@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useI18n } from '@wordpress/react-i18n';
 import { Link } from 'react-router-dom';
 import { MdHome } from 'react-icons/md';
 import LogoImg from '../../../img/logo.png';
-const Sidebar = () => {
-	const { __ } = useI18n();
 
+const Sidebar = () => {
     const [activeLink, setActiveLink] = useState('/');
 
     const handleLinkClick = (link) => {

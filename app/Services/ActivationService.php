@@ -16,13 +16,9 @@ class ActivationService
 			HEXCOUPON_FILE,
 			[ __CLASS__, 'activate' ]
 		);
-
-		// load plugin textdomain
-		load_plugin_textdomain( 'hexcoupon', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
 	}
 
 	public static function activate()
 	{
-
 	}
 }

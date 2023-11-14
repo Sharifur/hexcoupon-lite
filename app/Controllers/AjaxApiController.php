@@ -21,7 +21,7 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
-		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'full_coupon_creation_data'] );
+		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'today_yesterday_coupon_created'] );
 		add_action( 'wp_ajax_todayActiveExpiredCoupon', [ $this, 'todayYesterdayActiveExpiredCoupon'] );
 		add_action( 'wp_ajax_todayRedeemedCoupon', [ $this, 'todayRedeemedCoupon'] );
 		add_action( 'wp_ajax_yesterdayRedeemedCoupon', [ $this, 'yesterdayRedeemedCoupon'] );
@@ -44,7 +44,7 @@ class AjaxApiController extends Controller
 
 		$get_additional_date = $this->get_additional_data();
 
-		$full_coupon_creation_data = $this->full_coupon_creation_data();
+		$full_coupon_creation_data = $this->today_yesterday_coupon_created();
 
 		$today_coupon_redeemed = $this->todayRedeemedCoupon();
 
@@ -63,9 +63,9 @@ class AjaxApiController extends Controller
 			// Nonce is valid, proceed with your code
 			wp_send_json( [
 				// Your response data here
-				'msg' => __( 'hello' ),
+				'msg' => 'hello',
 				'type' => 'success',
-				'created' => __( $total_coupon_created_and_redeemed[0] ),
+				'created' => $total_coupon_created_and_redeemed[0],
 				'redeemedAmount' => $total_coupon_created_and_redeemed[1],
 				'active' => $get_additional_date[0],
 				'expired' => $get_additional_date[1],
@@ -73,14 +73,17 @@ class AjaxApiController extends Controller
 				'sharableUrlPost' => $get_additional_date[3],
 				'bogoCoupon' => $get_additional_date[4],
 				'geographicRestriction' => $get_additional_date[5],
-				'todayCouponCreated' => $full_coupon_creation_data[0],
-				'yesterdayCouponCreated' => $full_coupon_creation_data[1],
+
+				'todayCouponCreated' => $full_coupon_creation_data['today'],
 				'todayRedeemedCoupon' => $today_coupon_redeemed,
 				'todayActiveCoupons' => $today_yesterday_active_expired_coupon[0],
 				'todayExpiredCoupons' => $today_yesterday_active_expired_coupon[1],
+
+				'yesterdayCouponCreated' => $full_coupon_creation_data['yesterday'],
 				'yesterdayActiveCoupons' => $today_yesterday_active_expired_coupon[2],
 				'yesterdayExpiredCoupons' => $today_yesterday_active_expired_coupon[3],
 				'yesterdayRedeemedCoupon' => $yesterday_redeemed_coupon,
+
 				'weeklyCouponCreated' => $weekly_coupon_creation_data,
 				'weeklyCouponRedeemed' => $weekly_coupon_redeemed_data,
 				'weeklyActiveCoupon' => $weekly_coupon_active_expired_data[0],
@@ -412,7 +415,7 @@ class AjaxApiController extends Controller
 		$current_date = date('Y-m-d');
 
 		// Calculate the start date of the current week (Sunday)
-		$week_start = date('Y-m-d', strtotime('this Sunday', strtotime($current_date)));
+		$week_start = date('Y-m-d', strtotime('last Sunday', strtotime($current_date)));
 
 		// Initialize an array to store daily post counts for the current week
 		$daily_post_counts_current_week = [];
@@ -685,89 +688,54 @@ class AjaxApiController extends Controller
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method full_coupon_creation_data
+	 * @method today_yesterday_coupon_created
 	 * @return array
 	 * Show all the coupon creation data for yesterday and today.
 	 */
-	public function full_coupon_creation_data()
+	public function today_yesterday_coupon_created()
 	{
-		// Get the current month and year
-		$current_month = date('n');
-		$current_year = date('Y');
+		// Define the date range (today and yesterday)
+		$today = date( 'Y-m-d' );
+		$yesterday = date( 'Y-m-d', strtotime( '-1 day' ) );
 
-		// Get the current date
-		$current_date = date('Y-m-d');
-
-		// Calculate yesterday's date
-		$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($current_date)));
-
-		// Initialize an array to store post counts of yesterday and today
-		$post_counts = [
-			'yesterday' => 0,
-			'today' => 0,
+		$args = [
+			'post_type' => 'shop_coupon', // WooCommerce coupon post type
+			'date_query' => [
+				'relation' => 'OR',
+				[
+					'after' => $yesterday,
+					'before' => $today,
+					'inclusive' => true,
+				],
+			],
+			'posts_per_page' => -1, // Retrieve all matching coupons
 		];
 
-		// Initialize an array to store daily post counts
-		$daily_post_counts = [];
+		$query = new \WP_Query( $args );
 
-		// Initialize an array to store monthly post counts
-		$day_counts_for_month = [];
+		// Initialize an array to store the counts
+		$counts = [
+			'today' => 0,
+			'yesterday' => 0,
+		];
 
-		// Loop through each month of the year (from January to December)
-		for ( $month = 1; $month <= 12; $month++ ) {
-			// Get the total number of days in the current month
-			$total_days = cal_days_in_month(CAL_GREGORIAN, $month, $current_year);
+		// Loop through the results to count coupons created today and yesterday
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$post_date = get_the_date( 'Y-m-d' );
 
-			// Loop through each day of the month
-			for ( $day = 1; $day <= $total_days; $day++ ) {
-				// Format the date in 'Y-m-d' format
-				$date = sprintf('%d-%02d-%02d', $current_year, $current_month, $day);
-
-				// WP_Query arguments to count posts created on a specific day
-				$args = [
-					'post_type' => 'shop_coupon',      // Replace with your post type if needed
-					'post_status' => 'publish', // Retrieve only published posts
-					'date_query' => [
-						[
-							'year' => $current_year,
-							'month' => $current_month,
-							'day' => $day,
-						],
-					],
-					'fields' => 'ids', // Optimize query to retrieve post IDs only
-				];
-
-				// Create a new WP_Query instance
-				$query = new \WP_Query($args);
-
-				// Store the post count for the current day
-				$daily_post_counts[$date] = $query->post_count;
-
-				// Check if the date matches yesterday or today and update counts accordingly
-				if ( $date === $yesterday ) {
-					$post_counts['yesterday'] = $query->post_count;
-				} elseif ( $date === $current_date ) {
-					$post_counts['today'] = $query->post_count;
-				}
-
-				// Now you have post counts for yesterday, today, and other days
-				$yesterday_count = $post_counts['yesterday'];
-				$today_count = $post_counts['today'];
-
-				$monthly_post_counts = $query->post_count;
-
-				$day_counts_for_month[$day] = $monthly_post_counts;
+			if ( $post_date === $today ) {
+				$counts['today']++;
+			} elseif ( $post_date === $yesterday ) {
+				$counts['yesterday']++;
 			}
-
 		}
 
-		$final_array = [ $today_count, $yesterday_count ];
-
-		return $final_array;
+		return $counts;
 	}
 
 	private function verify_nonce()
 	{
-		return isset($_GET['nonce']) && !empty($_GET['nonce']) && wp_verify_nonce($_GET['nonce'],'hexCuponData-react_nonce') == 1 ;
+		return isset( $_GET['nonce'] ) && !empty( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'],'hexCuponData-react_nonce' ) == 1 ;
 	}
 }

@@ -9,6 +9,7 @@ import {
 	Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { __ } from '@wordpress/i18n';
 
 import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
 import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
@@ -16,6 +17,8 @@ import HexCardHeaderRight from '../../HexCardHeader/HexCardHeaderRight';
 import SingleSelect from '../../Global/FormComponent/SingleSelect/SingleSelect';
 import {getDataForCharJS, getSingleDayList, getWeekList} from "../../../helpers/helpers";
 import axios from "axios";
+import "../../../scss/skeleton/skeleton.scss";
+import {Skeleton} from "../../Skeleton";
 
 ChartJS.register(
 	CategoryScale,
@@ -27,54 +30,86 @@ ChartJS.register(
 );
 
 const BarChartOne = () => {
+
 	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
+	const [isLoading,setIsLoading] = useState(true);
+	const [selectedOption, setSelectedOption] = useState('');
 
-	const [todayCouponCreated, setTodayCouponCreated] = useState(0);
-	const [todayCouponRedeemed, setTodayCouponRedeemed] = useState(0);
-	const [todayActiveCoupons, setTodayActiveCoupons] = useState(0);
-	const [todayExpiredCoupons, setTodayExpiredCoupons] = useState(0);
 
-	const [yesterdayCouponCreated, setYesterdayCouponCreated] = useState(0);
-	const [yesterdayRedeemedCoupon, setYesterdayRedeemedCoupon] = useState(0);
-	const [yesterdayActiveCoupons, setYesterdayActiveCoupons] = useState(0);
-	const [yesterdayExpiredCoupons, setYesterdayExpiredCoupons] = useState(0);
+	const [couponBarchartData, setCouponBarchartData] = useState({
+		todayCouponCreated : 0,
+		todayCouponRedeemed : 0,
+		todayActiveCoupons : 0,
+		todayExpiredCoupons : 0,
 
-	const [weeklyCouponCreated, setWeeklyCouponCreated] = useState([]);
-	const [weeklyActiveCoupon, setWeeklyActiveCoupon] = useState([]);
-	const [weeklyExpiredCoupon, setWeeklyExpiredCoupon] = useState([]);
-	const [weeklyCouponRedeemed, setWeeklyCouponRedeemed] = useState([]);
+		yesterdayCouponCreated : 0,
+		yesterdayRedeemedCoupon : 0,
+		yesterdayActiveCoupons : 0,
+		yesterdayExpiredCoupons : 0,
+
+		weeklyCouponCreated : [],
+		weeklyCouponRedeemed : [],
+		weeklyActiveCoupon : [],
+		weeklyExpiredCoupon : [],
+	})
 
 	useEffect(() => {
-		axios
-			.get(ajaxUrl, {
-				params: {
-					nonce: nonce,
-					action: 'all_combined_data',
-				},
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(({data}) => {
-				setTodayCouponCreated(data.todayCouponCreated)
-				setTodayCouponRedeemed(data.todayRedeemedCoupon)
-				setTodayActiveCoupons(data.todayActiveCoupons)
-				setTodayExpiredCoupons(data.todayExpiredCoupons)
-				setYesterdayCouponCreated(data.yesterdayCouponCreated)
-				setYesterdayRedeemedCoupon(data.yesterdayRedeemedCoupon)
-				setYesterdayActiveCoupons(data.yesterdayActiveCoupons)
-				setYesterdayExpiredCoupons(data.yesterdayExpiredCoupons)
-				setWeeklyCouponCreated(data.weeklyCouponCreated)
-				setWeeklyCouponRedeemed(data.weeklyCouponRedeemed)
-				setWeeklyActiveCoupon(data.weeklyActiveCoupon)
-				setWeeklyExpiredCoupon(data.weeklyExpiredCoupon)
-				// Handle the response data
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+			axios
+				.get(ajaxUrl, {
+					params: {
+						nonce: nonce,
+						action: 'all_combined_data',
+					},
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+				.then(({data}) => {
+					setCouponBarchartData({
+						todayCouponCreated: data.todayCouponCreated,
+						todayCouponRedeemed: data.todayRedeemedCoupon,
+						todayActiveCoupons: data.todayActiveCoupons,
+						todayExpiredCoupons: data.todayExpiredCoupons,
 
-	}, []);
+						yesterdayCouponCreated: data.yesterdayCouponCreated,
+						yesterdayRedeemedCoupon: data.yesterdayRedeemedCoupon,
+						yesterdayActiveCoupons: data.yesterdayActiveCoupons,
+						yesterdayExpiredCoupons: data.yesterdayExpiredCoupons,
+
+						weeklyCouponCreated: data.weeklyCouponCreated,
+						weeklyCouponRedeemed: data.weeklyCouponRedeemed,
+						weeklyActiveCoupon: data.weeklyActiveCoupon,
+						weeklyExpiredCoupon: data.weeklyExpiredCoupon,
+					} );
+				})
+
+				.catch((error) => {
+					console.error('Error:', error);
+				})
+				.finally(() => {
+					setIsLoading(false);
+					setSelectedOption('Week');
+				})
+
+		},
+		[]);
+
+	const {
+		todayCouponCreated,
+		todayCouponRedeemed,
+		todayActiveCoupons,
+		todayExpiredCoupons,
+
+		yesterdayCouponCreated,
+		yesterdayRedeemedCoupon,
+		yesterdayActiveCoupons,
+		yesterdayExpiredCoupons,
+
+		weeklyCouponCreated,
+		weeklyCouponRedeemed,
+		weeklyActiveCoupon,
+		weeklyExpiredCoupon
+	} = couponBarchartData;
 
 	const SelectOptions = [
 		{ value: 'Week', label: translate_array.thisWeekLabel },
@@ -84,12 +119,12 @@ const BarChartOne = () => {
 
 	let labels = getWeekList;
 
-	let dataSet = {
-		created: weeklyCouponCreated,
-		redeemed: weeklyCouponRedeemed,
-		active: weeklyActiveCoupon,
-		expired: weeklyExpiredCoupon,
-	};
+	let dataSetForToday = {
+		created: [todayCouponCreated],
+		redeemed: [todayCouponRedeemed],
+		active: [todayActiveCoupons],
+		expired: [todayExpiredCoupons],
+	}
 
 	let dataSetForYesterday = {
 		created: [yesterdayCouponCreated],
@@ -98,12 +133,13 @@ const BarChartOne = () => {
 		expired: [yesterdayExpiredCoupons],
 	}
 
-	let dataSetForToday = {
-		created: [todayCouponCreated],
-		redeemed: [todayCouponRedeemed],
-		active: [todayActiveCoupons],
-		expired: [todayExpiredCoupons],
-	}
+	let dataSet = {
+		created: weeklyCouponCreated,
+		redeemed: weeklyCouponRedeemed,
+		active: weeklyActiveCoupon,
+		expired: weeklyExpiredCoupon,
+	};
+
 
 	const [barChartData, setBarChartData] = useState(getDataForCharJS(labels, dataSet));
 
@@ -121,7 +157,7 @@ const BarChartOne = () => {
 			},
 			title: {
 				display: false,
-				text: 'Bar Chart One',
+				text: __('Bar Chart One','hex-coupon-for-woocommerce' ),
 			},
 		},
 		scales: {
@@ -143,37 +179,16 @@ const BarChartOne = () => {
 	};
 
 	function handleChangeSelect(value){
-		// call api for getting coupon according to selected value
-		// todo:: do api request here
-
-		// todo:: call this function inside success method of ajax request
-		changeBarchartData(getWeekList,dataSet, value);
+			if (value === 'Week') {
+				setBarChartData(getDataForCharJS(getWeekList, dataSet));
+			}
+			if (value === 'Yesterday') {
+				setBarChartData(getDataForCharJS(getSingleDayList, dataSetForYesterday));
+			}
+			if (value === 'Today') {
+				setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
+			}
 	}
-
-	function changeBarchartData(getWeekList, dataSet, type){
-		if(type === 'Week'){
-			// now change this state value barchartLabel
-			setBarChartData(getDataForCharJS(getWeekList, dataSet));
-		}
-		if(type === 'Yesterday'){
-			// now change this state value barchartLabel
-			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForYesterday));
-		}
-		if(type === 'Today'){
-			// now change this state value barchartLabel
-			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
-		}
-	}
-
-	useEffect(() => {
-		// todo:: call this function inside success method of ajax request
-		changeBarchartData(getWeekList,{
-			created: weeklyCouponCreated,
-			redeemed: weeklyCouponRedeemed,
-			active: weeklyActiveCoupon,
-			expired: weeklyExpiredCoupon,
-		}, 'Week');
-	}, [weeklyExpiredCoupon])
 
 	return (
 		<>
@@ -181,15 +196,18 @@ const BarChartOne = () => {
 				<div className="hexDashboard__card__header">
 					<div className="hexDashboard__card__header__flex">
 						<HexCardHeaderLeft>
-							<HexCardHeaderTitle titleHeading={translate_array.couponInsightsLabel} />
+							<HexCardHeaderTitle titleHeading={__('Coupon Insights','hex-coupon-for-woocommerce')} />
 						</HexCardHeaderLeft>
 						<HexCardHeaderRight>
-							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} />
+							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} value={selectedOption} />
 						</HexCardHeaderRight>
 					</div>
 				</div>
 				<div className="hexDashboard__card__inner mt-4">
-					{barChartData && <Bar data={barChartData} options={options}/>}
+					{isLoading && (
+						<Skeleton height={200} />
+					)}
+					{!isLoading && barChartData && <Bar data={barChartData} options={options}/>}
 				</div>
 			</div>
 		</>

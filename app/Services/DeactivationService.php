@@ -19,10 +19,5 @@ class DeactivationService
 
 	public static function deactivate()
 	{
-		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php echo esc_html__( 'Plugin is deactivated', 'hex-coupon-for-woocommerce'); ?></p>
-		</div>
-		<?php
 	}
 }

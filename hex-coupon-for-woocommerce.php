@@ -5,13 +5,13 @@
  * Plugin Name: HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: WpHex
  * Requires at least: 5.4
- * Tested up to: 6.3
+ * Tested up to: 6.4.1
  * Requires PHP: 7.1
  * WC requires at least: 6.0
- * WC tested up to: 8.2.1
+ * WC tested up to: 8.2.2
  * Author URI: https://wphex.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,6 +19,7 @@
  * Domain Path: /languages
  */
 
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use HexCoupon\App\Core\Core;
 
 if ( ! defined( 'ABSPATH' ) ) die();
@@ -50,5 +51,61 @@ function appsero_init_tracker_hex_coupon_for_woocommerce() {
 }
 
 appsero_init_tracker_hex_coupon_for_woocommerce();
+
+add_filter( 'plugin_action_links', 'hexcoupon_plugin_page_action_list', 10, 2 );
+
+/**
+ * Add custom texts besides deactivate text in the plugin page
+ *
+ * @return void
+ */
+function hexcoupon_plugin_page_action_list( $actions, $plugin_file )
+{
+	// Specify the directory and file name of the specific plugin
+	$specific_plugin_directory = 'hex-coupon-for-woocommerce';
+	$specific_plugin_file = 'hex-coupon-for-woocommerce.php';
+
+	$support_link = 'https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/';
+	$documentation_link = 'https://hexcoupon.com/docs/';
+
+	// Check if the current plugin is the specific one
+	if ( strpos( $plugin_file, $specific_plugin_directory . '/' . $specific_plugin_file ) !== false ) {
+		// Add custom link(s) beside the "Deactivate" link
+		$actions[] = '<a href=" ' . esc_url( $support_link ) . ' " target="_blank">'. __( 'Support', 'hex-coupon-for-woocommerce' ) .'</a>';
+		$actions[] = '<a href=" ' . esc_url( $documentation_link ) . ' " target="_blank"><b>'. __( 'Documentation', 'hex-coupon-for-woocommerce' ) .'</b></a>';
+	}
+
+	return $actions;
+}
+
+/**
+ * Plugin compatibility declaration with WooCommerce HPOS - High Performance Order Storage
+ *
+ * @return void
+ */
+add_action( 'before_woocommerce_init', function() {
+	if ( class_exists( FeaturesUtil::class ) ) {
+		FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+} );
+
+add_action( 'init', 'load_hexcoupon_textdomain', 1 );
+function load_hexcoupon_textdomain() {
+	load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
+}
+
+
+// Redirect users to the dashboard of HexCoupon after activating the plugin
+add_action( 'activated_plugin', 'redirect_to_hexcoupon_dashboard_after_plugin_activation' );
+function redirect_to_hexcoupon_dashboard_after_plugin_activation( $plugin ) {
+	if ( $plugin == 'hex-coupon-for-woocommerce/hex-coupon-for-woocommerce.php' ) {
+		// Check if WooCommerce is active and then redirect to HexCoupon menu page
+		if ( class_exists( 'WooCommerce' ) ) {
+			// Redirect to the specified page after activation
+			wp_safe_redirect( admin_url( 'admin.php?page=hexcoupon-page' ) );
+			exit;
+		}
+	}
+}
 
 Core::getInstance();

@@ -41,6 +41,7 @@ class AdminMenuController extends BaseController
 
 		if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 			add_action( 'admin_menu', [ $this, 'add_hexcoupon_menu' ] );
+			add_action( 'admin_menu', [ $this, 'add_different' ] );
 			add_action( 'admin_menu', [ $this, 'add_all_coupons_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
@@ -65,6 +66,19 @@ class AdminMenuController extends BaseController
 			[ $this, 'render_hexcoupon' ],
 			'dashicons-admin-settings',
 			40
+		);
+	}
+
+	public function add_different()
+	{
+		$menu_slug = 'hexcoupon-page';
+		add_submenu_page(
+			$menu_slug,
+			'Dashboard',
+			'Dashboard',
+			'manage_options',
+			$menu_slug,
+			[ $this, 'render_hexcoupon' ]
 		);
 	}
 
