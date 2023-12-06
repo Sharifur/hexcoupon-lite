@@ -3,7 +3,6 @@ import Sidebar from './components/HexMain/HexSidebar/sidebar';
 import Dashboard from './components/Pages/Dashboard/Dashboard';
 import MainContainer from './components/HexMain/HexMainContainer/MainContainer';
 function App() {
-
 	return (
 		<>
 			<HashRouter>

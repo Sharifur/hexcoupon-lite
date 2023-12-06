@@ -371,14 +371,13 @@ class AjaxApiController extends Controller
 	 */
 	public function total_coupon_created_and_redeemed()
 	{
-		$result = DB::select('posts.post_status')
-			->count('posts.ID', 'posts')
-			->from('posts posts')
-			->where('posts.post_type', '=', 'shop_coupon')
-			->andWhere('posts.post_status', '=', 'publish')
-			->get();
+		global $wpdb;
 
-		$final_result = ! empty( $result[0]['posts'] ) ? $result[0]['posts'] : '';
+		$query = "SELECT COUNT(ID) as count
+          FROM {$wpdb->prefix}posts
+          WHERE post_type = 'shop_coupon'
+          AND post_status = 'publish'";
+		$result = $wpdb->get_var( $query );
 
 		// Initialize the total redeemed coupon value
 		$total_redeemed_value = 0;
@@ -396,7 +395,7 @@ class AjaxApiController extends Controller
 			$total_redeemed_value += $discount_amount;
 		}
 
-		$final_array = [ $final_result, $total_redeemed_value ];
+		$final_array = [ $result, $total_redeemed_value ];
 
 		return $final_array;
 	}

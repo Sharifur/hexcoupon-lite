@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MdHome } from 'react-icons/md';
 import LogoImg from '../../../img/logo.png';
+import {IconBook, IconHelpSquareRounded, IconHome} from "@tabler/icons-react";
+import { __ } from '@wordpress/i18n';
 
 const Sidebar = () => {
     const [activeLink, setActiveLink] = useState('/');
@@ -11,11 +12,11 @@ const Sidebar = () => {
     };
 
     const sidebarLinks = [
-        { path: '/', text: 'Dashboard', LinkIcon: MdHome },
+        { path: '/', text: __("Dashboard","hex-coupon-for-woocommerce"), LinkIcon: IconHome },
     ];
 
     return (
-        <aside className='hexpDashboard__left sidebarWrapper'>
+        <aside className='hexpDashboard__left sidebarWrapper radius-10'>
             <div className="hexpDashboard__left__header">
                 <div className="hexpDashboard__left__header__logo logoWrapper">
                     <Link to="/"><img src={LogoImg} alt="" /></Link>
@@ -31,6 +32,13 @@ const Sidebar = () => {
                     </li>
                 ))}
             </ul>
+			<div className="hexcoupon_resources">
+				<p>{__("Our Resources","hex-coupon-for-woocommerce")}</p>
+				<ul>
+					<li><a href="https://hexcoupon.com/docs/" target="_blank"><IconBook />{__("Documentation","hex-coupon-for-woocommerce")}</a></li>
+					<li><a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank"><IconHelpSquareRounded />{__("Support","hex-coupon-for-woocommerce")}</a></li>
+				</ul>
+			</div>
         </aside>
     );
 };

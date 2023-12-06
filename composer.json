@@ -31,7 +31,6 @@
         "codesvault/wp-seeder": "^1.1"
     },
     "require": {
-        "codesvault/howdy-qb": "^1.3",
         "codesvault/validator": "^1.0",
         "codesvault/kathamo-framework": "^1.1",
         "appsero/client": "^1.2"

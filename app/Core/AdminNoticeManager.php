@@ -28,6 +28,10 @@ class AdminNoticeManager
 		add_action('admin_notices', [ $this, 'woocommerce_version_notice' ] );
 		// Hook for displaying a notice for checking the 'PHP' version.
 		add_action('admin_notices', [ $this, 'php_version_notice' ] );
+		// Show getting started notice after user activates the plugin
+		add_action('admin_notices', [ $this, 'getting_started_notice' ] );
+		// Hook to add AJAX action
+		add_action('wp_ajax_dismiss_custom_admin_notice', [ $this, 'dismiss_custom_admin_notice' ] );
 	}
 
 	/**
@@ -198,6 +202,22 @@ class AdminNoticeManager
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
+	 * @method get_woocommerce_install_notice_message
+	 * @return string
+	 * @since 1.0.0
+	 * Renders a message for WooCommerce installation notice for the users.
+	 * */
+	private function show_getting_started_message()
+	{
+		$getting_started_url = 'https://hexcoupon.com/get-to-know-how-the-coupon-works/';
+
+		return sprintf( __( '<p>Welcome to <b>HexCoupon</b> - Solution for smarter store marketing. Get advanced features for your <b>WooCommerce</b> store with our free plugin.
+		</p><a href="%s">Want to learn how to setup?</a>','hex-coupon-for-woocommerce' ), esc_url( $getting_started_url ) );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
 	 * @method get_wordpress_version_message
 	 * @return string
 	 * @since 1.0.0
@@ -325,4 +345,58 @@ class AdminNoticeManager
 		<?php
 		}
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method getting_started_notice
+	 * @since 1.0.0
+	 * Show getting started notice.
+	 * */
+	public function getting_started_notice()
+	{
+		$getting_started_notice = $this->show_getting_started_message();
+
+		$allowed_html_tags = [
+			'a' => [
+				'href' => [],
+			],
+			'p' => [],
+			'b' => [
+
+			]
+		];
+		function is_coupon_create_page() {
+				$protocol = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+				$host = $_SERVER['HTTP_HOST'];
+				$uri = $_SERVER['REQUEST_URI'];
+
+				return $protocol . '://' . $host . $uri;
+		}
+
+		$coupon_sinlge_url = admin_url().'post-new.php?post_type=shop_coupon';
+
+		$dismissed = get_user_meta(get_current_user_id(), 'custom_notice_dismissed', true);
+
+		if ( is_coupon_create_page() === $coupon_sinlge_url && ! $dismissed ) {
+			$image_folder_link = plugin_dir_url( __FILE__ ).'../../assets/images/';
+			?>
+			<div class="notice notice-info is-dismissible hexcoupon-admin-notice" id="custom-admin-notice">
+				<div class="hexcoupon-notice-icon">
+					<img src="<?php echo esc_url( $image_folder_link ); ?>hexcoupon-notice-icon.png" alt="Icon">
+				</div>
+				<div class="hexcoupon-notice-text">
+					<?php echo wp_kses( $getting_started_notice, $allowed_html_tags ); ?>
+				</div>
+			</div>
+			<?php
+		}
+	}
+
+	// AJAX handler to dismiss the custom notice of getting started
+	public function dismiss_custom_admin_notice() {
+		update_user_meta( get_current_user_id(), 'custom_notice_dismissed', true );
+	}
+
+
 }

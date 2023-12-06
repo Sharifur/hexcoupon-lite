@@ -33,8 +33,6 @@ const BarChartOne = () => {
 
 	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
 	const [isLoading,setIsLoading] = useState(true);
-	const [selectedOption, setSelectedOption] = useState('');
-
 
 	const [couponBarchartData, setCouponBarchartData] = useState({
 		todayCouponCreated : 0,
@@ -88,7 +86,6 @@ const BarChartOne = () => {
 				})
 				.finally(() => {
 					setIsLoading(false);
-					setSelectedOption('Week');
 				})
 
 		},
@@ -179,15 +176,15 @@ const BarChartOne = () => {
 	};
 
 	function handleChangeSelect(value){
-			if (value === 'Week') {
-				setBarChartData(getDataForCharJS(getWeekList, dataSet));
-			}
-			if (value === 'Yesterday') {
-				setBarChartData(getDataForCharJS(getSingleDayList, dataSetForYesterday));
-			}
-			if (value === 'Today') {
-				setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
-			}
+		if (value === 'Week') {
+			setBarChartData(getDataForCharJS(getWeekList, dataSet));
+		}
+		if (value === 'Yesterday') {
+			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForYesterday));
+		}
+		if (value === 'Today') {
+			setBarChartData(getDataForCharJS(getSingleDayList, dataSetForToday));
+		}
 	}
 
 	return (
@@ -199,7 +196,7 @@ const BarChartOne = () => {
 							<HexCardHeaderTitle titleHeading={__('Coupon Insights','hex-coupon-for-woocommerce')} />
 						</HexCardHeaderLeft>
 						<HexCardHeaderRight>
-							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} value={selectedOption} />
+							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} />
 						</HexCardHeaderRight>
 					</div>
 				</div>

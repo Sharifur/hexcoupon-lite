@@ -32,7 +32,8 @@ const HexCouponPromo = () => {
 				},
 			})
 			.then(({ data }) => {
-				// Update all the state values in one go
+
+				console.log(data)
 				setCouponData({
 					created: data.created,
 					active: data.active,
@@ -50,7 +51,7 @@ const HexCouponPromo = () => {
 				console.error('Error:', error);
 			})
 			.finally(() => setIsLoading(false));
-	}, [couponData]);
+	}, [isLoading]);
 
 	const {
 		created,

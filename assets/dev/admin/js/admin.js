@@ -10,6 +10,46 @@
            Mixed Code
        ========================================
        */
+		// Code for restricting admin notice for being displayed
+		$('#custom-admin-notice').on('click', function() {
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'dismiss_custom_admin_notice'
+				}
+			});
+		});
+
+		const hash = window.location.hash;
+
+		if (hash === '#sharable_url_coupon_tab') {
+			const tabElement = document.querySelector('.sharable_url_coupon_tab_tab');
+			if (tabElement) {
+				$('li.sharable_url_coupon_tab_tab a').trigger('click');
+			}
+		}
+
+		if (hash === "#geographic_restriction_tab") {
+			const tabElement = document.querySelector('.geographic_restriction_tab_tab');
+			if (tabElement) {
+				$('li.geographic_restriction_tab_tab a').trigger('click');
+			}
+		}
+
+		if (hash === "#custom_coupon_tab") {
+			const tabElement = document.querySelector('.custom_coupon_tab_tab');
+			if (tabElement) {
+				$('li.custom_coupon_tab_tab a').trigger('click');
+			}
+		}
+
+		if (hash === "#general_coupon_data_bogo") {
+			const tabElement = document.querySelector('.general_tab');
+			if (tabElement) {
+				$('#coupon_type').val('buy_x_get_x_bogo');
+			}
+		}
 
 		// Select hexcoupon shortcode field
 		$(".shortcode_column").click(function(){

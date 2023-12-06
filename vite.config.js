@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from '@vitejs/plugin-react';
 
 const currentFilePath = new URL(import.meta.url).pathname;
+
 const regex = /[^\/\/]+(?=\/wp-content\/plugins\/hex-coupon-for-woocommerce)/;
 const match = currentFilePath.match(regex);
 var everythingBefore = '';
