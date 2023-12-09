@@ -681,7 +681,6 @@
 		   Days and Hours fields for Sunday
 	   ========================================
 	   */
-
 		// Enable flatpicker on sunday default input fields
 		flatPicker('sunday');
 
