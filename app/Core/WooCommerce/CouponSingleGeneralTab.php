@@ -116,10 +116,38 @@ class CouponSingleGeneralTab
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'add_specific_product_to_purchase',
+			'id' => 'add_specific_product_to_purchase',
 			'placeholder' => __('Search for specific product')
 		] );
 
 		echo '<span class="add_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hex-coupon-for-woocommerce' ) ).'</span>';
+
+		echo '<div id="selected_purchased_products">';
+		if ( ! empty( $add_specific_product_to_purchase ) ) {
+			foreach ( $add_specific_product_to_purchase as $value ) {
+				$purchased_product_title = get_the_title( $value );
+
+				$converted_purchased_product_title = strtolower( str_replace( ' ', '_', $purchased_product_title ) );
+
+				$purchased_min_quantity = get_post_meta( $post->ID, $converted_purchased_product_title . '-purchased_min_quantity', true );
+
+				echo '<div class="product-item-whole">';
+				echo '<div class="product_title">'.$purchased_product_title.'</div>';
+				?>
+				<div class="product_min_max_main">
+					<div class='product_min product-wrap'>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<input class="product-quantity-input" placeholder='Quantity' type='number' value="<?php echo esc_attr( $purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_title );?>-purchased_min_quantity" min="0" max="100">
+						</div>
+						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_purchased_product' data-title="<?php echo esc_attr( $purchased_product_title ); ?>" data-value="<?php echo esc_attr( $value ); ?>"></a>
+					</div>
+				</div>
+				<?php
+				echo '</div>';
+			}
+		}
+		echo '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -140,10 +168,40 @@ class CouponSingleGeneralTab
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'add_categories_to_purchase',
+			'id' => 'add_categories_to_purchase',
 			'placeholder' => __('Search for categories')
 		] );
 
 		echo '<span class="add_categories_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer need to buy from.', 'hex-coupon-for-woocommerce' ) ).'</span>';
+
+		echo '<div id="selected_purchased_categories">';
+
+		if ( ! empty( $add_categories_to_purchase ) ) {
+			foreach ( $add_categories_to_purchase as $value ) {
+				$purchased_product_category_title = get_the_category_by_ID( $value );
+
+				$converted_purchased_product_category_title = strtolower( str_replace( ' ', '_', $purchased_product_category_title ) );
+
+				$category_purchased_min_quantity = get_post_meta( $post->ID, $converted_purchased_product_category_title . '-purchased_category_min_quantity', true );
+
+				echo '<div class="product-item-whole">';
+				echo '<div class="product_title">'.$purchased_product_category_title.'</div>';
+				?>
+				<div class="product_min_max_main">
+					<div class='product_min product-wrap'>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<input class="product-quantity-input" placeholder='Quantity' type='number' value="<?php echo esc_attr( $category_purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_category_title );?>-purchased_category_min_quantity" min="0" max="100">
+						</div>
+						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_purchased_category' data-value="<?php echo esc_attr( $value ); ?>" data-title="<?php echo esc_attr( $purchased_product_category_title ); ?>"></a>
+					</div>
+				</div>
+				<?php
+				echo '</div>';
+			}
+		}
+
+		echo '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -164,7 +222,6 @@ class CouponSingleGeneralTab
 					'a_specific_product' => esc_html__( 'A specific product', 'hex-coupon-for-woocommerce' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
-					'same_product_added_to_cart' => esc_html__( 'Same product added to cart', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => $customer_gets_as_free,
 			]
@@ -186,10 +243,59 @@ class CouponSingleGeneralTab
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'add_specific_product_for_free',
+			'id' => 'add_specific_product_for_free',
 			'placeholder' => __('Search for specific product')
 		] );
 
 		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hex-coupon-for-woocommerce' ) ).'</span>';
+
+		echo '<div id="selected_free_products">';
+		if( ! empty( $add_specific_product_for_free ) ) {
+			foreach ( $add_specific_product_for_free as $value ) {
+				$free_product_title = get_the_title( $value );
+
+				$converted_free_product_title = strtolower( str_replace( ' ', '_', $free_product_title ) );
+
+				$free_product_quantity = get_post_meta( $post->ID, $converted_free_product_title . '-free_product_quantity', true );
+
+				$free_product_amount = get_post_meta( $post->ID, $converted_free_product_title . '-free_amount', true );
+
+				echo '<div class="product-item-whole">';
+				echo '<div class="product_title">'.$free_product_title.'</div>';
+				?>
+				<div class="product_min_max_main">
+					<div class='product_min product-wrap'>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<input class="product-quantity-input minimum" placeholder='Quantity' type='number' value="<?php echo esc_attr( $free_product_quantity ); ?>" name="<?php echo esc_attr( $converted_free_product_title );?>-free_product_quantity" min="0" max="100">
+						</div>
+					</div>
+					<div class='product_min product-wrap'>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'Discount Type', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<?php
+							$saved_discount_type = get_post_meta($post->ID, $converted_free_product_title . '-hexcoupon_bogo_discount_type', true);
+
+							// Default value if not set
+							$saved_discount_type = $saved_discount_type ? $saved_discount_type : 'percent';
+							?>
+							<select name="<?php echo esc_attr( $converted_free_product_title );?>-hexcoupon_bogo_discount_type" id="hexcoupon_bogo_discount_type">
+								<option value="percent" <?php if ( 'percent' === $saved_discount_type ) echo esc_attr( 'selected' );?>>Percent (%)</option>
+								<option value="fixed" <?php if ( 'fixed' === $saved_discount_type ) echo esc_attr( 'selected' );?>>Fixed</option>
+							</select>
+						</div>
+						<div class="product-wrap-inner">
+							<p class="product-wrap-para"><?php echo esc_html__( 'Amount', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<input class="product-quantity-input" placeholder='Amount' type='number' value="<?php echo esc_attr( $free_product_amount ); ?>" name="<?php echo esc_attr( $converted_free_product_title );?>-free_amount" min="0" max="100">
+						</div>
+						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_free_product' data-title="<?php echo esc_attr( $free_product_title ); ?>" data-value="<?php echo esc_attr( $value ); ?>"></a>
+					</div>
+				</div>
+				<?php
+				echo '</div>';
+			}
+		}
+		echo '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
 
@@ -322,8 +428,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field saturday">
                             <span class="first-input">
-                                <input type="text" class="time-picker-saturday" name="sat_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $sat_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_saturday">-</span>
-                                <input type="text" class="time-picker-saturday" name="sat_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $sat_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                                <input type="text" class="time-picker-saturday coupon_start_time" name="sat_coupon_start_time" value="<?php echo esc_attr( $sat_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_saturday">-</span>
+                                <input type="text" class="time-picker-saturday coupon_start_time" name="sat_coupon_expiry_time" value="<?php echo esc_attr( $sat_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                                 <input type="hidden" id="total_hours_count_saturday" name="total_hours_count_saturday" value="<?php $total_hours_count_saturday = intval( get_post_meta( $post->ID, 'total_hours_count_saturday', true ) ); echo esc_attr( $total_hours_count_saturday ); ?>">
                             </span>
@@ -333,8 +439,8 @@ class CouponSingleGeneralTab
 								$start_time = get_post_meta( $post->ID, 'sat_coupon_start_time_' . $i, true );
 								$expiry_time = get_post_meta( $post->ID, 'sat_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
-                                                      <input type='text' class='time-picker-saturday' name='sat_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday' name='sat_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <input type='text' class='time-picker-saturday coupon_start_time' name='sat_coupon_start_time_".$i."' value='".$start_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday coupon_expiry_time' name='sat_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_saturday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -391,8 +497,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field sunday">
                             <span class="first-input">
-                                <input type="text" class="time-picker-sunday" name="sun_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $sun_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_sunday">-</span>
-                                <input type="text" class="time-picker-sunday" name="sun_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $sun_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                                <input type="text" class="time-picker-sunday coupon_start_time" name="sun_coupon_start_time" value="<?php echo esc_attr( $sun_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_sunday">-</span>
+                                <input type="text" class="time-picker-sunday coupon_start_time" name="sun_coupon_expiry_time" value="<?php echo esc_attr( $sun_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                                 <input type="hidden" id="total_hours_count_sunday" name="total_hours_count_sunday" value="<?php $total_hours_count_sunday = intval( get_post_meta( $post->ID, 'total_hours_count_sunday', true ) ); echo esc_attr( $total_hours_count_sunday); ?>">
                             </span>
@@ -402,8 +508,8 @@ class CouponSingleGeneralTab
 								$start_time = get_post_meta( $post->ID, 'sun_coupon_start_time_' . $i, true );
 								$expiry_time = get_post_meta( $post->ID, 'sun_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
-                                                      <input type='text' class='time-picker-sunday' name='sun_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday' name='sun_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <input type='text' class='time-picker-sunday coupon_start_time' name='sun_coupon_start_time_".$i."' value='".$start_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday coupon_start_time' name='sun_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_sunday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -458,8 +564,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field monday">
                             <span class="first-input">
-                                <input type="text" class="time-picker-monday" name="mon_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $mon_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_monday">-</span>
-                                <input type="text" class="time-picker-monday" name="mon_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $mon_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                                <input type="text" class="time-picker-monday coupon_start_time" name="mon_coupon_start_time" value="<?php echo esc_attr( $mon_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_monday">-</span>
+                                <input type="text" class="time-picker-monday coupon_start_time" name="mon_coupon_expiry_time" value="<?php echo esc_attr( $mon_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                                 <input type="hidden" id="total_hours_count_monday" name="total_hours_count_monday" value="<?php $total_hours_count_monday = intval( get_post_meta( $post->ID, 'total_hours_count_monday', true ) ); echo esc_attr( $total_hours_count_monday ); ?>">
                             </span>
@@ -470,7 +576,7 @@ class CouponSingleGeneralTab
 								$expiry_time = get_post_meta( $post->ID, 'mon_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-monday' name='mon_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday' name='mon_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday coupon_expiry_time' name='mon_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_monday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -525,8 +631,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field tuesday">
                            <span class="first-input">
-                                <input type="text" class="time-picker-tuesday" name="tue_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $tue_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_tuesday">-</span>
-                                <input type="text" class="time-picker-tuesday" name="tue_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $tue_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                                <input type="text" class="time-picker-tuesday coupon_start_time" name="tue_coupon_start_time" value="<?php echo esc_attr( $tue_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_tuesday">-</span>
+                                <input type="text" class="time-picker-tuesday coupon_start_time" name="tue_coupon_expiry_time" value="<?php echo esc_attr( $tue_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                                 <input type="hidden" id="total_hours_count_tuesday" name="total_hours_count_tuesday" value="<?php $total_hours_count_tuesday = intval( get_post_meta( $post->ID, 'total_hours_count_tuesday', true ) ); echo esc_attr( $total_hours_count_tuesday ); ?>">
                            </span>
@@ -537,7 +643,7 @@ class CouponSingleGeneralTab
 								$expiry_time = get_post_meta( $post->ID, 'tue_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday' name='tue_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday coupon_expiry_time' name='tue_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_tuesday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -592,8 +698,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field wednesday">
                         <span class="first-input">
-                            <input type="text" class="time-picker-wednesday" name="wed_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $wed_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_wednesday">-</span>
-                            <input type="text" class="time-picker-wednesday" name="wed_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $wed_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                            <input type="text" class="time-picker-wednesday coupon_start_time" name="wed_coupon_start_time" value="<?php echo esc_attr( $wed_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_wednesday">-</span>
+                            <input type="text" class="time-picker-wednesday coupon_start_time" name="wed_coupon_expiry_time" value="<?php echo esc_attr( $wed_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                             <input type="hidden" id="total_hours_count_wednesday" name="total_hours_count_wednesday" value="<?php $total_hours_count_wednesday = intval( get_post_meta( $post->ID, 'total_hours_count_wednesday', true ) ); echo esc_attr( $total_hours_count_wednesday ); ?>">
                         </span>
@@ -604,7 +710,7 @@ class CouponSingleGeneralTab
 								$expiry_time = get_post_meta( $post->ID, 'wed_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday' name='wed_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday coupon_expiry_time' name='wed_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_wednesday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -659,8 +765,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field thursday">
                         <span class="first-input">
-                                <input type="text" class="time-picker-thursday" name="thu_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $thu_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_thursday">-</span>
-                                <input type="text" class="time-picker-thursday" name="thu_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $thu_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                                <input type="text" class="time-picker-thursday coupon_start_time" name="thu_coupon_start_time" value="<?php echo esc_attr( $thu_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_thursday">-</span>
+                                <input type="text" class="time-picker-thursday coupon_start_time" name="thu_coupon_expiry_time" value="<?php echo esc_attr( $thu_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                                 <input type="hidden" id="total_hours_count_thursday" name="total_hours_count_thursday" value="<?php $total_hours_count_thursday = intval( get_post_meta( $post->ID, 'total_hours_count_thursday', true ) ); echo esc_attr( $total_hours_count_thursday ); ?>">
                         </span>
@@ -671,7 +777,7 @@ class CouponSingleGeneralTab
 								$expiry_time = get_post_meta( $post->ID, 'thu_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                       <input type='text' class='time-picker-thursday' name='thu_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                      <span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday' name='thu_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                      <span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday coupon_expiry_time' name='thu_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                       <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_thursday cross-hour'></a>
                                                     </span>";
 								echo $appendedElement;
@@ -726,8 +832,8 @@ class CouponSingleGeneralTab
 					<div class="time-hours-start-expiry">
 						<p class="form-field friday">
                         <span class="first-input">
-                            <input type="text" class="time-picker-friday" name="fri_coupon_start_time" id="coupon_start_time" value="<?php echo esc_attr( $fri_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_friday">-</span>
-                            <input type="text" class="time-picker-friday" name="fri_coupon_expiry_time" id="coupon_expiry_time" value="<?php echo esc_attr( $fri_coupon_expiry_time ); ?>" placeholder="HH:MM" />
+                            <input type="text" class="time-picker-friday coupon_start_time" name="fri_coupon_start_time" value="<?php echo esc_attr( $fri_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_friday">-</span>
+                            <input type="text" class="time-picker-friday coupon_start_time" name="fri_coupon_expiry_time" value="<?php echo esc_attr( $fri_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
                             <input type="hidden" id="total_hours_count_friday" name="total_hours_count_friday" value="<?php $total_hours_count_friday = intval( get_post_meta( $post->ID, 'total_hours_count_friday', true ) ); echo esc_attr( $total_hours_count_friday ); ?>">
                         </span>
@@ -738,7 +844,7 @@ class CouponSingleGeneralTab
 								$expiry_time = get_post_meta( $post->ID, 'fri_coupon_expiry_time_' . $i, true );
 								$appendedElement = "<span class='appededItem first-input'>
                                                   <input type='text' class='time-picker-friday' name='fri_coupon_start_time_".$i."' id='coupon_start_time' value='".$start_time."' placeholder='HH:MM'>
-                                                  <span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday' name='fri_coupon_expiry_time_".$i."' id='coupon_expiry_time' value='".$expiry_time."' placeholder='HH:MM'>
+                                                  <span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday coupon_expiry_time' name='fri_coupon_expiry_time_".$i."' value='".$expiry_time."' placeholder='HH:MM'>
                                                   <a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_friday cross-hour'></a>
                                                 </span>";
 								echo $appendedElement;

@@ -177,7 +177,11 @@ span.day-title {
 .allowed_individual_customer span.select2-container,
 .all_selected_categories span.select2-container,
 .permitted_payment_methods + span.select2-container,
-.permitted_shipping_methods + span.select2-container {
+.permitted_shipping_methods + span.select2-container,
+.include_additional_emails + span.select2-container,
+.exclude_emails + span.select2-container,
+.add_additional_phones + span.select2-container,
+.exclude_phone_list + span.select2-container {
 	width: 50% !important;
 }
 
@@ -276,7 +280,8 @@ p.output-url-text {
 
 #woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_options a::before,
 #woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before,
-#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before {
+#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before,
+#woocommerce-coupon-data ul.wc-tabs li.sms_email_tab_tab a::before {
 	content: '\f111'
 }
 
@@ -294,7 +299,7 @@ p.output-url-text {
 }
 .product_title {
 	font-size: 14px;
-	font-weight: 400;
+	font-weight: 500;
 	color: #333;
 }
 
@@ -323,9 +328,13 @@ p.output-url-text {
 	font-size: 13px;
 	color: #333;
 	height: 30px;
-	width: 120px !important;
+	width: 85px !important;
 }
-.remove_product {
+.remove_product,
+.remove_purchased_product,
+.remove_free_product,
+.remove_purchased_category
+{
 	font-size: 20px;
 	color: #EB4747;
 	text-decoration: none;
@@ -391,6 +400,29 @@ p.output-url-text {
 	color: #2271b1;
 }
 
+.sms_email_tab p.apply_send_current_coupon_field, .sms_email_tab p.send_coupon_via_sms_field {
+	margin-left: -150px;
+}
+
+.hex-csv-upload {
+	font-size: 14px;
+	font-weight: 600;
+	color: #2271B1;
+}
+
+.button.hex-csv-upload {
+	padding: 12px 21px !important;
+	width: 170px;
+	text-align: center;
+}
+
+.hex-csv-remove {
+	margin-left: 12px !important;
+	font-size: 14px;
+	font-weight: 600;
+	color: #2271B1;
+}
+
 @media only screen and (max-width: 1650px) {
 	.reset_limit p {
 		width: 30%;
@@ -421,6 +453,13 @@ p.output-url-text {
 		width: 100% !important;
 	}
 
+	.include_additional_emails + span.select2-container,
+	.exclude_emails + span.select2-container,
+	.add_additional_phones + span.select2-container,
+	.exclude_phone_list + span.select2-container {
+		width: 60% !important;
+	}
+
 	/* select2 input field width */
 	.add_specific_product_to_purchase ul li {
 		width: 33% !important;
@@ -434,7 +473,8 @@ p.output-url-text {
 
 @media only screen and (max-width: 1280px) {
 	.add_specific_product_to_purchase .options_group span.select2-container,
-	.payment_and_shipping_method span.select2-container {
+	.payment_and_shipping_method span.select2-container,
+	.add_specific_product_for_free span.select2-container {
 		width: 80% !important;
 	}
 
@@ -451,12 +491,34 @@ p.output-url-text {
 	.restricted_countries span ul li {
 		width: 50% !important;
 	}
+
+	.add_specific_product_for_free span ul li {
+		width: 36% !important;
+	}
 }
 
 @media only screen and (max-width: 1100px) {
 	.reset_limit p {
 		width: 20%;
 		margin: 10px 10px !important;
+	}
+}
+
+@media only screen and (max-width: 1150px) {
+	.include_additional_emails + span.select2-container,
+	.exclude_emails + span.select2-container,
+	.add_additional_phones + span.select2-container,
+	.exclude_phone_list + span.select2-container {
+		width: 70% !important;
+	}
+}
+
+@media only screen and (max-width: 1060px) {
+	.include_additional_emails + span.select2-container,
+	.exclude_emails + span.select2-container,
+	.add_additional_phones + span.select2-container,
+	.exclude_phone_list + span.select2-container {
+		width: 90% !important;
 	}
 }
 
@@ -515,5 +577,8 @@ p.output-url-text {
 	}
 	.reset_limit {
 		margin-left: 20px;
+	}
+	.sms_email_tab p.apply_send_current_coupon_field {
+		margin-left: -10px;
 	}
 }

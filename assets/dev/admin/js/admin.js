@@ -97,8 +97,8 @@
 
 		const addCategoriesToPurchase = $(".add_categories_to_purchase");
 
-		// Place the add categories select2 input fields after the customer purchases field
 		addCategoriesToPurchase.insertAfter(customerPurchasesField);
+		$("select.add_categories_to_purchase").insertAfter(".add_categories_to_purchase label");
 		$(".add_categories_to_purchase_tooltip").insertAfter(".add_categories_to_purchase span.select2-container");
 
 		const customerGetsAsFreeClass = $(".customer_gets_as_free");
@@ -153,7 +153,7 @@
 				messageForCouponExpiryDateField.show();
 				couponStartingDateField.show();
 				messageForCouponStartingDateField.show();
-				// applyDaysHoursOfWeekField.show();
+				$("#selected_free_products").hide();
 			}
 		});
 
@@ -162,6 +162,16 @@
 
 		// Don't allow more than one product selection on selecting a specific product from the customer purchases field
 		const customerPurchases = $("input[name='customer_purchases']");
+		const customerPurchasesChecked = $("input[name='customer_purchases']:checked");
+		const customerGetsChecked = $("input[name='customer_gets_as_free']:checked");
+
+		if(customerPurchasesChecked.val() === "product_categories"){
+			addCategoriesToPurchase.show();
+			addSpecificProductToPurchaseClass.hide();
+		}else{
+			addCategoriesToPurchase.hide();
+			addSpecificProductToPurchaseClass.show();
+		}
 
 		// Show or hide product selection and category selection input fields if product categories type is selected
 		customerPurchases.on("change",function(){
@@ -172,26 +182,27 @@
 				addCategoriesToPurchase.hide();
 				addSpecificProductToPurchaseClass.show();
 			}
-		});
 
-		// Control number of result selection if a specific product type is selected
-		customerPurchases.on("change",function(){
 			if("a_specific_product" === $(this).val()){
 				addSpecificProductToPurchaseId.select2({
-					maximumSelectionLength: 1 // Set maximum selection to 1
+					maximumSelectionLength: 1, // Set maximum selection to 1
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
 				});
 			}else {
 				addSpecificProductToPurchaseId.select2({
-					maximumSelectionLength: 0 // Set maximum selection to unlimited
+					maximumSelectionLength: 0, // Set maximum selection to unlimited
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
 				});
 			}
-		});
 
-		// Trigger the change on page load
-		customerPurchases.trigger("change");
-
-		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
-		$('input[name="customer_purchases"]').on('change', function() {
 			// Check if the radio button is checked and its value is 'a_specific_product'
 			if ($(this).is(':checked') && $(this).val() === 'a_specific_product') {
 				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
@@ -200,41 +211,81 @@
 				var selectedOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
 
 				// Remove the selected attribute from all options except the first selected one
-				$('select[name="add_specific_product_to_purchase"] option:selected:not(:first)').removeAttr('selected');
+				$('#add_specific_product_to_purchase option:selected:not(:first)').removeAttr('selected');
 
 				// Reset the selected option back to the first one
 				selectedOption.prop('selected', true);
+
+				$("#selected_purchased_products .product-item-whole").slice(1).remove();
 			}
 		});
+
+		if(customerPurchasesChecked.val() === "a_specific_product"){
+			addSpecificProductToPurchaseId.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 1 // Set maximum selection to 1
+			});
+		}else{
+			addSpecificProductToPurchaseId.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 0 // Set maximum selection to unlimited
+			});
+		}
 
 		// Don't allow more than one product selection on selecting a specific product from the customer gets as free field
 		const customerGetsAsFree = $("input[name='customer_gets_as_free']");
-
-		// Show or hide product selection and category selection input fields if product categories type is selected
-		customerGetsAsFree.on("change",function(){
-			if($(this).is(":checked") && "same_product_added_to_cart" === $(this).val()){
-				addSpecificProductForFreeClass.hide();
-			}else{
-				addSpecificProductForFreeClass.show();
-			}
-		});
-
-		customerGetsAsFree.trigger("change");
 
 		// Control number of result selection if a specific product type is selected
 		customerGetsAsFree.on("change",function(){
 			if("a_specific_product" === $(this).val()){
 				addSpecificProductForFreeID.select2({
-					maximumSelectionLength: 1 // Set maximum selection to 1
+					maximumSelectionLength: 1, // Set maximum selection to 1
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
 				});
 			}else {
 				addSpecificProductForFreeID.select2({
-					maximumSelectionLength: 0 // Set maximum selection to unlimited
+					maximumSelectionLength: 0, // Set maximum selection to unlimited
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
 				});
 			}
 		});
 
-		customerGetsAsFree.trigger("change");
+		if(customerGetsChecked.val() === "a_specific_product"){
+			addSpecificProductForFreeID.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 1, // Set maximum selection to 1
+			});
+		}
+		else{
+			addSpecificProductForFreeID.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 0, // Set maximum selection to unlimited
+			});
+		}
 
 		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
 		$('input[name="customer_gets_as_free"]').on('change', function() {
@@ -242,6 +293,16 @@
 			if ($(this).is(':checked') && $(this).val() === 'a_specific_product') {
 				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
 				$('.customer_gets_as_free .select2-selection__choice').slice(1).remove();
+
+				const selectedFreeOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
+
+				// Remove the selected attribute from all options except the first selected one
+				$('#add_specific_product_for_free option:selected:not(:first)').removeAttr('selected');
+
+				// Reset the selected option back to the first one
+				selectedFreeOption.prop('selected', true);
+
+				$("#selected_free_products .product-item-whole").slice(1).remove();
 			}
 		});
 
@@ -468,6 +529,194 @@
 
 		/*
        ========================================
+           Bogo in General Tab
+       ========================================
+       */
+		$(document).on('click', '.submitbox #publish', function (e){
+			var firstInvalidInput = null;
+
+			// Iterate through each input field with class '.minimum'
+			$('.minimum').each(function (){
+				var freeQuantityMinInput = $(this).val();
+
+				// Check if the input is empty or not a number
+				if ($.trim(freeQuantityMinInput) === '' || isNaN(freeQuantityMinInput)){
+					// Prevent the default behavior of the WP post publish button
+					e.preventDefault();
+					// Display the alert button for invalid
+					alert('Please enter a valid quantity for all free products.');
+
+					// Set the first invalid input field
+					if (!firstInvalidInput){
+						firstInvalidInput = this;
+					}
+					return false; // Exit the loop if validation fails for any field
+				}
+			});
+
+			// Take the users to the first invalid number input filed
+			if (firstInvalidInput){
+				$(firstInvalidInput).focus();
+			}
+		});
+
+
+		// Place the div with an id of 'selected_purchased_products' after the 'add_specific_product_to_purchase options_group' div
+		$("#selected_purchased_products").insertAfter(".add_specific_product_to_purchase .options_group");
+		// Place the div with an id of 'selected_purchased_categories' aftr the 'add_categories_to_purchase options_group' div
+		$("#selected_purchased_categories").insertAfter(".add_categories_to_purchase .options_group");
+
+		$("#add_specific_product_to_purchase").on("select2:select",function (e){
+			var selectedOption = $(e.params.data.element);
+
+			// Get the title attribute value
+			var titleAttribute = selectedOption.attr('title');
+
+			var valueAttribute = selectedOption.attr('value');
+
+			var convertedTitleName = convertTitleToName(titleAttribute);
+
+			// Create a new product item
+			var newPurchasedProductItem = $('<div class="product-item-whole">' +
+				'<div class="product_title">'+titleAttribute+'</div>' +
+				'<div class="product_min_max_main">' +
+				'<div class="product_min product-wrap">' +
+				'<div class="product-wrap-inner">' +
+				'<p class="product-wrap-para">Quantity</p>' +
+				'<input class="product-quantity-input" placeholder="Quantity" type="number" value="1" min="0" max="100" name="'+convertedTitleName+'-purchased_min_quantity">' +
+				'</div>' +
+				'<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_purchased_product" data-title="'+titleAttribute+'" data-value="'+valueAttribute+'"></a>' +
+				'</div>' +
+				'</div>' +
+				'</div>');
+
+			// Append the new product item to the selected_purchased_products div
+			$('#selected_purchased_products').append(newPurchasedProductItem);
+
+		});
+
+		// Attach click event to the span with select2-selection__choice__remove class
+		$(document).on('click','.select2-selection__choice__remove',function(){
+			var liValue = $(this).closest('li').attr('value');
+
+			// Find the product-item-whole div with a matching a tag
+			var matchingDiv = $('.product-item-whole a[data-value="' + liValue + '"]').closest('.product-item-whole');
+
+			// Remove the product-item-whole div
+			matchingDiv.remove();
+		});
+
+		// product purchase
+		$(document).on("click",".remove_purchased_product", function (){
+			let purchasedValue = $(this).attr("data-value");
+
+			$('li[value*="'+purchasedValue+'"]').remove();
+			$('#add_specific_product_to_purchase option[value="'+purchasedValue+'"]').removeAttr("selected");
+
+			// call this function for handlingAllProductSection task
+			removeProductItemCard($(this));
+		});
+
+		// Purchased category
+		$("#add_categories_to_purchase").select2({
+			templateSelection: function (data, container) {
+				// Add a 'value' attribute to the generated <li> elements
+				$(container).attr('value', data.id);
+				return data.text;
+			}
+		});
+
+		$("#add_categories_to_purchase").on("select2:select",function (e){
+			var selectedOption = $(e.params.data.element);
+
+			var valueAttribute = selectedOption.attr('value');
+			// Get the title attribute
+			var CatTitleAttribute = selectedOption.attr('title');
+
+			var convertedCatTitleName = convertTitleToName(CatTitleAttribute);
+
+			// Create a new product item
+			var newPurchasedCatProductItem = $('<div class="product-item-whole">' +
+				'<div class="product_title">'+CatTitleAttribute+'</div>' +
+				'<div class="product_min_max_main">' +
+				'<div class="product_min product-wrap">' +
+				'<div class="product-wrap-inner">' +
+				'<p class="product-wrap-para">Quantity</p>' +
+				'<input class="product-quantity-input" placeholder="Quantity" type="number" value="1" name="'+convertedCatTitleName+'-purchased_category_min_quantity" min="0" max="100">' +
+				'</div>' +
+				'<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_purchased_category" data-title="'+CatTitleAttribute+'" data-value="'+valueAttribute+'"></a>' +
+				'</div>' +
+				'</div>' +
+				'</div>');
+
+			// Append the new product item to the selected_purchased_products div
+			$('#selected_purchased_categories').append(newPurchasedCatProductItem);
+		});
+
+		// product category purchase
+		$(document).on("click",".remove_purchased_category", function (){
+			let purchasedCatValue = $(this).attr("data-value");
+
+			$('li[value*="'+purchasedCatValue+'"]').remove();
+			$('#add_categories_to_purchase option[value="'+purchasedCatValue+'"]').removeAttr("selected");
+
+			// call this function for handlingAllProductSection task
+			removeProductItemCard($(this));
+		});
+
+		// Free Products
+		$("#add_specific_product_for_free").on("select2:select",function (e){
+			var selectedOption = $(e.params.data.element);
+
+			var freeTitleAttribute = selectedOption.attr('title');
+			var freeValueAttribute = selectedOption.attr('value');
+
+			var convertedFreeTitleName = convertTitleToName(freeTitleAttribute);
+
+			var newPurchasedFreeProductItem = `
+				  <div class="product-item-whole">
+					<div class="product_title">${freeTitleAttribute}</div>
+					<div class="product_min_max_main">
+					  <div class="product_min product-wrap">
+						<div class="product-wrap-inner">
+						  <p class="product-wrap-para">Quantity</p>
+						  <input class="product-quantity-input minimum" placeholder="Quantity" type="number" value="1" name="${convertedFreeTitleName}-free_product_quantity" min="0" max="100">
+						</div>
+					  </div>
+					  <div class="product_min product-wrap">
+						<div class="product-wrap-inner">
+						  <p class="product-wrap-para">Discount Type</p>
+						  <select name="${convertedFreeTitleName}-hexcoupon_bogo_discount_type" id="hexcoupon_bogo_discount_type">
+							<option value="percent">Percent (%)</option>
+							<option value="fixed">Fixed</option>
+						  </select>
+						</div>
+						<div class="product-wrap-inner">
+						  <p class="product-wrap-para">Amount</p>
+						  <input class="product-quantity-input" placeholder="Amount" type="number" value="0" name="${convertedFreeTitleName}-free_amount" min="0" max="100">
+						</div>
+						<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_free_product" data-title="${freeTitleAttribute}" data-value="${freeValueAttribute}"></a>
+					  </div>
+					</div>
+				  </div>
+				`;
+
+			// Append the new product item to the selected_purchased_products div
+			$('#selected_free_products').append(newPurchasedFreeProductItem);
+		});
+
+		$(document).on("click",".remove_free_product", function (){
+			let purchasedFreeValue = $(this).attr("data-value");
+
+			$('li[value*="'+purchasedFreeValue+'"]').remove();
+			$('#add_specific_product_for_free option[value="'+purchasedFreeValue+'"]').removeAttr("selected");
+
+			// call this function for handlingAllProductSection task
+			removeProductItemCard($(this));
+		});
+
+		/*
+       ========================================
            	Days & Hours in General Tab
        ========================================
        */
@@ -635,7 +884,7 @@
 			if (totalHoursCountSaturdayVal < 1) {
 				totalHoursCountSaturdayVal++;
 
-				let appendedElementSaturday = "<span class='appededItem first-input'><input type='text' class='time-picker-saturday' name='sat_coupon_start_time_" + totalHoursCountSaturdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday' name='sat_coupon_expiry_time_" + totalHoursCountSaturdayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_saturday cross-hour'></a></span>";
+				let appendedElementSaturday = "<span class='appededItem first-input'><input type='text' class='time-picker-saturday' name='sat_coupon_start_time_" + totalHoursCountSaturdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday coupon_expiry_time' name='sat_coupon_expiry_time_" + totalHoursCountSaturdayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_saturday cross-hour'></a></span>";
 
 				$(".saturday").append(appendedElementSaturday);
 				totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
@@ -707,7 +956,7 @@
 			if (totalHoursCountSundayVal < 1) {
 				totalHoursCountSundayVal++;
 
-				let appendedElementSunday = "<span class='appededItem first-input'><input type='text' class='time-picker-sunday' name='sun_coupon_start_time_" + totalHoursCountSundayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday' name='sun_coupon_expiry_time_" + totalHoursCountSundayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_sunday cross-hour'></a></span>";
+				let appendedElementSunday = "<span class='appededItem first-input'><input type='text' class='time-picker-sunday' name='sun_coupon_start_time_" + totalHoursCountSundayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday coupon_expiry_time' name='sun_coupon_expiry_time_" + totalHoursCountSundayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_sunday cross-hour'></a></span>";
 
 				$(".sunday").append(appendedElementSunday);
 				totalHoursCountSunday.val(totalHoursCountSundayVal);
@@ -779,7 +1028,7 @@
 			if (totalHoursCountMondayVal < 1) {
 				totalHoursCountMondayVal++;
 
-				let appendedElementMonday = "<span class='appededItem first-input'><input type='text' class='time-picker-monday' name='mon_coupon_start_time_" + totalHoursCountMondayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday' name='mon_coupon_expiry_time_" + totalHoursCountMondayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_monday cross-hour'></a></span>";
+				let appendedElementMonday = "<span class='appededItem first-input'><input type='text' class='time-picker-monday' name='mon_coupon_start_time_" + totalHoursCountMondayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday coupon_expiry_time' name='mon_coupon_expiry_time_" + totalHoursCountMondayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_monday cross-hour'></a></span>";
 
 				$(".monday").append(appendedElementMonday);
 				totalHoursCountMonday.val(totalHoursCountMondayVal);
@@ -852,7 +1101,7 @@
 			if (totalHoursCountTuesdayVal < 1) {
 				totalHoursCountTuesdayVal++;
 
-				let appendedElementTuesday = "<span class='appededItem first-input'><input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_" + totalHoursCountTuesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday' name='tue_coupon_expiry_time_" + totalHoursCountTuesdayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_tuesday cross-hour'></a></span>";
+				let appendedElementTuesday = "<span class='appededItem first-input'><input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_" + totalHoursCountTuesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday coupon_expiry_time' name='tue_coupon_expiry_time_" + totalHoursCountTuesdayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_tuesday cross-hour'></a></span>";
 
 				$(".tuesday").append(appendedElementTuesday);
 				totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
@@ -925,7 +1174,7 @@
 			if (totalHoursCountWednesdayVal < 1) {
 				totalHoursCountWednesdayVal++;
 
-				let appendedElementWednesday = "<span class='appededItem first-input'><input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_" + totalHoursCountWednesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday' name='wed_coupon_expiry_time_" + totalHoursCountWednesdayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_wednesday cross-hour'></a></span>";
+				let appendedElementWednesday = "<span class='appededItem first-input'><input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_" + totalHoursCountWednesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday coupon_expiry_time' name='wed_coupon_expiry_time_" + totalHoursCountWednesdayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_wednesday cross-hour'></a></span>";
 
 				$(".wednesday").append(appendedElementWednesday);
 				totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
@@ -998,7 +1247,7 @@
 			if (totalHoursCountThursdayVal < 1) {
 				totalHoursCountThursdayVal++;
 
-				let appendedElementThursday = "<span class='appededItem first-input'><input type='text' class='time-picker-thursday' name='thu_coupon_start_time_" + totalHoursCountThursdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday' name='thu_coupon_expiry_time_" + totalHoursCountThursdayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_thursday cross-hour'></a></span>";
+				let appendedElementThursday = "<span class='appededItem first-input'><input type='text' class='time-picker-thursday' name='thu_coupon_start_time_" + totalHoursCountThursdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday coupon_expiry_time' name='thu_coupon_expiry_time_" + totalHoursCountThursdayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_thursday cross-hour'></a></span>";
 
 				$(".thursday").append(appendedElementThursday);
 				totalHoursCountThursday.val(totalHoursCountThursdayVal);
@@ -1070,7 +1319,7 @@
 			if (totalHoursCountFridayVal < 1) {
 				totalHoursCountFridayVal++;
 
-				let appendedElementFriday = "<span class='appededItem first-input'><input type='text' class='time-picker-friday' name='fri_coupon_start_time_" + totalHoursCountFridayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday' name='fri_coupon_expiry_time_" + totalHoursCountFridayVal + "'  id='coupon_expiry_time' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_friday cross-hour'></a></span>";
+				let appendedElementFriday = "<span class='appededItem first-input'><input type='text' class='time-picker-friday' name='fri_coupon_start_time_" + totalHoursCountFridayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday coupon_expiry_time' name='fri_coupon_expiry_time_" + totalHoursCountFridayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_friday cross-hour'></a></span>";
 
 				$(".friday").append(appendedElementFriday);
 				totalHoursCountFriday.val(totalHoursCountFridayVal);
