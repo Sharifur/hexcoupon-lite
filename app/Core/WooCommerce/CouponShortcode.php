@@ -40,7 +40,7 @@ class CouponShortcode
 
 		// Check if the 'code' attribute is provided.
 		if ( empty( $atts['code'] ) ) {
-			return esc_html__( 'Please provide a coupon code.', 'hex-coupon-for-woocommerce' );
+			return esc_html__( 'Provide a coupon code.', 'hex-coupon-for-woocommerce' );
 		}
 
 		// Get the coupon object using the provided coupon code.

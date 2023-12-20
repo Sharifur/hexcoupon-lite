@@ -84,7 +84,7 @@ class CouponSingleSharableUrl {
 				'name' => 'sharable_url_coupon[sharable_url]',
 				'label' => esc_html__( 'Edit URL link', 'hex-coupon-for-woocommerce' ),
 				'desc_tip' => true,
-				'description' => esc_html__( 'Please update the page to implement the url and afterwards copy the url and give to the users.', 'hex-coupon-for-woocommerce' ),
+				'description' => esc_html__( 'Update the page to implement the url and afterwards copy the url and give to the users.', 'hex-coupon-for-woocommerce' ),
 				'type' => 'text',
 				'value' => $sharable_url,
 				'class' => 'sharable-url form-control',
@@ -127,7 +127,7 @@ class CouponSingleSharableUrl {
 					'redirect_to_custom_link' => esc_html__( 'Redirect to a custom URL', 'hex-coupon-for-woocommerce' ),
 					'redirect_back_to_origin' => esc_html__( 'Redirect back to original', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $apply_redirect_sharable_link,
+				'value' => ! empty( $apply_redirect_sharable_link ) ? $apply_redirect_sharable_link : 'redirect_to_custom_link',
 			]
 		);
 

@@ -395,7 +395,7 @@ class CouponUsageRestrictionTabController extends BaseController
 
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. to apply this coupon please add all of these products to your cart "' . $all_product_single_string . '".', 'hex-coupon-for-woocommerce');
+			$err = esc_html__( 'Invalid coupon. to apply this coupon add all of these products to your cart "' . $all_product_single_string . '".', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;
@@ -431,7 +431,7 @@ class CouponUsageRestrictionTabController extends BaseController
 
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. To apply this coupon please add any of these products to your cart "' . $all_product_single_string . '".', 'hex-coupon-for-woocommerce');
+			$err = esc_html__( 'Invalid coupon. To apply this coupon add any of these products to your cart "' . $all_product_single_string . '".', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;
@@ -467,7 +467,7 @@ class CouponUsageRestrictionTabController extends BaseController
 
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. To apply this coupon please add products from any of these categories to your cart "' . $category_string . '".', 'hex-coupon-for-woocommerce');
+			$err = esc_html__( 'Invalid coupon. To apply this coupon add products from any of these categories to your cart "' . $category_string . '".', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;

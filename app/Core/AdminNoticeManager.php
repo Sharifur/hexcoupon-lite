@@ -180,7 +180,7 @@ class AdminNoticeManager
 	private function get_woocommerce_active_notice_message()
 	{
 		$activate_url = wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=' . urlencode( $this->woocommerce_plugin_url ) ), 'activate-plugin_' . $this->woocommerce_plugin_url );
-		return sprintf( __( '<p><b>WooCommerce</b> plugin is not active! Please activate the WooCommerce plugin to use <b>HexCoupon</b> features.
+		return sprintf( __( '<p><b>WooCommerce</b> plugin is not active! Activate the WooCommerce plugin to use <b>HexCoupon</b> features.
 		</p><a href="%s">Activate WooCommerce</a>','hex-coupon-for-woocommerce' ), esc_url( $activate_url ) );
 	}
 
@@ -195,7 +195,7 @@ class AdminNoticeManager
 	private function get_woocommerce_install_notice_message()
 	{
 		$install_url = wp_nonce_url( admin_url( 'update.php?action=install-plugin&plugin=woocommerce' ), 'install-plugin_woocommerce' );
-		return sprintf( __( '<p><b>WooCommerce</b> plugin is not installed! Please install the WooCommerce plugin to use <b>HexCoupon</b> features.
+		return sprintf( __( '<p><b>WooCommerce</b> plugin is not installed! Install the WooCommerce plugin to use <b>HexCoupon</b> features.
 		</p><a href="%s">Install WooCommerce</a>','hex-coupon-for-woocommerce' ), esc_url( $install_url ) );
 	}
 

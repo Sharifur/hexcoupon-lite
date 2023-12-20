@@ -8,8 +8,9 @@
 	margin: 20px 20px;
 }
 
-.free_bogo_deal_text {
-	font-weight: bold;
+.free_bogo_deal_text,
+.free-items-name {
+	font-weight: bold !important;
 }
 
 .button-for-adding-removed-item {

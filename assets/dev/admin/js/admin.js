@@ -544,7 +544,7 @@
 					// Prevent the default behavior of the WP post publish button
 					e.preventDefault();
 					// Display the alert button for invalid
-					alert('Please enter a valid quantity for all free products.');
+					alert('Enter a valid quantity for all free products.');
 
 					// Set the first invalid input field
 					if (!firstInvalidInput){

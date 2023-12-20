@@ -58,6 +58,8 @@ class CouponSingleUsageRestriction {
 		] );
 
 		foreach ( $products as $product ) {
+			$product_obj = wc_get_product( $product->ID );
+			$product_price = $product_obj->get_price();
 			$all_product_titles[$product->ID] = get_the_title( $product );
 		}
 
@@ -159,7 +161,7 @@ class CouponSingleUsageRestriction {
 					'any_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains any of the product listed below', 'hex-coupon-for-woocommerce' ),
 					'all_of_the_product' => esc_html__( 'Coupon applies if only customers cart contains all of the product listed below', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $apply_on_listed_product,
+				'value' => ! empty( $apply_on_listed_product ) ? $apply_on_listed_product : 'any_of_the_product',
 			]
 		);
 		echo '</div>';
@@ -304,7 +306,7 @@ class CouponSingleUsageRestriction {
 					'allowed_for_groups' => esc_html__( 'Coupon allowed for below groups', 'hex-coupon-for-woocommerce' ),
 					'restricted_for_groups' => esc_html__( 'Coupon restricted for below groups', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $allowed_grp_of_customer,
+				'value' => ! empty( $allowed_grp_of_customer ) ? $allowed_grp_of_customer : 'allowed_for_groups',
 			]
 		);
 
@@ -355,7 +357,7 @@ class CouponSingleUsageRestriction {
 					'allowed_for_customers' => esc_html__( 'Coupon allowed for below customers', 'hex-coupon-for-woocommerce' ),
 					'restricted_for_customers' => esc_html__( 'Coupon restricted for below customers', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $allowed_individual_customer,
+				'value' => ! empty( $allowed_individual_customer ) ? $allowed_individual_customer : 'allowed_for_customers',
 			]
 		);
 

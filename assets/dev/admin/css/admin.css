@@ -433,6 +433,10 @@ p.output-url-text {
 	.restricted_countries span.select2-container {
 		width: 36% !important;
 	}
+
+	.product_min_max_main {
+		margin-left: 80px;
+	}
 }
 
 @media only screen and (max-width: 1440px) {
@@ -468,6 +472,10 @@ p.output-url-text {
 	.restricted_shipping_zones span.select2-container,
 	.restricted_countries span.select2-container {
 		width: 52% !important;
+	}
+
+	.product_min_max_main {
+		margin-left: 40px;
 	}
 }
 

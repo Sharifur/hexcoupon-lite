@@ -95,7 +95,7 @@ class CouponSingleGeneralTab
 					'product_categories' => esc_html__( 'Any product from categories', 'hex-coupon-for-woocommerce' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $customer_purchases,
+				'value' => ! empty( $customer_purchases ) ? $customer_purchases : 'a_specific_product',
 			]
 		);
 
@@ -108,7 +108,6 @@ class CouponSingleGeneralTab
 
 		$output .= FormHelpers::Init( [
 			'label' => esc_html__( 'Add a specific product', 'hex-coupon-for-woocommerce' ),
-			'id' => 'add_specific_product_to_purchase',
 			'name' => 'add_specific_product_to_purchase',
 			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
@@ -117,7 +116,7 @@ class CouponSingleGeneralTab
 			'select2' => true,
 			'class' => 'add_specific_product_to_purchase',
 			'id' => 'add_specific_product_to_purchase',
-			'placeholder' => __('Search for specific product')
+			'placeholder' => __( 'Search for specific product', 'hex-coupon-for-woocommerce' )
 		] );
 
 		echo '<span class="add_specific_product_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer buys.', 'hex-coupon-for-woocommerce' ) ).'</span>';
@@ -137,7 +136,7 @@ class CouponSingleGeneralTab
 				<div class="product_min_max_main">
 					<div class='product_min product-wrap'>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='Quantity' type='number' value="<?php echo esc_attr( $purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_title );?>-purchased_min_quantity" min="0" max="100">
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_purchased_product' data-title="<?php echo esc_attr( $purchased_product_title ); ?>" data-value="<?php echo esc_attr( $value ); ?>"></a>
@@ -169,7 +168,7 @@ class CouponSingleGeneralTab
 			'select2' => true,
 			'class' => 'add_categories_to_purchase',
 			'id' => 'add_categories_to_purchase',
-			'placeholder' => __('Search for categories')
+			'placeholder' => __( 'Search for categories', 'hex-coupon-for-woocommerce' )
 		] );
 
 		echo '<span class="add_categories_to_purchase_tooltip">'.wc_help_tip( esc_html__( 'Add categories that customer need to buy from.', 'hex-coupon-for-woocommerce' ) ).'</span>';
@@ -190,7 +189,7 @@ class CouponSingleGeneralTab
 				<div class="product_min_max_main">
 					<div class='product_min product-wrap'>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='Quantity' type='number' value="<?php echo esc_attr( $category_purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_category_title );?>-purchased_category_min_quantity" min="0" max="100">
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_purchased_category' data-value="<?php echo esc_attr( $value ); ?>" data-title="<?php echo esc_attr( $purchased_product_category_title ); ?>"></a>
@@ -223,7 +222,7 @@ class CouponSingleGeneralTab
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
 				],
-				'value' => $customer_gets_as_free,
+				'value' => ! empty( $customer_gets_as_free ) ? $customer_gets_as_free : 'a_specific_product',
 			]
 		);
 
@@ -244,7 +243,7 @@ class CouponSingleGeneralTab
 			'select2' => true,
 			'class' => 'add_specific_product_for_free',
 			'id' => 'add_specific_product_for_free',
-			'placeholder' => __('Search for specific product')
+			'placeholder' => __( 'Search for specific product', 'hex-coupon-for-woocommerce' )
 		] );
 
 		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hex-coupon-for-woocommerce' ) ).'</span>';
@@ -266,13 +265,13 @@ class CouponSingleGeneralTab
 				<div class="product_min_max_main">
 					<div class='product_min product-wrap'>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input minimum" placeholder='Quantity' type='number' value="<?php echo esc_attr( $free_product_quantity ); ?>" name="<?php echo esc_attr( $converted_free_product_title );?>-free_product_quantity" min="0" max="100">
 						</div>
 					</div>
 					<div class='product_min product-wrap'>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Discount Type', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'Discount Type', 'hex-coupon-for-woocommerce' ); ?></p>
 							<?php
 							$saved_discount_type = get_post_meta($post->ID, $converted_free_product_title . '-hexcoupon_bogo_discount_type', true);
 
@@ -285,7 +284,7 @@ class CouponSingleGeneralTab
 							</select>
 						</div>
 						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Amount', 'hex-coupon-for-woocommerce-pro' ); ?></p>
+							<p class="product-wrap-para"><?php echo esc_html__( 'Amount', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='Amount' type='number' value="<?php echo esc_attr( $free_product_amount ); ?>" name="<?php echo esc_attr( $converted_free_product_title );?>-free_amount" min="0" max="100">
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_free_product' data-title="<?php echo esc_attr( $free_product_title ); ?>" data-value="<?php echo esc_attr( $value ); ?>"></a>
