@@ -32,13 +32,195 @@ class CouponGeneralTabController extends BaseController
 		add_filter( 'woocommerce_cart_item_price', [ $this, 'replace_price_amount_with_free_text' ], 10, 2 );
 //		add_action( 'woocommerce_before_calculate_totals', [ $this, 'apply_price_deduction' ] );
 		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
-		add_filter( 'woocommerce_cart_product_subtotal', [ $this, 'hexcoupon_cart_product_subtotal' ], 10, 4 );
+//		add_filter( 'woocommerce_cart_product_subtotal', [ $this, 'hexcoupon_cart_product_subtotal' ], 10, 4 );
+
+
+
 
 //		add_filter( 'woocommerce_add_cart_item_data', [ $this, 'add_product_in_different_line' ], 10, 4 );
 
 //		add_action( 'woocommerce_add_to_cart', [ $this, 'mai_split_multiple_quantity_products_to_separate_cart_items' ], 10, 6 );
-		add_action( 'woocommerce_before_calculate_totals', [ $this, 'custom_reset_product_subtotal' ] );
+//		add_action( 'woocommerce_before_calculate_totals', [ $this, 'custom_reset_product_subtotal' ] );
+
+//		add_action( 'woocommerce_calculate_totals', [ $this, 'custom_change_cart_subtotal' ], 10, 1 );
+
+//		add_action( 'woocommerce_before_calculate_totals', [ $this, 'custom_change_cart_subtotals' ], 10, 1 );
+
+//		add_action( 'woocommerce_before_calculate_totals', [ $this, 'misha_recalculate_price' ] );
+
+		add_action( 'woocommerce_cart_calculate_fees', [ $this, 'custom_fee_based_on_cart_total' ], 10, 1 );
 	}
+
+
+	public function custom_fee_based_on_cart_total( $cart ) {
+
+		$coupon_id = $this->coupon_id(); // Get the id of applied coupon
+
+		$all_meta_values = $this->get_all_post_meta( $coupon_id );
+
+		$free_items_id = ! empty( $all_meta_values['add_specific_product_for_free'] ) ? $all_meta_values['add_specific_product_for_free'] : [];
+
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) return;
+
+		$total_subtotal = 0;
+
+		// Loop through cart items to calculate total subtotal
+		foreach ( $cart->get_cart() as $cart_item ) {
+			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+				$product_title = $this->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
+				$product_free_quantity = get_post_meta( $coupon_id, $product_title . '-free_product_quantity', true );
+				$product_free_amount = get_post_meta( $coupon_id, $product_title . '-free_amount', true );
+				$product_discount_type = get_post_meta( $coupon_id, $product_title . '-hexcoupon_bogo_discount_type', true );
+				if ( 'fixed' === $product_discount_type ) {
+					if ( $product_free_amount > $cart_item['data']->get_price() ) {
+						$product_free_amount = $cart_item['data']->get_price();
+					}
+					if ( $product_free_amount <= 0 ) {
+						$product_free_amount = 0;
+					}
+
+					$total_subtotal += $product_free_quantity * $product_free_amount;
+				}
+				else {
+					if ( $product_free_amount > 100 ) {
+						$product_free_amount = 100;
+					}
+					if ( $product_free_amount <= 0 ) {
+						$product_free_amount = 0;
+					}
+					$total_subtotal += ($product_free_amount / 100) * $cart_item['data']->get_price() * $product_free_quantity;
+				}
+			}
+		}
+
+		// Now, $total_subtotal contains the sum of all product subtotals in the cart
+		// You can use $total_subtotal to determine the custom fee
+
+		$cart->add_fee( __( 'Custom Fee', 'your-text-domain' ), -$total_subtotal );
+
+
+	}
+
+
+
+	public function misha_recalculate_price( $cart_object ) {
+
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		$product_category_id = 25;
+		$product_id_to_exclude = 12345;
+		// it is our quantity of products in specific product category
+		$quantity = 0;
+
+		// you can always print_r() your object and look what's inside
+		// print_r( $cart_object ); exit;
+
+		// $hash = cart item unique hash
+		// $value = cart item data
+		foreach ( $cart_object->get_cart() as $hash => $value ) {
+
+			$quantity += $value[ 'quantity' ];
+
+		}
+
+		// change prices
+		if( 1 < $quantity ) {
+			foreach ( $cart_object->get_cart() as $hash => $value ) {
+
+				// I want to make discounts only for products in category with ID 25
+				// and I never want to make discount for the product with ID 12345
+				if( $value[ 'product_id' ] == 334 ) {
+					$newprice = $value[ 'data' ]->get_price() / 2;
+					$value[ 'data' ]->set_price( $newprice );
+
+				}
+			}
+		}
+	}
+
+	public function custom_change_cart_subtotals( $cart_object ) {
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+						return;
+
+
+		// Your target product ID
+		$target_product_id = 332; // Replace 123 with the actual product ID
+
+		// Initialize a variable to store the new subtotal
+		$new_subtotal = 0;
+
+		// Loop through cart items
+		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			// Check if the current item is the target product
+			if ( $cart_item['product_id'] == $target_product_id ) {
+				// Modify the subtotal calculation as needed
+				$new_subtotal += $cart_item['data']->get_price() * $cart_item['quantity'] * 2.3; // Replace 2.3 with your desired factor
+			} else {
+				// For other products, keep the existing subtotal calculation
+				$new_subtotal += $cart_item['data']->get_price() * $cart_item['quantity'];
+			}
+		}
+
+		// Set the new subtotal
+		WC()->cart->set_subtotal( $new_subtotal );
+
+		// Set the cart total to the new subtotal
+		WC()->cart->set_total( $new_subtotal );
+
+		// Trigger a recalculation of totals
+		WC()->cart->calculate_totals();
+
+	}
+
+
+
+
+	public function custom_change_cart_subtotal( $cart ) {
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+			return;
+		}
+
+		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+			return;
+
+		// Your target product ID
+		$target_product_id = 332; // Replace 123 with the actual product ID
+
+		// Initialize a variable to store the new subtotal
+		$new_subtotal = 10;
+
+		// Loop through cart items
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+			// Check if the current item is the target product
+			if ( $cart_item['product_id'] == $target_product_id ) {
+				// Modify the subtotal calculation as needed
+				$new_subtotal += $cart_item['data']->get_price() * $cart_item['quantity'] * 2.3; // Replace 2.3 with your desired factor
+			} else {
+				// For other products, keep the existing subtotal calculation
+				$new_subtotal += $cart_item['line_total'];
+			}
+		}
+
+		// Set the new subtotal
+		$cart->subtotal = $new_subtotal;
+
+		// Set the cart total to the new subtotal
+		$cart->total = $new_subtotal + $cart->shipping_total + $cart->tax_total;
+
+		// Set the cart subtotal to the new subtotal
+		$cart->subtotal_ex_tax = $new_subtotal;
+
+		// Trigger a recalculation of totals
+		$cart->calculate_totals();
+	}
+
+
+
 
 	public function custom_reset_product_subtotal( $cart_object ) {
 		// Specify the product ID for which you want to reset the subtotal
@@ -158,6 +340,7 @@ class CouponGeneralTabController extends BaseController
 //
 //					$product->set_price( $custom_subtotal );
 //					WC()->cart->calculate_totals();
+
 				}
 				else {
 					if ( $free_amount > 100 ) {
@@ -1116,8 +1299,13 @@ class CouponGeneralTabController extends BaseController
 
 					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
 				}
+				$fee_amount = floatval( $price );
+
+//				$GLOBALS['custom_fee_amount'] = $fee_amount;
+				WC()->session->set( 'custom_fee_amount', $fee_amount );
 			}
 		}
+
 
 		return $price;
 	}
