@@ -96,7 +96,7 @@ class CouponGeneralTabController extends BaseController
 		// Now, $total_subtotal contains the sum of all product subtotals in the cart
 		// You can use $total_subtotal to determine the custom fee
 
-		$cart->add_fee( __( 'Custom Fee', 'your-text-domain' ), -$total_subtotal );
+		$cart->add_fee( __( 'Total Bogo Discount', 'hex-coupon-for-woocommerce' ), -$total_subtotal );
 
 
 	}
@@ -1283,11 +1283,17 @@ class CouponGeneralTabController extends BaseController
 					if ( $free_amount <= 0 ) {
 						$free_amount = 0;
 					}
-					$item_price = $item_price * $cart_item['quantity'] - $free_amount * $cart_item['quantity'];
+//					$item_price = $item_price * $cart_item['quantity'] - $free_amount * $cart_item['quantity'];
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount * $product_free_quantity .' = ' . wc_price( $item_price );
+					$item_price = $cart_item['quantity'] * $free_amount;
+
+//					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount * $product_free_quantity .' = ' . wc_price( $item_price );
+
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . wc_price( $free_amount * $product_free_quantity );
 				}
 				else {
+					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
+
 					if ( $free_amount > 100 ) {
 						$free_amount = 100;
 					}
@@ -1297,12 +1303,10 @@ class CouponGeneralTabController extends BaseController
 
 					$item_price = $item_price * ( ( 100 - $free_amount ) / 100 ) * $cart_item['quantity'];
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
-				}
-				$fee_amount = floatval( $price );
+//					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
 
-//				$GLOBALS['custom_fee_amount'] = $fee_amount;
-				WC()->session->set( 'custom_fee_amount', $fee_amount );
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .' )';
+				}
 			}
 		}
 
