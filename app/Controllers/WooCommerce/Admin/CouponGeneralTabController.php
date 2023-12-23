@@ -32,7 +32,7 @@ class CouponGeneralTabController extends BaseController
 		add_filter( 'woocommerce_cart_item_price', [ $this, 'replace_price_amount_with_free_text' ], 10, 2 );
 //		add_action( 'woocommerce_before_calculate_totals', [ $this, 'apply_price_deduction' ] );
 		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
-//		add_filter( 'woocommerce_cart_product_subtotal', [ $this, 'hexcoupon_cart_product_subtotal' ], 10, 4 );
+		add_filter( 'woocommerce_cart_product_subtotal', [ $this, 'hexcoupon_cart_product_subtotal' ], 10, 4 );
 
 
 
@@ -48,12 +48,40 @@ class CouponGeneralTabController extends BaseController
 
 //		add_action( 'woocommerce_before_calculate_totals', [ $this, 'misha_recalculate_price' ] );
 
-		add_action( 'woocommerce_cart_calculate_fees', [ $this, 'custom_fee_based_on_cart_total' ], 10, 1 );
+		add_action( 'woocommerce_cart_calculate_fees', [ $this, 'custom_fee_based_bogo_deal' ], 10, 1 );
+
+		add_filter( 'woocommerce_cart_subtotal', [ $this, 'deduct_bogo_amount_from_subtotal' ] , 99, 3 );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method deduct_bogo_amount_from_subtotal
+	 * @return string
+	 * Add discount fee based on bogo deal
+	 */
+	public function deduct_bogo_amount_from_subtotal( $cart_subtotal, $compound, $obj )
+	{
+		$price_to_be_deducted = $this->custom_fee_based_bogo_deal( $obj );
+
+		$final_subtotal_price = wc_price( (float)$obj->get_subtotal() - (float)$price_to_be_deducted );
+
+		return $final_subtotal_price;
 	}
 
 
-	public function custom_fee_based_on_cart_total( $cart ) {
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method custom_fee_based_bogo_deal
+	 * @return mixed
+	 * Add discount fee based on bogo deal
+	 */
+	public function custom_fee_based_bogo_deal( $cart )
+	{
 		$coupon_id = $this->coupon_id(); // Get the id of applied coupon
 
 		$all_meta_values = $this->get_all_post_meta( $coupon_id );
@@ -93,12 +121,10 @@ class CouponGeneralTabController extends BaseController
 			}
 		}
 
-		// Now, $total_subtotal contains the sum of all product subtotals in the cart
-		// You can use $total_subtotal to determine the custom fee
+		if ( $cart->get_applied_coupons() )
+			$cart->add_fee( __( 'Total Bogo Discount', 'hex-coupon-for-woocommerce' ), -$total_subtotal );
 
-		$cart->add_fee( __( 'Total Bogo Discount', 'hex-coupon-for-woocommerce' ), -$total_subtotal );
-
-
+		return $total_subtotal;
 	}
 
 
@@ -296,12 +322,10 @@ class CouponGeneralTabController extends BaseController
 	 * @since 1.0.0
 	 * @method hexcoupon_cart_product_subtotal
 	 * @return mixed
-	 * Show product new subtotal
+	 * Show product new subtotal according to Bogo discounts
 	 */
 	public function hexcoupon_cart_product_subtotal( $product_subtotal, $product, $quantity, $cart )
 	{
-		$test = 0;
-
 		$coupon_id = $this->coupon_id(); // Get the id of applied coupon
 
 		$all_meta_values = $this->get_all_post_meta( $coupon_id );
@@ -311,9 +335,9 @@ class CouponGeneralTabController extends BaseController
 
 		$free_items_id = ! empty( $all_meta_values['add_specific_product_for_free'] ) ? $all_meta_values['add_specific_product_for_free'] : [];
 
-		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free ) {
+		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free || 'any_products_listed_below' === $customer_gets_as_free ) {
 			if ( in_array( $product->get_id(), $free_items_id ) ) {
-				$string_to_be_replaced = [ ' ', '-' ];
+				$string_to_be_replaced = [ ' ', '_' ];
 
 				$product_title = get_the_title( $product->get_id() );
 				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
@@ -332,15 +356,6 @@ class CouponGeneralTabController extends BaseController
 						$free_amount = 0;
 					}
 					$custom_subtotal = $original_subtotal - ( $free_amount * $quantity );
-//					if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-//						return;
-//
-//					if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-//						return;
-//
-//					$product->set_price( $custom_subtotal );
-//					WC()->cart->calculate_totals();
-
 				}
 				else {
 					if ( $free_amount > 100 ) {
@@ -350,31 +365,16 @@ class CouponGeneralTabController extends BaseController
 						$free_amount = 0;
 					}
 					$custom_subtotal = $original_subtotal * ( ( 100 - $free_amount ) / 100 );
-//					if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-//						return;
-//
-//					if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-//						return;
-//
-//					$product->set_price( $custom_subtotal );
-//					WC()->cart->calculate_totals();
 				}
 
 				// Format the custom subtotal for display
 				$formatted_subtotal = wc_price( $custom_subtotal );
-//
-//				$test += $custom_subtotal;
-//
-//				var_dump(WC()->cart->get_subtotal());
-//
-//				$deduct_from_subtotal = WC()->cart->get_subtotal() - $test;
-//				WC()->cart->set_subtotal( $deduct_from_subtotal );
 
 				return $formatted_subtotal;
 			}
 		}
 
-		// Other than the Bogo free products, prices of all other products will be intact.
+		// Other than the Bogo free products, prices of all other products will be the same.
 		return $product_subtotal;
 	}
 
@@ -421,7 +421,8 @@ class CouponGeneralTabController extends BaseController
 	{
 		$applied_coupon = WC()->cart->get_applied_coupons(); // get applied coupon from the cart page
 
-		$coupon_id = ''; // assigning an empty string
+		// assigning an empty string
+		$coupon_id = '';
 
 		// check if there are applied coupon
 		if ( ! empty( $applied_coupon ) ) {
@@ -430,7 +431,93 @@ class CouponGeneralTabController extends BaseController
 			$coupon_id = wc_get_coupon_id_by_code( $coupon_code ); // get the coupon id from the coupon code
 		}
 
-		return $coupon_id; // finally return the coupon code id
+		// finally return the coupon code id
+		return $coupon_id;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method update_quantity_after_updating_cart
+	 * @return void
+	 * Updating product quantity after clicking on update cart button
+	 */
+	public function update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases )
+	{
+		// Initialize the cart object
+		$wc_cart = WC()->cart;
+
+		$main_product_ids = $main_product_id;
+		$main_product_single_title_lower_case = '';
+		$main_product_id = '';
+
+		foreach ( $main_product_ids as $main_single_id ) {
+			$main_product_id = $main_single_id;
+			$main_product_single_title_lower_case = $this->convert_and_replace_unnecessary_string( $main_single_id );
+		}
+
+		// get main purchased product minimum quantity
+		$main_product_min_purchased_quantity = get_post_meta( $coupon_id, $main_product_single_title_lower_case . '-purchased_min_quantity', true );
+		$main_product_min_purchased_quantity = ! empty( $main_product_min_purchased_quantity ) ? $main_product_min_purchased_quantity : 1;
+
+		$cart_item_quantity = 0;
+
+		foreach ( $wc_cart->get_cart() as $cart_item_key => $cart_item ) {
+			if ( $main_product_id  == $cart_item['product_id'] ) {
+				$cart_item_quantity = $cart_item['quantity'];
+				break;
+			}
+		}
+
+		if ( 'a_specific_product' === $customer_purchases || 'a_combination_of_products' === $customer_purchases || 'any_products_listed_below' == $customer_purchases ) {
+			if ( $cart_item_quantity >= $main_product_min_purchased_quantity ) {
+				foreach ( $free_item_id as $free_single_id ) {
+					$free_single_product_key = $wc_cart->generate_cart_id( $free_single_id );
+					// Find and search if the free product exists in the cart page.
+					if ( $wc_cart->find_product_in_cart( $free_single_product_key ) ) {
+						$free_product_title_lowercase = $this->convert_and_replace_unnecessary_string( $free_single_id );
+						$free_product_quantity = get_post_meta( $coupon_id, $free_product_title_lowercase . '-free_product_quantity', true );
+						// Executes the below code, if the cart item quantity is equals to the main product min purchased quantity
+						if ( $cart_item_quantity >= $main_product_min_purchased_quantity ) {
+							if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
+								return;
+
+							if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+								return;
+
+							$customer_gets = $free_product_quantity;
+							$wc_cart->set_quantity( $free_single_product_key, $customer_gets );
+							break;
+						}
+					}
+				}
+			}
+			add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_success_message' ] );
+		}
+
+		// If customer purchases from 'product_categories'
+		if ( 'product_categories' === $customer_purchases ) {
+			foreach ( $free_item_id as $free_single_id ) {
+				$free_single_product_key = $wc_cart->generate_cart_id( $free_single_id );
+				// Find and search if the free product exists in the cart page.
+				if ( $wc_cart->find_product_in_cart( $free_single_product_key ) ) {
+					$free_product_title_lowercase = $this->convert_and_replace_unnecessary_string( $free_single_id );
+					$free_product_quantity = get_post_meta( $coupon_id, $free_product_title_lowercase . '-free_product_quantity', true );
+
+					if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
+						return;
+
+					if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+						return;
+
+					$customer_gets = $free_product_quantity;
+					$wc_cart->set_quantity( $free_single_product_key, $customer_gets );
+					break;
+				}
+			}
+			add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_success_message' ] );
+		}
 	}
 
 	/**
@@ -443,28 +530,71 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function get_product_categories_id_in_cart()
 	{
-		// Initialize an empty array to store product categories
-		$product_categories = [];
+//		// Initialize an empty array to store product categories
+//		$product_categories = [];
+//
+//		// Get the current cart contents
+//		$cart = WC()->cart->get_cart();
+//
+//		// Loop through cart items and extract categories
+//		foreach ( $cart as $cart_item_key => $cart_item ) {
+//			$product_id = $cart_item['product_id'];
+//			$product = wc_get_product( $product_id );
+//
+//			// Get product categories
+//			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
+//
+//			// Add categories to the array
+//			$product_categories = array_merge( $product_categories, $categories );
+//		}
+//
+//		// Remove duplicate categories
+//		$product_categories = array_unique( $product_categories );
+//
+//		return $product_categories; // return all the ids of product categories
 
-		// Get the current cart contents
-		$cart = WC()->cart->get_cart();
+		// Get the WooCommerce cart
+		$cart = WC()->cart;
 
-		// Loop through cart items and extract categories
-		foreach ( $cart as $cart_item_key => $cart_item ) {
+		// Initialize an empty array to store category IDs and their occurrences
+		$category_occurrences = array();
+
+		// Loop through cart items
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+			// Get product ID
 			$product_id = $cart_item['product_id'];
-			$product = wc_get_product( $product_id );
+
+			// Get product quantity
+			$quantity = $cart_item['quantity'];
 
 			// Get product categories
-			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
+			$categories = get_the_terms( $product_id, 'product_cat' );
 
-			// Add categories to the array
-			$product_categories = array_merge( $product_categories, $categories );
+			// Loop through categories
+			if ( $categories && ! is_wp_error( $categories ) ) {
+				foreach ( $categories as $category ) {
+					// Get category ID
+					$category_id = $category->term_id;
+
+					// Check if category ID already exists in the array
+					if ( array_key_exists( $category_id, $category_occurrences ) ) {
+						// Add quantity to existing category occurrence
+						$category_occurrences[ $category_id ] += $quantity;
+					} else {
+						// Add new category occurrence
+						$category_occurrences[ $category_id ] = $quantity;
+					}
+				}
+			}
 		}
 
-		// Remove duplicate categories
-		$product_categories = array_unique( $product_categories );
+		// Output the results
+//		foreach ( $category_occurrences as $category_id => $occurrence ) {
+//			echo "Category ID: $category_id, Occurrence: $occurrence<br>";
+//		}
 
-		return $product_categories; // return all the ids of product categories
+		return $category_occurrences;
+
 	}
 
 	/**
@@ -733,8 +863,27 @@ class CouponGeneralTabController extends BaseController
 		}
 
 		if ( 'product_categories' === $customer_purchases ) {
-			// Determine whether the cart has the min quantity of selected category
-			$main_product_in_cart = $this->get_product_categories_id_in_cart();
+			$string_tobe_converted = [ ' ', '-' ];
+
+			$cart_product_cat_occurences = $this->get_product_categories_id_in_cart();
+
+			foreach ( $add_categories_to_purchase as $category_single ) {
+				if ( array_key_exists( $category_single, $cart_product_cat_occurences ) ) {
+					$category = get_term( $category_single, 'product_cat' );
+
+					if ( $category && ! is_wp_error( $category ) ) {
+						$category_name = $category->name;
+						$category_converted_name = str_replace( $string_tobe_converted, '_', strtolower( $category_name ) );
+						$category_purchased_min_category = get_post_meta( $coupon_id, $category_converted_name . '-purchased_category_min_quantity', true );
+
+						$cart_cat_quantity = $cart_product_cat_occurences[$category_single];
+
+						if ( $cart_cat_quantity >= $category_purchased_min_category ) {
+							$main_product_in_cart = true;
+						}
+					}
+				}
+			}
 		}
 
 		$is_main_product_greater_or_equal_to_min = false;
@@ -1289,7 +1438,7 @@ class CouponGeneralTabController extends BaseController
 
 //					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount * $product_free_quantity .' = ' . wc_price( $item_price );
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . wc_price( $free_amount * $product_free_quantity );
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount . ' (' . wc_price( $free_amount * $product_free_quantity ) . ')';
 				}
 				else {
 					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
@@ -1305,7 +1454,7 @@ class CouponGeneralTabController extends BaseController
 
 //					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .' )';
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .')';
 				}
 			}
 		}
@@ -1391,7 +1540,7 @@ class CouponGeneralTabController extends BaseController
 		if ( ! empty( $free_items ) ) {
 			$free_items = rtrim( $free_items, ', ' ); // removes ', ' from the end of the right side of the string
 			echo '<tr class="free-items-row">';
-			echo '<th>' . esc_html__( 'Free Items', 'hex-coupon-for-woocommerce' ) . '</th><td class="free-items-name">' . esc_html( $free_items ) . '</td>';
+			echo '<th>' . esc_html__( 'Free/Discounted Items', 'hex-coupon-for-woocommerce' ) . '</th><td class="free-items-name">' . esc_html( $free_items ) . '</td>';
 			echo '</tr>';
 		}
 	}

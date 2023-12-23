@@ -126,7 +126,6 @@
 		const messageForCouponExpiryDateField = $(".message_for_coupon_expiry_date_field");
 		const couponStartingDateField = $(".coupon_starting_date_field");
 		const messageForCouponStartingDateField = $(".message_for_coupon_starting_date_field");
-		const applyDaysHoursOfWeekField = $(".apply_days_hours_of_week_field");
 
 		discountTypeField.on("change",function (){
 			if("buy_x_get_x_bogo" === this.value){
@@ -140,7 +139,6 @@
 				messageForCouponExpiryDateField.hide();
 				couponStartingDateField.hide();
 				messageForCouponStartingDateField.hide();
-				// applyDaysHoursOfWeekField.hide();
 			}
 			else {
 				customerPurchasesDiv.hide()
