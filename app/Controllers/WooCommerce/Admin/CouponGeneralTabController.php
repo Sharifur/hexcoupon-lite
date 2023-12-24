@@ -40,6 +40,7 @@ class CouponGeneralTabController extends BaseController
 //		add_filter( 'woocommerce_add_cart_item_data', [ $this, 'add_product_in_different_line' ], 10, 4 );
 
 //		add_action( 'woocommerce_add_to_cart', [ $this, 'mai_split_multiple_quantity_products_to_separate_cart_items' ], 10, 6 );
+
 //		add_action( 'woocommerce_before_calculate_totals', [ $this, 'custom_reset_product_subtotal' ] );
 
 //		add_action( 'woocommerce_calculate_totals', [ $this, 'custom_change_cart_subtotal' ], 10, 1 );
@@ -52,6 +53,7 @@ class CouponGeneralTabController extends BaseController
 
 		add_filter( 'woocommerce_cart_subtotal', [ $this, 'deduct_bogo_amount_from_subtotal' ] , 99, 3 );
 	}
+
 
 	/**
 	 * @package hexcoupon
@@ -68,6 +70,26 @@ class CouponGeneralTabController extends BaseController
 		$final_subtotal_price = wc_price( (float)$obj->get_subtotal() - (float)$price_to_be_deducted );
 
 		return $final_subtotal_price;
+	}
+
+	public function remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free )
+	{
+		// Get the cart contents
+		$cart_contents = $wc_cart->get_cart();
+
+		$product_ids = [];
+
+		foreach ( $cart_contents as $cart_item ) {
+			$product_ids[] = $cart_item['product_id'];
+		}
+
+		$common_elements  = array_intersect( $product_ids, $selected_products_as_free );
+
+		array_shift( $common_elements );
+
+		$this->remove_cart_product( $common_elements );
+
+		add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message_two' ] );
 	}
 
 
@@ -281,7 +303,7 @@ class CouponGeneralTabController extends BaseController
 	public function add_product_in_different_line( $cart_item_data, $product_id, $variation_id, $quantity )
 	{
 		// Check if the product ID is the one you are interested in
-		$target_product_id = 332;
+		$target_product_id = 562;
 
 		if ( $product_id == $target_product_id ) {
 			// Check if quantity is greater than 2
@@ -530,34 +552,11 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function get_product_categories_id_in_cart()
 	{
-//		// Initialize an empty array to store product categories
-//		$product_categories = [];
-//
-//		// Get the current cart contents
-//		$cart = WC()->cart->get_cart();
-//
-//		// Loop through cart items and extract categories
-//		foreach ( $cart as $cart_item_key => $cart_item ) {
-//			$product_id = $cart_item['product_id'];
-//			$product = wc_get_product( $product_id );
-//
-//			// Get product categories
-//			$categories = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'ids' ] );
-//
-//			// Add categories to the array
-//			$product_categories = array_merge( $product_categories, $categories );
-//		}
-//
-//		// Remove duplicate categories
-//		$product_categories = array_unique( $product_categories );
-//
-//		return $product_categories; // return all the ids of product categories
-
 		// Get the WooCommerce cart
 		$cart = WC()->cart;
 
 		// Initialize an empty array to store category IDs and their occurrences
-		$category_occurrences = array();
+		$category_occurrences = [];
 
 		// Loop through cart items
 		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
@@ -588,13 +587,7 @@ class CouponGeneralTabController extends BaseController
 			}
 		}
 
-		// Output the results
-//		foreach ( $category_occurrences as $category_id => $occurrence ) {
-//			echo "Category ID: $category_id, Occurrence: $occurrence<br>";
-//		}
-
 		return $category_occurrences;
-
 	}
 
 	/**
@@ -621,6 +614,19 @@ class CouponGeneralTabController extends BaseController
 	public function cart_custom_error_message()
 	{
 		wc_print_notice( 'You do not have enough item or enough quantity to avail the <b>Bogo</b> offer.', 'error' );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method cart_custom_error_message_two
+	 * @return void
+	 * @since 1.0.0
+	 * Show error message if customer tries to add more than one product from the list below.
+	 */
+	public function cart_custom_error_message_two()
+	{
+		wc_print_notice( 'You can not add more than one product from the below list.', 'error' );
 	}
 
 	/**
@@ -865,10 +871,10 @@ class CouponGeneralTabController extends BaseController
 		if ( 'product_categories' === $customer_purchases ) {
 			$string_tobe_converted = [ ' ', '-' ];
 
-			$cart_product_cat_occurences = $this->get_product_categories_id_in_cart();
+			$cart_product_cat_occurances = $this->get_product_categories_id_in_cart();
 
 			foreach ( $add_categories_to_purchase as $category_single ) {
-				if ( array_key_exists( $category_single, $cart_product_cat_occurences ) ) {
+				if ( array_key_exists( $category_single, $cart_product_cat_occurances ) ) {
 					$category = get_term( $category_single, 'product_cat' );
 
 					if ( $category && ! is_wp_error( $category ) ) {
@@ -876,7 +882,7 @@ class CouponGeneralTabController extends BaseController
 						$category_converted_name = str_replace( $string_tobe_converted, '_', strtolower( $category_name ) );
 						$category_purchased_min_category = get_post_meta( $coupon_id, $category_converted_name . '-purchased_category_min_quantity', true );
 
-						$cart_cat_quantity = $cart_product_cat_occurences[$category_single];
+						$cart_cat_quantity = $cart_product_cat_occurances[$category_single];
 
 						if ( $cart_cat_quantity >= $category_purchased_min_category ) {
 							$main_product_in_cart = true;
@@ -891,12 +897,12 @@ class CouponGeneralTabController extends BaseController
 		if ( $main_product_in_cart ) {
 			// Add product in the case of customer purchases 'a specific product' and getting 'a specific product' as free
 			if ( 'a_specific_product' === $customer_gets_as_free && 'a_specific_product' === $customer_purchases ) {
-//				if ( $cart_item_quantity < $main_product_min_purchased_quantity ) {
-//					// Remove free item from cart, if '$main_product_min_purchased_quantity' is less than the '$cart_item_quantity'
+				if ( $cart_item_quantity < $main_product_min_purchased_quantity && ! array_diff( $main_product_id, $free_item_id ) ) {
+					// Remove free item from cart, if '$main_product_min_purchased_quantity' is less than the '$cart_item_quantity'
 //					$this->remove_cart_product( $free_item_id );
-//					// Show error message to the user if main product quantity is not sufficient to get the offer
-//					add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message' ] );
-//				}
+					// Show error message to the user if main product quantity is not sufficient to get the offer
+					add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message' ] );
+				}
 				// check if free items is not empty and cart item quantity is bigger than the main product min purchases quantity
 				if ( ! empty( $free_item_id ) && $cart_item_quantity >= $main_product_min_purchased_quantity ) {
 					// loop through all the free products
@@ -947,6 +953,58 @@ class CouponGeneralTabController extends BaseController
 							}
 						}
 					}
+				}
+
+				if ( ! empty( $free_item_id ) && $cart_item_quantity >= $main_product_min_purchased_quantity && ! array_diff( $main_product_id, $free_item_id ) ) {
+					echo 'hello';
+
+					foreach ( $free_item_id as $free_item_single ) {
+						if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+							return;
+						}
+						if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+							return;
+						}
+
+						$free_single_key = $wc_cart->generate_cart_id( $free_item_single );
+						$wc_cart->set_quantity( $free_single_key, 2 );
+					}
+
+
+
+
+//					if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+//						return;
+//					}
+//					if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+//						return;
+//					}
+//
+//					$target_product_id = 562;
+//
+//					// Get the cart contents
+//					$cart = WC()->cart->get_cart();
+//
+//					// Check if the target product is already in the cart
+//					$target_product_in_cart = false;
+//
+//					foreach ( $cart as $cart_item_key => $cart_item ) {
+//						if ( $cart_item['product_id'] == $target_product_id ) {
+//							$target_product_in_cart = true;
+//							$target_product_quantity = $cart_item['quantity'];
+//							break;
+//						}
+//					}
+//
+//					// If the target product is in the cart, add it again with the same quantity
+//					if ( $target_product_in_cart && $target_product_quantity >= 2 ) {
+//
+//						$new_cart_item_key = md5( microtime() ); // unique key for the new item
+//
+//						$cart_item_data['unique_key'] = $new_cart_item_key;
+//
+//						WC()->cart->add_to_cart( 562, 2, 0, 0, $cart_item_data );
+//					}
 				}
 			}
 
@@ -1024,6 +1082,8 @@ class CouponGeneralTabController extends BaseController
 				}
 
 				add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button' ] );
+
+				$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
 
 				// Remove any free items other than one if added to the cart page, cause any products from the list only allows one free item to the cart
 //				$cart_items = WC()->cart->get_cart(); // Get the cart items
@@ -1162,6 +1222,8 @@ class CouponGeneralTabController extends BaseController
 
 					$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
 				}
+
+				$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
 			}
 
 			// Add product in the case of customer  purchases 'any_products_listed_below' and gets 'a_specific_product' as free
@@ -1260,6 +1322,8 @@ class CouponGeneralTabController extends BaseController
 					add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button' ] );
 
 					$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
+
+					$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
 				}
 				else {
 					$this->remove_cart_product( $free_item_id );
@@ -1289,6 +1353,8 @@ class CouponGeneralTabController extends BaseController
 				add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button_for_categories' ] );
 //
 				$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
+
+				$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
 			}
 
 
