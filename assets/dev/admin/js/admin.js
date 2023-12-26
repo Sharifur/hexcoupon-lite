@@ -252,7 +252,9 @@
 						return data.text;
 					}
 				});
-			}else {
+				addSpecificProductForFreeClass.show();
+			}
+			if("a_combination_of_products" === $(this).val()){
 				addSpecificProductForFreeID.select2({
 					maximumSelectionLength: 0, // Set maximum selection to unlimited
 					templateSelection: function (data, container) {
@@ -261,6 +263,21 @@
 						return data.text;
 					}
 				});
+				addSpecificProductForFreeClass.show();
+			}
+			if("any_products_listed_below" === $(this).val()){
+				addSpecificProductForFreeID.select2({
+					maximumSelectionLength: 0, // Set maximum selection to unlimited
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
+				});
+				addSpecificProductForFreeClass.show();
+			}
+			if("same_product_as_free" === $(this).val()){
+				addSpecificProductForFreeClass.hide();
 			}
 		});
 
@@ -273,16 +290,44 @@
 				},
 				maximumSelectionLength: 1, // Set maximum selection to 1
 			});
+			addSpecificProductForFreeClass.show();
 		}
-		else{
+		if(customerGetsChecked.val() === "a_combination_of_products"){
 			addSpecificProductForFreeID.select2({
 				templateSelection: function (data, container) {
 					// Add a 'value' attribute to the generated <li> elements
 					$(container).attr('value', data.id);
 					return data.text;
 				},
-				maximumSelectionLength: 0, // Set maximum selection to unlimited
+				maximumSelectionLength: 1, // Set maximum selection to 1
 			});
+			addSpecificProductForFreeClass.show();
+		}
+		if(customerGetsChecked.val() === "any_products_listed_below"){
+			addSpecificProductForFreeID.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 1, // Set maximum selection to 1
+			});
+			addSpecificProductForFreeClass.show();
+		}
+		if(customerGetsChecked.val() === "same_product_as_free"){
+			addSpecificProductForFreeClass.hide();
+
+			// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
+			$('.customer_gets_as_free .select2-selection__choice').remove();
+
+			const selectedFreeOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
+
+			// Remove the selected attribute from all options except the first selected one
+			$('#add_specific_product_for_free option').removeAttr('selected');
+
+			$('#selected_free_products .product-quantity-input.minimum').attr('name','same_free_product_quantity');
+			$('#selected_free_products select').attr('name','hexcoupon_bogo_discount_type_on_same_product');
+			$('#selected_free_products .product-quantity-input.amount').attr('name','same_free_amount');
 		}
 
 		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
@@ -301,6 +346,22 @@
 				selectedFreeOption.prop('selected', true);
 
 				$("#selected_free_products .product-item-whole").slice(1).remove();
+			}
+
+			if ($(this).is(':checked') && $(this).val() === 'same_product_as_free') {
+				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
+				$('.customer_gets_as_free .select2-selection__choice').remove();
+
+				const selectedFreeOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
+
+				// Remove the selected attribute from all options except the first selected one
+				$('#add_specific_product_for_free option').removeAttr('selected');
+
+				$('#selected_free_products .product_title').remove();
+
+				$('#selected_free_products .product-quantity-input.minimum').attr('name','test');
+				$('#selected_free_products select').attr('name','test');
+				$('#selected_free_products .product-quantity-input.amount').attr('name','test');
 			}
 		});
 
@@ -590,7 +651,6 @@
 
 			// Append the new product item to the selected_purchased_products div
 			$('#selected_purchased_products').append(newPurchasedProductItem);
-
 		});
 
 		// Attach click event to the span with select2-selection__choice__remove class
@@ -666,7 +726,7 @@
 		$("#add_specific_product_for_free").on("select2:select",function (e){
 			var selectedOption = $(e.params.data.element);
 
-			var freeTitleAttribute = selectedOption.attr('title');
+			let freeTitleAttribute = selectedOption.attr('title');
 			var freeValueAttribute = selectedOption.attr('value');
 
 			var convertedFreeTitleName = convertTitleToName(freeTitleAttribute);
@@ -691,7 +751,7 @@
 						</div>
 						<div class="product-wrap-inner">
 						  <p class="product-wrap-para">Amount</p>
-						  <input class="product-quantity-input" placeholder="Amount" type="number" value="0" name="${convertedFreeTitleName}-free_amount" min="0" max="100">
+						  <input class="product-quantity-input amount" placeholder="Amount" type="number" value="0" name="${convertedFreeTitleName}-free_amount" min="0" max="100">
 						</div>
 						<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_free_product" data-title="${freeTitleAttribute}" data-value="${freeValueAttribute}"></a>
 					  </div>
@@ -701,6 +761,12 @@
 
 			// Append the new product item to the selected_purchased_products div
 			$('#selected_free_products').append(newPurchasedFreeProductItem);
+
+			customerGetsAsFree.on("change",function() {
+				if ("same_product_as_free" === $(this).val()) {
+					$('#selected_free_products').append('');
+				}
+			});
 		});
 
 		$(document).on("click",".remove_free_product", function (){

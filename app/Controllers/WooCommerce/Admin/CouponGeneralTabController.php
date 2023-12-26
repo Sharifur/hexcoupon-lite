@@ -355,6 +355,7 @@ class CouponGeneralTabController extends BaseController
 		$customer_purchases = ! empty( $all_meta_values['customer_purchases'] ) ? $all_meta_values['customer_purchases'] : '';
 		$customer_gets_as_free = ! empty( $all_meta_values['customer_gets_as_free'] ) ? $all_meta_values['customer_gets_as_free'] : '';
 
+		$main_product_id = ! empty( $all_meta_values['add_specific_product_to_purchase'] ) ? $all_meta_values['add_specific_product_to_purchase'] : [];
 		$free_items_id = ! empty( $all_meta_values['add_specific_product_for_free'] ) ? $all_meta_values['add_specific_product_for_free'] : [];
 
 		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free || 'any_products_listed_below' === $customer_gets_as_free ) {
@@ -364,13 +365,15 @@ class CouponGeneralTabController extends BaseController
 				$product_title = get_the_title( $product->get_id() );
 				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
 
+				$free_quantity = get_post_meta( $coupon_id, $converted_string . '-free_product_quantity', true );
+
 				$free_amount = get_post_meta( $coupon_id, $converted_string . '-free_amount', true );
 				$free_amount = ! empty( $free_amount ) ? $free_amount : 0;
 				$hexcoupon_bogo_discount_type = get_post_meta( $coupon_id, $converted_string . '-hexcoupon_bogo_discount_type', true );
 
 				$original_subtotal = floatval($product->get_price() * $quantity );
 
-				if ( 'fixed' === $hexcoupon_bogo_discount_type ) {
+				if ( 'fixed' === $hexcoupon_bogo_discount_type && array_diff( $main_product_id, $free_items_id ) ) {
 					if ( $free_amount > $product->get_price() ) {
 						$free_amount = $product->get_price();
 					}
@@ -379,7 +382,26 @@ class CouponGeneralTabController extends BaseController
 					}
 					$custom_subtotal = $original_subtotal - ( $free_amount * $quantity );
 				}
-				else {
+				if ( 'percent' === $hexcoupon_bogo_discount_type && array_diff( $main_product_id, $free_items_id ) ) {
+					if ( $free_amount > 100 ) {
+						$free_amount = 100;
+					}
+					if ( $free_amount <= 0 ) {
+						$free_amount = 0;
+					}
+					$custom_subtotal = $original_subtotal * ( ( 100 - $free_amount ) / 100 );
+				}
+
+				if ( 'fixed' === $hexcoupon_bogo_discount_type && ! array_diff( $main_product_id, $free_items_id ) ) {
+					if ( $free_amount > $product->get_price() ) {
+						$free_amount = $product->get_price();
+					}
+					if ( $free_amount <= 0 ) {
+						$free_amount = 0;
+					}
+					$custom_subtotal = $original_subtotal - ( $free_amount * $free_quantity );
+				}
+				if ( 'percent' === $hexcoupon_bogo_discount_type && ! array_diff( $main_product_id, $free_items_id ) ) {
 					if ( $free_amount > 100 ) {
 						$free_amount = 100;
 					}
@@ -916,8 +938,8 @@ class CouponGeneralTabController extends BaseController
 						$free_product_quantity = ! empty( $free_product_quantity ) ? $free_product_quantity : 1;
 
 						// If the main purchased product and the free product is the same product
-						if ( $free_gift_single_id == $main_product_single_id && $cart_item_quantity >= $main_product_min_purchased_quantity ) {
-							wc_print_notice( 'Add more than ' . $main_product_min_purchased_quantity . ' products for getting the discount.' );
+//						if ( $free_gift_single_id == $main_product_single_id && $cart_item_quantity >= $main_product_min_purchased_quantity ) {
+//							wc_print_notice( 'Add more than ' . $main_product_min_purchased_quantity . ' products for getting the discount.' );
 
 //							if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
 //								return;
@@ -929,7 +951,7 @@ class CouponGeneralTabController extends BaseController
 //
 //							$wc_cart->add_to_cart( $free_gift_single_id, 2, '','', $cart_item_data );
 
-						}
+//						}
 						// If the main purchased product and the free product is not the same product
 						if( $free_gift_single_id != $main_product_single_id ) {
 							// If free item is not in the cart then add free items to the cart with 'add_to_cart()'
@@ -946,7 +968,8 @@ class CouponGeneralTabController extends BaseController
 								if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
 									return;
 
-								$generate_free_item_id =  WC()->cart->generate_cart_id( $free_gift_single_id ); // generate id of free item
+								// generate free item cart key
+								$generate_free_item_id =  WC()->cart->generate_cart_id( $free_gift_single_id );
 								WC()->cart->set_quantity( $generate_free_item_id, $free_product_quantity );
 								add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_success_message' ] );
 								break;
@@ -955,20 +978,27 @@ class CouponGeneralTabController extends BaseController
 					}
 				}
 
-				if ( ! empty( $free_item_id ) && $cart_item_quantity >= $main_product_min_purchased_quantity && ! array_diff( $main_product_id, $free_item_id ) ) {
-					echo 'hello';
-
-					foreach ( $free_item_id as $free_item_single ) {
-						if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
-							return;
-						}
-						if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
-							return;
-						}
-
-						$free_single_key = $wc_cart->generate_cart_id( $free_item_single );
-						$wc_cart->set_quantity( $free_single_key, 2 );
-					}
+				// If the main product and free product is same.
+//				if ( ! empty( $free_item_id ) && $cart_item_quantity >= $main_product_min_purchased_quantity && ! array_diff( $main_product_id, $free_item_id ) ) {
+//					foreach ( $free_item_id as $free_single_item ) {
+//						if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+//							return;
+//						}
+//						if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+//							return;
+//						}
+//
+//						$trimmed_single_title = $this->convert_and_replace_unnecessary_string( $free_single_item );
+//
+//						$free_single_quantity = get_post_meta( $coupon_id, $trimmed_single_title . '-free_product_quantity', true );
+//						$free_discount_type = get_post_meta( $coupon_id, $trimmed_single_title . '-hexcoupon_bogo_discount_type', true );
+//						$free_single_amount = get_post_meta( $coupon_id, $trimmed_single_title . '-free_amount', true );
+//
+//						wc_print_notice( 'Add at least ' . $main_product_min_purchased_quantity + $free_single_quantity . ' products to get the discount.' );
+//
+//
+////						$wc_cart->add_to_cart( $free_single_item, $free_single_quantity );
+//					}
 
 
 
@@ -1109,6 +1139,24 @@ class CouponGeneralTabController extends BaseController
 //				}
 
 				$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
+			}
+
+			if ( 'same_product_as_free' === $customer_gets_as_free && 'a_specific_product'  === $customer_purchases ) {
+				if ( ! array_diff( $main_product_id, $free_item_id ) ) {
+					foreach ( $free_item_id as $free_single_item ) {
+						if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
+							return;
+						}
+						if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) {
+							return;
+						}
+						$free_item_title = get_the_title( $free_single_item );
+						$trimmed_single_title = $this->convert_and_replace_unnecessary_string( $free_single_item );
+
+						$free_single_quantity = get_post_meta( $coupon_id, $trimmed_single_title . '-free_product_quantity', true );
+
+						wc_print_notice( 'Add at least ' . $main_product_min_purchased_quantity + $free_single_quantity . ' "' . $free_item_title . '" to get the discount.' );
+					}
 			}
 
 			// Add product in the case of customer  purchases 'a combination of products' and gets 'a specific product' as free
@@ -1468,10 +1516,11 @@ class CouponGeneralTabController extends BaseController
 		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true );
 
 		$free_items_id = get_post_meta( $coupon_id, 'add_specific_product_for_free', true );
+		$main_product_id = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true );
 
 		$item_price = wc_get_price_excluding_tax( $cart_item['data'] );
 
-		if ( 'a_specific_product' === $customer_purchases || 'a_combination_of_products' === $customer_purchases || 'any_products_listed_below' === $customer_purchases || 'product_categories' === $customer_purchases ) {
+		if ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free || 'any_products_listed_below' === $customer_gets_as_free ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
 				$string_to_be_replaced = [ ' ', '-' ];
 
@@ -1488,7 +1537,7 @@ class CouponGeneralTabController extends BaseController
 					'br' => []
 				];
 
-				if ( 'fixed' === $hexcoupon_bogo_discount_type ) {
+				if ( 'fixed' === $hexcoupon_bogo_discount_type && array_diff( $main_product_id, $free_items_id ) ) {
 					// Get the free product quantity
 					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
 
@@ -1504,9 +1553,9 @@ class CouponGeneralTabController extends BaseController
 
 //					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount * $product_free_quantity .' = ' . wc_price( $item_price );
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount . ' (' . wc_price( $free_amount * $product_free_quantity ) . ')';
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount . ' (-' . wc_price( $free_amount * $product_free_quantity ) . ')';
 				}
-				else {
+				if ( 'percent' === $hexcoupon_bogo_discount_type && array_diff( $main_product_id, $free_items_id ) ) {
 					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
 
 					if ( $free_amount > 100 ) {
@@ -1520,11 +1569,64 @@ class CouponGeneralTabController extends BaseController
 
 //					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
 
-					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .')';
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (-' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .')';
 				}
 			}
 		}
 
+		if ( 'same_product_as_free' === $customer_gets_as_free ) {
+			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
+				$string_to_be_replaced = [ ' ', '-' ];
+
+				$product_title = get_the_title( $cart_item['product_id'] );
+				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
+
+				$free_amount = get_post_meta( $coupon_id, $converted_string . '-free_amount', true );
+				$free_amount = ! empty( $free_amount ) ? $free_amount : 0;
+				$hexcoupon_bogo_discount_type = get_post_meta( $coupon_id, $converted_string . '-hexcoupon_bogo_discount_type', true );
+
+				$text = __( '(BOGO Deal) <br>', 'hex-coupon-for-woocommerce' );
+
+				$allowed_tag = [
+					'br' => []
+				];
+
+				if ( 'fixed' === $hexcoupon_bogo_discount_type && ! array_diff( $main_product_id, $free_items_id ) ) {
+					// Get the free product quantity
+					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
+
+					if ( $free_amount > $item_price ) {
+						$free_amount = $item_price;
+					}
+					if ( $free_amount <= 0 ) {
+						$free_amount = 0;
+					}
+//					$item_price = $item_price * $cart_item['quantity'] - $free_amount * $cart_item['quantity'];
+
+					$item_price = $cart_item['quantity'] * $free_amount;
+
+//					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . $free_amount * $product_free_quantity .' = ' . wc_price( $item_price );
+
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] . 'x) - ' . '(' . $product_free_quantity . 'x * ' . $free_amount . ') = (-' . wc_price( $free_amount * $product_free_quantity ) . ')';
+				}
+				if ( 'percent' === $hexcoupon_bogo_discount_type && ! array_diff( $main_product_id, $free_items_id ) ) {
+					$product_free_quantity = get_post_meta( $coupon_id,  $converted_string . '-free_product_quantity', true );
+
+					if ( $free_amount > 100 ) {
+						$free_amount = 100;
+					}
+					if ( $free_amount <= 0 ) {
+						$free_amount = 0;
+					}
+
+					$item_price = $item_price * ( ( 100 - $free_amount ) / 100 ) * $cart_item['quantity'];
+
+//					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% = ' . wc_price( $item_price );
+
+					$price = '<span class="free_bogo_deal_text">' . wp_kses( $text, $allowed_tag ) . '</span>' . ' (' . $price . ' * ' . $cart_item['quantity'] .'x) - ' . $free_amount .'% (-' . wc_price( ( $free_amount / 100 ) * ( $cart_item['data']->get_price() * $product_free_quantity ) ) .')';
+				}
+			}
+		}
 
 		return $price;
 	}
@@ -1698,6 +1800,9 @@ class CouponGeneralTabController extends BaseController
 			[ 'coupon_apply_on_thursday', 'string' ],
 			[ 'coupon_apply_on_friday', 'string' ],
 			[ 'discount_type', 'string' ],
+			[ 'same_free_product_quantity', 'string' ],
+			[ 'hexcoupon_bogo_discount_type_on_same_product', 'string' ],
+			[ 'same_free_amount', 'string' ],
 			[ 'customer_purchases', 'string' ],
 			[ 'add_a_specific_product', 'string' ],
 			[ 'add_categories_to_purchase', 'string' ],
