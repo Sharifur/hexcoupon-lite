@@ -252,7 +252,6 @@
 						return data.text;
 					}
 				});
-				addSpecificProductForFreeClass.show();
 			}
 			if("a_combination_of_products" === $(this).val()){
 				addSpecificProductForFreeID.select2({
@@ -263,7 +262,6 @@
 						return data.text;
 					}
 				});
-				addSpecificProductForFreeClass.show();
 			}
 			if("any_products_listed_below" === $(this).val()){
 				addSpecificProductForFreeID.select2({
@@ -274,10 +272,16 @@
 						return data.text;
 					}
 				});
-				addSpecificProductForFreeClass.show();
 			}
 			if("same_product_as_free" === $(this).val()){
-				addSpecificProductForFreeClass.hide();
+				addSpecificProductForFreeID.select2({
+					maximumSelectionLength: 1, // Set maximum selection to unlimited
+					templateSelection: function (data, container) {
+						// Add a 'value' attribute to the generated <li> elements
+						$(container).attr('value', data.id);
+						return data.text;
+					}
+				});
 			}
 		});
 
@@ -290,7 +294,6 @@
 				},
 				maximumSelectionLength: 1, // Set maximum selection to 1
 			});
-			addSpecificProductForFreeClass.show();
 		}
 		if(customerGetsChecked.val() === "a_combination_of_products"){
 			addSpecificProductForFreeID.select2({
@@ -299,9 +302,8 @@
 					$(container).attr('value', data.id);
 					return data.text;
 				},
-				maximumSelectionLength: 1, // Set maximum selection to 1
+				maximumSelectionLength: 0, // Set maximum selection to 1
 			});
-			addSpecificProductForFreeClass.show();
 		}
 		if(customerGetsChecked.val() === "any_products_listed_below"){
 			addSpecificProductForFreeID.select2({
@@ -310,30 +312,25 @@
 					$(container).attr('value', data.id);
 					return data.text;
 				},
-				maximumSelectionLength: 1, // Set maximum selection to 1
+				maximumSelectionLength: 0, // Set maximum selection to 1
 			});
-			addSpecificProductForFreeClass.show();
+			// addSpecificProductForFreeClass.show();
 		}
 		if(customerGetsChecked.val() === "same_product_as_free"){
-			addSpecificProductForFreeClass.hide();
-
-			// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
-			$('.customer_gets_as_free .select2-selection__choice').remove();
-
-			const selectedFreeOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
-
-			// Remove the selected attribute from all options except the first selected one
-			$('#add_specific_product_for_free option').removeAttr('selected');
-
-			$('#selected_free_products .product-quantity-input.minimum').attr('name','same_free_product_quantity');
-			$('#selected_free_products select').attr('name','hexcoupon_bogo_discount_type_on_same_product');
-			$('#selected_free_products .product-quantity-input.amount').attr('name','same_free_amount');
+			addSpecificProductForFreeID.select2({
+				templateSelection: function (data, container) {
+					// Add a 'value' attribute to the generated <li> elements
+					$(container).attr('value', data.id);
+					return data.text;
+				},
+				maximumSelectionLength: 1, // Set maximum selection to 1
+			});
 		}
 
 		// Remove all li of select2 button except the first one on selecting the 'a_specific_product' radio button
 		$('input[name="customer_gets_as_free"]').on('change', function() {
 			// Check if the radio button is checked and its value is 'a_specific_product'
-			if ($(this).is(':checked') && $(this).val() === 'a_specific_product') {
+			if (($(this).is(':checked') && $(this).val() === 'a_specific_product') || $(this).is(':checked') && $(this).val() === 'same_product_as_free') {
 				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
 				$('.customer_gets_as_free .select2-selection__choice').slice(1).remove();
 
@@ -346,22 +343,6 @@
 				selectedFreeOption.prop('selected', true);
 
 				$("#selected_free_products .product-item-whole").slice(1).remove();
-			}
-
-			if ($(this).is(':checked') && $(this).val() === 'same_product_as_free') {
-				// Remove all 'select2-selection__choice' elements except the first one inside '.add_specific_product_to_purchase'
-				$('.customer_gets_as_free .select2-selection__choice').remove();
-
-				const selectedFreeOption = $('select[name="add_specific_product_to_purchase"] option:selected:first');
-
-				// Remove the selected attribute from all options except the first selected one
-				$('#add_specific_product_for_free option').removeAttr('selected');
-
-				$('#selected_free_products .product_title').remove();
-
-				$('#selected_free_products .product-quantity-input.minimum').attr('name','test');
-				$('#selected_free_products select').attr('name','test');
-				$('#selected_free_products .product-quantity-input.amount').attr('name','test');
 			}
 		});
 
@@ -761,12 +742,6 @@
 
 			// Append the new product item to the selected_purchased_products div
 			$('#selected_free_products').append(newPurchasedFreeProductItem);
-
-			customerGetsAsFree.on("change",function() {
-				if ("same_product_as_free" === $(this).val()) {
-					$('#selected_free_products').append('');
-				}
-			});
 		});
 
 		$(document).on("click",".remove_free_product", function (){

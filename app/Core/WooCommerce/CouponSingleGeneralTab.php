@@ -250,7 +250,7 @@ class CouponSingleGeneralTab
 		echo '<span class="add_specific_product_for_free_tooltip">'.wc_help_tip( esc_html__( 'Add the product that customer will get for free.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		echo '<div id="selected_free_products">';
-		if( ! empty( $add_specific_product_for_free ) && 'same_product_as_free' != $customer_gets_as_free ) {
+		if( ! empty( $add_specific_product_for_free ) ) {
 			foreach ( $add_specific_product_for_free as $value ) {
 				$free_product_title = get_the_title( $value );
 
@@ -295,50 +295,7 @@ class CouponSingleGeneralTab
 				echo '</div>';
 			}
 		}
-		else {
-			foreach ( $add_specific_product_to_purchase as $value ) {
-				$free_product_title = get_the_title( $value );
 
-				$converted_free_product_title = strtolower( str_replace( ' ', '_', $free_product_title ) );
-
-				$free_product_quantity = get_post_meta( $post->ID, 'same_free_product_quantity', true );
-
-				$free_product_amount = get_post_meta( $post->ID, 'same_free_amount', true );
-
-				echo '<div class="product-item-whole">';
-				echo '<div class="product_title"></div>';
-				?>
-				<div class="product_min_max_main">
-					<div class='product_min product-wrap'>
-						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce' ); ?></p>
-							<input class="product-quantity-input minimum" placeholder='Quantity' type='number' value="<?php echo esc_attr( $free_product_quantity ); ?>" name="same_free_product_quantity" min="0" max="100">
-						</div>
-					</div>
-					<div class='product_min product-wrap'>
-						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Discount Type', 'hex-coupon-for-woocommerce' ); ?></p>
-							<?php
-							$saved_discount_type = get_post_meta($post->ID, 'hexcoupon_bogo_discount_type_on_same_product', true);
-
-							// Default value if not set
-							$saved_discount_type = $saved_discount_type ? $saved_discount_type : 'percent';
-							?>
-							<select name="hexcoupon_bogo_discount_type_on_same_product" id="hexcoupon_bogo_discount_type">
-								<option value="percent" <?php if ( 'percent' === $saved_discount_type ) echo esc_attr( 'selected' );?>>Percent (%)</option>
-								<option value="fixed" <?php if ( 'fixed' === $saved_discount_type ) echo esc_attr( 'selected' );?>>Fixed</option>
-							</select>
-						</div>
-						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'Amount', 'hex-coupon-for-woocommerce' ); ?></p>
-							<input class="product-quantity-input" placeholder='Amount' type='number' value="<?php echo esc_attr( $free_product_amount ); ?>" name="same_free_amount" min="0" max="100">
-						</div>
-					</div>
-				</div>
-				<?php
-				echo '</div>';
-			}
-		}
 		echo '</div>';
 
 		echo wp_kses( $output, RenderHelpers::getInstance()->Wp_Kses_Allowed_For_Forms() );
