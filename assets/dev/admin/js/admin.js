@@ -649,7 +649,7 @@
 		$(document).on("click",".remove_purchased_product", function (){
 			let purchasedValue = $(this).attr("data-value");
 
-			$('li[value*="'+purchasedValue+'"]').remove();
+			$('.add_specific_product_to_purchase li[value*="'+purchasedValue+'"]').remove();
 			$('#add_specific_product_to_purchase option[value="'+purchasedValue+'"]').removeAttr("selected");
 
 			// call this function for handlingAllProductSection task
@@ -747,7 +747,7 @@
 		$(document).on("click",".remove_free_product", function (){
 			let purchasedFreeValue = $(this).attr("data-value");
 
-			$('li[value*="'+purchasedFreeValue+'"]').remove();
+			$('.add_specific_product_for_free li[value*="'+purchasedFreeValue+'"]').remove();
 			$('#add_specific_product_for_free option[value="'+purchasedFreeValue+'"]').removeAttr("selected");
 
 			// call this function for handlingAllProductSection task
