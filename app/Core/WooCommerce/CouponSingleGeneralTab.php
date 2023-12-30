@@ -92,8 +92,8 @@ class CouponSingleGeneralTab
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hex-coupon-for-woocommerce' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
-					'product_categories' => esc_html__( 'Any product from categories', 'hex-coupon-for-woocommerce' ),
 					'any_products_listed_below' => esc_html__( 'Any products listed below', 'hex-coupon-for-woocommerce' ),
+					'product_categories' => esc_html__( 'Any product from categories', 'hex-coupon-for-woocommerce' ),
 				],
 				'value' => ! empty( $customer_purchases ) ? $customer_purchases : 'a_specific_product',
 			]
