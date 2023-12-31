@@ -6,6 +6,7 @@ use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponColumTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\HexcouponBogoController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponSharableUrlTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageRestrictionTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageLimitsTabController;
@@ -55,7 +56,8 @@ final class Core extends BootManager
 			CouponGeographicRestrictionTabController::class,
 			CouponSingleSharableUrl::class,
 			CouponSharableUrlTabController::class,
-			AjaxApiController::class
+			AjaxApiController::class,
+			HexcouponBogoController::class,
 		];
 	}
 }

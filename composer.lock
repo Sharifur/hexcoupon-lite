@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6000c27c91c5ca19d3ead096742b602",
+    "content-hash": "f39770692de5807f2bf5ff8e36f4864d",
     "packages": [
         {
             "name": "appsero/client",
-            "version": "v1.2.5",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Appsero/client.git",
-                "reference": "fd06ae6ec3da9241541e7587a6d418640725f231"
+                "reference": "0943a4583297db01a0299e48a4a70cf3fcf6fc6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Appsero/client/zipball/fd06ae6ec3da9241541e7587a6d418640725f231",
-                "reference": "fd06ae6ec3da9241541e7587a6d418640725f231",
+                "url": "https://api.github.com/repos/Appsero/client/zipball/0943a4583297db01a0299e48a4a70cf3fcf6fc6c",
+                "reference": "0943a4583297db01a0299e48a4a70cf3fcf6fc6c",
                 "shasum": ""
             },
             "require": {
@@ -56,38 +56,28 @@
             ],
             "support": {
                 "issues": "https://github.com/Appsero/client/issues",
-                "source": "https://github.com/Appsero/client/tree/v1.2.5"
+                "source": "https://github.com/Appsero/client/tree/v1.3.0"
             },
-            "time": "2023-10-11T09:13:24+00:00"
+            "time": "2023-12-26T07:12:29+00:00"
         },
         {
-            "name": "codesvault/howdy-qb",
-            "version": "1.5.4",
+            "name": "appsero/updater",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/CodesVault/howdy_qb.git",
-                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2"
+                "url": "https://github.com/Appsero/updater.git",
+                "reference": "541cf090d42a9354aee2cf6438b3eee0e5e34a99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/dce09fa9259ffd2d090b42efed609dc672707bf2",
-                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2",
+                "url": "https://api.github.com/repos/Appsero/updater/zipball/541cf090d42a9354aee2cf6438b3eee0e5e34a99",
+                "reference": "541cf090d42a9354aee2cf6438b3eee0e5e34a99",
                 "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "phpcompatibility/php-compatibility": "^9.3",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.7",
-                "symfony/var-dumper": "^5.4",
-                "wp-coding-standards/wpcs": "^2.3"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "CodesVault\\Howdyqb\\": "src/"
+                    "Appsero\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -96,31 +86,16 @@
             ],
             "authors": [
                 {
-                    "name": "CodesVault",
-                    "email": "codesvault@gmail.com"
-                },
-                {
-                    "name": "Keramot UL Islam",
-                    "email": "keramotul.islam@gmail.com"
+                    "name": "Tareq Hasan",
+                    "email": "tareq@appsero.com"
                 }
             ],
-            "description": "Mysql Query Builder for WordPress",
-            "keywords": [
-                "builder",
-                "database",
-                "mysql",
-                "mysqli",
-                "pdo",
-                "query",
-                "query builder",
-                "wordpress",
-                "wp"
-            ],
+            "description": "Appsero client updater module",
             "support": {
-                "issues": "https://github.com/CodesVault/howdy_qb/issues",
-                "source": "https://github.com/CodesVault/howdy_qb/tree/1.5.4"
+                "issues": "https://github.com/Appsero/updater/issues",
+                "source": "https://github.com/Appsero/updater/tree/v1.0.0"
             },
-            "time": "2023-08-12T06:26:58+00:00"
+            "time": "2023-12-06T08:32:44+00:00"
         },
         {
             "name": "codesvault/kathamo-framework",
@@ -222,6 +197,68 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "codesvault/howdy-qb",
+            "version": "1.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CodesVault/howdy_qb.git",
+                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/dce09fa9259ffd2d090b42efed609dc672707bf2",
+                "reference": "dce09fa9259ffd2d090b42efed609dc672707bf2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/var-dumper": "^5.4",
+                "wp-coding-standards/wpcs": "^2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CodesVault\\Howdyqb\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CodesVault",
+                    "email": "codesvault@gmail.com"
+                },
+                {
+                    "name": "Keramot UL Islam",
+                    "email": "keramotul.islam@gmail.com"
+                }
+            ],
+            "description": "Mysql Query Builder for WordPress",
+            "keywords": [
+                "builder",
+                "database",
+                "mysql",
+                "mysqli",
+                "pdo",
+                "query",
+                "query builder",
+                "wordpress",
+                "wp"
+            ],
+            "support": {
+                "issues": "https://github.com/CodesVault/howdy_qb/issues",
+                "source": "https://github.com/CodesVault/howdy_qb/tree/1.5.4"
+            },
+            "time": "2023-08-12T06:26:58+00:00"
+        },
         {
             "name": "codesvault/wp-seeder",
             "version": "1.1.0",

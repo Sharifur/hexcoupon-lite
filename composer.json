@@ -33,6 +33,7 @@
     "require": {
         "codesvault/validator": "^1.0",
         "codesvault/kathamo-framework": "^1.1",
-        "appsero/client": "^1.2"
+        "appsero/client": "^1.3",
+        "appsero/updater": "^1.0"
     }
 }
