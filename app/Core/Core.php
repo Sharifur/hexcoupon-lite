@@ -6,11 +6,15 @@ use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponColumTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
-use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\HexcouponBogoController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponSharableUrlTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageRestrictionTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageLimitsTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeographicRestrictionTabController;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\HexcouponBogoController;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductForSpecificProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSameProductForSpecificProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForSpecificProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetProductFromListForSpecificProduct;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\WooCommerce\CouponCategory;
 use HexCoupon\App\Core\WooCommerce\CouponEmailSMS;
@@ -58,6 +62,10 @@ final class Core extends BootManager
 			CouponSharableUrlTabController::class,
 			AjaxApiController::class,
 			HexcouponBogoController::class,
+			GetSpecificProductForSpecificProduct::class,
+			GetSameProductForSpecificProduct::class,
+			GetCombinationOfProductForSpecificProduct::class,
+			GetProductFromListForSpecificProduct::class,
 		];
 	}
 }

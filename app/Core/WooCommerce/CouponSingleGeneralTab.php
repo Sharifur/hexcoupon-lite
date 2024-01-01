@@ -107,7 +107,7 @@ class CouponSingleGeneralTab
 		$output ='<div class="add_specific_product_to_purchase">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add a specific product', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Add product/products', 'hex-coupon-for-woocommerce' ),
 			'name' => 'add_specific_product_to_purchase',
 			'value' => $add_specific_product_to_purchase,
 			'type' => 'select',
@@ -235,7 +235,7 @@ class CouponSingleGeneralTab
 		$output ='<div class="add_specific_product_for_free">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add a specific product', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Add product/products', 'hex-coupon-for-woocommerce' ),
 			'name' => 'add_specific_product_for_free',
 			'value' => $add_specific_product_for_free,
 			'type' => 'select',

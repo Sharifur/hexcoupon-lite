@@ -32,8 +32,6 @@ const HexCouponPromo = () => {
 				},
 			})
 			.then(({ data }) => {
-
-				console.log(data)
 				setCouponData({
 					created: data.created,
 					active: data.active,

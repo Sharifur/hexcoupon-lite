@@ -21,6 +21,7 @@
 			});
 		});
 
+		// Dashboard quick links mechanism
 		const hash = window.location.hash;
 
 		if (hash === '#sharable_url_coupon_tab') {
@@ -48,6 +49,14 @@
 			const tabElement = document.querySelector('.general_tab');
 			if (tabElement) {
 				$('#coupon_type').val('buy_x_get_x_bogo');
+			}
+		}
+
+		if (hash === "#reset_usage") {
+			const tabElement = document.querySelector('.usage_limit_tab');
+			if (tabElement) {
+				$('li.usage_limit_tab a').trigger('click');
+				$('input#reset_usage_limit').trigger('click');
 			}
 		}
 
