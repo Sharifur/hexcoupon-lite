@@ -2,7 +2,6 @@
 namespace hexcoupon\app\Controllers\WooCommerce\Admin\Bogo;
 
 use HexCoupon\App\Controllers\BaseController;
-use hexcoupon\app\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class GetSpecificProductAndCombinationOfProductForProductCategory extends BaseController
@@ -13,11 +12,11 @@ class GetSpecificProductAndCombinationOfProductForProductCategory extends BaseCo
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method customer_gets_a_specific_product_and_a_combination_of_product_against_product_categories
+	 * @method product_categories_against_specific_product_and_combination_of_product
 	 * @return mixed
 	 * Customer gets specific product and a combination of product against any product from the categories
 	 */
-	public function customer_gets_a_specific_product_and_a_combination_of_product_against_product_categories( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id )
+	public function product_categories_against_specific_product_and_combination_of_product( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id )
 	{
 		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
 			return;
@@ -30,6 +29,7 @@ class GetSpecificProductAndCombinationOfProductForProductCategory extends BaseCo
 				$free_single_key = $wc_cart->generate_cart_id( $free_single );
 				$free_single_converted_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $free_single );
 				$free_single_quantity = get_post_meta( $coupon_id, $free_single_converted_title . '-free_product_quantity', true );
+				$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
 
 				// Add the product to the cart if it's not already been added in the cart
 				if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {

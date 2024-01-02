@@ -2,7 +2,6 @@
 namespace hexcoupon\app\Controllers\WooCommerce\Admin\Bogo;
 
 use HexCoupon\App\Controllers\BaseController;
-use hexcoupon\app\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class GetProductFromListForCombinationOfProduct extends BaseController
@@ -13,16 +12,16 @@ class GetProductFromListForCombinationOfProduct extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method customer_can_get_any_product_from_a_list_against_a_combination_of_product
+	 * @method combination_of_product_against_any_product_listed_below
 	 * @return mixed
 	 * Customer gets any product listed below against a combination of product
 	 */
-	public function customer_can_get_any_product_from_a_list_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart, $selected_products_as_free )
+	public function combination_of_product_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart, $selected_products_as_free )
 	{
 		$hexcoupon_bogo_instance = HexcouponBogoController::getInstance();
 
 		if ( 'any_products_listed_below' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
-			foreach ( $wc_cart->get_cart() as $cart_item ) {
+			foreach ( WC()->cart->get_cart() as $cart_item ) {
 				// Checking if the cart has all products that the store owner has selected to purchase
 				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
 					$product_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $cart_item['product_id'] );

@@ -15,6 +15,14 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductForSpecif
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSameProductForSpecificProduct;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForSpecificProduct;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetProductFromListForSpecificProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductForCombinationOfProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForCombinationOfProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetProductFromListForCombinationOfProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductForAnyListedProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForAnyListedProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyListedProductForAnyListedProduct;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductAndCombinationOfProductForProductCategory;
+use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForProductCategory;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\WooCommerce\CouponCategory;
 use HexCoupon\App\Core\WooCommerce\CouponEmailSMS;
@@ -66,6 +74,14 @@ final class Core extends BootManager
 			GetSameProductForSpecificProduct::class,
 			GetCombinationOfProductForSpecificProduct::class,
 			GetProductFromListForSpecificProduct::class,
+			GetSpecificProductForCombinationOfProduct::class,
+			GetCombinationOfProductForCombinationOfProduct::class,
+			GetProductFromListForCombinationOfProduct::class,
+			GetSpecificProductForAnyListedProduct::class,
+			GetCombinationOfProductForAnyListedProduct::class,
+			GetAnyListedProductForAnyListedProduct::class,
+			GetSpecificProductAndCombinationOfProductForProductCategory::class,
+			GetAnyProductFromListForProductCategory::class,
 		];
 	}
 }

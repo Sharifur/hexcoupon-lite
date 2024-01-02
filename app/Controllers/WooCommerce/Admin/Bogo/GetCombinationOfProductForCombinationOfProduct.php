@@ -2,8 +2,8 @@
 namespace hexcoupon\app\Controllers\WooCommerce\Admin\Bogo;
 
 use HexCoupon\App\Controllers\BaseController;
-use hexcoupon\app\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Core\Lib\SingleTon;
+use ParagonIE\ConstantTime\Hex;
 
 class GetCombinationOfProductForCombinationOfProduct extends BaseController
 {
@@ -13,11 +13,11 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method customer_gets_a_combination_of_product_against_a_combination_of_product
+	 * @method combination_of_product_against_combination_of_product
 	 * @return mixed
 	 * Customer gets a combination of product against a combination of product
 	 */
-	public function customer_gets_a_combination_of_product_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
+	public function combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
 	{
 		$hexcoupon_bogo_instance = HexcouponBogoController::getInstance();
 
@@ -28,7 +28,7 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 			return;
 
 		if ( 'a_combination_of_products' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
-			foreach ( $wc_cart->get_cart() as $cart_item ) {
+			foreach ( WC()->cart->get_cart() as $cart_item ) {
 				// Checking if the cart has all products that the store owner has selected to purchase
 				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
 					$product_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
@@ -54,12 +54,14 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 					if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
 						$free_single_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $free_single );
 						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
+						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
 						$wc_cart->add_to_cart( $free_single, $free_single_quantity );
 					}
 					// Increase the product quantity if it already exists in the cart
 					if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
 						$free_single_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $free_single );
 						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
+						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
 						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
 					}
 				}

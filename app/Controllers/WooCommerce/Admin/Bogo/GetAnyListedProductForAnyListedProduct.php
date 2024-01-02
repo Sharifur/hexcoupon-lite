@@ -2,7 +2,6 @@
 namespace hexcoupon\app\Controllers\WooCommerce\Admin\Bogo;
 
 use HexCoupon\App\Controllers\BaseController;
-use hexcoupon\app\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class GetAnyListedProductForAnyListedProduct extends BaseController
@@ -13,11 +12,11 @@ class GetAnyListedProductForAnyListedProduct extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method customer_can_get_any_product_from_a_list_against_any_product_listed_below
+	 * @method any_product_listed_below_against_any_product_listed_below
 	 * @return mixed
 	 * Customer gets any product listed below against any product listed below
 	 */
-	public function customer_can_get_any_product_from_a_list_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free )
+	public function any_product_listed_below_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free )
 	{
 		$hexcoupon_bogo_instance = HexcouponBogoController::getInstance();
 

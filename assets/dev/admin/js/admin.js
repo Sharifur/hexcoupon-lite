@@ -148,6 +148,7 @@
 				messageForCouponExpiryDateField.hide();
 				couponStartingDateField.hide();
 				messageForCouponStartingDateField.hide();
+				$("#selected_free_products").show();
 			}
 			else {
 				customerPurchasesDiv.hide()

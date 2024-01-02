@@ -101,7 +101,7 @@ input:checked + .slider:before {
 
 .options_group__saturdayWrap .first-input input {
 	border: 1px solid #ddd;
-	max-width: 70px;
+	max-width: 85px;
 	background: unset;
 	text-align: center;
 }
@@ -113,8 +113,51 @@ input:checked + .slider:before {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	flex-wrap: wrap;
 	gap: 10px 30px;
 	max-width: 49%;
+}
+@media screen and (max-width: 1000px) {
+	.options_group__saturdayWrap__inner {
+		max-width: calc(100% - 10px);
+	}
+	.options_group__saturdayWrap .first-input {
+		gap: 0 3px;
+	}
+	.options_group__saturdayWrap .first-input input {
+		max-width: 130px;
+	}
+}
+@media screen and (max-width: 960px) {
+	.options_group__saturdayWrap__inner {
+		max-width: calc(100% - 10px);
+	}
+	.options_group__saturdayWrap .first-input {
+		gap: 0 3px;
+	}
+	.options_group__saturdayWrap .first-input input {
+		max-width: 180px;
+	}
+}
+@media screen and (max-width: 575px) {
+	.options_group__saturdayWrap .first-input input {
+		max-width: 100px;
+	}
+}
+@media screen and (max-width: 450px) {
+	.options_group__saturdayWrap .first-input input {
+		max-width: 110px;
+	}
+}
+@media screen and (max-width: 375px) {
+	.options_group__saturdayWrap .first-input {
+		gap: 0 3px;
+		max-width: calc(100% - 10px);
+		width: calc(100% - 10px);
+	}
+	.options_group__saturdayWrap .first-input input {
+		max-width: 105px;
+	}
 }
 .woocommerce_options_panel .options_group__saturdayWrap .form-field {
 	padding: 0px !important;
@@ -267,6 +310,10 @@ p.output-url-text {
 	font-size: 13px;
 }
 
+ul li.select2-selection__choice {
+	width: auto !important;
+}
+
 .add_specific_product_to_purchase span.select2-container,
 .add_specific_product_for_free span.select2-container,
 .add_categories_to_purchase span.select2-container,
@@ -288,10 +335,18 @@ p.output-url-text {
 .product-item-whole {
 	display: flex;
 	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
 	width: 44%;
 	justify-content: space-between;
 	padding: 5px 0px 5px 162px!important;
 }
+@media screen and (max-width: 500px) {
+	.product-item-whole {
+		padding-left: 12px !important;
+	}
+}
+
 .product-item-whole:not(:last-child) {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 20px !important;
@@ -306,9 +361,14 @@ p.output-url-text {
 .product_min_max_main {
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	flex-wrap: wrap;
+	gap: 10px 24px;
 }
-
+@media screen and (max-width: 767px) {
+	.product_min_max_main {
+		flex-wrap: wrap;
+	}
+}
 .product-wrap-para {
 	font-size: 14px !important;
 	font-weight: 400;
@@ -433,10 +493,6 @@ p.output-url-text {
 	.restricted_countries span.select2-container {
 		width: 36% !important;
 	}
-
-	.product_min_max_main {
-		margin-left: 80px;
-	}
 }
 
 @media only screen and (max-width: 1440px) {
@@ -468,21 +524,19 @@ p.output-url-text {
 	.add_specific_product_to_purchase ul li {
 		width: 33% !important;
 	}
+	ul li.select2-selection__choice {
+		width: auto !important;
+	}
 
 	.restricted_shipping_zones span.select2-container,
 	.restricted_countries span.select2-container {
 		width: 52% !important;
 	}
-
-	.product_min_max_main {
-		margin-left: 40px;
-	}
 }
 
 @media only screen and (max-width: 1280px) {
 	.add_specific_product_to_purchase .options_group span.select2-container,
-	.payment_and_shipping_method span.select2-container,
-	.add_specific_product_for_free span.select2-container {
+	.payment_and_shipping_method span.select2-container {
 		width: 80% !important;
 	}
 
@@ -498,10 +552,6 @@ p.output-url-text {
 	.restricted_shipping_zones span ul li,
 	.restricted_countries span ul li {
 		width: 50% !important;
-	}
-
-	.add_specific_product_for_free span ul li {
-		width: 36% !important;
 	}
 }
 
@@ -543,6 +593,9 @@ p.output-url-text {
 		width: 80% !important;
 		text-align: center;
 	}
+	ul li.select2-selection__choice {
+		width: auto !important;
+	}
 }
 
 @media only screen and (max-width: 850px) {
@@ -554,6 +607,9 @@ p.output-url-text {
 	.add_specific_product_to_purchase ul li {
 		width: 40% !important;
 		text-align: center;
+	}
+	ul li.select2-selection__choice {
+		width: auto !important;
 	}
 }
 
@@ -588,5 +644,8 @@ p.output-url-text {
 	}
 	.sms_email_tab p.apply_send_current_coupon_field {
 		margin-left: -10px;
+	}
+	.options_group__saturdayWrap {
+		padding-left: 15px;
 	}
 }

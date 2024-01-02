@@ -13,7 +13,7 @@ class HexcouponBogoController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method register
+	 * @method registercustom_fee_for_bogo_deal
 	 * @return void
 	 * @since 1.0.0
 	 * Register hook that is needed to validate the coupon according to the starting date.
@@ -22,367 +22,10 @@ class HexcouponBogoController extends BaseController
 	{
 		add_action( 'woocommerce_before_calculate_totals', [ $this, 'add_free_items_to_cart' ] );
 		add_filter( 'woocommerce_cart_item_price', [ $this, 'replace_price_amount_with_free_text' ], 10, 2 );
-		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ] );
+		add_action( 'woocommerce_cart_totals_before_order_total', [ $this, 'show_free_items_name_before_total_price' ], 10 );
 		add_filter( 'woocommerce_cart_product_subtotal', [ $this, 'alter_product_subtotal_in_cart_for_bogo' ], 10, 4 );
 		add_action( 'woocommerce_cart_calculate_fees', [ $this, 'custom_fee_for_bogo_deal' ], 10, 1 );
-		add_filter( 'woocommerce_cart_subtotal', [ $this, 'deduct_bogo_discount_amount_from_subtotal' ] , 99, 3 );
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method combination_of_product_against_specific_product
-	 * @return mixed
-	 * Customer gets a specific product against a combination of product
-	 */
-	public function combination_of_product_against_specific_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
-	{
-		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-			return;
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-			return;
-
-		if ( 'a_specific_product' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
-			foreach ( WC()->cart->get_cart() as $cart_item ) {
-				// Checking if the cart has all products that the store owner has selected to purchase
-				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
-					$product_title = $this->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
-
-					$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
-
-					if ( $cart_item['quantity'] >= $main_product_min_quantity ) {
-						$is_main_product_greater_or_equal_to_min = true;
-					}
-					else {
-						$is_main_product_greater_or_equal_to_min = false;
-						// Show error message to the user if main product quantity is less than the store owner has selected
-						add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message' ] );
-						break;
-					}
-				}
-			}
-
-			foreach ( $free_item_id as $free_single ) {
-				$free_single_key = $wc_cart->generate_cart_id( $free_single );
-				if ( $is_main_product_greater_or_equal_to_min ) {
-					// Add product to the cart if the product does not already exist in the cart
-					if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$free_single_title = $this->convert_and_replace_unnecessary_string( $free_single );
-						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
-						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-						$wc_cart->add_to_cart( $free_single, $free_single_quantity );
-					}
-					// Increase the product quantity if it already exists in the cart
-					if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$free_single_title = $this->convert_and_replace_unnecessary_string( $free_single );
-						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
-						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
-					}
-				}
-			}
-
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method combination_of_product_against_combination_of_product
-	 * @return mixed
-	 * Customer gets a combination of product against a combination of product
-	 */
-	public function combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
-	{
-		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-			return;
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-			return;
-
-		if ( 'a_combination_of_products' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
-			foreach ( WC()->cart->get_cart() as $cart_item ) {
-				// Checking if the cart has all products that the store owner has selected to purchase
-				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
-					$product_title = $this->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
-
-					$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
-
-					if ( $cart_item['quantity'] >= $main_product_min_quantity ) {
-						$is_main_product_greater_or_equal_to_min = true;
-					}
-					else {
-						$is_main_product_greater_or_equal_to_min = false;
-						// Show error message to the user if main product quantity is less than the store owner has selected
-						add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message' ] );
-						break;
-					}
-				}
-			}
-
-			foreach ( $free_item_id as $free_single ) {
-				$free_single_key = $wc_cart->generate_cart_id( $free_single );
-				if ( $is_main_product_greater_or_equal_to_min ) {
-					// Add product to the cart if the product does not already exist in the cart
-					if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$free_single_title = $this->convert_and_replace_unnecessary_string( $free_single );
-						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
-						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-						$wc_cart->add_to_cart( $free_single, $free_single_quantity );
-					}
-					// Increase the product quantity if it already exists in the cart
-					if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$free_single_title = $this->convert_and_replace_unnecessary_string( $free_single );
-						$free_single_quantity = get_post_meta( $coupon_id, $free_single_title . '-free_product_quantity', true );
-						$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method combination_of_product_against_any_product_listed_below
-	 * @return mixed
-	 * Customer gets any product listed below against a combination of product
-	 */
-	public function combination_of_product_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart, $selected_products_as_free )
-	{
-		if ( 'any_products_listed_below' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
-			foreach ( WC()->cart->get_cart() as $cart_item ) {
-				// Checking if the cart has all products that the store owner has selected to purchase
-				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
-					$product_title = $this->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
-
-					$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
-
-					if ( $cart_item['quantity'] >= $main_product_min_quantity ) {
-						$is_main_product_greater_or_equal_to_min = true;
-					}
-					else {
-						$is_main_product_greater_or_equal_to_min = false;
-						// Show error message to the user if main product quantity is less than the store owner has selected
-						add_action( 'woocommerce_before_cart', [ $this, 'cart_custom_error_message' ] );
-						break;
-					}
-				}
-			}
-
-			if ( $is_main_product_greater_or_equal_to_min ) {
-				add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button' ] );
-
-				$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
-			}
-
-			$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method any_product_listed_below_against_specific_product
-	 * @return mixed
-	 * Customer gets a specific product against any product listed below
-	 */
-	public function any_product_listed_below_against_specific_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id )
-	{
-		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-			return;
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-			return;
-
-		if ( 'a_specific_product' === $customer_gets_as_free && 'any_products_listed_below' === $customer_purchases ) {
-			$main_product_in_cart = false;
-			$quantities = $wc_cart->get_cart_item_quantities();
-
-			foreach ( $main_product_id as $main_single_id ) {
-				$main_single_key = $wc_cart->generate_cart_id( $main_single_id );
-
-				$main_single_converted_title = $this->convert_and_replace_unnecessary_string( $main_single_id );
-				$main_single_min_quantity = get_post_meta( $coupon_id, $main_single_converted_title . '-purchased_min_quantity', true );
-
-				if ( $wc_cart->find_product_in_cart( $main_single_key ) && $quantities[$main_single_id] >= $main_single_min_quantity ) {
-					$main_product_in_cart = true;
-					break;
-				}
-			}
-			if ( $main_product_in_cart ) {
-				foreach ( $free_item_id as $free_single_id ) {
-					$free_single_converted_title = $this->convert_and_replace_unnecessary_string( $free_single_id );
-					$free_single_quantity = get_post_meta( $coupon_id, $free_single_converted_title . '-free_product_quantity', true );
-					$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-					$free_single_key = $wc_cart->generate_cart_id( $free_single_id );
-					// If the free product does not already exist in the cart, then add to cart
-					if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$wc_cart->add_to_cart( $free_single_id, $free_single_quantity );
-					}
-					// If the free product does already exist in the cart, then update product quantity in the cart
-					if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
-					}
-				}
-			}
-			else {
-				$this->remove_cart_product( $free_item_id );
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method any_product_listed_below_against_a_combination_of_product
-	 * @return mixed
-	 * Customer gets a combination of product against any product listed below
-	 */
-	public function any_product_listed_below_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id )
-	{
-		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-			return;
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-			return;
-
-		if ( 'a_combination_of_products' === $customer_gets_as_free && 'any_products_listed_below' === $customer_purchases ) {
-			$main_product_in_cart = false;
-			$quantities = $wc_cart->get_cart_item_quantities();
-
-			foreach ( $main_product_id as $main_single_id ) {
-				$main_single_key = $wc_cart->generate_cart_id( $main_single_id );
-
-				$main_single_converted_title = $this->convert_and_replace_unnecessary_string( $main_single_id );
-				$main_single_min_quantity = get_post_meta( $coupon_id, $main_single_converted_title . '-purchased_min_quantity', true );
-
-				if ( $wc_cart->find_product_in_cart( $main_single_key ) && $quantities[$main_single_id] >= $main_single_min_quantity ) {
-					$main_product_in_cart = true;
-					break;
-				}
-			}
-
-			if ( $main_product_in_cart ) {
-				foreach ( $free_item_id as $free_single_id ) {
-					$free_single_converted_title = $this->convert_and_replace_unnecessary_string( $free_single_id );
-					$free_single_quantity = get_post_meta( $coupon_id, $free_single_converted_title . '-free_product_quantity', true );
-					$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-					$free_single_key = $wc_cart->generate_cart_id( $free_single_id );
-					// If the free product does not already exist in the cart, then add to cart
-					if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$wc_cart->add_to_cart( $free_single_id, $free_single_quantity );
-					}
-					// If the free product does already exist in the cart, then update product quantity in the cart
-					if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
-						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
-					}
-				}
-			}
-			else {
-				$this->remove_cart_product( $free_item_id );
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method any_product_listed_below_against_any_product_listed_below
-	 * @return mixed
-	 * Customer gets any product listed below against any product listed below
-	 */
-	public function any_product_listed_below_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free )
-	{
-		if ( 'any_products_listed_below' === $customer_gets_as_free && 'any_products_listed_below' === $customer_purchases ) {
-			$main_product_in_cart = false;
-			$quantities = $wc_cart->get_cart_item_quantities();
-
-			foreach ( $main_product_id as $main_single_id ) {
-				$main_single_key = $wc_cart->generate_cart_id( $main_single_id );
-
-				$main_single_converted_title = $this->convert_and_replace_unnecessary_string( $main_single_id );
-				$main_single_min_quantity = get_post_meta( $coupon_id, $main_single_converted_title . '-purchased_min_quantity', true );
-
-				if ( $wc_cart->find_product_in_cart( $main_single_key ) && $quantities[$main_single_id] >= $main_single_min_quantity ) {
-					$main_product_in_cart = true;
-					break;
-				}
-			}
-
-			if ( $main_product_in_cart ) {
-				add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button' ] );
-
-				$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
-
-				$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
-			}
-			else {
-				$this->remove_cart_product( $free_item_id );
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method product_categories_against_specific_product_and_combination_of_product
-	 * @return mixed
-	 * Customer gets specific product and a combination of product against any product from the categories
-	 */
-	public function product_categories_against_specific_product_and_combination_of_product( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id )
-	{
-		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
-			return;
-
-		if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-			return;
-
-		if ( ( 'a_specific_product' === $customer_gets_as_free || 'a_combination_of_products' === $customer_gets_as_free ) && 'product_categories' === $customer_purchases ) {
-			foreach ( $free_item_id as $free_single ) {
-				$free_single_key = $wc_cart->generate_cart_id( $free_single );
-				$free_single_converted_title = $this->convert_and_replace_unnecessary_string( $free_single );
-				$free_single_quantity = get_post_meta( $coupon_id, $free_single_converted_title . '-free_product_quantity', true );
-				$free_single_quantity = ! empty( $free_single_quantity ) ? $free_single_quantity : 1;
-
-				// Add the product to the cart if it's not already been added in the cart
-				if ( ! $wc_cart->find_product_in_cart( $free_single_key ) ) {
-					$wc_cart->add_to_cart( $free_single, $free_single_quantity );
-				}
-				// Update the product quantity if it's already been added in the cart
-				if ( $wc_cart->find_product_in_cart( $free_single_key ) ) {
-					$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
-				}
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method product_categories_against_any_product_listed_below
-	 * @return mixed
-	 * Customer gets any product listed below against any product from the product categories
-	 */
-	public function product_categories_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $coupon_id, $free_item_id, $main_product_id, $wc_cart, $selected_products_as_free )
-	{
-		if ( 'any_products_listed_below' === $customer_gets_as_free && 'product_categories' === $customer_purchases ) {
-			add_action( 'woocommerce_after_cart_table', [ $this, 'custom_content_below_coupon_button_for_categories' ] );
-
-			$this->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
-
-			$this->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
-		}
+		add_filter( 'woocommerce_cart_subtotal', [ $this, 'deduct_bogo_discount_amount_from_subtotal' ] , 10, 3 );
 	}
 
 	/**
@@ -1053,31 +696,31 @@ class HexcouponBogoController extends BaseController
 			GetProductFromListForSpecificProduct::getInstance()->specific_products_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_min_purchased_quantity, $cart_item_quantity, $free_item_id, $wc_cart, $selected_products_as_free, $coupon_id, $main_product_id );
 
 			// Add product in the case of customer  purchases 'a combination of products' and gets 'a specific product' as free
-			$this->combination_of_product_against_specific_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart );
+			GetSpecificProductForCombinationOfProduct::getInstance()->combination_of_product_against_specific_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart );
 
 
 			// Add product in the case of customer  purchases 'a combination of products' and gets 'a combination product' as free
-			$this->combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart );
+			GetCombinationOfProductForCombinationOfProduct::getInstance()->combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart );
 
 			// Add product in the case of customer  purchases 'a combination of products' and gets 'any_products_listed_below' as free
-			$this->combination_of_product_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart, $selected_products_as_free );
+			GetProductFromListForCombinationOfProduct::getInstance()->combination_of_product_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart, $selected_products_as_free );
 
 			// Add product in the case of customer  purchases 'any_products_listed_below' and gets 'a_specific_product' as free
-			$this->any_product_listed_below_against_specific_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id );
+			GetSpecificProductForAnyListedProduct::getInstance()->any_product_listed_below_against_specific_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id );
 
 
 			// Add product in the case of customer  purchases 'any_products_listed_below' and gets 'a_combination_of_products' as free
-			$this->any_product_listed_below_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id );
+			GetCombinationOfProductForAnyListedProduct::getInstance()->any_product_listed_below_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id );
 
 
 			// Add product in the case of customer  purchases 'any_products_listed_below' and gets 'any_products_listed_below' as free
-			$this->any_product_listed_below_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free );
+			GetAnyListedProductForAnyListedProduct::getInstance()->any_product_listed_below_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free );
 
 			// Add product in the case of customer  purchases from 'product_categories' and gets 'a_specific_product' and 'a_combination_of_products' as free
-			$this->product_categories_against_specific_product_and_combination_of_product( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id );
+			GetSpecificProductAndCombinationOfProductForProductCategory::getInstance()->product_categories_against_specific_product_and_combination_of_product( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id );
 
 			// Add product in the case of customer  purchases 'product_categories' and gets 'any_products_listed_below' as free
-			$this->product_categories_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $coupon_id, $free_item_id, $main_product_id, $wc_cart, $selected_products_as_free );
+			GetAnyProductFromListForProductCategory::getInstance()->product_categories_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $coupon_id, $free_item_id, $main_product_id, $wc_cart, $selected_products_as_free );
 		}
 		// Remove all free items from the cart if the main product does not exist in the cart
 		else {
@@ -1305,13 +948,12 @@ class HexcouponBogoController extends BaseController
 	public function show_free_items_name_before_total_price()
 	{
 		$coupon_id = CouponGeneralTabController::getInstance()->coupon_id();
-
 		$all_meta_values = CouponGeneralTabController::getInstance()->get_all_post_meta( $coupon_id ); // get all free items id's
 
 		$free_items_id = ! empty( $all_meta_values['add_specific_product_for_free'] ) ? $all_meta_values['add_specific_product_for_free'] : [];
 
 		// Displays free item names
-		$free_items = '';
+		$free_items = 'hhh';
 
 		foreach ( WC()->cart->get_cart() as $cart_item ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {
