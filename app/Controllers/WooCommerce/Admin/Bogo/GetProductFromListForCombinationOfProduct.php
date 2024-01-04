@@ -45,7 +45,12 @@ class GetProductFromListForCombinationOfProduct extends BaseController
 
 				HexcouponBogoController::getInstance()->update_quantity_after_updating_cart( $coupon_id, $free_item_id, $main_product_id, $customer_purchases );
 			}
+			else {
+				// Removing free product from the list if it does not satisfy the rules
+				HexcouponBogoController::getInstance()->remove_cart_product( $selected_products_as_free );
+			}
 
+			// Removing product if customer tries to add more than one product from the list.
 			HexcouponBogoController::getInstance()->remove_product_in_case_of_any_product_listed_below( $wc_cart, $selected_products_as_free );
 		}
 	}

@@ -18,6 +18,8 @@ class GetSpecificProductForCombinationOfProduct extends BaseController
 	 */
 	public function combination_of_product_against_specific_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
 	{
+		$is_main_product_greater_or_equal_to_min = true;
+
 		$hexcoupon_bogo_instance = HexcouponBogoController::getInstance();
 
 		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
@@ -28,20 +30,12 @@ class GetSpecificProductForCombinationOfProduct extends BaseController
 
 		if ( 'a_specific_product' === $customer_gets_as_free && 'a_combination_of_products' === $customer_purchases ) {
 			foreach ( WC()->cart->get_cart() as $cart_item ) {
+				$product_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
+				$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
 				// Checking if the cart has all products that the store owner has selected to purchase
 				if ( in_array( $cart_item['product_id'], $main_product_id ) ) {
-					$product_title = HexcouponBogoController::getInstance()->convert_and_replace_unnecessary_string( $cart_item['product_id'] );
-
-					$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
-
-					if ( $cart_item['quantity'] >= $main_product_min_quantity ) {
-						$is_main_product_greater_or_equal_to_min = true;
-					}
-					else {
+					if ( ! ( $cart_item['quantity'] >= $main_product_min_quantity ) ) {
 						$is_main_product_greater_or_equal_to_min = false;
-						// Show error message to the user if main product quantity is less than the store owner has selected
-						add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
-						break;
 					}
 				}
 			}
@@ -66,6 +60,13 @@ class GetSpecificProductForCombinationOfProduct extends BaseController
 				}
 			}
 
+			if ( ! $is_main_product_greater_or_equal_to_min ) {
+				// Showing an error message if it does not satisfy the equation
+				add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
+
+				// Removing free items if it does not satisfy the equation
+				HexcouponBogoController::getInstance()->remove_cart_product( $free_item_id );
+			}
 		}
 	}
 }

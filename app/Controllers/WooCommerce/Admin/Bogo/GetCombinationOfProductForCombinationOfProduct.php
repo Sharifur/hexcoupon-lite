@@ -19,6 +19,8 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 	 */
 	public function combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
 	{
+		$is_main_product_greater_or_equal_to_min = true;
+
 		$hexcoupon_bogo_instance = HexcouponBogoController::getInstance();
 
 		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) )
@@ -35,15 +37,15 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 
 					$main_product_min_quantity = get_post_meta( $coupon_id, $product_title . '-purchased_min_quantity', true );
 
-					if ( $cart_item['quantity'] >= $main_product_min_quantity ) {
-						$is_main_product_greater_or_equal_to_min = true;
-					}
-					else {
+					if ( ! ( $cart_item['quantity'] >= $main_product_min_quantity ) ) {
 						$is_main_product_greater_or_equal_to_min = false;
-						// Show error message to the user if main product quantity is less than the store owner has selected
-						add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
-						break;
 					}
+//					else {
+//						$is_main_product_greater_or_equal_to_min = false;
+//						// Show error message to the user if main product quantity is less than the store owner has selected
+//						add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
+//						break;
+//					}
 				}
 			}
 
@@ -65,6 +67,12 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 						$wc_cart->set_quantity( $free_single_key, $free_single_quantity );
 					}
 				}
+			}
+
+			if ( ! $is_main_product_greater_or_equal_to_min ) {
+				add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
+
+				HexcouponBogoController::getInstance()->remove_cart_product( $free_item_id );
 			}
 		}
 	}

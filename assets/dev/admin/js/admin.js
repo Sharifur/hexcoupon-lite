@@ -7,6 +7,39 @@
 
 		/*
        ========================================
+           Restricting users from selecting the same item
+       ========================================
+       */
+		$(document).on( 'click', '.submitbox #publish',function (e) {
+			// Get selected values from both dropdowns
+			var purchasedProductValue = $('#add_specific_product_to_purchase').val();
+			var freeProductValue = $('#add_specific_product_for_free').val();
+
+			// Check if there are any common selected values
+			var commonValues = $(purchasedProductValue).filter(freeProductValue);
+
+			var purchasedProductCheckedVal = $('input[name="customer_purchases"]:checked').val();
+			var freeProductCheckedVal = $('input[name="customer_gets_as_free"]:checked').val();
+
+			// If common values exist, show an alert
+			if (purchasedProductCheckedVal == 'a_specific_product' || purchasedProductCheckedVal == 'a_combination_of_products' || purchasedProductCheckedVal == 'any_products_listed_below' && freeProductCheckedVal == 'a_specific_product' || freeProductCheckedVal == 'a_combination_of_products' || freeProductCheckedVal == 'any_products_listed_below' ) {
+				if (commonValues.length > 0 ) {
+					e.preventDefault();
+					alert('Can not select same item on both purchased and free product, chose specific and same product to do so!');
+					$("#add_specific_product_for_free").focus();
+				}
+			}
+			if (purchasedProductCheckedVal == 'a_specific_product' && freeProductCheckedVal == 'same_product_as_free') {
+				if (!(commonValues.length > 0) ) {
+					e.preventDefault();
+					alert('You have select same product for both purchased and free options!');
+					$("#add_specific_product_for_free").focus();
+				}
+			}
+		});
+
+		/*
+       ========================================
            Mixed Code
        ========================================
        */
@@ -173,6 +206,12 @@
 		const customerPurchasesChecked = $("input[name='customer_purchases']:checked");
 		const customerGetsChecked = $("input[name='customer_gets_as_free']:checked");
 
+		if(customerPurchasesChecked.val() === "a_specific_product"){
+			$("input[name='customer_gets_as_free'][value='same_product_as_free']").parent().show();
+		}else{
+			$("input[name='customer_gets_as_free'][value='same_product_as_free']").parent().hide();
+		}
+
 		if(customerPurchasesChecked.val() === "product_categories"){
 			addCategoriesToPurchase.show();
 			addSpecificProductToPurchaseClass.hide();
@@ -200,6 +239,7 @@
 						return data.text;
 					}
 				});
+				$("input[name='customer_gets_as_free'][value='same_product_as_free']").parent().show();
 			}else {
 				addSpecificProductToPurchaseId.select2({
 					maximumSelectionLength: 0, // Set maximum selection to unlimited
@@ -209,6 +249,7 @@
 						return data.text;
 					}
 				});
+				$("input[name='customer_gets_as_free'][value='same_product_as_free']").parent().hide();
 			}
 
 			// Check if the radio button is checked and its value is 'a_specific_product'

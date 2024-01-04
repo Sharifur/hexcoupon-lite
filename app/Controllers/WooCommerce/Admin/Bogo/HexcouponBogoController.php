@@ -953,7 +953,7 @@ class HexcouponBogoController extends BaseController
 		$free_items_id = ! empty( $all_meta_values['add_specific_product_for_free'] ) ? $all_meta_values['add_specific_product_for_free'] : [];
 
 		// Displays free item names
-		$free_items = 'hhh';
+		$free_items = '';
 
 		foreach ( WC()->cart->get_cart() as $cart_item ) {
 			if ( in_array( $cart_item['product_id'], $free_items_id ) ) {

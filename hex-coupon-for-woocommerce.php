@@ -89,13 +89,21 @@ add_action( 'before_woocommerce_init', function() {
 	}
 } );
 
+/**
+ * Load the plugin text-domain
+ *
+ * @return void
+ */
 add_action( 'init', 'load_hexcoupon_textdomain', 1 );
 function load_hexcoupon_textdomain() {
 	load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
 }
 
-
-// Redirect users to the dashboard of HexCoupon after activating the plugin
+/**
+ * Redirect users to the dashboard of HexCoupon after activating the plugin
+ *
+ * @return void
+ */
 add_action( 'activated_plugin', 'redirect_to_hexcoupon_dashboard_after_plugin_activation' );
 function redirect_to_hexcoupon_dashboard_after_plugin_activation( $plugin ) {
 	if ( $plugin == 'hex-coupon-for-woocommerce/hex-coupon-for-woocommerce.php' ) {
@@ -107,5 +115,27 @@ function redirect_to_hexcoupon_dashboard_after_plugin_activation( $plugin ) {
 		}
 	}
 }
+
+/**
+ * Override the cart page and checkout page with the old woocommerce classic pattern content
+ *
+ * @return void
+ */
+function alter_cart_page_with_cart_shortcode( $content ) {
+	// Check if it's the WooCommerce cart page
+	if ( is_cart() ) {
+		// Insert the [woocommerce_cart] shortcode in the cart page of the site.
+		$content = '[woocommerce_cart]';
+	}
+
+	if ( is_checkout() ) {
+		// Insert the [woocommerce_checkout] shortcode in the checkout page of the site
+		$content = '[woocommerce_checkout]';
+	}
+
+	return $content;
+}
+
+add_filter( 'the_content', 'alter_cart_page_with_cart_shortcode' );
 
 Core::getInstance();
