@@ -32,13 +32,15 @@ class AssetsManager
 	public function admin_scripts()
 	{
 		$folder_prefix = hexcoupon_get_config('dev_mode') ? '/dev' : '/dist';
+		$js_file_extension = hexcoupon_get_config('dev_mode') ? '.js' : '.min.js';
+		$css_file_extension = hexcoupon_get_config('dev_mode') ? '.css' : '.min.css';
 
 		if ( ( str_contains( $_SERVER['REQUEST_URI'], 'post-new.php' ) && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'shop_coupon') ||
 			( isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) ) {
 
 			wp_enqueue_script(
 				hexcoupon_prefix( 'admin' ),
-				hexcoupon_asset_url( $folder_prefix . "/admin/js/admin.js" ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/js/admin" . $js_file_extension ),
 				['jquery', 'select2', 'wp-i18n'],
 				$this->version,
 				true
@@ -54,7 +56,7 @@ class AssetsManager
 
 			wp_enqueue_style(
 				hexcoupon_prefix( 'admin' ),
-				hexcoupon_asset_url( $folder_prefix. "/admin/css/admin.css" ),
+				hexcoupon_asset_url( $folder_prefix. "/admin/css/admin" .$css_file_extension ),
 				array(),
 				$this->version,
 				'all'
@@ -72,7 +74,7 @@ class AssetsManager
 
 		wp_enqueue_style(
 			hexcoupon_prefix( 'hexcoupon-admin-notice' ),
-			hexcoupon_asset_url( $folder_prefix . "/admin/css/hex-dashboard-notice.css" ),
+			hexcoupon_asset_url( $folder_prefix . "/admin/css/hex-dashboard-notice" . $css_file_extension ),
 			array(),
 			$this->version,
 			'all'
@@ -140,10 +142,12 @@ class AssetsManager
 	public function public_scripts()
 	{
 		$folder_prefix = hexcoupon_get_config( 'dev_mode' ) ? '/dev' : '/dist';
+		$js_file_extension = hexcoupon_get_config('dev_mode') ? '.js' : '.min.js';
+		$css_file_extension = hexcoupon_get_config('dev_mode') ? '.css' : '.min.css';
 
 		wp_enqueue_script(
 			hexcoupon_prefix( 'public' ),
-			hexcoupon_asset_url( $folder_prefix . "/public/js/public.js" ),
+			hexcoupon_asset_url( $folder_prefix . "/public/js/public" . $js_file_extension ),
 			[],
 			$this->version,
 			true
@@ -151,7 +155,7 @@ class AssetsManager
 
 		wp_enqueue_style(
 			hexcoupon_prefix( 'public' ),
-			hexcoupon_asset_url( $folder_prefix . "/public/css/public.css" ),
+			hexcoupon_asset_url( $folder_prefix . "/public/css/public" . $css_file_extension ),
 			array(),
 			$this->version,
 			'all'

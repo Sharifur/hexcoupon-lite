@@ -82,6 +82,7 @@ input:checked + .slider:before {
 	gap: 10px;
 	position: relative;
 }
+
 .options_group__saturdayWrap .cross-hour {
 	position: absolute;
 	right: -25px;
@@ -117,6 +118,7 @@ input:checked + .slider:before {
 	gap: 10px 30px;
 	max-width: 49%;
 }
+
 @media screen and (max-width: 1000px) {
 	.options_group__saturdayWrap__inner {
 		max-width: calc(100% - 10px);
@@ -128,6 +130,7 @@ input:checked + .slider:before {
 		max-width: 130px;
 	}
 }
+
 @media screen and (max-width: 960px) {
 	.options_group__saturdayWrap__inner {
 		max-width: calc(100% - 10px);
@@ -139,16 +142,19 @@ input:checked + .slider:before {
 		max-width: 180px;
 	}
 }
+
 @media screen and (max-width: 575px) {
 	.options_group__saturdayWrap .first-input input {
 		max-width: 100px;
 	}
 }
+
 @media screen and (max-width: 450px) {
 	.options_group__saturdayWrap .first-input input {
 		max-width: 110px;
 	}
 }
+
 @media screen and (max-width: 375px) {
 	.options_group__saturdayWrap .first-input {
 		gap: 0 3px;
@@ -159,10 +165,12 @@ input:checked + .slider:before {
 		max-width: 105px;
 	}
 }
+
 .woocommerce_options_panel .options_group__saturdayWrap .form-field {
 	padding: 0px !important;
 	position: relative;
 }
+
 .woocommerce_options_panel .options_group__saturdayWrap label, .woocommerce_options_panel .options_group__saturdayWrap legend {
 	margin: 0;
 }

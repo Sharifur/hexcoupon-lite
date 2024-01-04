@@ -11,7 +11,7 @@ return array(
 	'namaspace_root'	=> 'HexCoupon',
 	'plugin_version'	=> '1.0.9',
 	'plugin_name'		=> 'HexCoupon',
-	'dev_mode'			=> true,
+	'dev_mode'			=> false,
 	'root_dir'			=> dirname(__DIR__),
 	'middlewares'		=> [
 		'auth'	=> HexCoupon\App\Controllers\Middleware\Auth::class,

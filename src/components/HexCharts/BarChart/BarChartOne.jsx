@@ -30,10 +30,9 @@ ChartJS.register(
 );
 
 const BarChartOne = () => {
-
 	const {restApiUrl,nonce,ajaxUrl,translate_array} = hexCuponData;
-	const [isLoading,setIsLoading] = useState(true);
 
+	const [isLoading,setIsLoading] = useState(true);
 	const [couponBarchartData, setCouponBarchartData] = useState({
 		todayCouponCreated : 0,
 		todayCouponRedeemed : 0,
@@ -51,6 +50,10 @@ const BarChartOne = () => {
 		weeklyExpiredCoupon : [],
 	})
 
+	const [dataSet,setDataset]=useState({})
+	const [barChartData, setBarChartData] = useState([]);
+
+	let labels = getWeekList;
 	useEffect(() => {
 			axios
 				.get(ajaxUrl, {
@@ -63,6 +66,22 @@ const BarChartOne = () => {
 					},
 				})
 				.then(({data}) => {
+					const initialChartData=	getDataForCharJS(labels, {
+						created: data.weeklyCouponCreated,
+						redeemed: data.weeklyCouponRedeemed,
+						active: data.weeklyActiveCoupon,
+						expired: data.weeklyExpiredCoupon,
+					})
+
+					setBarChartData(initialChartData)
+
+					setDataset({
+						created: data.weeklyCouponCreated,
+						redeemed: data.weeklyCouponRedeemed,
+						active: data.weeklyActiveCoupon,
+						expired: data.weeklyExpiredCoupon,
+					})
+
 					setCouponBarchartData({
 						todayCouponCreated: data.todayCouponCreated,
 						todayCouponRedeemed: data.todayRedeemedCoupon,
@@ -89,7 +108,7 @@ const BarChartOne = () => {
 				})
 
 		},
-		[]);
+		[isLoading]);
 
 	const {
 		todayCouponCreated,
@@ -101,11 +120,6 @@ const BarChartOne = () => {
 		yesterdayRedeemedCoupon,
 		yesterdayActiveCoupons,
 		yesterdayExpiredCoupons,
-
-		weeklyCouponCreated,
-		weeklyCouponRedeemed,
-		weeklyActiveCoupon,
-		weeklyExpiredCoupon
 	} = couponBarchartData;
 
 	const SelectOptions = [
@@ -113,8 +127,6 @@ const BarChartOne = () => {
 		{ value: 'Yesterday', label: translate_array.yesterdayLabel },
 		{ value: 'Today', label: translate_array.todayLabel },
 	]
-
-	let labels = getWeekList;
 
 	let dataSetForToday = {
 		created: [todayCouponCreated],
@@ -129,16 +141,6 @@ const BarChartOne = () => {
 		active: [yesterdayActiveCoupons],
 		expired: [yesterdayExpiredCoupons],
 	}
-
-	let dataSet = {
-		created: weeklyCouponCreated,
-		redeemed: weeklyCouponRedeemed,
-		active: weeklyActiveCoupon,
-		expired: weeklyExpiredCoupon,
-	};
-
-
-	const [barChartData, setBarChartData] = useState(getDataForCharJS(labels, dataSet));
 
 	const options = {
 		indexAxis: 'x',
