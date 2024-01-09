@@ -25,14 +25,14 @@
 			if (purchasedProductCheckedVal == 'a_specific_product' || purchasedProductCheckedVal == 'a_combination_of_products' || purchasedProductCheckedVal == 'any_products_listed_below' && freeProductCheckedVal == 'a_specific_product' || freeProductCheckedVal == 'a_combination_of_products' || freeProductCheckedVal == 'any_products_listed_below' ) {
 				if (commonValues.length > 0 ) {
 					e.preventDefault();
-					alert('Can not select same item on both purchased and free product, chose specific and same product to do so!');
+					alert(__('Can not select same item on both purchased and free product, chose specific and same product to do so!','hex-coupon-for-woocommerce'));
 					$("#add_specific_product_for_free").focus();
 				}
 			}
 			if (purchasedProductCheckedVal == 'a_specific_product' && freeProductCheckedVal == 'same_product_as_free') {
 				if (!(commonValues.length > 0) ) {
 					e.preventDefault();
-					alert('You have select same product for both purchased and free options!');
+					alert(__('You have select same product for both purchased and free options!','hex-coupon-for-woocommerce'));
 					$("#add_specific_product_for_free").focus();
 				}
 			}
@@ -92,11 +92,6 @@
 				$('input#reset_usage_limit').trigger('click');
 			}
 		}
-
-		// Select hexcoupon shortcode field
-		$(".shortcode_column").click(function(){
-			this.select();
-		});
 
 		/*
        ========================================
@@ -635,7 +630,7 @@
 					// Prevent the default behavior of the WP post publish button
 					e.preventDefault();
 					// Display the alert button for invalid
-					alert('Enter a valid quantity for all free products.');
+					alert(__('Enter a valid quantity for all free products.','hex-coupon-for-woocommerce'));
 
 					// Set the first invalid input field
 					if (!firstInvalidInput){

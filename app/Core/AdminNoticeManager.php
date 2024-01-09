@@ -212,7 +212,7 @@ class AdminNoticeManager
 		$getting_started_url = 'https://hexcoupon.com/get-to-know-how-the-coupon-works/';
 
 		return sprintf( __( '<p>Welcome to <b>HexCoupon</b> - Solution for smarter store marketing. Get advanced features for your <b>WooCommerce</b> store with our free plugin.
-		</p><a href="%s">Want to learn how to setup?</a>','hex-coupon-for-woocommerce' ), esc_url( $getting_started_url ) );
+		</p><a href="%s">Want to learn how to set up?</a>','hex-coupon-for-woocommerce' ), esc_url( $getting_started_url ) );
 	}
 
 	/**
@@ -288,7 +288,7 @@ class AdminNoticeManager
 		?>
 		<div class="notice notice-info is-dismissible">
 			<p>
-				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $wp_version_notice_message ) ); ?>
+				<?php printf( esc_html__( 'Notice: %s', 'hex-coupon-for-woocommerce' ), esc_html( $wp_version_notice_message ) ); ?>
 			</p>
 		</div>
 		<?php
@@ -313,7 +313,7 @@ class AdminNoticeManager
 			?>
 			<div class="notice notice-info is-dismissible">
 				<p>
-					<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $wc_version_notice_message ) ); ?>
+					<?php printf( esc_html__( 'Notice: %s', 'hex-coupon-for-woocommerce' ), esc_html( $wc_version_notice_message ) ); ?>
 				</p>
 			</div>
 			<?php
@@ -339,7 +339,7 @@ class AdminNoticeManager
 		?>
 		<div class="notice notice-info is-dismissible">
 			<p>
-				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $php_version_notice_message ) ); ?>
+				<?php printf( esc_html__( 'Notice: %s', 'hex-coupon-for-woocommerce' ), esc_html( $php_version_notice_message ) ); ?>
 			</p>
 		</div>
 		<?php

@@ -7,7 +7,6 @@ use HexCoupon\App\Core\Lib\SingleTon;
 class AssetsManager
 {
 	use SingleTon;
-
 	private $version = '';
 	private $configs = [];
 
@@ -72,9 +71,25 @@ class AssetsManager
 
 		}
 
+		wp_enqueue_script(
+			hexcoupon_prefix( 'admin' ),
+			hexcoupon_asset_url( $folder_prefix . "/admin/js/all-coupon-page" . $js_file_extension ),
+			['jquery', 'select2', 'wp-i18n'],
+			$this->version,
+			true
+		);
+
 		wp_enqueue_style(
 			hexcoupon_prefix( 'hexcoupon-admin-notice' ),
 			hexcoupon_asset_url( $folder_prefix . "/admin/css/hex-dashboard-notice" . $css_file_extension ),
+			array(),
+			$this->version,
+			'all'
+		);
+
+		wp_enqueue_style(
+			hexcoupon_prefix( 'all-coupon-page' ),
+			hexcoupon_asset_url( $folder_prefix . "/admin/css/all-coupon-page" . $css_file_extension ),
 			array(),
 			$this->version,
 			'all'

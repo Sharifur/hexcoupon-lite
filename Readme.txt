@@ -4,136 +4,121 @@ Donate link: https://example.com/
 Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, discounts, dynamic pricing, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
-Tested up to: 6.4.1
-Version: 1.0.8
-Stable tag: 1.0.8
+Tested up to: 6.4.2
+Version: 1.0.9
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
-Elevate your WooCommerce store with HexCoupon, a robust and intuitive coupon management plugin that effortlessly brings BOGO deals, store credits, and loyalty programs to your fingertips. HexCoupon provides the tools you need to create dynamic and compelling offers with ease.
+HexCoupon is a WooCommerce plugin designed to enhance and streamline coupon management for online stores. HexCoupon is providing tools to create dynamic and compelling offers. This likely includes
+customization and optimizing coupon offers, potentially through features like Automation, time-sensitive promotions, or product-specific deals.
 
-<h4>Major Features:</h4>
+HexCoupon prioritizes user-friendliness, ensuring that beginners and experienced users can navigate the plugin effortlessly.
+
+HexCoupon ensures that discounts are visible in various stages, including the product page, product details page, cart, checkout, and email notifications.
+
+##USEFUL LINKS##
+**[HexCoupon Website Link ](https://hexcoupon.com/)** |  **[Need Support?](https://hexcoupon.com/support)** | **[Documentation](https://hexcoupon.com/docs/)**
+
+<h4>MAJOR FEATURES-</h4>
 <ul>
-	<li><strong>Discounts coupons</strong> - At the core HexCoupon is a versatile coupon system. Easily generate, manage and distribute coupons to your promotional needs.</li>
-	<li><strong>BOGO Deals</strong> - Simplify your Buy One, Get One deals. Whether it's a simple "buy one, get one free" or a more complex. Sky is our limit.</li>
-	<li><strong>Store Credit (Upcoming)[Pro]</strong> - Want to refund or reward customers with store credit? HexCoupon lets you issue credits seamlessly, ensuring happy customers and repeat business.</li>
-	<li><strong>Loyalty Program (Upcoming)[Pro]</strong> - Keep your customers coming back. Design a loyalty program tailored to your business, allowing shoppers to earn points for purchases, referrals, or other actions, redeemable for discounts or rewards.</li>
-	<li><strong>Easy Integration (Upcoming)[Pro]</strong> - Designed with WooCommerce in mind, HexCoupon integrates seamlessly with your existing setup, ensuring a smooth experience for both store owners and customers.</li>
-	<li><strong>User-Friendly Interface</strong> - With its intuitive dashboard, even those new to WooCommerce can dive in and design intricate deals without the hassle.</li>
-	<li><strong>Flexible Customization</strong> - Every store is unique, and HexCoupon offers flexibility in coupon parameters, ensuring that your promotions match your brand's voice and strategy.</li>
+	<li><strong>Discounts coupons -</strong> HexCoupon simplifies the process of creating coupons and generating unique and engaging promotional offers for your online store.</li>
+	<li><strong>BOGO Deals > Your Gateway to BOGO Brilliance! -</strong> HexCoupon BOGO Deals is more than just a traditional 'Buy One, Get One' offer, our BOGO Deals are crafted to deliver the best shopping experience, to you and your customers.</li>
+	<li><strong>Store Credit -</strong> Want to refund or reward customers with store credit? HexCoupon lets you issue credits seamlessly, ensuring happy customers and repeat business. <strong>Store Credit feature Coming Soon to HexCoupon!</strong></li>
+	<li><strong>Loyalty Program -</strong> Keep your customers coming back. Design a loyalty program tailored to your business, allowing shoppers to earn points for purchases, referrals, or other actions, redeemable for discounts or rewards. <strong>This feature is Coming Soon to HexCoupon!</strong></li>
+	<li><strong>Gift🎁 Coupon -</strong> Gift Coupons allow your customers to spread love and happiness. Whether it's a birthday, anniversary, or just a special day, give the gift of choice with <strong>HexCoupon's upcoming feature. HexCoupon - Because Every Gift 🎁 Should Be Extraordinary!</strong> 🌟</li>
+	<li><strong>Sharable URL Coupons -</strong> With URL Coupons, you can create hyper-targeted campaigns by attaching discounts to specific URLs. Deliver targeted discounts directly to your audience, increasing engagement and interaction.</br> <strong>Elevate Your Promotions with HexCoupon's URL Coupon🌐</strong></li>
+	<li><strong>Easy Integration -</strong> Designed with WooCommerce in mind, HexCoupon integrates seamlessly with your existing setup, ensuring a smooth experience for store owners and customers.</li>
+	<li><strong>User-Friendly Interface -</strong> With its intuitive dashboard, even those new to WooCommerce can dive in and design intricate deals without the hassle.</li>
+	<li><strong>Flexible Customization -</strong> Every store is unique, and HexCoupon offers flexibility in coupon parameters, ensuring that your promotions match your brand’s voice and strategy.</li>
 </ul>
 
-<h4>Current Features:</h4>
-1. After activating HexCoupon WooCommerce plugin the WooCommerce shop owner will see a top-level menu called HexCoupon where he can add WooCommerce coupon, see all WooCommerce coupon, and its categories on that page.
-2. Added one new tab named – HexCoupon.
-3. WooCommerce registered users can check available coupon for use in the WooCommerce my account page.
+<h4>HexCoupon Free Version-</h4>
+1. <strong>Valid for specific⏰ days and hours -</strong> You can restrict the usage of a coupon code to certain days of the week and specific hours. Limited-time offers create a sense of urgency, motivating shoppers to take advantage of your promotions before time runs out.
+<strong>Why Valid for specific⏰ days and hours Matter:</strong>
+				>Automated Activation and Deactivation
+				>Boost Sales During Peak Hours
+				>Strategic Marketing
 
-4. Apply payment and shipping moved to another specific tab called 'Payment & shipping method' from hexcoupon tab.
-5. Added a new tab called 'Geographic restrictions'. WooCommerce shop owner can restrict users based on their location.
+2. <strong>Coupon Starting Date📅 (With Message) -</strong> You can set a specific date from the calendar when a coupon becomes valid, and includes a message to customers about when they can start using the coupon. It’s a pre-announce promotion or plans a scheduled discount.
+<strong>Why Coupon Starting Date Matter:</strong>
+				>Create Buzz and Anticipation
+                >Enhanced Customer Experience
+                >Strategic Promotion Timing
+
+3. <strong>Product Cart Condition🎯-</strong> With HexCoupon, users can apply conditions to their cart for specific product-related discounts. Tailor your promotions, boost cross-selling, and elevate your marketing strategies.
+<strong>Why Product Cart Conditions Matter</strong>
+                 >Precision Targeting
+                 >Enhanced Cross-Selling
+                 >Strategic Marketing
+
+4. <strong>Category 🛍️Cart Condition-</strong> HexCoupon allows you to set conditions that trigger discounts when items from these categories are added to the cart. Apply percentage or fixed discounts when products from designated categories meet your predefined criteria.
+<strong>Why Category 🛍️Cart Conditions Matter:</strong>
+                  >Category Precision
+                  >Enhanced Upselling
+                  >Strategic Marketing Impact
+
+5. <strong>Allowed/Restricted! 🔐 Customer -</strong> HexCoupon's Allowed/Restricted! 🔐 Customer Role feature allows you to set exclusive conditions based on customer roles. Ensure that certain discounts are exclusive to new customers, while loyal patrons enjoy their own set of personalized offers.
+<strong>Why Allowed/Restricted! 🔐 Customer Matter:</strong>
+                  >Personalized Customer Experience
+                  >Loyalty Recognition
+                  >Strategic Marketing Impact
+
+6. <strong>Usage 🔄Reset -</strong> Empowers you to refresh and renew the usage count of your coupons effortlessly. Choose how often you want to reset the usage count. Whether it's a weekly, monthly, or custom interval, HexCoupon ensures that your coupons stay vibrant and ready for action whenever you need them.
+<strong>Why Usage Reset🔄 Matter:</strong>
+                  >Flexible Coupon Management
+                  >Continuous Impact
+                  >Strategic Marketing Adaptation
+
+7. <strong>Geographic🌍 Restriction (By countries or Shipping Zones) -</strong> Set specific countries or shipping zones for your promotions, ensuring relevance and maximizing engagement. Elevate Your Promotions with HexCoupon's Geographic Restriction!
+<strong>Why Geographic🌍 Restriction (By countries or Shipping Zones) Matter:</strong>
+                  >Compliance and Precision
+                  >Global Brand Consistency
+                  >Targeted Marketing
+
+8. <strong>Sharable URL coupon -</strong> Each URL carries a personalized discount code, making it easy for your customers to share the savings with friends and family. Share the Savings with HexCoupon's Sharable URL Coupons! 🔗
+<strong>Why Sharable URL coupon Matter:</strong>
+                  >Convenient Referral Programs
+                  >Community Building
+                  >Viral Marketing
+
+<h4>Why you choose HexCoupon?</h4>
+When you are choosing HexCoupon, you should consider the unique requirements and how well the features align with your marketing strategies.
 <ul>
-	<li>Users can be restricted by shipping zones that the WooCommerce shop owner will select. Example. users from New York, Texas or from Dhaka will not be able to use that coupon.</li>
-    <li>Users can be restricted from the selected countries that the WooCommerce shop owner will select. Example: Bangladesh, India, USA</li>
+	<li>HexCoupon prioritizes <strong>user-friendly experiences, making it easy</strong> for businesses to navigate and implement various coupon strategies without extensive technical knowledge.</li>
+	<li><strong>Innovative features</strong> like "Coupon Starting Date," "Usage Reset," and "Sharable URL Coupons" indicate a commitment to innovation, to run dynamic and engaging promotional campaigns.</li>
+	<li>Generate <strong>coupons in bulk</strong> effortlessly. Whether you need a batch of 10 or 100, create them in just a few clicks.</li>
+	<li>HexCoupon <strong>streamlines</strong> the process, saving you time and ensuring consistency.</li>
+	<li>Easily identify and track the <strong>performance</strong> of different campaigns.</li>
+	<li><strong>BOGO deals</strong> and <strong>store credits</strong> provide diverse options for creating compelling and customer-attractive offers, encouraging repeat purchases and customer loyalty.</li>
+	<li>HexCoupon being <strong>mobile-responsive</strong> ensures that businesses can manage and customers can redeem coupons easily across various devices, accommodating the growing trend of mobile commerce.</li>
+	<li><strong>Customer analytics</strong> in HexCoupon could allow businesses to track and analyze customer behavior related to coupon usage, providing valuable insights for future marketing strategies.</li>
+	<li>HexCoupon sends <strong>automated notifications</strong> to customers before a coupon expires, businesses can encourage timely usage and enhance customer engagement.</li>
+	<li>HexCoupon supports <strong>tiered membership</strong> discounts, businesses with loyalty programs can reward customers at different membership levels, fostering customer retention.</li>
 </ul>
-6. Added a new tab called 'Sharable URL coupon'.
-<ul>
-	<li>Here in this tab shop owners of WooCommerce can get a unique url of a particular coupon. Copy and send that coupon link to any user.</li>
-    <li>After visiting that particular link users will get that particular WooCommerce coupon applied in the cart page.</li>
-    Shop Owner can set a message for the users, who will see the message on their screen after visiting that particular url.</li>
-    <li>WoCommerce shop owner can also set whether to redirect the users back to the original page where they came from. Or redirect to a custom url, and the customs urls are the WooCommerce cart page url and WooCommerce checkout page url.</li>
-    <li>Finally shop owner can set the automatic apply of the coupon by visiting the url with a checkbox.</li>
-</ul>
-7. Added a new option in the 'Usage Limits' tab
-<ul>
-	<li>Shop owners can now reset the usage limit to '0' after a certain interval. Added four buttons which are reset annually, reset, monthly, reset weekly, reset daily.</li>
-    <li>After checking the reset usage checkbox shop owners can then select one of these four buttons for the resetting the usage.</li>
-</ul>
-8. General Tab:
-<ul>
-	<li>Added a message text area field to display a message for the expiration date for the users.</li>
-	<li>Added a new field of coupon starting date which will be used for from which date a coupon will be activated.</li>
-	<li>Added a message texture field for displaying a message to the users for the coupon starting date.</li>
-	<li>If customers select the fixed cart discount a new field will appear which is a checkbox to enable the days and hours wise coupon validity system.</li>
-	<li>Shop owners can select up to 3 time range from a specific day field to set coupon validity.</li>
-</ul>
-
-=== Buy X Get X (BOGO) ===
-6. Added a new option Buy X Get X (BOGO) in the general tab.
-6.1. Store owners can select what products the customers should buy in order to get the free BOGO offer. Options Are:
-<ul>
-	<li>A specific product</li>
-	<li>A combination of products</li>
-	<li>Any product from the categories</li>
-	<li>Any product from a list</li>
-</ul>
-6.2. Store owners can select what products the customers will if he satisfies the criteria’s Options Are:
-<ul>
-	<li>A specific product</li>
-    <li>A combination of products</li>
-    <li>Any product from a list</li>
-    <li>Same product added to cart</li>
-</ul>
-7. Usage Restriction Tab. Added few new options in the default usage restriction tab.
-7.1. Added product cart condition, for example if certain conditions are met then customers can apply the coupon. Options Are:
-<ul>
-	<li>Coupon applies if only customers cart contains any of the product listed below</li>
-    <li>Coupon applies if only customers cart contains all of the product listed below</li>
-</ul>
-7.2. Added category cart condition. Coupon will be applied if customers cart contains products from certain categories
-7.3. Added a new filed 'Allowed or Restricted group of customers' Options Are:
-<ul>
-	<li>Coupon allowed for below groups</li>
-    <li>Coupon restricted for below groups</li>
-</ul>
-7.4. Added a new field 'Allowed/Restricted 'individual customers. Options Are:
-<ul>
-	<li>Coupon allowed for below customers</li>
-    <li>Coupon restricted for below customers</li>
-</ul>
-8. Added shortcode in the all-coupons page. Shortcode will be automatically added in the new custom column and users can copy and paste it anywhere to display the coupon information.
-
-
-<h4>Why HexCoupon?</h4>
-
-In the vast sea of WooCommerce plugins, HexCoupon stands out by offering a blend of power, simplicity, and flexibility. It’s not just about creating coupons—it’s about crafting the best shopping experience for your customers.
-
-
-== Installation ==
-
-**One way.**
-
-Go to your WordPress Dashboard. Navigate to Plugins > Add New and then search for "HexCoupon Advance Coupons For WooCommerce". Click on Install and then Activate the Plugin.
-
-That's it, HexCoupon - Advance Coupons For WooCommerce Plugin is now activated on your site!
-
-**Another way..**
-
-Simply download the HexCoupon plugin from the repository, install it to your WordPress, and activate. Dive into the settings and start creating your unique promotions immediately!
-
-<h4>Support & Updates:</h4>
-
-Our dedicated team is here to help. With regular updates, we ensure HexCoupon is always compatible with the latest version of WooCommerce and WordPress, and our support team is always eager to assist with any questions or issues.
-
+When choosing HexCoupon, you should evaluate these factors based on their unique requirements, industry context, and long-term strategic goals.
 
 == Frequently Asked Questions ==
 
-=  Is this plugin compatible on latest WordPress ?  =
+=  Is this plugin compatible with the latest WordPress?  =
 Yes
-=  Is this plugin requires WooCommerce ?  =
-Yes
-=  Is this plugin offers BOGO deal ?  =
-Yes
-=  Is this plugin offers sharable url coupon ?  =
-Yes
-=  Can I restrict coupon use by location and shipping zones ?  =
-Yes
-=  Can I restrict specific users or users group for a particular coupon ?  =
-Yes
-=  Can a coupon be validated in a particular day and time ?  =
-Yes
+=  Does this plugin require WooCommerce?  =
+Yes, HexCoupon is designed to be used in WooCommerce. WooCommerce provides the foundational
+infrastructure for running an online store within WordPress, and plugins like HexCoupon extend its
+functionality by adding advanced coupon management features.
 
-##USEFUL LINKS##
-**[HexCoupon Landing Page](https://hexcoupon.com/)** |  **[Need Support?](https://hexcoupon.com/support)** | **[Documentation](https://hexcoupon.com/docs/)**
+It would be best if you had WooCommerce installed and activated on your WordPress site. This ensures that the HexCoupon plugin can integrate seamlessly with your e-commerce store and leverage WooCommerce's capabilities for managing products, orders, and the overall shopping experience.
+=  Does this plugin offer BOGO deal?  =
+HexCoupon's BOGO deals, allow you to set up promotions where customers can receive an additional product for free or at a discounted rate when they purchase a specified item.
+=  Does this plugin offer a sharable URL coupon?  =
+Yes, HexCoupon does offer a "Sharable URL Coupon. It allows users to generate unique URL coupons. These URLs likely contain embedded coupon codes, making it easy for customers to share the discounts by simply sharing the URL. This can be a convenient and effective way to encourage viral marketing and referrals.
+=  Can I restrict coupon use by location and shipping zones?  =
+HexCoupon offers a "Geographic Restriction" feature. The geographic Restriction feature empowers you to choose where your discounts have the most impact. This indicates that you can define specific countries or shipping zones where your coupons will be valid or restrict them from being used in certain locations.
+=  Can I restrict specific users or user groups for a particular coupon?  =
+HexCoupon's Allowed/Restricted Customer Role feature allows you to set exclusive conditions based on customer roles. Set your discounts to specific customer groups, offering personalized promotions to your valued clientele.
+=  Can a coupon be validated on a particular day and time?  =
+HexCoupon allows date and time-based validation, you may find options to set the start and end dates for coupons, allowing you to specify the exact timeframe during which the coupon is valid.
 
 == Screenshots ==
 
@@ -163,25 +148,13 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.0.9 ==
+* Fixed issues of Bogo feature.
+* Checked compatibility with WordPress 6.4.2
 
 == 1.0.8 ==
 * Checked compatibility with WordPress 6.4.1
 * Fixed some issues
-
-= 1.0.7 =
-* Added coupon starting date.
-* Added coupon days and hours validation
-* Added Buy, 1 Get 1 BOGO.
-* Added product cart condition on the usage restriction tab.
-* Added category cart condition on the usage restriction tab.
-* Added coupon validation for group of customers
-* Added coupon validation for individual of customers
-* Added reset the usage limit option for the fields
-* Added shipping zones and country wise coupon restriction
-* Added sharable url coupon option
-
-= 1.0.6 =
-This is the initial Release for HexCoupon
 
 == Upgrade Notice ==
 

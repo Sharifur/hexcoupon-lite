@@ -2,17 +2,22 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store 1.0.9\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hex-coupon-for-woocommerce\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: HexCoupon - Create Smart & Advance Coupons For Your "
+"WooCommerce Store 1.0.9\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hex-coupon-for-"
+"woocommerce\n"
+"Last-Translator: \n"
+"Language-Team: English (UK)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-01-08T08:16:31+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"PO-Revision-Date: 2024-01-08 08:18+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Domain: hex-coupon-for-woocommerce\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.6.6; wp-6.4.2"
 
 #. Plugin Name of the plugin
 msgid "HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store"
@@ -103,7 +108,8 @@ msgid "Error: %s"
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponColumTabController.php:192
-msgid "Invalid coupon. Your payment or shipping method does not support this coupon."
+msgid ""
+"Invalid coupon. Your payment or shipping method does not support this coupon."
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponGeographicRestrictionTabController.php:208
@@ -115,15 +121,21 @@ msgid "Invalid coupon. Your country does not support this coupon."
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponUsageRestrictionTabController.php:398
-msgid "Invalid coupon. to apply this coupon add all of these products to your cart \""
+msgid ""
+"Invalid coupon. to apply this coupon add all of these products to your cart "
+"\""
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponUsageRestrictionTabController.php:434
-msgid "Invalid coupon. To apply this coupon add any of these products to your cart \""
+msgid ""
+"Invalid coupon. To apply this coupon add any of these products to your cart "
+"\""
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponUsageRestrictionTabController.php:470
-msgid "Invalid coupon. To apply this coupon add products from any of these categories to your cart \""
+msgid ""
+"Invalid coupon. To apply this coupon add products from any of these "
+"categories to your cart \""
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponUsageRestrictionTabController.php:506
@@ -140,19 +152,25 @@ msgstr ""
 
 #: app/Core/AdminNoticeManager.php:183
 msgid ""
-"<p><b>WooCommerce</b> plugin is not active! Activate the WooCommerce plugin to use <b>HexCoupon</b> features.\n"
+"<p><b>WooCommerce</b> plugin is not active! Activate the WooCommerce plugin "
+"to use <b>HexCoupon</b> features.\n"
 "\t\t</p><a href=\"%s\">Activate WooCommerce</a>"
 msgstr ""
+"<p><b>WooCommerce</b> plugin is not active! Activate the WooCommerce plugin "
+"to use <b>HexCoupon</b> features.\n"
+"\t\t</p><a href=\"%s\">Activate WooCommerce</a>"
 
 #: app/Core/AdminNoticeManager.php:198
 msgid ""
-"<p><b>WooCommerce</b> plugin is not installed! Install the WooCommerce plugin to use <b>HexCoupon</b> features.\n"
+"<p><b>WooCommerce</b> plugin is not installed! Install the WooCommerce "
+"plugin to use <b>HexCoupon</b> features.\n"
 "\t\t</p><a href=\"%s\">Install WooCommerce</a>"
 msgstr ""
 
 #: app/Core/AdminNoticeManager.php:214
 msgid ""
-"<p>Welcome to <b>HexCoupon</b> - Solution for smarter store marketing. Get advanced features for your <b>WooCommerce</b> store with our free plugin.\n"
+"<p>Welcome to <b>HexCoupon</b> - Solution for smarter store marketing. Get "
+"advanced features for your <b>WooCommerce</b> store with our free plugin.\n"
 "\t\t</p><a href=\"%s\">Want to learn how to set up?</a>"
 msgstr ""
 
@@ -168,8 +186,7 @@ msgstr ""
 msgid "This plugin requires at least PHP version of %s"
 msgstr ""
 
-#: app/Core/AdminNoticeManager.php:291
-#: app/Core/AdminNoticeManager.php:316
+#: app/Core/AdminNoticeManager.php:291 app/Core/AdminNoticeManager.php:316
 #: app/Core/AdminNoticeManager.php:342
 msgid "Notice: %s"
 msgstr ""
@@ -375,7 +392,8 @@ msgid "Valid for days/hours"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:389
-msgid "Check this box to make coupon valid for specific days and hours of the week."
+msgid ""
+"Check this box to make coupon valid for specific days and hours of the week."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:416
@@ -487,7 +505,9 @@ msgid "Sharable URL coupon"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:70
-msgid "Check this box to allow customers automatically apply the current coupon by visiting a URL"
+msgid ""
+"Check this box to allow customers automatically apply the current coupon by "
+"visiting a URL"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:85
@@ -495,7 +515,9 @@ msgid "Edit URL link"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:87
-msgid "Update the page to implement the url and afterwards copy the url and give to the users."
+msgid ""
+"Update the page to implement the url and afterwards copy the url and give to "
+"the users."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:98
@@ -522,8 +544,8 @@ msgstr ""
 msgid "Enter redirect URL"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:45
-#: src/components/Quick Links/Quik_Links.jsx:30
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:45 src/components/Quick
+#: Links/Quik_Links.jsx:30
 msgid "Reset Usage"
 msgstr ""
 
@@ -552,15 +574,20 @@ msgid "Product Cart Condition"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:145
-msgid "Check this box to to add a cart condition for the customer based on product."
+msgid ""
+"Check this box to to add a cart condition for the customer based on product."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:161
-msgid "Coupon applies if only customers cart contains any of the product listed below"
+msgid ""
+"Coupon applies if only customers cart contains any of the product listed "
+"below"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:162
-msgid "Coupon applies if only customers cart contains all of the product listed below"
+msgid ""
+"Coupon applies if only customers cart contains all of the product listed "
+"below"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:174
@@ -572,13 +599,14 @@ msgid "Search for Products"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:186
-msgid "Products that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
+msgid ""
+"Products that the coupon will be applied to, or that need to be in the cart "
+"in order for the &quot;Fixed cart discount&quot; to be applied."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:198
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:205
-#: assets/dev/admin/js/admin.js:485
-#: assets/dev/admin/js/admin.js:492
+#: assets/dev/admin/js/admin.js:485 assets/dev/admin/js/admin.js:492
 msgid "This feature is only available on Pro"
 msgstr ""
 
@@ -597,7 +625,8 @@ msgid "Category Cart Condition"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:242
-msgid "Check this box to to add a cart condition for the customer based on category."
+msgid ""
+"Check this box to to add a cart condition for the customer based on category."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:252
@@ -609,7 +638,9 @@ msgid "Search for category"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:264
-msgid "Categories that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
+msgid ""
+"Categories that the coupon will be applied to, or that need to be in the "
+"cart in order for the &quot;Fixed cart discount&quot; to be applied."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:289
@@ -637,7 +668,9 @@ msgid "Search for customer group"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:328
-msgid "Groups that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
+msgid ""
+"Groups that the coupon will be applied to, or that need to be in the cart in "
+"order for the &quot;Fixed cart discount&quot; to be applied."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:341
@@ -661,7 +694,9 @@ msgid "Search for customers"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:379
-msgid "Individual customer that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
+msgid ""
+"Individual customer that the coupon will be applied to, or that need to be "
+"in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
 msgstr ""
 
 #: app/Core/WooCommerce/MyAccount.php:101
@@ -691,7 +726,9 @@ msgid "Documentation"
 msgstr ""
 
 #: assets/dev/admin/js/admin.js:28
-msgid "Can not select same item on both purchased and free product, chose specific and same product to do so!"
+msgid ""
+"Can not select same item on both purchased and free product, chose specific "
+"and same product to do so!"
 msgstr ""
 
 #: assets/dev/admin/js/admin.js:35

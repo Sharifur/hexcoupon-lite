@@ -79,7 +79,7 @@ class CouponShortcode
 	 */
 	public function generate_coupon_shortcode( $coupon_code )
 	{
-		return '[hexcoupon_info code="' . esc_attr( $coupon_code ) . '"]';
+		return '[hex_code="' . esc_attr( $coupon_code ) . '"]';
 	}
 
 	/**

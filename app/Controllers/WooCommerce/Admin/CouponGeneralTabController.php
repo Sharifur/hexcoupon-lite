@@ -25,7 +25,30 @@ class CouponGeneralTabController extends BaseController
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_general_tab_meta_field_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon' ], 10, 2 );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
+		add_filter( 'woocommerce_coupon_error', [ $this, 'custom_error_message_for_expiry_date' ], 10, 3 );
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method custom_error_message_for_expiry_date
+	 * @return void
+	 * @since 1.0.0
+	 * Altering the default coupon expiry message with a custom one
+	 */
+	public function custom_error_message_for_expiry_date( $err_message, $err_code, $coupon ) {
+		if ( 107 === $err_code ) {
+			$coupon_id = $coupon->get_id();
+			$custom_expiry_message = get_post_meta( $coupon_id, 'message_for_coupon_expiry_date', true );
+			$err_message = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $custom_expiry_message ) );
+		}
+
+		return $err_message;
+	}
+
+
+
+
 
 	/**
 	 * @package hexcoupon
@@ -105,7 +128,7 @@ class CouponGeneralTabController extends BaseController
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
+				<p><?php echo sprintf( esc_html__( 'Error: %s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -140,7 +163,7 @@ class CouponGeneralTabController extends BaseController
 				if ( $error ) {
 					?>
 					<div class="notice notice-error is-dismissible">
-						<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
+						<p><?php echo sprintf( esc_html__( 'Error: %s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
 					</div>
 					<?php
 				}
@@ -372,7 +395,7 @@ class CouponGeneralTabController extends BaseController
 		$coupon_starting_date = get_post_meta( $coupon->get_id(), 'coupon_starting_date', true );
 		$coupon_converted_starting_date = strtotime( $coupon_starting_date );
 
-		if ( empty( $coupon_starting_date ) || $current_time >= $coupon_converted_starting_date ) {
+		if ( empty( $coupon_starting_date ) && $current_time >= $coupon_converted_starting_date ) {
 			return $valid;
 		}
 		else {
@@ -649,9 +672,9 @@ class CouponGeneralTabController extends BaseController
 
 		$message_for_coupon_starting_date = get_post_meta( $coupon_id, 'message_for_coupon_starting_date', true );
 
-		if ( 100 === $err_code ) {
+		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = $message_for_coupon_starting_date;
+			$err = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $message_for_coupon_starting_date ) );
 		}
 
 		return $err;

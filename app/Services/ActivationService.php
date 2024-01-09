@@ -3,7 +3,6 @@
 namespace HexCoupon\App\Services;
 
 use HexCoupon\App\Core\Lib\SingleTon;
-use HexCoupon\Database\Migrations\CacheMigration;
 
 class ActivationService
 {

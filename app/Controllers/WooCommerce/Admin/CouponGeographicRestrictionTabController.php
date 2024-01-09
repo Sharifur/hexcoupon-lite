@@ -65,7 +65,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
+				<p><?php echo sprintf( esc_html__( 'Error: %s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -111,11 +111,11 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
 
-		if ( empty( $all_meta_data['restricted_shipping_zones'] ) ) {
+		if ( empty( $all_cities ) ) {
 			return $valid;
 		}
 
-		if ( str_contains( $all_cities, $billing_city ) ) {
+		if ( ! empty( $all_cities ) && ! empty( $billing_city ) && str_contains( $all_cities, $billing_city ) ) {
 			return false;
 		}
 	}
@@ -136,13 +136,15 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$all_meta_data = $this->get_all_post_meta( $coupon->get_id() ); // get all meta values
 
+		$all_countries = ! empty( $all_meta_data['restricted_countries'] ) ? $all_meta_data['restricted_countries'] : [];
+
 		$billing_country = $woocommerce->customer->get_billing_country();
 
-		if ( empty( $all_meta_data['restricted_countries'] ) ) {
+		if ( empty( $all_countries ) ) {
 			return $valid;
 		}
 
-		if ( in_array( $billing_country, $all_meta_data['restricted_countries'] ) ) {
+		if ( in_array( $billing_country, $all_countries ) ) {
 			return false;
 		}
 	}
@@ -163,7 +165,6 @@ class CouponGeographicRestrictionTabController extends BaseController
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
-
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {

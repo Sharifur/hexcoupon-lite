@@ -2,7 +2,6 @@
 namespace HexCoupon\App\Core\WooCommerce;
 
 use HexCoupon\App\Core\Lib\SingleTon;
-use function Symfony\Component\VarDumper\Dumper\esc;
 
 /**
  * will add more
@@ -74,28 +73,29 @@ class MyAccount
 	 */
 	public function all_coupon_list()
 	{
-		if ( is_user_logged_in() ) {
-			$this->user = wp_get_current_user();
-		}
-		$roles = $this->user->roles;
-		$roles = $roles[0];
-
 		$coupon_posts = get_posts( [
 			'post_type' => 'shop_coupon',
 			'posts_per_page' => -1,
 			'post_status' => 'publish',
 			'orderby' => 'name',
 			'order' => 'asc',
-			'meta_key' => 'permitted_roles',
-			'meta_value' => $roles,
-			'meta_compare' => 'LIKE'
 		] );
 
 		foreach ( $coupon_posts as $coupon_post ) {
+			$real_expiry_date = '';
+			$expiry_date = get_post_meta( $coupon_post->ID, 'date_expires', true );
+			if ( (int)$expiry_date > 0 ) {
+				$real_expiry_date = date('Y-m-d', (int)$expiry_date);
+			} else {
+				$real_expiry_date = __( 'No date set', 'hex-coupon-for-woocommerce' );
+			}
 			?>
-				<P>
-				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
-				</P>
+			<p>
+				<?php printf( esc_html__( 'Code: %s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
+				<span>
+				<?php printf( esc_html__( 'Expiry Date: %s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
+			</span>
+			</p>
 			<?php
 		}
 	}
@@ -111,9 +111,9 @@ class MyAccount
 	public function coupon_page_endpoint_content()
 	{
 		?>
-			<header class="woocommerce-Address-title title">
-				<h3><?php echo esc_html__( 'All Available Coupons', 'hex-coupon-for-woocommerce' ); ?></h3>
-			</header>
+		<header class="woocommerce-Address-title title">
+			<h3><?php echo esc_html__( 'All Available Coupons', 'hex-coupon-for-woocommerce' ); ?></h3>
+		</header>
 		<?php
 		$this->all_coupon_list();
 	}

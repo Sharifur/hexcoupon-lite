@@ -4,8 +4,6 @@ import {
 	IconGift,
 	IconLink,
 	IconMapPinCancel, IconRefresh,
-	IconRotate,
-	IconRotate2,
 	IconTruck
 } from "@tabler/icons-react";
 import { __ } from '@wordpress/i18n';
@@ -23,7 +21,7 @@ const Quick_Links = () => {
 
 	return (
 		<div className="hexcoupon_quick_links">
-			<p>Quick Links:</p>
+			<p>{__("Quick Links:","hex-coupon-for-woocommerce")}</p>
 			<a href={finalUrl} target="_blank"><IconFilePlus />{__("Add New Coupon","hex-coupon-for-woocommerce")}</a>
 			<a href={finalUrl+"#general_coupon_data_bogo"} target="_blank"><IconGift />{__("Bogo Coupon","hex-coupon-for-woocommerce")}</a>
 			<a href={finalUrl+"#sharable_url_coupon_tab"} onClick="goToCouponTab('sharable_url_coupon_tab'); return false;" target="_blank"><IconLink />{__("URL Coupon","hex-coupon-for-woocommerce")}</a>

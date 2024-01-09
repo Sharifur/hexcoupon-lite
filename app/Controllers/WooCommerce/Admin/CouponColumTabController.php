@@ -47,7 +47,10 @@ class CouponColumTabController extends BaseController
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
+				<p><?php echo sprintf(
+					/* translators: %s: Just an error message to display */
+					esc_html__( 'Error: %s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message )
+					); ?></p>
 			</div>
 			<?php
 		}

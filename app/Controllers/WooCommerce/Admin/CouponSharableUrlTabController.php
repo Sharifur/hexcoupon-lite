@@ -48,7 +48,7 @@ class CouponSharableUrlTabController extends BaseController {
 		if ( $error ) {
 			?>
 			<div class="notice notice-error is-dismissible">
-				<p><?php echo sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
+				<p><?php echo sprintf( esc_html__( 'Error: %s', 'hex-coupon-for-woocommerce' ), esc_html( $this->error_message ) ); ?></p>
 			</div>
 			<?php
 		}
@@ -95,7 +95,7 @@ class CouponSharableUrlTabController extends BaseController {
 				// Get the referring URL
 				$redirect_link = wp_get_referer();
 
-				// If there's no referring URL or, it's the current page, redirect to the home page
+					// If there's no referring URL or, it's the current page, redirect to the home page
 				if ( ! $redirect_link || $redirect_link === get_permalink() ) {
 					$redirect_link = home_url();
 				}
@@ -109,8 +109,10 @@ class CouponSharableUrlTabController extends BaseController {
 			$sharable_url = ! empty( $sharable_url_coupon['sharable_url'] ) ? $sharable_url_coupon['sharable_url'] : '';
 			$coupon_code_search = str_contains( $sharable_url, 'coupon_code=' . $coupon_code );
 
+			$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? $sharable_url_coupon['apply_automatic_coupon_by_url'] : '';
+
 			if ( $coupon_code_search ) {
-				if ( $response ) {
+				if ( $response && 'yes' === $apply_automatic_coupon_by_url ) {
 					WC()->cart->apply_coupon( $coupon_code );
 					wp_safe_redirect( $redirect_link );
 					exit();

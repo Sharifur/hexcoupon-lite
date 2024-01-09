@@ -307,6 +307,7 @@ class AjaxApiController extends Controller
 	{
 		// Get the current date
 		$current_date = date('Y-m-d');
+		$current_date = strtotime( $current_date );
 
 		// Calculate yesterday's date
 		$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($current_date)));
@@ -314,6 +315,7 @@ class AjaxApiController extends Controller
 		// Get the coupons
 		$args = [
 			'post_type' => 'shop_coupon', // Replace 'coupon' with your custom post type name
+			'post_status' => 'publish',
 			'posts_per_page' => -1, // Get all coupons
 		];
 
@@ -333,14 +335,14 @@ class AjaxApiController extends Controller
 				$coupons->the_post();
 
 				// Get the expiry date for the current coupon
-				$expiry_date = get_post_meta(get_the_ID(), 'expiry_date', true);
+				$expiry_date = get_post_meta( get_the_ID(), 'date_expires', true );
 
 				// Check if the expiry date matches today's date (active) or is in the past (expired)
-				if ( $expiry_date != $current_date ) {
-					$today_active_coupons++;
+				if ( ! empty( (int)$expiry_date ) && (int)$expiry_date < $current_date ) {
+					$today_expired_coupons++;
 				}
 				else {
-					$today_expired_coupons++;
+					$today_active_coupons++;
 				}
 
 				if ( $expiry_date != $yesterday ) {
@@ -373,10 +375,17 @@ class AjaxApiController extends Controller
 	{
 		global $wpdb;
 
-		$query = "SELECT COUNT(ID) as count
-          FROM {$wpdb->prefix}posts
-          WHERE post_type = 'shop_coupon'
-          AND post_status = 'publish'";
+		$post_type = 'shop_coupon';
+		$post_status = 'publish';
+
+		$query = $wpdb->prepare(
+			"SELECT COUNT(ID) as count
+					FROM {$wpdb->prefix}posts
+					WHERE post_type = %s
+					AND post_status = %s",
+					$post_type,
+					$post_status,
+		);
 		$result = $wpdb->get_var( $query );
 
 		// Initialize the total redeemed coupon value
@@ -576,6 +585,7 @@ class AjaxApiController extends Controller
 		$coupon_query = new \WP_Query( [
 			'post_type' => 'shop_coupon', // WooCommerce coupon post type
 			'posts_per_page' => -1, // Retrieve all coupons
+			'post_status' => 'publish' // Retrieve only the published post
 		] );
 
 		// Initialize counters for active and expired coupons

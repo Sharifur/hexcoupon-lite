@@ -3,7 +3,6 @@ namespace HexCoupon\App\Core\WooCommerce;
 
 use HexCoupon\App\Core\Helpers\FormHelpers;
 use HexCoupon\App\Core\Helpers\RenderHelpers;
-use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class CouponSingleGeneralTab
@@ -216,7 +215,7 @@ class CouponSingleGeneralTab
 		woocommerce_wp_radio(
 			[
 				'id' => 'customer_gets_as_free',
-				'label' => esc_html__( 'Customer gets as free', 'hex-coupon-for-woocommerce' ),
+				'label' => esc_html__( 'Customer gets', 'hex-coupon-for-woocommerce' ),
 				'options' => [
 					'a_specific_product' => esc_html__( 'A specific product', 'hex-coupon-for-woocommerce' ),
 					'a_combination_of_products' => esc_html__( 'A combination of products', 'hex-coupon-for-woocommerce' ),
