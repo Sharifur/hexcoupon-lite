@@ -136,7 +136,7 @@ class CouponSingleGeneralTab
 					<div class='product_min product-wrap'>
 						<div class="product-wrap-inner">
 							<p class="product-wrap-para"><?php echo esc_html__( 'Quantity', 'hex-coupon-for-woocommerce' ); ?></p>
-							<input class="product-quantity-input" placeholder='Quantity' type='number' value="<?php echo esc_attr( $purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_title );?>-purchased_min_quantity" min="0" max="100">
+							<input class="product-quantity-input purchase" placeholder='Quantity' type='number' value="<?php echo esc_attr( $purchased_min_quantity ); ?>" name="<?php echo esc_attr( $converted_purchased_product_title );?>-purchased_min_quantity" min="0" max="100">
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_purchased_product' data-title="<?php echo esc_attr( $purchased_product_title ); ?>" data-value="<?php echo esc_attr( $value ); ?>"></a>
 					</div>

@@ -1,12 +1,12 @@
-=== HexCoupon – Create Smart & Advance Coupons For Your WooCommerce Store ===
+=== HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules ===
 Contributors: wphex
 Donate link: https://example.com/
 Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, discounts, dynamic pricing, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.4.2
-Version: 1.0.9
-Stable tag: 1.0.9
+Version: 1.0.10
+Stable tag: 1.0.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

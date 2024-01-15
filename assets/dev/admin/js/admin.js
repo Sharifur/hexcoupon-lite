@@ -644,6 +644,58 @@
 			if (firstInvalidInput){
 				$(firstInvalidInput).focus();
 			}
+
+			// check also
+			var dd = null;
+
+			$('.purchase').each(function (){
+				var cc = $(this).val();
+
+				// Check if the input is empty or not a number
+				if ($.trim(cc) === '' || isNaN(cc)){
+					// Prevent the default behavior of the WP post publish button
+					e.preventDefault();
+					// Display the alert button for invalid
+					alert(__('Efdfs.','hex-coupon-for-woocommerce'));
+
+					// Set the first invalid input field
+					if (!dd){
+						dd = this;
+					}
+					return false; // Exit the loop if validation fails for any field
+				}
+			});
+
+			// Take the users to the first invalid number input filed
+			if (dd){
+				$(dd).focus();
+			}
+
+			// check
+			var bb = null;
+
+			$('.amount').each(function (){
+				var aaa = $(this).val();
+
+				// Check if the input is empty or not a number
+				if ($.trim(aaa) === '' || isNaN(aaa) || 0 <= aaa){
+					// Prevent the default behavior of the WP post publish button
+					e.preventDefault();
+					// Display the alert button for invalid
+					alert(__("Enter a value greater than '0' for the Bogo discount amount"));
+
+					// Set the first invalid input field
+					if (!bb){
+						bb = this;
+					}
+					return false; // Exit the loop if validation fails for any field
+				}
+			});
+			if (bb){
+				$(bb).focus();
+			}
+
+
 		});
 
 

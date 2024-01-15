@@ -5,7 +5,7 @@
  * Plugin Name: HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: WpHex
  * Requires at least: 5.4
  * Tested up to: 6.4.2
@@ -122,20 +122,59 @@ function redirect_to_hexcoupon_dashboard_after_plugin_activation( $plugin ) {
  * @return void
  */
 function alter_cart_page_with_cart_shortcode( $content ) {
-	// Check if it's the WooCommerce cart page
-	if ( is_cart() ) {
-		// Insert the [woocommerce_cart] shortcode in the cart page of the site.
-		$content = '[woocommerce_cart]';
-	}
+	if ( class_exists( 'WooCommerce' ) ) {
+		// Check if it's the WooCommerce cart page
+		if ( is_cart() ) {
+			// Insert the [woocommerce_cart] shortcode in the cart page of the site.
+			$content = '[woocommerce_cart]';
+		}
 
-	if ( is_checkout() ) {
-		// Insert the [woocommerce_checkout] shortcode in the checkout page of the site
-		$content = '[woocommerce_checkout]';
+		if ( is_checkout() ) {
+			// Insert the [woocommerce_checkout] shortcode in the checkout page of the site
+			$content = '[woocommerce_checkout]';
+		}
 	}
 
 	return $content;
 }
 
 add_filter( 'the_content', 'alter_cart_page_with_cart_shortcode' );
+
+add_filter('manage_shop_coupon_posts_custom_column', 'custom_coupon_type_column_content', 10, 2);
+
+function custom_coupon_type_column_content($column, $post_id) {
+	if ($column === 'type') {
+		$coupon = new WC_Coupon($post_id);
+
+		if ($coupon) {
+			// Get the coupon type
+			$coupon_type = $coupon->get_discount_type();
+
+			// Customize the output based on the coupon type
+			switch ($coupon_type) {
+				case 'fixed_cart':
+					echo 'Fixed Cart Discount';
+					break;
+				case 'percent':
+					echo 'Percentage Discount';
+					break;
+				case 'fixed_product':
+					echo 'Fixed Product Discount';
+					break;
+				case 'custom_option':
+					echo 'Custom Option';
+					break;
+				default:
+					echo 'Unknown Type';
+			}
+		} else {
+			echo 'N/A';
+		}
+	}
+}
+
+
+
+
 
 Core::getInstance();

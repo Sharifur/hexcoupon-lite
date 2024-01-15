@@ -2,20 +2,20 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store 1.0.9\n"
+"Project-Id-Version: HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules 1.0.10\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/hex-coupon-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-08T08:16:31+00:00\n"
+"POT-Creation-Date: 2024-01-09T12:15:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: hex-coupon-for-woocommerce\n"
 
 #. Plugin Name of the plugin
-msgid "HexCoupon - Create Smart & Advance Coupons For Your WooCommerce Store"
+msgid "HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -41,7 +41,7 @@ msgstr ""
 
 #: app/Controllers/AdminMenuController.php:97
 #: app/Controllers/AdminMenuController.php:98
-#: app/Core/WooCommerce/MyAccount.php:48
+#: app/Core/WooCommerce/MyAccount.php:47
 msgid "All Coupons"
 msgstr ""
 
@@ -93,8 +93,8 @@ msgstr ""
 
 #. translators: %s: Just an error message to display
 #: app/Controllers/WooCommerce/Admin/CouponColumTabController.php:52
-#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:108
-#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:143
+#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:131
+#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:166
 #: app/Controllers/WooCommerce/Admin/CouponGeographicRestrictionTabController.php:68
 #: app/Controllers/WooCommerce/Admin/CouponSharableUrlTabController.php:51
 #: app/Controllers/WooCommerce/Admin/CouponUsageLimitsTabController.php:136
@@ -104,6 +104,11 @@ msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponColumTabController.php:192
 msgid "Invalid coupon. Your payment or shipping method does not support this coupon."
+msgstr ""
+
+#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:43
+#: app/Controllers/WooCommerce/Admin/CouponGeneralTabController.php:677
+msgid "%s"
 msgstr ""
 
 #: app/Controllers/WooCommerce/Admin/CouponGeographicRestrictionTabController.php:208
@@ -174,52 +179,52 @@ msgstr ""
 msgid "Notice: %s"
 msgstr ""
 
-#: app/Core/AssetsManager.php:121
+#: app/Core/AssetsManager.php:120
 msgid "Coupons Created"
 msgstr ""
 
-#: app/Core/AssetsManager.php:122
+#: app/Core/AssetsManager.php:121
 msgid "Coupons Redeemed"
 msgstr ""
 
-#: app/Core/AssetsManager.php:123
+#: app/Core/AssetsManager.php:122
 msgid "Coupons Active"
 msgstr ""
 
-#: app/Core/AssetsManager.php:124
+#: app/Core/AssetsManager.php:123
 msgid "Coupons Expired"
 msgstr ""
 
-#: app/Core/AssetsManager.php:125
+#: app/Core/AssetsManager.php:124
 msgid "Redeemed Coupon Amount"
 msgstr ""
 
-#: app/Core/AssetsManager.php:126
+#: app/Core/AssetsManager.php:125
 msgid "Sharable Url Coupons"
 msgstr ""
 
-#: app/Core/AssetsManager.php:127
+#: app/Core/AssetsManager.php:126
 msgid "Bogo Coupons"
 msgstr ""
 
-#: app/Core/AssetsManager.php:128
+#: app/Core/AssetsManager.php:127
 msgid "Geographically Restricted"
 msgstr ""
 
-#: app/Core/AssetsManager.php:129
+#: app/Core/AssetsManager.php:128
 #: src/components/HexCharts/BarChart/BarChartOne.jsx:198
 msgid "Coupon Insights"
 msgstr ""
 
-#: app/Core/AssetsManager.php:130
+#: app/Core/AssetsManager.php:129
 msgid "This Week"
 msgstr ""
 
-#: app/Core/AssetsManager.php:131
+#: app/Core/AssetsManager.php:130
 msgid "Yesterday"
 msgstr ""
 
-#: app/Core/AssetsManager.php:132
+#: app/Core/AssetsManager.php:131
 msgid "Today"
 msgstr ""
 
@@ -267,119 +272,129 @@ msgstr ""
 msgid "Shortcode"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:70
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:69
 msgid "Coupon type"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:91
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:90
 msgid "Customer purchases"
+msgstr ""
+
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:92
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:220
+msgid "A specific product"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:93
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:221
-msgid "A specific product"
+msgid "A combination of products"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:94
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:222
-msgid "A combination of products"
-msgstr ""
-
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:95
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:223
 msgid "Any products listed below"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:96
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:95
 msgid "Any product from categories"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:110
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:238
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:109
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:237
 msgid "Add product/products"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:119
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:247
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:118
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:246
 msgid "Search for specific product"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:122
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:121
 msgid "Add the product that customer buys."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:139
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:192
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:269
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:138
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:191
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:268
 msgid "Quantity"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:162
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:161
 msgid "Add categories"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:171
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:170
 msgid "Search for categories"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:174
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:173
 msgid "Add categories that customer need to buy from."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:219
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:218
 msgid "Customer gets"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:224
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:223
 msgid "Same product as free"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:250
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:249
 msgid "Add the product that customer will get for free."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:275
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:274
 msgid "Discount Type"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:288
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:287
 msgid "Amount"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:310
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:309
 msgid "Set a message for customers about the coupon expiry date."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:311
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:310
 msgid "Message for customer e.g. This coupon has been expired."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:332
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:331
 msgid "Coupon starting date"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:334
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:333
 msgid "Set the coupon starting date."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:363
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:362
 msgid "Set a message for customers about the coupon starting date."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:364
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:363
 msgid "Message for customer e.g. This coupon has not been started yet."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:388
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:387
 msgid "Valid for days/hours"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:389
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:388
 msgid "Check this box to make coupon valid for specific days and hours of the week."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:416
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:415
 msgid "Saturday"
+msgstr ""
+
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:451
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:520
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:587
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:654
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:721
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:788
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:855
+msgid "To add more hours switch to Pro version"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:452
@@ -389,68 +404,58 @@ msgstr ""
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:722
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:789
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:856
-msgid "To add more hours switch to Pro version"
-msgstr ""
-
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:453
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:522
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:589
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:656
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:723
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:790
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:857
 msgid "Add More Hours"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:457
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:456
 msgid "Coupon deactivated for Saturday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:486
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:485
 msgid "Sunday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:525
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:524
 msgid "Coupon deactivated for Sunday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:553
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:552
 msgid "Monday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:592
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:591
 msgid "Coupon deactivated for Monday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:620
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:619
 msgid "Tuesday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:659
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:658
 msgid "Coupon deactivated for Tuesday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:687
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:686
 msgid "Wednesday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:726
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:725
 msgid "Coupon deactivated for Wednesday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:754
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:753
 msgid "Thursday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:793
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:792
 msgid "Coupon deactivated for Thursday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:821
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:820
 msgid "Friday"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleGeneralTab.php:860
+#: app/Core/WooCommerce/CouponSingleGeneralTab.php:859
 msgid "Coupon deactivated for Friday"
 msgstr ""
 
@@ -482,68 +487,68 @@ msgstr ""
 msgid "Select countries that you want to restrict the coupon."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:38
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:36
 msgid "Sharable URL coupon"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:70
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:68
 msgid "Check this box to allow customers automatically apply the current coupon by visiting a URL"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:85
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:83
 msgid "Edit URL link"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:87
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:85
 msgid "Update the page to implement the url and afterwards copy the url and give to the users."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:98
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:96
 msgid "Copy URL"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:110
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:108
 msgid "Set a message for customers about the coupon discount they got."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:111
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:109
 msgid "Message for customer e.g. Congratulations you got 20% discount."
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:127
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:125
 msgid "Redirect to a custom URL"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:128
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:126
 msgid "Redirect back to original"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleSharableUrl.php:142
+#: app/Core/WooCommerce/CouponSingleSharableUrl.php:140
 msgid "Enter redirect URL"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:45
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:43
 #: src/components/Quick Links/Quik_Links.jsx:30
 msgid "Reset Usage"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:46
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:44
 msgid "Check this box to reset usage limit after a period"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:56
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:54
 msgid "Reset Annually"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:57
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:55
 msgid "Reset Monthly"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:58
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:56
 msgid "Reset Weekly"
 msgstr ""
 
-#: app/Core/WooCommerce/CouponSingleUsageLimits.php:59
+#: app/Core/WooCommerce/CouponSingleUsageLimits.php:57
 msgid "Reset Daily"
 msgstr ""
 
@@ -664,19 +669,19 @@ msgstr ""
 msgid "Individual customer that the coupon will be applied to, or that need to be in the cart in order for the &quot;Fixed cart discount&quot; to be applied."
 msgstr ""
 
-#: app/Core/WooCommerce/MyAccount.php:101
+#: app/Core/WooCommerce/MyAccount.php:90
 msgid "No date set"
 msgstr ""
 
-#: app/Core/WooCommerce/MyAccount.php:105
+#: app/Core/WooCommerce/MyAccount.php:94
 msgid "Code: %s "
 msgstr ""
 
-#: app/Core/WooCommerce/MyAccount.php:107
+#: app/Core/WooCommerce/MyAccount.php:96
 msgid "Expiry Date: %s"
 msgstr ""
 
-#: app/Core/WooCommerce/MyAccount.php:126
+#: app/Core/WooCommerce/MyAccount.php:115
 msgid "All Available Coupons"
 msgstr ""
 
