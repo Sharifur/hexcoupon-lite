@@ -61,7 +61,7 @@ class CouponSingleGeographicRestrictions {
 		$output ='<div class="restricted_shipping_zones">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add shipping zones', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Restrict shipping zones', 'hex-coupon-for-woocommerce' ),
 			'name' => 'geographic_restriction[restricted_shipping_zones]',
 			'id' => 'restricted_shipping_zones',
 			'value' => $restricted_shipping_zones,
@@ -84,7 +84,7 @@ class CouponSingleGeographicRestrictions {
 		$output ='<div class="restricted_countries">';
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Add countries', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Restrict countries', 'hex-coupon-for-woocommerce' ),
 			'name' => 'geographic_restriction[restricted_countries]',
 			'id' => 'restricted_countries',
 			'value' => $restricted_countries,

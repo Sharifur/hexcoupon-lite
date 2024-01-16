@@ -228,7 +228,7 @@ class CouponGeneralTabController extends BaseController
 		if ( ! empty( $add_specific_product_to_purchase ) ) {
 			foreach ( $add_specific_product_to_purchase as $value ) {
 				$product_title = get_the_title( $value );
-				$converted_product_title = str_replace( $string_to_be_replaced, '_', strtolower( $product_title ) ) . '-purchased_min_quantity';
+				$converted_product_title = str_replace( $string_to_be_replaced, '-', strtolower( $product_title ) ) . '-purchased_min_quantity';
 				$this->save_meta_data( $converted_product_title, 'string', $coupon_id );
 			}
 		}
@@ -240,7 +240,7 @@ class CouponGeneralTabController extends BaseController
 				$category_name = get_term( $value, 'product_cat' );
 				$category_name = $category_name->name;
 
-				$converted_categories_title = strtolower( str_replace( $string_to_be_replaced, '_', $category_name ) ) . '-purchased_category_min_quantity';
+				$converted_categories_title = strtolower( str_replace( $string_to_be_replaced, '-', $category_name ) ) . '-purchased_category_min_quantity';
 
 				$this->save_meta_data( $converted_categories_title, 'string', $coupon_id );
 			}
@@ -251,7 +251,7 @@ class CouponGeneralTabController extends BaseController
 		if ( ! empty( $add_specific_product_for_free ) ) {
 			foreach ( $add_specific_product_for_free as $value ) {
 				$product_title = get_the_title( $value );
-				$converted_product_title = str_replace( $string_to_be_replaced, '_', strtolower( $product_title ) ) . '-free_product_quantity';
+				$converted_product_title = str_replace( $string_to_be_replaced, '-', strtolower( $product_title ) ) . '-free_product_quantity';
 				$this->save_meta_data( $converted_product_title, 'string', $coupon_id );
 			}
 		}
@@ -259,13 +259,13 @@ class CouponGeneralTabController extends BaseController
 		if ( ! empty( $add_specific_product_for_free ) ) {
 			foreach ( $add_specific_product_for_free as $value ) {
 				$product_title = get_the_title( $value );
-				$converted_product_title = str_replace( $string_to_be_replaced, '_', strtolower( $product_title ) ) . '-hexcoupon_bogo_discount_type';
+				$converted_product_title = str_replace( $string_to_be_replaced, '-', strtolower( $product_title ) ) . '-hexcoupon_bogo_discount_type';
 				$this->save_meta_data( $converted_product_title, 'string', $coupon_id );
 			}
 
 			foreach ( $add_specific_product_for_free as $value ) {
 				$product_title = get_the_title( $value );
-				$converted_product_title = str_replace( $string_to_be_replaced, '_', strtolower( $product_title ) ) . '-free_amount';
+				$converted_product_title = str_replace( $string_to_be_replaced, '-', strtolower( $product_title ) ) . '-free_amount';
 				$this->save_meta_data( $converted_product_title, 'string', $coupon_id );
 			}
 		}

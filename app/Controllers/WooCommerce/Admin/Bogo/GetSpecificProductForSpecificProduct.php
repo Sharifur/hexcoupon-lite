@@ -36,7 +36,7 @@ class GetSpecificProductForSpecificProduct extends BaseController
 					// Get the title of product
 					$free_product_title = get_the_title( $free_gift_single_id );
 					// Replace the unnecessary strings from the title
-					$free_product_title_lowercase = str_replace( $string_to_be_replaced, '_', strtolower( $free_product_title ) );
+					$free_product_title_lowercase = str_replace( $string_to_be_replaced, '-', strtolower( $free_product_title ) );
 					// Get the quantity of free products
 					$free_product_quantity = get_post_meta( $coupon_id, $free_product_title_lowercase . '-free_product_quantity', true );
 					$free_product_quantity = ! empty( $free_product_quantity ) ? $free_product_quantity : 1;

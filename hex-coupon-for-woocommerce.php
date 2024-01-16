@@ -140,41 +140,17 @@ function alter_cart_page_with_cart_shortcode( $content ) {
 
 add_filter( 'the_content', 'alter_cart_page_with_cart_shortcode' );
 
-add_filter('manage_shop_coupon_posts_custom_column', 'custom_coupon_type_column_content', 10, 2);
+add_filter( 'woocommerce_coupon_discount_types', 'display_bogo_discount_in_couopon_type_column',10, 1 );
 
-function custom_coupon_type_column_content($column, $post_id) {
-	if ($column === 'type') {
-		$coupon = new WC_Coupon($post_id);
+/**
+ * Display 'Bogo Discount' text in the 'Coupon type' column in all coupon page
+ *
+ * @return void
+ */
+function display_bogo_discount_in_couopon_type_column( $discount_types ) {
+	$discount_types[ 'buy_x_get_x_bogo' ] = esc_html__( 'Bogo Discount', 'hex-coupon-for-woocommerce' );
 
-		if ($coupon) {
-			// Get the coupon type
-			$coupon_type = $coupon->get_discount_type();
-
-			// Customize the output based on the coupon type
-			switch ($coupon_type) {
-				case 'fixed_cart':
-					echo 'Fixed Cart Discount';
-					break;
-				case 'percent':
-					echo 'Percentage Discount';
-					break;
-				case 'fixed_product':
-					echo 'Fixed Product Discount';
-					break;
-				case 'custom_option':
-					echo 'Custom Option';
-					break;
-				default:
-					echo 'Unknown Type';
-			}
-		} else {
-			echo 'N/A';
-		}
-	}
+	return $discount_types;
 }
-
-
-
-
 
 Core::getInstance();

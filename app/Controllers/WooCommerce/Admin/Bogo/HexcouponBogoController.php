@@ -162,7 +162,7 @@ class HexcouponBogoController extends BaseController
 				$string_to_be_replaced = [ ' ', '_' ];
 
 				$product_title = get_the_title( $product->get_id() );
-				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
+				$converted_string = strtolower( str_replace( $string_to_be_replaced, '-', $product_title ) );
 
 				$free_quantity = get_post_meta( $coupon_id, $converted_string . '-free_product_quantity', true );
 
@@ -437,7 +437,7 @@ class HexcouponBogoController extends BaseController
 	{
 		$string = get_the_title( $post_id );
 		$string_to_be_replaced = [ ' ', '-' ];
-		$replaced_string = strtolower( str_replace( $string_to_be_replaced, '_', $string ) );
+		$replaced_string = strtolower( str_replace( $string_to_be_replaced, '-', $string ) );
 		return $replaced_string;
 	}
 
@@ -644,7 +644,7 @@ class HexcouponBogoController extends BaseController
 		// Define strings that need to be replaced in the title
 		$string_to_be_replaced = [ ' ', '-' ];
 
-		$main_product_single_title_lower_case = str_replace( $string_to_be_replaced, '_', strtolower( $main_product_single_title ) );
+		$main_product_single_title_lower_case = str_replace( $string_to_be_replaced, '-', strtolower( $main_product_single_title ) );
 
 		// get main purchased product minimum quantity
 		$main_product_min_purchased_quantity = get_post_meta( $coupon_id, $main_product_single_title_lower_case.'-purchased_min_quantity', true );
@@ -668,7 +668,7 @@ class HexcouponBogoController extends BaseController
 
 					if ( $category && ! is_wp_error( $category ) ) {
 						$category_name = $category->name;
-						$category_converted_name = str_replace( $string_tobe_converted, '_', strtolower( $category_name ) );
+						$category_converted_name = str_replace( $string_tobe_converted, '-', strtolower( $category_name ) );
 						$category_purchased_min_category = get_post_meta( $coupon_id, $category_converted_name . '-purchased_category_min_quantity', true );
 
 						$cart_cat_quantity = $cart_product_cat_occurances[$category_single];
@@ -764,7 +764,7 @@ class HexcouponBogoController extends BaseController
 				$string_to_be_replaced = [ ' ', '-' ];
 
 				$product_title = get_the_title( $cart_item['product_id'] );
-				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
+				$converted_string = strtolower( str_replace( $string_to_be_replaced, '-', $product_title ) );
 
 				$free_amount = get_post_meta( $coupon_id, $converted_string . '-free_amount', true );
 				$free_amount = ! empty( $free_amount ) ? $free_amount : 0;
@@ -813,7 +813,7 @@ class HexcouponBogoController extends BaseController
 				$string_to_be_replaced = [ ' ', '-' ];
 
 				$product_title = get_the_title( $cart_item['product_id'] );
-				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
+				$converted_string = strtolower( str_replace( $string_to_be_replaced, '-', $product_title ) );
 
 				$free_amount = get_post_meta( $coupon_id, $converted_string . '-free_amount', true );
 				$free_amount = ! empty( $free_amount ) ? $free_amount : 0;
@@ -860,7 +860,7 @@ class HexcouponBogoController extends BaseController
 				$string_to_be_replaced = [ ' ', '-' ];
 
 				$product_title = get_the_title( $cart_item['product_id'] );
-				$converted_string = strtolower( str_replace( $string_to_be_replaced, '_', $product_title ) );
+				$converted_string = strtolower( str_replace( $string_to_be_replaced, '-', $product_title ) );
 
 				$free_amount = get_post_meta( $coupon_id, $converted_string . '-free_amount', true );
 				$free_amount = ! empty( $free_amount ) ? $free_amount : 0;

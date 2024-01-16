@@ -19,7 +19,7 @@ class CouponShortcode
 	{
 		add_filter( 'manage_edit-shop_coupon_columns', [ $this, 'custom_coupon_list_table_columns' ] );
 		add_action( 'manage_shop_coupon_posts_custom_column', [ $this, 'custom_coupon_list_table_column_values' ], 10, 2);
-		add_shortcode('hexcoupon_info', [ $this, 'display_coupon_info_shortcode' ] );
+		add_shortcode('hexcoupon', [ $this, 'display_coupon_info_shortcode' ] );
 	}
 
 	/**
@@ -46,23 +46,44 @@ class CouponShortcode
 		// Get the coupon object using the provided coupon code.
 		$coupon = new \WC_Coupon( $atts['code'] );
 
-		// Check if the coupon exists and is valid.
-//		if( $coupon->get_date_expires() ) {
-//			return esc_html__( 'Invalid or expired coupon code.', 'hex-coupon-for-woocommerce' );
-//		}
-
 		// Get coupon information.
 		$coupon_code = $coupon->get_code();
 		$coupon_description = $coupon->get_description();
 		$coupon_discount_type = $coupon->get_discount_type();
-		$coupon_amount = $coupon->get_amount();
-		$coupon_discount = $coupon_amount . ( $coupon_discount_type === 'percent' ? '%' : get_woocommerce_currency_symbol() );
+		$coupon_amount = wc_price( $coupon->get_discount_amount( $coupon->get_amount() ) );
+
+		$discount_type = '';
+
+		switch ( $coupon_discount_type ) {
+			case 'percent' :
+				$discount_type = 'Percentage Discount';
+				break;
+			case 'fixed_cart' :
+				$discount_type = 'Fixed Cart Discount';
+				break;
+			case 'fixed_product' :
+				$discount_type = 'Fixed Product Discount';
+				break;
+				case 'buy_x_get_x_bogo':
+					$discount_type = 'Bogo Discount';
+		}
+
+		$allowed_html  = [
+			'a' => [
+				'href' => [],
+			],
+			'p' => [],
+			'b' => [
+
+			]
+		];
 
 		// Build the HTML output for the coupon information.
-		$output = '<div class="coupon-info">';
-		$output .= '<p>' . esc_html__( 'Coupon Code: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_code ) . '</p>';
-		$output .= '<p>' . esc_html__( 'Description: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_description ) . '</p>';
-		$output .= '<p>' . esc_html__( 'Discount: ', 'hex-coupon-for-woocommerce' ) . esc_html( $coupon_discount ) . '</p>';
+		$output = '<div class="hexcoupon-shortcode-banner">';
+		$output .= '<p class="coupon-code">' . esc_html__( 'Coupon Code: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_code ) ) . '</span></p>';
+		$output .= '<p class="coupon-discount">' . esc_html__( 'Coupon Type: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $discount_type ) ) . '</span></p>';
+		$output .= '<p class="coupon-description">' . esc_html__( 'Description: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_description ) ) . '</span></p>';
+		$output .= '<p <p class="coupon-amount">' . esc_html__( 'Discount Amount: ', 'hex-coupon-for-woocommerce' ) . '<span>' . wp_kses( $coupon_amount, $allowed_html ) . '</span></p>';
 		$output .= '</div>';
 
 		return $output;
@@ -79,7 +100,7 @@ class CouponShortcode
 	 */
 	public function generate_coupon_shortcode( $coupon_code )
 	{
-		return '[hex_code="' . esc_attr( $coupon_code ) . '"]';
+		return '[hexcoupon code="' . esc_attr( $coupon_code ) . '"]';
 	}
 
 	/**

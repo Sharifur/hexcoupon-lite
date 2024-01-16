@@ -125,7 +125,7 @@ class CouponSingleGeneralTab
 			foreach ( $add_specific_product_to_purchase as $value ) {
 				$purchased_product_title = get_the_title( $value );
 
-				$converted_purchased_product_title = strtolower( str_replace( ' ', '_', $purchased_product_title ) );
+				$converted_purchased_product_title = strtolower( str_replace( ' ', '-', $purchased_product_title ) );
 
 				$purchased_min_quantity = get_post_meta( $post->ID, $converted_purchased_product_title . '-purchased_min_quantity', true );
 
@@ -178,7 +178,7 @@ class CouponSingleGeneralTab
 			foreach ( $add_categories_to_purchase as $value ) {
 				$purchased_product_category_title = get_the_category_by_ID( $value );
 
-				$converted_purchased_product_category_title = strtolower( str_replace( ' ', '_', $purchased_product_category_title ) );
+				$converted_purchased_product_category_title = strtolower( str_replace( ' ', '-', $purchased_product_category_title ) );
 
 				$category_purchased_min_quantity = get_post_meta( $post->ID, $converted_purchased_product_category_title . '-purchased_category_min_quantity', true );
 
@@ -253,7 +253,7 @@ class CouponSingleGeneralTab
 			foreach ( $add_specific_product_for_free as $value ) {
 				$free_product_title = get_the_title( $value );
 
-				$converted_free_product_title = strtolower( str_replace( ' ', '_', $free_product_title ) );
+				$converted_free_product_title = strtolower( str_replace( ' ', '-', $free_product_title ) );
 
 				$free_product_quantity = get_post_meta( $post->ID, $converted_free_product_title . '-free_product_quantity', true );
 

@@ -41,6 +41,18 @@
 	background: rgba(167, 96, 254, 0.7);
 }
 
+@media screen and (max-width: 1890px) {
+	.MainContainer {
+		padding-right: 20px;
+	}
+}
+
+@media screen and (max-width: 1500px) {
+	.MainContainer {
+		padding-right: 20px;
+	}
+}
+
 @media only screen and (max-width: 1580px) {
 	.hexcoupon-notice-icon {
 		width: 10%;

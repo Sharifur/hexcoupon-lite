@@ -113,7 +113,7 @@ class CouponPaymentandShipping
 		$permitted_payment_methods = ! empty( $payment_and_shipping['permitted_payment_methods'] ) ? $payment_and_shipping['permitted_payment_methods'] : [];
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Apply Payment Methods', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Allow Payment Methods', 'hex-coupon-for-woocommerce' ),
 			'name' => 'payment_and_shipping[permitted_payment_methods]',
 			'id' => 'permitted_payment_methods',
 			'value' => $permitted_payment_methods,
@@ -122,15 +122,15 @@ class CouponPaymentandShipping
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'permitted_payment_methods',
-			'placeholder' => esc_html__('Apply Payment Methods')
+			'placeholder' => esc_html__('Enter Payment Methods')
 		] );
 
-		echo '<span class="permitted_payment_methods_tooltip">'.wc_help_tip( esc_html__( 'Select payment methods that you want to apply to the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
+		echo '<span class="permitted_payment_methods_tooltip">'.wc_help_tip( esc_html__( 'Select payment methods that you want to allow to the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		$permitted_shipping_methods = ! empty( $payment_and_shipping['permitted_shipping_methods'] ) ? $payment_and_shipping['permitted_shipping_methods'] : [];
 
 		$output .= FormHelpers::Init( [
-			'label' => esc_html__( 'Apply Shipping Methods', 'hex-coupon-for-woocommerce' ),
+			'label' => esc_html__( 'Allow Shipping Methods', 'hex-coupon-for-woocommerce' ),
 			'name' => 'payment_and_shipping[permitted_shipping_methods]',
 			'id' => 'permitted_shipping_methods',
 			'value' => $permitted_shipping_methods,
@@ -139,10 +139,10 @@ class CouponPaymentandShipping
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'permitted_shipping_methods',
-			'placeholder' => esc_html__('Apply Shipping Methods')
+			'placeholder' => esc_html__('Enter Shipping Methods')
 		] );
 
-		echo '<span class="permitted_shipping_methods_tooltip">'.wc_help_tip( esc_html__( 'Select shipping methods that you want to apply to the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
+		echo '<span class="permitted_shipping_methods_tooltip">'.wc_help_tip( esc_html__( 'Select shipping methods that you want to allow to the coupon.', 'hex-coupon-for-woocommerce' ) ).'</span>';
 
 		$output .= '</div>';
 

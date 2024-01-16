@@ -16,6 +16,22 @@
 .button-for-adding-removed-item {
 	padding: 16px;
 }
+.hexcoupon-shortcode-banner {
+	background-color: #A760FE;
+	color: #fff;
+	padding: 20px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.hexcoupon-shortcode-banner p {
+	margin: 10px 0;
+}
+
+.hexcoupon-shortcode-banner span {
+	font-weight: bold;
+}
+
 @media only screen and (max-width: 1024px) {
 	.custom-product {
 		width: 26% !important;

@@ -470,7 +470,7 @@
 		}
 
 		function convertTitleToName(title){
-			return title.replace(" ","_").replace("-","_").toLowerCase();
+			return title.replace(" ","-").toLowerCase();
 		}
 
 		function addProductItem(element, min = null, max = null){
@@ -618,84 +618,44 @@
            Bogo in General Tab
        ========================================
        */
-		$(document).on('click', '.submitbox #publish', function (e){
-			var firstInvalidInput = null;
+		// Show an alert box to the user if the Bogo purchased and free fields are not properly entered
+		$(document).on('click', '.submitbox #publish', function (e) {
+			var inputValue = $('input[name="coupon_amount"]').val();
+			if(inputValue === '' || inputValue <= 0){
+				e.preventDefault();
+				alert( 'You did not entered any valid amount in the coupon amount field' );
+				$('input[name="coupon_amount"]').focus();
+			}
+			function validateInput(bogoInputFieldClass) {
+				var firstInvalidInput = null;
 
-			// Iterate through each input field with class '.minimum'
-			$('.minimum').each(function (){
-				var freeQuantityMinInput = $(this).val();
+				$(bogoInputFieldClass).each(function () {
+					var inputValue = $(this).val();
 
-				// Check if the input is empty or not a number
-				if ($.trim(freeQuantityMinInput) === '' || isNaN(freeQuantityMinInput)){
-					// Prevent the default behavior of the WP post publish button
-					e.preventDefault();
-					// Display the alert button for invalid
-					alert(__('Enter a valid quantity for all free products.','hex-coupon-for-woocommerce'));
+					// Check if the input is empty or not a number
+					if ($.trim(inputValue) === '' || isNaN(inputValue) || parseInt(inputValue) <= 0) {
+						// Prevent the default behavior of the WP post publish button
+						e.preventDefault();
+						// Display an alert for invalid input
+						alert(__('Enter a valid number in the Bogo fields, equivalent or greater than 1', 'hex-coupon-for-woocommerce'));
 
-					// Set the first invalid input field
-					if (!firstInvalidInput){
-						firstInvalidInput = this;
+						// Set the first invalid input field
+						if (!firstInvalidInput) {
+							firstInvalidInput = this;
+						}
+						// Focus on the first invalid number input field
+						if (firstInvalidInput) {
+							$(firstInvalidInput).focus();
+						}
+						invalidFields.push(this);
 					}
-					return false; // Exit the loop if validation fails for any field
-				}
-			});
-
-			// Take the users to the first invalid number input filed
-			if (firstInvalidInput){
-				$(firstInvalidInput).focus();
+				});
 			}
 
-			// check also
-			var dd = null;
-
-			$('.purchase').each(function (){
-				var cc = $(this).val();
-
-				// Check if the input is empty or not a number
-				if ($.trim(cc) === '' || isNaN(cc)){
-					// Prevent the default behavior of the WP post publish button
-					e.preventDefault();
-					// Display the alert button for invalid
-					alert(__('Efdfs.','hex-coupon-for-woocommerce'));
-
-					// Set the first invalid input field
-					if (!dd){
-						dd = this;
-					}
-					return false; // Exit the loop if validation fails for any field
-				}
-			});
-
-			// Take the users to the first invalid number input filed
-			if (dd){
-				$(dd).focus();
-			}
-
-			// check
-			var bb = null;
-
-			$('.amount').each(function (){
-				var aaa = $(this).val();
-
-				// Check if the input is empty or not a number
-				if ($.trim(aaa) === '' || isNaN(aaa) || 0 <= aaa){
-					// Prevent the default behavior of the WP post publish button
-					e.preventDefault();
-					// Display the alert button for invalid
-					alert(__("Enter a value greater than '0' for the Bogo discount amount"));
-
-					// Set the first invalid input field
-					if (!bb){
-						bb = this;
-					}
-					return false; // Exit the loop if validation fails for any field
-				}
-			});
-			if (bb){
-				$(bb).focus();
-			}
-
-
+			// Validate the specified input fields
+			validateInput('.purchase');
+			validateInput('.minimum');
+			validateInput('.amount');
 		});
 
 
@@ -721,7 +681,7 @@
 				'<div class="product_min product-wrap">' +
 				'<div class="product-wrap-inner">' +
 				'<p class="product-wrap-para">Quantity</p>' +
-				'<input class="product-quantity-input" placeholder="Quantity" type="number" value="1" min="0" max="100" name="'+convertedTitleName+'-purchased_min_quantity">' +
+				'<input class="product-quantity-input purchase" placeholder="Quantity" type="number" value="1" min="0" max="100" name="'+convertedTitleName+'-purchased_min_quantity">' +
 				'</div>' +
 				'<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_purchased_product" data-title="'+titleAttribute+'" data-value="'+valueAttribute+'"></a>' +
 				'</div>' +
