@@ -105,19 +105,62 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$all_meta_data = $this->get_all_post_meta( $coupon->get_id() ); // get the meta values
 
-		$all_cities = ! empty( $all_meta_data['restricted_shipping_zones'] ) ? $all_meta_data['restricted_shipping_zones'] : [];
+		$all_zones = ! empty( $all_meta_data['restricted_shipping_zones'] ) ? $all_meta_data['restricted_shipping_zones'] : [];
 
-		$all_cities = implode( ',', $all_cities );
+		$all_zones = implode( ',', $all_zones );
+
+		$all_continents = [
+			'Africa' => 'AF',
+			'Antarctica' => 'AN',
+			'Asia' => 'AS',
+			'Europe' => 'EU',
+			'North America' => 'NA',
+			'Oceania' => 'OC',
+			'South America' => 'SA',
+		];
+
+
+		// Get an instance of WC_Countries class
+		$countries = new \WC_Countries();
+
+		// Get all countries and their data
+		$all_countries = $countries->get_countries();
+
+		$shipping_city = $woocommerce->customer->get_shipping_city();
+		$shipping_country = $woocommerce->customer->get_shipping_country();
+
+		$get_shipping_country_name = array_key_exists( $shipping_country, $all_countries ) ? $all_countries[$shipping_country] : 'None';
 
 		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
+		$billing_country = $woocommerce->customer->get_billing_country();
 
-		if ( empty( $all_cities ) ) {
+		$shipping_continent_code = $countries->get_continent_code_for_country($shipping_country);
+		$shipping_continent_full_name = array_search( $shipping_continent_code, $all_continents );
+
+		var_dump($shipping_city);
+
+
+
+
+
+		if ( empty( $all_zones ) ) {
 			return $valid;
 		}
 
-		if ( ! empty( $all_cities ) && ! empty( $billing_city ) && str_contains( $all_cities, $billing_city ) ) {
+		if ( ! empty( $all_zones ) && $shipping_city && str_contains( $all_zones, $shipping_city ) ) {
 			return false;
 		}
+//		if ( ! empty( $all_zones ) && $shipping_country && $get_shipping_country_name && str_contains( $all_zones, $get_shipping_country_name ) ) {
+//			return false;
+//		}
+//		if ( ! empty( $all_zones ) && $shipping_continent_full_name && $get_shipping_country_name && str_contains( $all_zones, $shipping_continent_full_name ) ) {
+//			return false;
+//		}
+//
+//
+//		if ( ! empty( $all_zones ) && ! empty( $billing_city ) && str_contains( $all_zones, $billing_city ) ) {
+//			return false;
+//		}
 	}
 
 	/**

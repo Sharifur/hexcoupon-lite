@@ -286,7 +286,7 @@ class CouponSingleUsageRestriction {
 			[
 				'id' => 'allowed_or_restricted_customer_group',
 				'name' => 'usage_restriction[allowed_or_restricted_customer_group]',
-				'label' => esc_html__( 'Allowed/Restricted customer', 'hex-coupon-for-woocommerce' ),
+				'label' => esc_html__( 'Allowed/Restricted customer Group', 'hex-coupon-for-woocommerce' ),
 				'description' => esc_html__( 'Check this box to to add groups of Allowed/Restricted customers.', 'hex-coupon-for-woocommerce' ),
 				'value' => $allowed_or_restricted_customer_group,
 			]

@@ -45,7 +45,6 @@ export function getDataForCharJS(labels, data){
 	};
 }
 
-// export const getWeekList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-export const getWeekList = ['kon', 'Mosn', 'Tuse', 'Wead', 'Tfhu', 'a', 'a'];
+export const getWeekList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const getSingleDayList = ['1'];
