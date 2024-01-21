@@ -6,6 +6,7 @@ use HexCoupon\App\Controllers\BaseController;
 use hexcoupon\app\Core\Helpers\ValidationHelper;
 use HexCoupon\App\Core\Lib\SingleTon;
 use Kathamo\Framework\Lib\Http\Request;
+use HexCoupon\App\Core\WooCommerce\CouponSingleGeographicRestrictions;
 
 class CouponGeographicRestrictionTabController extends BaseController
 {
@@ -107,6 +108,16 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$all_zones = ! empty( $all_meta_data['restricted_shipping_zones'] ) ? $all_meta_data['restricted_shipping_zones'] : [];
 
+		$all_shipping_zones = CouponSingleGeographicRestrictions::getInstance()->get_all_shipping_zones();
+
+		// Deleting changed shipping zone location
+		foreach ( $all_zones as $value ) {
+			if ( ! array_key_exists( $value, $all_shipping_zones ) ) {
+				$key = array_search( $value, $all_zones );
+				unset( $all_zones[$key] );
+			}
+		}
+
 		$all_zones = implode( ',', $all_zones );
 
 		$all_continents = [
@@ -119,48 +130,54 @@ class CouponGeographicRestrictionTabController extends BaseController
 			'South America' => 'SA',
 		];
 
-
-		// Get an instance of WC_Countries class
+		// Initializing WC_Countries class
 		$countries = new \WC_Countries();
 
 		// Get all countries and their data
 		$all_countries = $countries->get_countries();
 
+		// Getting shipping information of the user
 		$shipping_city = $woocommerce->customer->get_shipping_city();
 		$shipping_country = $woocommerce->customer->get_shipping_country();
-
 		$get_shipping_country_name = array_key_exists( $shipping_country, $all_countries ) ? $all_countries[$shipping_country] : 'None';
 
-		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
-		$billing_country = $woocommerce->customer->get_billing_country();
-
-		$shipping_continent_code = $countries->get_continent_code_for_country($shipping_country);
+		$shipping_continent_code = $countries->get_continent_code_for_country( $shipping_country );
 		$shipping_continent_full_name = array_search( $shipping_continent_code, $all_continents );
 
-		var_dump($shipping_city);
+		// Getting billing information of the user
+		$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
+		$billing_country = $woocommerce->customer->get_billing_country();
+		$get_billing_country_name = array_key_exists( $billing_country, $all_countries ) ? $all_countries[$billing_country] : 'None';
 
+		$billing_continent_code = $countries->get_continent_code_for_country( $billing_country );
+		$billing_continent_full_name = array_search( $billing_continent_code, $all_continents );
 
-
-
-
+		// Validating user based on their shipping or billing address for zone wise restriction
 		if ( empty( $all_zones ) ) {
 			return $valid;
 		}
 
-		if ( ! empty( $all_zones ) && $shipping_city && str_contains( $all_zones, $shipping_city ) ) {
-			return false;
+		if ( $shipping_city || $shipping_country ) {
+			if ( ! empty( $all_zones ) && $shipping_city && str_contains( $all_zones, $shipping_city ) ) {
+				return false;
+			}
+			if ( ! empty( $all_zones ) && $shipping_country && $get_shipping_country_name && str_contains( $all_zones, $get_shipping_country_name ) ) {
+				return false;
+			}
+			if ( ! empty( $all_zones ) && $shipping_continent_full_name && $get_shipping_country_name && str_contains( $all_zones, $shipping_continent_full_name ) ) {
+				return false;
+			}
+		} else {
+			if ( ! empty( $all_zones ) && ! empty( $billing_city ) && str_contains( $all_zones, $billing_city ) ) {
+				return false;
+			}
+			if ( ! empty( $all_zones ) && $billing_country && $get_billing_country_name && str_contains( $all_zones, $get_billing_country_name ) ) {
+				return false;
+			}
+			if ( ! empty( $all_zones ) && $billing_continent_full_name && $get_billing_country_name && str_contains( $all_zones, $billing_continent_full_name ) ) {
+				return false;
+			}
 		}
-//		if ( ! empty( $all_zones ) && $shipping_country && $get_shipping_country_name && str_contains( $all_zones, $get_shipping_country_name ) ) {
-//			return false;
-//		}
-//		if ( ! empty( $all_zones ) && $shipping_continent_full_name && $get_shipping_country_name && str_contains( $all_zones, $shipping_continent_full_name ) ) {
-//			return false;
-//		}
-//
-//
-//		if ( ! empty( $all_zones ) && ! empty( $billing_city ) && str_contains( $all_zones, $billing_city ) ) {
-//			return false;
-//		}
 	}
 
 	/**
@@ -181,12 +198,16 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		$all_countries = ! empty( $all_meta_data['restricted_countries'] ) ? $all_meta_data['restricted_countries'] : [];
 
+		$shipping_country = $woocommerce->customer->get_shipping_country();
 		$billing_country = $woocommerce->customer->get_billing_country();
 
+		// Validating coupon based on user country for country wise restriction
 		if ( empty( $all_countries ) ) {
 			return $valid;
 		}
-
+		if ( in_array( $shipping_country, $all_countries ) ) {
+			return false;
+		}
 		if ( in_array( $billing_country, $all_countries ) ) {
 			return false;
 		}

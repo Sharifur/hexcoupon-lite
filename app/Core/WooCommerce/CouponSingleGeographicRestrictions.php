@@ -66,7 +66,7 @@ class CouponSingleGeographicRestrictions {
 			'id' => 'restricted_shipping_zones',
 			'value' => $restricted_shipping_zones,
 			'type' => 'select',
-			'options' => $this->get_all_shipping_zones(), //if the field is select, this param will be here
+			'options' => $this->get_all_shipping_zones(),
 			'multiple' => true,
 			'select2' => true,
 			'class' => 'restricted_shipping_zones',
@@ -111,7 +111,7 @@ class CouponSingleGeographicRestrictions {
 	 * @return array
 	 * Get all the shipping zone name and code.
 	 */
-	private function get_all_shipping_zones()
+	public function get_all_shipping_zones()
 	{
 		$shipping_zones = []; // define an empty array
 

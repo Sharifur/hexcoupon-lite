@@ -748,6 +748,7 @@ class HexcouponBogoController extends BaseController
 		$customer_gets_as_free = get_post_meta( $coupon_id, 'customer_gets_as_free', true );
 
 		$free_items_id = get_post_meta( $coupon_id, 'add_specific_product_for_free', true );
+		$free_items_id = ! empty( $free_items_id ) ? $free_items_id : [];
 		$main_product_id = get_post_meta( $coupon_id, 'add_specific_product_to_purchase', true );
 		$main_product_id = ! empty( $main_product_id ) ? $main_product_id : [];
 
