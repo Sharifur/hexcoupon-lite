@@ -51,6 +51,7 @@
 		"react-icons": "^4.10.1",
 		"react-router-dom": "^6.15.0",
 		"react-select": "^5.7.4",
-		"select2": "^4.1.0-rc.0"
+		"select2": "^4.1.0-rc.0",
+		"sweetalert2": "^11.10.3"
 	}
 }

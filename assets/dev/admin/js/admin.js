@@ -623,7 +623,7 @@
 			var inputValue = $('input[name="coupon_amount"]').val();
 			if(inputValue === '' || inputValue <= 0){
 				e.preventDefault();
-				alert( 'You did not entered any valid amount in the coupon amount field' );
+				alert( 'You did not entered any amount in the coupon amount field' );
 				$('input[name="coupon_amount"]').focus();
 			}
 			function validateInput(bogoInputFieldClass) {

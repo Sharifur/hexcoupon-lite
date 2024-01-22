@@ -25,7 +25,7 @@ class MyAccount
 	public function register()
 	{
 		// Action hook for adding 'All Coupons' menu page in the 'My Account' Page Menu
-		add_filter ( 'woocommerce_account_menu_items', [ $this, 'coupon_menu_in_my_account_page' ], 40 );
+		add_filter ( 'woocommerce_account_menu_items', [ $this, 'coupon_menu_in_my_account_page' ], 99, 1 );
 		// Action hook for registering permalink endpoint
 		add_action( 'init', [ $this, 'coupon_menu_page_endpoint' ] );
 		// Action hook for displaying 'All Coupons' page content
@@ -60,7 +60,7 @@ class MyAccount
 	 */
 	public function coupon_menu_page_endpoint()
 	{
-		return add_rewrite_endpoint( 'all-coupons', EP_PAGES );
+		return add_rewrite_endpoint( 'all-coupons', EP_ROOT | EP_PAGES );
 	}
 
 	/**
@@ -91,10 +91,12 @@ class MyAccount
 			}
 			?>
 			<p>
-				<?php printf( esc_html__( 'Code: %s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
-				<span>
-				<?php printf( esc_html__( 'Expiry Date: %s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
-			</span>
+				<b><?php printf( esc_html__( 'Code: ', 'hex-coupon-for-woocommerce' ) ); ?></b>
+				<?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
+				<b>
+					<?php printf( esc_html__( 'Expiry Date:', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
+				</b>
+				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
 			</p>
 			<?php
 		}
