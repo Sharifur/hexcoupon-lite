@@ -6,9 +6,9 @@
 		const { __, _x, _n, _nx } = wp.i18n;
 
 		/*
-       ========================================
+       ==================================================
            Restricting users from selecting the same item
-       ========================================
+       ==================================================
        */
 		$(document).on( 'click', '.submitbox #publish',function (e) {
 			// Get selected values from both dropdowns
@@ -23,6 +23,17 @@
 
 			// If common values exist, show an alert
 			if (purchasedProductCheckedVal == 'a_specific_product' || purchasedProductCheckedVal == 'a_combination_of_products' || purchasedProductCheckedVal == 'any_products_listed_below' && freeProductCheckedVal == 'a_specific_product' || freeProductCheckedVal == 'a_combination_of_products' || freeProductCheckedVal == 'any_products_listed_below' ) {
+				let couponDiscountType = $('select[name="discount_type"]');
+				let couponDiscountTypeVal = couponDiscountType.val();
+
+				// Validate purchased and free product select2 field is empty
+				if(couponDiscountTypeVal === "buy_x_get_x_bogo"){
+					if(purchasedProductValue == "" || freeProductValue == ""){
+						e.preventDefault();
+						alert(__("You have to select at least a product for the purchase and free item","hex-coupon-for-woocommerce"));
+					}
+				}
+
 				if (commonValues.length > 0 ) {
 					e.preventDefault();
 					alert(__('Can not select same item on both purchased and free product, chose specific and same product to do so!','hex-coupon-for-woocommerce'));
@@ -618,16 +629,23 @@
            Bogo in General Tab
        ========================================
        */
+
 		// Show an alert box to the user if the Bogo purchased and free fields are not properly entered
 		$(document).on('click', '.submitbox #publish', function (e) {
-			var inputValue = $('input[name="coupon_amount"]').val();
-			if(inputValue === '' || inputValue <= 0){
-				e.preventDefault();
-				alert( 'You did not entered any amount in the coupon amount field' );
-				$('input[name="coupon_amount"]').focus();
+			let couponDiscountType = $('select[name="discount_type"]');
+			let couponDiscountTypeVal = couponDiscountType.val();
+
+			if("buy_x_get_x_bogo" != couponDiscountTypeVal){
+				let inputValue = $('input[name="coupon_amount"]').val();
+				if(inputValue === '' || inputValue <= 0){
+					e.preventDefault();
+					alert(__("You did not entered any amount in the coupon amount field", "hex-coupon-for-woocommerce"));
+					$('input[name="coupon_amount"]').focus();
+				}
 			}
+
 			function validateInput(bogoInputFieldClass) {
-				var firstInvalidInput = null;
+				let firstInvalidInput = null;
 
 				$(bogoInputFieldClass).each(function () {
 					var inputValue = $(this).val();
@@ -657,7 +675,6 @@
 			validateInput('.minimum');
 			validateInput('.amount');
 		});
-
 
 		// Place the div with an id of 'selected_purchased_products' after the 'add_specific_product_to_purchase options_group' div
 		$("#selected_purchased_products").insertAfter(".add_specific_product_to_purchase .options_group");

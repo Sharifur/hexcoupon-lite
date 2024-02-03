@@ -386,7 +386,7 @@ class AjaxApiController extends Controller
 					$post_type,
 					$post_status,
 		);
-		$result = $wpdb->get_var( $query );
+		$result = (int)$wpdb->get_var( $query );
 
 		// Initialize the total redeemed coupon value
 		$total_redeemed_value = 0;

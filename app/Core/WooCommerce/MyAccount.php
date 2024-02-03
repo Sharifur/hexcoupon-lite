@@ -81,24 +81,28 @@ class MyAccount
 			'order' => 'asc',
 		] );
 
-		foreach ( $coupon_posts as $coupon_post ) {
-			$real_expiry_date = '';
-			$expiry_date = get_post_meta( $coupon_post->ID, 'date_expires', true );
-			if ( (int)$expiry_date > 0 ) {
-				$real_expiry_date = date('Y-m-d', (int)$expiry_date);
-			} else {
-				$real_expiry_date = __( 'No date set', 'hex-coupon-for-woocommerce' );
+		if( $coupon_posts ) {
+			foreach ( $coupon_posts as $coupon_post ) {
+				$real_expiry_date = '';
+				$expiry_date = get_post_meta( $coupon_post->ID, 'date_expires', true );
+				if ( (int)$expiry_date > 0 ) {
+					$real_expiry_date = date('Y-m-d', (int)$expiry_date);
+				} else {
+					$real_expiry_date = __( 'No date set', 'hex-coupon-for-woocommerce' );
+				}
+				?>
+				<p>
+					<b><?php printf( esc_html__( 'Code: ', 'hex-coupon-for-woocommerce' ) ); ?></b>
+					<?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
+					<b>
+						<?php printf( esc_html__( 'Expiry Date:', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
+					</b>
+					<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
+				</p>
+				<?php
 			}
-			?>
-			<p>
-				<b><?php printf( esc_html__( 'Code: ', 'hex-coupon-for-woocommerce' ) ); ?></b>
-				<?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
-				<b>
-					<?php printf( esc_html__( 'Expiry Date:', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
-				</b>
-				<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
-			</p>
-			<?php
+		} else {
+			echo esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' );
 		}
 	}
 

@@ -7,7 +7,7 @@ const Dashboard = () => {
         <>
 			<Quick_Links />
 			<HexCouponPromo />
-            <BarChartOne />
+            {/*<BarChartOne />*/}
         </>
     );
 };
