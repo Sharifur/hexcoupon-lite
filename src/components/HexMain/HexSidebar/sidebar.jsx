@@ -12,7 +12,7 @@ const Sidebar = () => {
     };
 
     const sidebarLinks = [
-        { path: '/', text: __("Dashboard","hex-coupon-for-woocommerce"), LinkIcon: IconHome },
+        { path: '/', text: "Dashboard", LinkIcon: IconHome },
     ];
 
     return (
@@ -33,11 +33,11 @@ const Sidebar = () => {
                 ))}
             </ul>
 			<div className="hexcoupon_resources">
-				<p>{__("Our Resources","hex-coupon-for-woocommerce")}</p>
+				<p>Our Resources</p>
 				<ul>
-					<li><a href="https://hexcoupon.com/docs/" target="_blank"><IconBook />{__("Documentation","hex-coupon-for-woocommerce")}</a></li>
-					<li><a href="https://hexcoupon.com/get-to-know-how-the-coupon-works/" target="_blank"><IconArrowGuide />{__("Getting Started","hex-coupon-for-woocommerce")}</a></li>
-					<li><a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank"><IconHelpSquareRounded />{__("Support","hex-coupon-for-woocommerce")}</a></li>
+					<li><a href="https://hexcoupon.com/docs/" target="_blank"><IconBook />Documentation</a></li>
+					<li><a href="https://hexcoupon.com/get-to-know-how-the-coupon-works/" target="_blank"><IconArrowGuide />Getting Started</a></li>
+					<li><a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank"><IconHelpSquareRounded />Support</a></li>
 				</ul>
 			</div>
         </aside>

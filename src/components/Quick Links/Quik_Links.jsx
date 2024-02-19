@@ -21,13 +21,13 @@ const Quick_Links = () => {
 
 	return (
 		<div className="hexcoupon_quick_links">
-			<p>{__("Quick Links:","hex-coupon-for-woocommerce")}</p>
-			<a href={finalUrl} target="_blank"><IconFilePlus />{__("Add New Coupon","hex-coupon-for-woocommerce")}</a>
-			<a href={finalUrl+"#general_coupon_data_bogo"} target="_blank"><IconGift />{__("Bogo Coupon","hex-coupon-for-woocommerce")}</a>
-			<a href={finalUrl+"#sharable_url_coupon_tab"} onClick="goToCouponTab('sharable_url_coupon_tab'); return false;" target="_blank"><IconLink />{__("URL Coupon","hex-coupon-for-woocommerce")}</a>
-			<a href={finalUrl+"#geographic_restriction_tab"} target="_blank"><IconMapPinCancel />{__("Geographic Restriction","hex-coupon-for-woocommerce")}</a>
-			<a href={finalUrl+"#custom_coupon_tab"} target="_blank"><IconTruck />{__("Payment and Shipping Restriction","hex-coupon-for-woocommerce")}</a>
-			<a href={finalUrl+"#reset_usage"} target="_blank"><IconRefresh />{__("Reset Usage","hex-coupon-for-woocommerce")}</a>
+			<p>Quick Links:</p>
+			<a href={finalUrl} target="_blank"><IconFilePlus />Add New Coupon</a>
+			<a href={finalUrl+"#general_coupon_data_bogo"} target="_blank"><IconGift />Bogo Coupon</a>
+			<a href={finalUrl+"#sharable_url_coupon_tab"} onClick="goToCouponTab('sharable_url_coupon_tab'); return false;" target="_blank"><IconLink />URL Coupon</a>
+			<a href={finalUrl+"#geographic_restriction_tab"} target="_blank"><IconMapPinCancel />Geographic Restriction</a>
+			<a href={finalUrl+"#custom_coupon_tab"} target="_blank"><IconTruck />Payment and Shipping Restriction</a>
+			<a href={finalUrl+"#reset_usage"} target="_blank"><IconRefresh />Reset Usage</a>
 		</div>
 	)
 }
