@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LogoImg from '../../../img/logo.png';
-import {IconBook, IconHelpSquareRounded, IconHome} from "@tabler/icons-react";
+import {IconArrowGuide, IconBook, IconHelpSquareRounded, IconHome} from "@tabler/icons-react";
 import { __ } from '@wordpress/i18n';
 
 const Sidebar = () => {
@@ -36,6 +36,7 @@ const Sidebar = () => {
 				<p>Our Resources</p>
 				<ul>
 					<li><a href="https://hexcoupon.com/docs/" target="_blank"><IconBook />Documentation</a></li>
+					<li><a href="https://hexcoupon.com/get-to-know-how-the-coupon-works/" target="_blank"><IconArrowGuide />Getting Started</a></li>
 					<li><a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank"><IconHelpSquareRounded />Support</a></li>
 				</ul>
 			</div>
