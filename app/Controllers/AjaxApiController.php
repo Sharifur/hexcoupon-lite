@@ -42,7 +42,7 @@ class AjaxApiController extends Controller
 	{
 		$total_coupon_created_and_redeemed = $this->total_coupon_created_and_redeemed();
 
-		$get_additional_date = $this->get_additional_data();
+		$get_additional_data = $this->get_additional_data();
 
 		$full_coupon_creation_data = $this->today_yesterday_coupon_created();
 
@@ -67,12 +67,12 @@ class AjaxApiController extends Controller
 				'type' => 'success',
 				'created' => $total_coupon_created_and_redeemed[0],
 				'redeemedAmount' => $total_coupon_created_and_redeemed[1],
-				'active' => $get_additional_date[0],
-				'expired' => $get_additional_date[1],
-				'redeemed' => $get_additional_date[2],
-				'sharableUrlPost' => $get_additional_date[3],
-				'bogoCoupon' => $get_additional_date[4],
-				'geographicRestriction' => $get_additional_date[5],
+				'active' => $get_additional_data[0],
+				'expired' => $get_additional_data[1],
+				'redeemed' => $get_additional_data[2],
+				'sharableUrlPost' => $get_additional_data[3],
+				'bogoCoupon' => $get_additional_data[4],
+				'geographicRestriction' => $get_additional_data[5],
 
 				'todayCouponCreated' => $full_coupon_creation_data['today'],
 				'todayRedeemedCoupon' => $today_coupon_redeemed,
@@ -175,7 +175,13 @@ class AjaxApiController extends Controller
 			$coupon_counts[$day_of_week] = $total_redeemed_coupons;
 		}
 
-		return $coupon_counts;
+		$new_array = [];
+
+		foreach ( $coupon_counts as $value ) {
+			$new_array[] = (string)$value;
+		}
+
+		return $new_array;
 	}
 
 	/**
@@ -307,7 +313,6 @@ class AjaxApiController extends Controller
 	{
 		// Get the current date
 		$current_date = date('Y-m-d');
-		$current_date = strtotime( $current_date );
 
 		// Calculate yesterday's date
 		$yesterday = date('Y-m-d', strtotime('-1 day', strtotime($current_date)));
@@ -315,7 +320,6 @@ class AjaxApiController extends Controller
 		// Get the coupons
 		$args = [
 			'post_type' => 'shop_coupon', // Replace 'coupon' with your custom post type name
-			'post_status' => 'publish',
 			'posts_per_page' => -1, // Get all coupons
 		];
 
@@ -335,14 +339,14 @@ class AjaxApiController extends Controller
 				$coupons->the_post();
 
 				// Get the expiry date for the current coupon
-				$expiry_date = get_post_meta( get_the_ID(), 'date_expires', true );
+				$expiry_date = get_post_meta(get_the_ID(), 'expiry_date', true);
 
 				// Check if the expiry date matches today's date (active) or is in the past (expired)
-				if ( ! empty( (int)$expiry_date ) && (int)$expiry_date < $current_date ) {
-					$today_expired_coupons++;
+				if ( $expiry_date != $current_date ) {
+					$today_active_coupons++;
 				}
 				else {
-					$today_active_coupons++;
+					$today_expired_coupons++;
 				}
 
 				if ( $expiry_date != $yesterday ) {
@@ -360,7 +364,6 @@ class AjaxApiController extends Controller
 		$final_array = [ $today_active_coupons, $today_expired_coupons, $yesterday_active_coupons, $yesterday_expired_coupons ];
 
 		return $final_array;
-
 	}
 
 	/**
@@ -375,21 +378,16 @@ class AjaxApiController extends Controller
 	{
 		global $wpdb;
 
-		$post_type = 'shop_coupon';
-		$post_status = 'publish';
-
-		$query = $wpdb->prepare(
-			"SELECT COUNT(ID) as count
-					FROM {$wpdb->prefix}posts
-					WHERE post_type = %s
-					AND post_status = %s",
-					$post_type,
-					$post_status,
-		);
-		$result = (int)$wpdb->get_var( $query );
-
-		// Initialize the total redeemed coupon value
+		// Initialize the values
 		$total_redeemed_value = 0;
+
+		$query = "SELECT COUNT(ID) as count
+          FROM {$wpdb->prefix}posts
+          WHERE post_type = 'shop_coupon'
+          AND post_status = 'publish'";
+		$result = $wpdb->get_var( $query );
+
+		$total_coupon_created = (int)$result;
 
 		// Query all WooCommerce orders
 		$orders = wc_get_orders( [
@@ -404,7 +402,7 @@ class AjaxApiController extends Controller
 			$total_redeemed_value += $discount_amount;
 		}
 
-		$final_array = [ $result, $total_redeemed_value ];
+		$final_array = [ $total_coupon_created, $total_redeemed_value ];
 
 		return $final_array;
 	}
@@ -470,7 +468,7 @@ class AjaxApiController extends Controller
 			$final_array = [];
 
 			foreach ( $daily_post_counts_current_week as $value ) {
-				$final_array[] = $value;
+				$final_array[] = (string)$value;
 			}
 		}
 
@@ -488,27 +486,27 @@ class AjaxApiController extends Controller
 	public function weekly_coupon_active_expired_data()
 	{
 		$current_date = date( 'Y-m-d' );
-		$week_start = date( 'Y-m-d', strtotime( 'last Sunday', strtotime( $current_date ) ) );
+		$week_start = date( 'Y-m-d', strtotime('last Sunday', strtotime( $current_date ) ) );
 		$week_end = date( 'Y-m-d', strtotime( 'this Saturday', strtotime( $current_date ) ) );
 
-		// Initialize an array to store the count of active coupons for each day
+		// Initialize indexed arrays to store the count of active and expired coupons for each day
 		$active_coupon_count_by_day = [
-			'Sun' => 0,
-			'Mon' => 0,
-			'Tue' => 0,
-			'Wed' => 0,
-			'Thu' => 0,
-			'Fri' => 0,
-			'Sat' => 0,
+			0, // Sun
+			0, // Mon
+			0, // Tue
+			0, // Wed
+			0, // Thu
+			0, // Fri
+			0, // Sat
 		];
 		$expired_coupon_count_by_day = [
-			'Sun' => 0,
-			'Mon' => 0,
-			'Tue' => 0,
-			'Wed' => 0,
-			'Thu' => 0,
-			'Fri' => 0,
-			'Sat' => 0,
+			0, // Sun
+			0, // Mon
+			0, // Tue
+			0, // Wed
+			0, // Thu
+			0, // Fri
+			0, // Sat
 		];
 
 		$args = array(
@@ -524,7 +522,7 @@ class AjaxApiController extends Controller
 
 			// Instantiate the WC_Coupon object with the coupon code
 			$coupon_code = $title;
-			$coupon = new \WC_Coupon($coupon_code);
+			$coupon = new \WC_Coupon( $coupon_code );
 
 			// Check if the coupon exists
 			if ( $coupon->get_id() > 0 ) {
@@ -541,14 +539,13 @@ class AjaxApiController extends Controller
 				}
 
 				// Loop through each day of the current week and compare expiry date
-				for ( $day = strtotime( $week_start ); $day <= strtotime( $week_end ); $day = strtotime( '+1 day', $day ) ) {
-					$day_name = date('D', $day);
+				for ( $day = strtotime( $week_start ); $day <= strtotime( $week_end ); $day = strtotime('+1 day', $day)) {
+					$day_name = date('D', $day );
 
 					if ( strtotime( $final_date ) <= $day && $final_date <= strtotime( '+1 day', $day ) ) {
-						$active_coupon_count_by_day[$day_name]++;
-					}
-					else {
-						$expired_coupon_count_by_day[$day_name]++;
+						$active_coupon_count_by_day[array_search( $day_name, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] )]++;
+					} else {
+						$expired_coupon_count_by_day[array_search( $day_name, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] )]++;
 					}
 				}
 			}
@@ -557,7 +554,10 @@ class AjaxApiController extends Controller
 
 		wp_reset_postdata();
 
-		$final_array = [ $active_coupon_count_by_day, $expired_coupon_count_by_day ];
+		$active_coupon_count_by_day = array_map( 'strval', $active_coupon_count_by_day );
+		$expired_coupon_count_by_day = array_map( 'strval', $expired_coupon_count_by_day );
+
+		$final_array = [$active_coupon_count_by_day, $expired_coupon_count_by_day];
 
 		return $final_array;
 	}
@@ -585,7 +585,6 @@ class AjaxApiController extends Controller
 		$coupon_query = new \WP_Query( [
 			'post_type' => 'shop_coupon', // WooCommerce coupon post type
 			'posts_per_page' => -1, // Retrieve all coupons
-			'post_status' => 'publish' // Retrieve only the published post
 		] );
 
 		// Initialize counters for active and expired coupons

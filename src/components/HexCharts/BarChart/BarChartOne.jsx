@@ -9,7 +9,6 @@ import {
 	Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { __ } from '@wordpress/i18n';
 
 import HexCardHeaderLeft from '../../HexCardHeader/HexCardHeaderLeft';
 import HexCardHeaderTitle from '../../HexCardHeader/HexCardHeaderTitle';
@@ -195,7 +194,7 @@ const BarChartOne = () => {
 				<div className="hexDashboard__card__header">
 					<div className="hexDashboard__card__header__flex">
 						<HexCardHeaderLeft>
-							<HexCardHeaderTitle titleHeading='Coupon Insights' />
+							<HexCardHeaderTitle titleHeading="Coupon Insights" />
 						</HexCardHeaderLeft>
 						<HexCardHeaderRight>
 							<SingleSelect options={SelectOptions} handleChangeSelect={handleChangeSelect} />

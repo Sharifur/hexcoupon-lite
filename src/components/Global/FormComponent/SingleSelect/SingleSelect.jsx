@@ -8,7 +8,7 @@ const SingleSelect = (props) => {
 		<>
 			<div className="single__select">
 				<label className='single__input__label'>{selectLabel}</label>
-				<Select defaultValue={{label:"Week"}} options={options} onChange={(e) => handleChangeSelect(e.value)} />
+				<Select defaultValue={{label:"This Week"}} options={options} onChange={(e) => handleChangeSelect(e.value)} />
 			</div>
 		</>
 	);

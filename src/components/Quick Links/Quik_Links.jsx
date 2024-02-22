@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-	IconFilePlus,
-	IconGift,
-	IconLink,
-	IconMapPinCancel, IconRefresh,
-	IconTruck
-} from "@tabler/icons-react";
+import {IconFilePlus, IconGift, IconLink, IconMapPinCancel, IconTruck} from "@tabler/icons-react";
 import { __ } from '@wordpress/i18n';
 
 const Quick_Links = () => {
@@ -26,8 +20,7 @@ const Quick_Links = () => {
 			<a href={finalUrl+"#general_coupon_data_bogo"} target="_blank"><IconGift />Bogo Coupon</a>
 			<a href={finalUrl+"#sharable_url_coupon_tab"} onClick="goToCouponTab('sharable_url_coupon_tab'); return false;" target="_blank"><IconLink />URL Coupon</a>
 			<a href={finalUrl+"#geographic_restriction_tab"} target="_blank"><IconMapPinCancel />Geographic Restriction</a>
-			<a href={finalUrl+"#custom_coupon_tab"} target="_blank"><IconTruck />Payment and Shipping Restriction</a>
-			<a href={finalUrl+"#reset_usage"} target="_blank"><IconRefresh />Reset Usage</a>
+			<a href={finalUrl+"#custom_coupon_tab"} target="_blank"><IconTruck />Payment and Shipping</a>
 		</div>
 	)
 }
