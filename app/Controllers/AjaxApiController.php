@@ -572,122 +572,61 @@ class AjaxApiController extends Controller
 	 */
 	public function get_additional_data()
 	{
-		// Get the current date in the format 'Y-m-d'
-		$current_time = time();
+// Get current date
+		$current_date = new \DateTime();
 
-		// Calculate the current week number
-		$current_week_number = date('W', $current_time);
-
-		// Initialize an array to store daily counts for the current week
-		$daily_counts_current_week = [];
-
-		// Query the database to get all coupon posts and their expiration dates
-		$coupon_query = new \WP_Query( [
-			'post_type' => 'shop_coupon', // WooCommerce coupon post type
-			'posts_per_page' => -1, // Retrieve all coupons
-		] );
-
-		// Initialize counters for active and expired coupons
-		$active_coupons = 0;
-		$expired_coupons = 0;
-		$total_redeemed = 0;
-		$sharable_url_post_count = 0;
+// Initialize counts
+		$active_coupons_count = 0;
+		$expired_coupons_count = 0;
+		$redeemed_coupons_count = 0;
+		$sharable_url_coupons_count = 0;
 		$bogo_coupon_count = 0;
 		$geographic_restriction_count = 0;
 
-		// Loop through the coupon posts
-		while ( $coupon_query->have_posts() ) {
-			$coupon_query->the_post();
+// Get all coupons
+		$coupons = get_posts( [
+			'post_type' => 'shop_coupon',
+			'numberposts' => -1,
+		] );
 
-			// get coupon code of every coupon
-			$coupon_code = wc_get_coupon_code_by_id( get_the_ID() );
+// Loop through each coupon
+		foreach ( $coupons as $coupon ) {
+// Create WC_Coupon object
+			$coupon_obj = new \WC_Coupon( $coupon->ID );
 
-			$wc_coupon_data = new \WC_Coupon( $coupon_code );
+// Get expiry date
+			$expiry_date = $coupon_obj->get_date_expires();
 
-			// get usage count of every coupon, means get the no of redeemed coupon
-			$count = $wc_coupon_data->get_usage_count();
-
-			// calculate the total redeemed no
-			$total_redeemed += $count;
-
-			// Get the coupon's expiration date from post meta
-			$expiry_date = get_post_meta( get_the_ID(), 'expiry_date', true );
-
-			$sharable_url_post = get_post_meta( get_the_ID(), 'sharable_url_coupon', true );
-
-			$apply_automatic_coupon_by_url = ! empty( $sharable_url_post['apply_automatic_coupon_by_url'] ) ? $sharable_url_post['apply_automatic_coupon_by_url'] : '';
-
-			$discount_type = get_post_meta( get_the_ID(), 'discount_type', true );
-
-			$geographic_restriction = get_post_meta( get_the_ID(), 'geographic_restriction', true );
+			$redeemed_coupons_count += $coupon_obj->get_usage_count();
 
 
-			if ( ! empty( $geographic_restriction['apply_geographic_restriction'] ) && 'restrict_by_shipping_zones' == $geographic_restriction['apply_geographic_restriction'] || ! empty( $geographic_restriction['apply_geographic_restriction'] ) && 'restrict_by_countries' == $geographic_restriction['apply_geographic_restriction'] )  $geographic_restriction_count++;
+// Compare expiry date with current date
+			if ( $expiry_date ) {
+				if ( $expiry_date < $current_date ) {
+					$expired_coupons_count++;
+				} else {
+					$active_coupons_count++;
+				}
+			} else {
+				$active_coupons_count++; // Coupons without expiry dates are considered active
+			}
+
+// Check if the coupon is a sharable URL coupon
+			$sharable_url_coupon_meta = get_post_meta( $coupon->ID, 'sharable_url_coupon', true );
+			if ( isset( $sharable_url_coupon_meta['apply_automatic_coupon_by_url'] ) && $sharable_url_coupon_meta['apply_automatic_coupon_by_url'] === 'yes' ) {
+				$sharable_url_coupons_count++;
+			}
+
+			$discount_type = get_post_meta( $coupon->ID, 'discount_type', true );
 
 			if ( 'buy_x_get_x_bogo' === $discount_type ) $bogo_coupon_count++;
 
-			if ( ! empty( $apply_automatic_coupon_by_url ) && 'yes' === $apply_automatic_coupon_by_url ) {
-				$sharable_url_post_count++;
-			}
+			$geographic_restriction = get_post_meta( $coupon->ID, 'geographic_restriction', true );
 
-			// Check if the coupon has an expiry date
-			if ( ! empty( $expiry_date ) ) {
-				// Compare the expiry date with the current date
-				$expiry_timestamp = strtotime( $expiry_date );
-
-				// Compare the expiry date with the current date
-				if ( strtotime( $expiry_date ) <= $current_time ) {
-					// Coupon is active
-					$expired_coupons++;
-				}
-
-				// Check if the expiry date falls within the current week
-				if ( date('W', $expiry_timestamp) == $current_week_number ) {
-					// Coupon is within the current week
-
-					// Calculate the day of the week for the expiry date (0 = Sunday, 6 = Saturday)
-					$day_of_week = date('w', $expiry_timestamp);
-
-					// Store the count in the corresponding day of the week
-					if ( !isset( $daily_counts_current_week[$day_of_week] ) ) {
-						$daily_counts_current_week[$day_of_week] = [
-							'active' => 0,
-							'expired' => 0,
-						];
-					}
-
-					if ( $expiry_timestamp >= $current_time ) {
-						// Coupon is active
-						$daily_counts_current_week[$day_of_week]['active']++;
-					} else {
-						// Coupon has expired
-						$daily_counts_current_week[$day_of_week]['expired']++;
-					}
-				}
-			} else {
-				$active_coupons++;
-			}
-
-			// Create an array with daily counts for the current week
-			$daily_counts_array = [];
-			// Initialize daily counts for all days of the week
-			for ( $day = 0; $day <= 6; $day++ ) {
-				$daily_counts_array[$day] = [
-					'active' => 0,
-					'expired' => 0,
-				];
-			}
-
-			// Merge the daily counts for the current week into the array
-			foreach ( $daily_counts_current_week as $day_of_week => $counts ) {
-				$daily_counts_array[$day_of_week] = $counts;
-			}
+			if ( ! empty( $geographic_restriction ) )  $geographic_restriction_count++;
 		}
 
-		// Reset post data
-		wp_reset_postdata();
-
-		$final_array = [ $active_coupons, $expired_coupons, $total_redeemed, $sharable_url_post_count, $bogo_coupon_count, $geographic_restriction_count ];
+		$final_array = [ $active_coupons_count, $expired_coupons_count, $redeemed_coupons_count, $sharable_url_coupons_count, $bogo_coupon_count, $geographic_restriction_count ];
 
 		return $final_array;
 	}

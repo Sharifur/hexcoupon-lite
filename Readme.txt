@@ -4,9 +4,9 @@ Donate link: https://example.com/
 Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, discounts, dynamic pricing, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
-Tested up to: 6.4.2
-Version: 1.1.1
-Stable tag: 1.1.1
+Tested up to: 6.4.3
+Version: 1.1.2
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,11 +148,8 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
-== 1.1.1 ==
-* Fixed the issue of geographically restriction for the coupon
-
-== 1.0.10 ==
-* Fixed some issues
+== 1.1.2 ==
+* Fixed the blank dashboard issue
 
 == Upgrade Notice ==
 
