@@ -154,7 +154,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		// Validating user based on their shipping or billing address for zone wise restriction
 		if ( empty( $all_zones ) ) {
-			return $valid;
+			return true;
 		}
 
 		if ( $shipping_city || $shipping_country ) {
@@ -178,6 +178,8 @@ class CouponGeographicRestrictionTabController extends BaseController
 				return false;
 			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -203,14 +205,19 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		// Validating coupon based on user country for country wise restriction
 		if ( empty( $all_countries ) ) {
+			error_log('heelo');
 			return $valid;
 		}
 		if ( in_array( $shipping_country, $all_countries ) ) {
+			error_log('hell2');
 			return false;
 		}
 		if ( in_array( $billing_country, $all_countries ) ) {
+			error_log('hee3');
 			return false;
 		}
+
+//		return true;
 	}
 
 
@@ -228,7 +235,11 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 
+		var_dump($restricted_shipping_zones);
+
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
+
+		var_dump($restrict_shipping_countries);
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
@@ -269,7 +280,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your shipping zone does not support this coupon.', 'hex-coupon-for-woocommerce');
+			$err = esc_html__( 'Invalid coupon, your shipping zone does not support this coupon.', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;

@@ -6,7 +6,7 @@ use HexCoupon\App\Controllers\BaseController;
 use hexcoupon\app\Core\Helpers\ValidationHelper;
 use HexCoupon\App\Core\Lib\SingleTon;
 use Kathamo\Framework\Lib\Http\Request;
-class CouponColumTabController extends BaseController
+class PaymentAndShippingTabController extends BaseController
 {
 	use SingleTon;
 
@@ -159,17 +159,20 @@ class CouponColumTabController extends BaseController
 		$selectedPaymentMethod = $this->apply_selected_payments_method_to_coupon( $valid, $coupon, $payment_and_shipping );
 		$selectedShippingMethods = $this->apply_selected_shipping_methods_to_coupon( $valid, $coupon, $payment_and_shipping );
 
-		if ( ! $selectedPaymentMethod && ! $selectedShippingMethods ) {
-			return $valid;
-		}
-
 		if ( $selectedPaymentMethod && $selectedShippingMethods ) {
 			return $valid;
 		}
-
-		else {
+		if ( ! $selectedPaymentMethod ) {
 			// display a custom coupon error message if the coupon is invalid
-			add_filter( 'woocommerce_coupon_error', [ $this, 'custom_change_invalid_coupon_error_message' ] , 10, 2 );
+			add_filter( 'woocommerce_coupon_error', [ $this, 'error_message_for_invalid_payment_method' ] , 10, 2 );
+
+			return false;
+		}
+		if ( ! $selectedShippingMethods ) {
+			// display a custom coupon error message if the coupon is invalid
+			add_filter( 'woocommerce_coupon_error', [ $this, 'error_message_for_invalid_shipping_method' ] , 10, 2 );
+
+			return false;
 		}
 
 		return false;
@@ -179,17 +182,37 @@ class CouponColumTabController extends BaseController
 	 * @package hexcoupon
 	 * @author Wphex
 	 * @since 1.0.0
-	 * @method custom_change_invalid_coupon_error_message
+	 * @method error_message_for_invalid_payment_method
 	 * @param string $err
 	 * @param int $err_code
 	 * @return string
 	 * Display custom error message for invalid coupon.
 	 */
-	public function custom_change_invalid_coupon_error_message( $err, $err_code )
+	public function error_message_for_invalid_payment_method( $err, $err_code )
 	{
 		if ( $err_code === 100 ) {
 			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your payment or shipping method does not support this coupon.', 'hex-coupon-for-woocommerce');
+			$err = esc_html__( 'Invalid coupon. Your payment method does not support this coupon.', 'hex-coupon-for-woocommerce');
+		}
+
+		return $err;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method error_message_for_invalid_shipping_method
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function error_message_for_invalid_shipping_method( $err, $err_code )
+	{
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. Your shipping method does not support this coupon.', 'hex-coupon-for-woocommerce');
 		}
 
 		return $err;

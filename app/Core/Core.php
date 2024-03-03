@@ -4,7 +4,7 @@ namespace HexCoupon\App\Core;
 
 use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
-use HexCoupon\App\Controllers\WooCommerce\Admin\CouponColumTabController;
+use HexCoupon\App\Controllers\WooCommerce\Admin\PaymentAndShippingTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponSharableUrlTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponUsageRestrictionTabController;
@@ -57,15 +57,15 @@ final class Core extends BootManager
 			CouponCategory::class,
 			CouponShortcode::class,
 			CouponPaymentandShipping::class,
-			CouponColumTabController::class,
+			PaymentAndShippingTabController::class,
 			CouponSingleGeneralTab::class,
 			CouponGeneralTabController::class,
+			CouponSingleGeographicRestrictions::class,
+			CouponGeographicRestrictionTabController::class,
 			CouponSingleUsageRestriction::class,
 			CouponUsageRestrictionTabController::class,
 			CouponSingleUsageLimits::class,
 			CouponUsageLimitsTabController::class,
-			CouponSingleGeographicRestrictions::class,
-			CouponGeographicRestrictionTabController::class,
 			CouponSingleSharableUrl::class,
 			CouponSharableUrlTabController::class,
 			AjaxApiController::class,

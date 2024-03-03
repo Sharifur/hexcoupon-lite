@@ -34,12 +34,13 @@ class CouponGeneralTabController extends BaseController
 	 * @method custom_error_message_for_expiry_date
 	 * @return void
 	 * @since 1.0.0
-	 * Altering the default coupon expiry message with a custom one
+	 * Altering the default coupon expiry message with the custom one
 	 */
 	public function custom_error_message_for_expiry_date( $err_message, $err_code, $coupon ) {
-		if ( 107 === $err_code ) {
-			$coupon_id = $coupon->get_id();
-			$custom_expiry_message = get_post_meta( $coupon_id, 'message_for_coupon_expiry_date', true );
+		$coupon_id = $coupon->get_id();
+		$custom_expiry_message = get_post_meta( $coupon_id, 'message_for_coupon_expiry_date', true );
+
+		if ( 107 === $err_code && ! empty( $custom_expiry_message ) ) {
 			$err_message = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $custom_expiry_message ) );
 		}
 
@@ -488,7 +489,7 @@ class CouponGeneralTabController extends BaseController
 		}
 
 		// If none of the days are valid, add the filter for an invalid coupon message.
-		add_filter('woocommerce_coupon_error', [$this, 'coupon_invalid_error_message_for_single_day'], 10, 3);
+//		add_filter('woocommerce_coupon_error', [$this, 'coupon_invalid_error_message_for_single_day'], 10, 3);
 
 		return false;
 	}
@@ -673,8 +674,12 @@ class CouponGeneralTabController extends BaseController
 		$message_for_coupon_starting_date = get_post_meta( $coupon_id, 'message_for_coupon_starting_date', true );
 
 		if ( $err_code === 100 ) {
-			// Change the error message for the INVALID_FILTERED error here
-			$err = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $message_for_coupon_starting_date ) );
+			if ( ! empty( $message_for_coupon_starting_date ) ) {
+				// Change the error message for the INVALID_FILTERED error here
+				$err = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $message_for_coupon_starting_date ) );
+			} else {
+				$err = esc_html__( 'This coupon has not been started yet. ' );
+			}
 		}
 
 		return $err;
