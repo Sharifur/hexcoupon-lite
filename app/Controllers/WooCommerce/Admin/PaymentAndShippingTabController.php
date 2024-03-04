@@ -84,14 +84,14 @@ class PaymentAndShippingTabController extends BaseController
 	 * @return bool
 	 * Apply coupon to user selected payment methods only.
 	 */
-	private function apply_selected_payments_method_to_coupon($valid, $coupon, $payment_and_shipping )
+	private function apply_selected_payments_method_to_coupon( $valid, $coupon, $payment_and_shipping )
 	{
 		// get saved selected permitted payment methods meta data
 		$selected_permitted_payment_methods = ! empty( $payment_and_shipping['permitted_payment_methods'] ) ? $payment_and_shipping['permitted_payment_methods'] : [];
 
 		// check if is it empty
 		if ( empty( $selected_permitted_payment_methods ) ) {
-			return $valid;
+			return true;
 		}
 
 		// get current payment method of customer
@@ -99,7 +99,7 @@ class PaymentAndShippingTabController extends BaseController
 
 		// check if the current payment method matches with the selected payment methods
 		if ( in_array( $current_payment_method, $selected_permitted_payment_methods ) ) {
-			return $valid;
+			return true;
 		}
 
 		return false;
@@ -122,7 +122,7 @@ class PaymentAndShippingTabController extends BaseController
 
 		// check if is it empty
 		if ( empty( $selected_shipping_methods ) ) {
-			return $valid;
+			return true;
 		}
 
 		// get current chosen shipping method of customer
@@ -134,7 +134,7 @@ class PaymentAndShippingTabController extends BaseController
 				$exploded_string = explode( ':', $chosen_shipping_method );
 				$chosen_shipping_method = $exploded_string[0];
 				if ( in_array( $chosen_shipping_method, $selected_shipping_methods ) ) {
-					return $valid;
+					return true;
 				}
 			}
 		}
@@ -157,10 +157,11 @@ class PaymentAndShippingTabController extends BaseController
 		$payment_and_shipping = get_post_meta( $coupon->get_id(), 'payment_and_shipping', true );
 
 		$selectedPaymentMethod = $this->apply_selected_payments_method_to_coupon( $valid, $coupon, $payment_and_shipping );
+
 		$selectedShippingMethods = $this->apply_selected_shipping_methods_to_coupon( $valid, $coupon, $payment_and_shipping );
 
 		if ( $selectedPaymentMethod && $selectedShippingMethods ) {
-			return $valid;
+			return true;
 		}
 		if ( ! $selectedPaymentMethod ) {
 			// display a custom coupon error message if the coupon is invalid
@@ -174,8 +175,6 @@ class PaymentAndShippingTabController extends BaseController
 
 			return false;
 		}
-
-		return false;
 	}
 
 	/**

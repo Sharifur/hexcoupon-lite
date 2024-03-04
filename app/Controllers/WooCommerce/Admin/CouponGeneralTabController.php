@@ -484,12 +484,12 @@ class CouponGeneralTabController extends BaseController
 
 		foreach ( $days as $day => $abbrev ) {
 			if ( $this->apply_to_single_day( $valid, $coupon, $day, $abbrev ) ) {
-				return $valid;
+				return true; // changed $valid to true;
 			}
 		}
 
 		// If none of the days are valid, add the filter for an invalid coupon message.
-//		add_filter('woocommerce_coupon_error', [$this, 'coupon_invalid_error_message_for_single_day'], 10, 3);
+		add_filter( 'woocommerce_coupon_error', [ $this, 'coupon_invalid_error_message_for_single_day' ], 10, 3 );
 
 		return false;
 	}
@@ -723,13 +723,23 @@ class CouponGeneralTabController extends BaseController
 			'fri_coupon_start_time',
 		];
 
+		$expiry_time = [
+			'sat_coupon_expiry_time',
+			'sun_coupon_expiry_time',
+			'mon_coupon_expiry_time',
+			'tue_coupon_expiry_time',
+			'wed_coupon_expiry_time',
+			'thu_coupon_expiry_time',
+			'fri_coupon_expiry_time',
+		];
+
 		$result = '';
 
 		// get the value of apply coupon on different days
 		foreach ( $days as $day => $meta_key ) {
 			$value = get_post_meta( $coupon_id, $meta_key, true );
 			if ( ! empty( $value ) && '1' === $value ) {
-				$result .= ' -' . ucfirst($day);
+				$result .= ' - ' . ucfirst($day);
 			}
 		}
 
@@ -741,10 +751,10 @@ class CouponGeneralTabController extends BaseController
 				// initialize the message
 				$message = 'Coupon is not valid for this hour. Comeback at another time.';
 			}
-			else {
-				// initialize the message
-				$message = 'Coupon is not valid for today. Comeback on ' . $result . '';
-			}
+//			else {
+//				// initialize the message
+//				$message = 'Coupon is not valid for today. Comeback on ' . $result . '';
+//			}
 		}
 
 		if ( 100 === $err_code ) {

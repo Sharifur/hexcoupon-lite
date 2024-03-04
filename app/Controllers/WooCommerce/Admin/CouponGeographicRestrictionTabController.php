@@ -205,19 +205,16 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		// Validating coupon based on user country for country wise restriction
 		if ( empty( $all_countries ) ) {
-			error_log('heelo');
-			return $valid;
+			return true;
 		}
 		if ( in_array( $shipping_country, $all_countries ) ) {
-			error_log('hell2');
 			return false;
 		}
 		if ( in_array( $billing_country, $all_countries ) ) {
-			error_log('hee3');
 			return false;
 		}
 
-//		return true;
+		return true;
 	}
 
 
@@ -235,11 +232,7 @@ class CouponGeographicRestrictionTabController extends BaseController
 	{
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 
-		var_dump($restricted_shipping_zones);
-
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
-
-		var_dump($restrict_shipping_countries);
 
 		if ( ! is_null( $restricted_shipping_zones )  ) {
 			if ( ! $restricted_shipping_zones ) {
