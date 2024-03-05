@@ -5,8 +5,8 @@ Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, dis
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.4.3
-Version: 1.1.2
-Stable tag: 1.1.2
+Version: 1.1.3
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,9 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.1.3 ==
+Fixed always displaying shipping zone error while applying the coupon
+
 == 1.1.2 ==
 * Fixed the blank dashboard issue
 

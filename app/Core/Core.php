@@ -61,7 +61,7 @@ final class Core extends BootManager
 			PaymentAndShippingTabController::class,
 			CouponSingleGeneralTab::class,
 			CouponGeneralTabController::class,
-//			CouponStartingDateController::class,
+			CouponStartingDateController::class,
 			CouponSingleGeographicRestrictions::class,
 			CouponGeographicRestrictionTabController::class,
 			CouponSingleUsageRestriction::class,

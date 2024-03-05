@@ -431,7 +431,7 @@ class CouponSingleGeneralTab
                                 <input type="text" class="time-picker-saturday coupon_start_time" name="sat_coupon_start_time" value="<?php echo esc_attr( $sat_coupon_start_time ); ?>" placeholder="HH:MM" /><span class="input_separator_saturday">-</span>
                                 <input type="text" class="time-picker-saturday coupon_start_time" name="sat_coupon_expiry_time" value="<?php echo esc_attr( $sat_coupon_expiry_time ); ?>" placeholder="HH:MM" />
 
-                                <input type="hidden" id="total_hours_count_saturday" name="total_hours_count_saturday" value="<?php $total_hours_count_saturday = intval( get_post_meta( $post->ID, 'total_hours_count_saturday', true ) ); echo esc_attr( $total_hours_count_saturday ); ?>">
+                                <input type="hidden" id="total_hours_count_saturday" name="total_hours_count_saturday" value="<?php $total_hours_count_saturday =  get_post_meta( $post->ID, 'total_hours_count_saturday', true ) ; echo esc_attr( $total_hours_count_saturday ); ?>">
                             </span>
 
 							<?php

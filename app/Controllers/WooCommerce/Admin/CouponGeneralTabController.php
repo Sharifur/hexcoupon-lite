@@ -21,35 +21,11 @@ class CouponGeneralTabController extends BaseController
 	 */
 	public function register()
 	{
-		add_action('wp_loaded', [ $this, 'get_all_post_meta' ] );
+		add_action( 'wp_loaded', [ $this, 'get_all_post_meta' ] );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_general_tab_meta_field_data' ] );
 		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon' ], 10, 2 );
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'delete_meta_value' ] );
-		add_filter( 'woocommerce_coupon_error', [ $this, 'custom_error_message_for_expiry_date' ], 10, 3 );
 	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @method custom_error_message_for_expiry_date
-	 * @return void
-	 * @since 1.0.0
-	 * Altering the default coupon expiry message with the custom one
-	 */
-	public function custom_error_message_for_expiry_date( $err_message, $err_code, $coupon ) {
-		$coupon_id = $coupon->get_id();
-		$custom_expiry_message = get_post_meta( $coupon_id, 'message_for_coupon_expiry_date', true );
-
-		if ( 107 === $err_code && ! empty( $custom_expiry_message ) ) {
-			$err_message = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $custom_expiry_message ) );
-		}
-
-		return $err_message;
-	}
-
-
-
-
 
 	/**
 	 * @package hexcoupon
@@ -152,8 +128,8 @@ class CouponGeneralTabController extends BaseController
 	 */
 	private function save_dynamic_meta_data( $day, $key, $data_type, $coupon_id )
 	{
-		if ( isset( $_POST['total_hours_count_'.$day] ) ) {
-			$total_hours_count = intval( $_POST['total_hours_count_'.$day] );
+		if ( isset( $_POST['total_hours_count_' . $day] ) ) {
+			$total_hours_count = intval( $_POST['total_hours_count_' . $day] );
 
 			// Loop through the input values and save them as post meta
 			for ( $i = 1; $i <= $total_hours_count; $i++ ) {
@@ -366,6 +342,20 @@ class CouponGeneralTabController extends BaseController
 			}
 		}
 
+		$total_hours_count = [
+			[ 'total_hours_count_saturday', 'string' ],
+			[ 'total_hours_count_sunday', 'string' ],
+			[ 'total_hours_count_monday', 'string' ],
+			[ 'total_hours_count_tuesday', 'string' ],
+			[ 'total_hours_count_wednesday', 'string' ],
+			[ 'total_hours_count_thursday', 'string' ],
+			[ 'total_hours_count_friday', 'string' ],
+		];
+
+		foreach ( $total_hours_count as $value ) {
+			$this->save_meta_data( $value[0], $value[1], $coupon_id );
+		}
+
 		// Save the coupon days and hours option applicability on different days
 		$this->save_coupon_on_different_days( $coupon_id );
 
@@ -377,32 +367,6 @@ class CouponGeneralTabController extends BaseController
 
 		// Save coupon bogo deals data
 		$this->save_hex_bogo_data( $coupon_id );
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method apply_coupon_starting_date
-	 * @param bool $valid
-	 * @param object $coupon
-	 * @return bool
-	 * Apply/validate the coupon starting date.
-	 */
-	private function apply_coupon_starting_date( $valid, $coupon )
-	{
-		$current_time = time();
-
-		$coupon_starting_date = get_post_meta( $coupon->get_id(), 'coupon_starting_date', true );
-		$coupon_converted_starting_date = strtotime( $coupon_starting_date );
-
-		if ( empty( $coupon_starting_date ) && $current_time >= $coupon_converted_starting_date ) {
-			return $valid;
-		}
-		else {
-			// display a custom coupon error message if the coupon is invalid
-			add_filter( 'woocommerce_coupon_error', [ $this, 'coupon_starting_date_invalid_error_message' ] , 10, 3 );
-		}
 	}
 
 	/**
@@ -440,21 +404,23 @@ class CouponGeneralTabController extends BaseController
 		$coupon_expiry_time = strtotime( $coupon_expiry_time );
 
 		if ( ! empty( $day ) && $current_day == $day ) {
-			if ( ( '' == $coupon_start_time && '' == $coupon_expiry_time ) || ( $current_server_time >= $coupon_start_time && $current_server_time <= $coupon_expiry_time ) ) {
-				return $valid;
+			// Validating first data and time field
+			if ( $current_server_time >= $coupon_start_time && $current_server_time <= $coupon_expiry_time  ) {
+				return true;
 			}
 
-			$total_hours_count = get_post_meta( $coupon->get_id(), 'total_hours_count', true );
+			// Validating dynamic date and time field after the first field
+			$total_hours_count = get_post_meta( $coupon->get_id(), 'total_hours_count_'. $full_day, true );
 
 			for ( $i = 1; $i <= $total_hours_count; $i++ ) {
-				$additional_start_time = get_post_meta( $coupon->get_id(), $abbrev.'_coupon_start_time_'.$i, true );
-				$additional_expiry_time = get_post_meta( $coupon->get_id(), $abbrev.'_coupon_expiry_time_'.$i, true );
+				$additional_start_time = get_post_meta( $coupon->get_id(), $abbrev . '_coupon_start_time_' . $i, true );
+				$additional_expiry_time = get_post_meta( $coupon->get_id(), $abbrev . '_coupon_expiry_time_' . $i, true );
 
 				$additional_start_time =  strtotime( $additional_start_time );
 				$additional_expiry_time =  strtotime( $additional_expiry_time );
 
 				if (  $current_server_time >= $additional_start_time && $current_server_time <= $additional_expiry_time ) {
-					return $valid;
+					return true;
 				}
 			}
 		}
@@ -483,15 +449,12 @@ class CouponGeneralTabController extends BaseController
 		];
 
 		foreach ( $days as $day => $abbrev ) {
-			if ( $this->apply_to_single_day( $valid, $coupon, $day, $abbrev ) ) {
-				return true; // changed $valid to true;
+			if ( ! $this->apply_to_single_day( $valid, $coupon, $day, $abbrev ) ) {
+				return false;
+			} else {
+				return true;
 			}
 		}
-
-		// If none of the days are valid, add the filter for an invalid coupon message.
-		add_filter( 'woocommerce_coupon_error', [ $this, 'coupon_invalid_error_message_for_single_day' ], 10, 3 );
-
-		return false;
 	}
 
 	/**
@@ -509,8 +472,6 @@ class CouponGeneralTabController extends BaseController
 		// get 'apply_days_hours_of_week' meta value
 		$days_hours_of_week = get_post_meta( $coupon->get_id(), 'apply_days_hours_of_week', true );
 
-		// get 'apply_coupon_starting_date' return value
-		$apply_coupon_starting_date = $this->apply_coupon_starting_date( $valid, $coupon );
 		// get 'apply_coupon_on_different_days' return value
 		$apply_coupon_on_different_days = $this->apply_coupon_on_different_days( $valid, $coupon );
 
@@ -524,22 +485,17 @@ class CouponGeneralTabController extends BaseController
 			'coupon_apply_on_friday',
 		];
 
-		// Finally apply coupon and check the validity
-		if ( $apply_coupon_starting_date ) {
-			if ( 'yes' === $days_hours_of_week ) {
-				if ( $apply_coupon_on_different_days ) {
-					return $valid;
-				}
-
-				foreach ( $coupon_apply_on_every_day as $single_day ) {
-					$single_day = get_post_meta( $coupon->get_id(), $single_day, true );
-					if ( '1' == $single_day ) {
-						return false;
-					}
-				}
+		if ( 'yes' === $days_hours_of_week ) {
+			if ( $apply_coupon_on_different_days ) {
+				return $valid;
 			}
 
-			return true;
+			foreach ( $coupon_apply_on_every_day as $single_day ) {
+				$single_day = get_post_meta( $coupon->get_id(), $single_day, true );
+				if ( '1' == $single_day ) {
+					return false;
+				}
+			}
 		}
 
 		return false;
@@ -598,6 +554,16 @@ class CouponGeneralTabController extends BaseController
 			'friday' => 'fri_coupon'
 		];
 
+		$total_hours_count = [
+			'total_hours_count_saturday',
+			'total_hours_count_sunday',
+			'total_hours_count_monday',
+			'total_hours_count_tuesday',
+			'total_hours_count_wednesday',
+			'total_hours_count_thursday',
+			'total_hours_count_friday',
+		];
+
 		if ( empty( $days_hours_of_week ) ) {
 			foreach( $meta_start_key as $value ) {
 				delete_post_meta( $coupon_id,$value );
@@ -608,6 +574,10 @@ class CouponGeneralTabController extends BaseController
 			}
 
 			foreach ( $coupon_apply_on_day as $value ) {
+				delete_post_meta( $coupon_id, $value );
+			}
+
+			foreach ( $total_hours_count as $value ) {
 				delete_post_meta( $coupon_id, $value );
 			}
 		}
@@ -651,117 +621,5 @@ class CouponGeneralTabController extends BaseController
 				delete_post_meta( $coupon_id, $single_value );
 			}
 		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @since 1.0.0
-	 * @method coupon_starting_date_invalid_error_message
-	 * @param string $err
-	 * @param int $err_code
-	 * @param object $coupon
-	 * @return string
-	 * Display custom error message for invalid coupon.
-	 */
-	public function coupon_starting_date_invalid_error_message( $err, $err_code, $coupon )
-	{
-		$coupon = new \WC_Coupon( $coupon );
-
-		// Get the ID of the coupon
-		$coupon_id = $coupon->get_id();
-
-		$message_for_coupon_starting_date = get_post_meta( $coupon_id, 'message_for_coupon_starting_date', true );
-
-		if ( $err_code === 100 ) {
-			if ( ! empty( $message_for_coupon_starting_date ) ) {
-				// Change the error message for the INVALID_FILTERED error here
-				$err = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $message_for_coupon_starting_date ) );
-			} else {
-				$err = esc_html__( 'This coupon has not been started yet. ' );
-			}
-		}
-
-		return $err;
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @since 1.0.0
-	 * @method coupon_invalid_error_message_for_single_day
-	 * @param string $err
-	 * @param int $err_code
-	 * @param object $coupon
-	 * @return string
-	 * Display custom error message for invalid coupon.
-	 */
-	public function coupon_invalid_error_message_for_single_day( $err, $err_code, $coupon )
-	{
-		$coupon = new \WC_Coupon( $coupon );
-
-		// Get the ID of the coupon
-		$coupon_id = $coupon->get_id();
-
-		$days = [
-			'saturday' => 'coupon_apply_on_saturday',
-			'sunday' => 'coupon_apply_on_sunday',
-			'monday' => 'coupon_apply_on_monday',
-			'tuesday' => 'coupon_apply_on_tuesday',
-			'wednesday' => 'coupon_apply_on_wednesday',
-			'thursday' => 'coupon_apply_on_thursday',
-			'friday' => 'coupon_apply_on_friday',
-		];
-
-		$start_time = [
-			'sat_coupon_start_time',
-			'sun_coupon_start_time',
-			'mon_coupon_start_time',
-			'tue_coupon_start_time',
-			'wed_coupon_start_time',
-			'thu_coupon_start_time',
-			'fri_coupon_start_time',
-		];
-
-		$expiry_time = [
-			'sat_coupon_expiry_time',
-			'sun_coupon_expiry_time',
-			'mon_coupon_expiry_time',
-			'tue_coupon_expiry_time',
-			'wed_coupon_expiry_time',
-			'thu_coupon_expiry_time',
-			'fri_coupon_expiry_time',
-		];
-
-		$result = '';
-
-		// get the value of apply coupon on different days
-		foreach ( $days as $day => $meta_key ) {
-			$value = get_post_meta( $coupon_id, $meta_key, true );
-			if ( ! empty( $value ) && '1' === $value ) {
-				$result .= ' - ' . ucfirst($day);
-			}
-		}
-
-		// get the values of coupon start time
-		foreach ( $start_time as $meta_key ) {
-			$value = get_post_meta( $coupon_id, $meta_key, true );
-
-			if ( ! empty( $value ) ) {
-				// initialize the message
-				$message = 'Coupon is not valid for this hour. Comeback at another time.';
-			}
-//			else {
-//				// initialize the message
-//				$message = 'Coupon is not valid for today. Comeback on ' . $result . '';
-//			}
-		}
-
-		if ( 100 === $err_code ) {
-			// Change the error message for the INVALID_FILTERED error here
-			$err = $message;
-		}
-
-		return $err;
 	}
 }

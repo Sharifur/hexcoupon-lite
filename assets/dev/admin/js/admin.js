@@ -654,6 +654,7 @@
 					if ($.trim(inputValue) === '' || isNaN(inputValue) || parseInt(inputValue) <= 0) {
 						// Prevent the default behavior of the WP post publish button
 						e.preventDefault();
+
 						// Display an alert for invalid input
 						alert(__('Enter a valid number in the Bogo fields, equivalent or greater than 1', 'hex-coupon-for-woocommerce'));
 
@@ -674,6 +675,25 @@
 			validateInput('.purchase');
 			validateInput('.minimum');
 			validateInput('.amount');
+
+			// show alert if user leave a field empty
+			let $checkbox = $("#apply_days_hours_of_week");
+
+			if ($checkbox.prop("checked")) {
+				let $timeInputs = $(".flatpickr-input").filter(function() {
+					return $(this).css('display') !== 'none';
+				});
+
+				let $emptyInput = $timeInputs.filter(function() {
+					return $(this).val() === "";
+				}).first();
+
+				if ($emptyInput.length > 0) {
+					alert(__("Do not leave date and time empty.","hex-coupon-for-woocommerce"));
+					$emptyInput.focus();
+					e.preventDefault(); // Preventing form submission
+				}
+			}
 		});
 
 		// Place the div with an id of 'selected_purchased_products' after the 'add_specific_product_to_purchase options_group' div
@@ -869,6 +889,8 @@
            	Days & Hours in General Tab
        ========================================
        */
+
+
 		const applyDaysHoursOfWeek = $("#apply_days_hours_of_week");
 		const dayTimeHoursBlock = $(".day_time_hours_block");
 		const totalHoursCountSaturday = $("#total_hours_count_saturday");
