@@ -230,6 +230,8 @@ class CouponGeographicRestrictionTabController extends BaseController
 	 */
 	public function apply_coupon_meta_data( $valid, $coupon )
 	{
+		$payment_shipping_method = PaymentAndShippingTabController::getInstance()->apply_coupon_meta_data( $valid, $coupon );
+
 		$restricted_shipping_zones = $this->restrict_selected_shipping_zones_to_coupon( $valid, $coupon );
 
 		$restrict_shipping_countries = $this->restrict_selected_shipping_countries( $valid, $coupon );
@@ -254,6 +256,13 @@ class CouponGeographicRestrictionTabController extends BaseController
 
 		if ( is_null( $restricted_shipping_zones ) || is_null( $restrict_shipping_countries ) ) {
 			return $valid;
+		}
+
+		if ( ! $payment_shipping_method ) {
+			// display a custom coupon error message if the coupon is invalid
+			add_filter( 'woocommerce_coupon_error', [ $this, 'custom_coupon_error_message_for_payment_and_shipping_method' ] , 10, 2 );
+
+			return false;
 		}
 
 		return $valid;
@@ -299,4 +308,22 @@ class CouponGeographicRestrictionTabController extends BaseController
 		return $err;
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method custom_coupon_error_message_for_payment_and_shipping_method
+	 * @param string $err
+	 * @param int $err_code
+	 * @return string
+	 * Display custom error message for invalid coupon.
+	 */
+	public function custom_coupon_error_message_for_payment_and_shipping_method( $err, $err_code ) {
+		if ( $err_code === 100 ) {
+			// Change the error message for the INVALID_FILTERED error here
+			$err = esc_html__( 'Invalid coupon. Your payment or shipping method does not support this coupon.', 'hex-coupon-for-woocommerce');
+		}
+
+		return $err;
+	}
 }

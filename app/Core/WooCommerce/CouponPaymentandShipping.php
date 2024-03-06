@@ -88,11 +88,11 @@ class CouponPaymentandShipping
 	 */
 	public function add_custom_coupon_tab( $tabs )
 	{
-		$tabs['custom_coupon_tab'] = array(
+		$tabs['custom_coupon_tab'] = [
 			'label'    => esc_html__( 'Payment & shipping method', 'hex-coupon-for-woocommerce' ),
 			'target'   => 'custom_coupon_tab',
 			'class'    => array( 'show_if_coupon_usage_limits' ),
-		);
+		];
 		return $tabs;
 	}
 

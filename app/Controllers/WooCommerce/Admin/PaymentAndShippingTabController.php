@@ -23,7 +23,7 @@ class PaymentAndShippingTabController extends BaseController
 	public function register()
 	{
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_all_meta_data' ] );
-		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
+//		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
 	}
 
 	/**
@@ -89,13 +89,13 @@ class PaymentAndShippingTabController extends BaseController
 		// get saved selected permitted payment methods meta data
 		$selected_permitted_payment_methods = ! empty( $payment_and_shipping['permitted_payment_methods'] ) ? $payment_and_shipping['permitted_payment_methods'] : [];
 
+		// get current payment method of customer
+		$current_payment_method = WC()->session->get( 'chosen_payment_method' );
+
 		// check if is it empty
 		if ( empty( $selected_permitted_payment_methods ) ) {
 			return true;
 		}
-
-		// get current payment method of customer
-		$current_payment_method = WC()->session->get( 'chosen_payment_method' );
 
 		// check if the current payment method matches with the selected payment methods
 		if ( in_array( $current_payment_method, $selected_permitted_payment_methods ) ) {
@@ -163,57 +163,12 @@ class PaymentAndShippingTabController extends BaseController
 		if ( $selectedPaymentMethod && $selectedShippingMethods ) {
 			return true;
 		}
-		if ( ! $selectedPaymentMethod ) {
-			// display a custom coupon error message if the coupon is invalid
-			add_filter( 'woocommerce_coupon_error', [ $this, 'error_message_for_invalid_payment_method' ] , 10, 2 );
 
+		if ( ! $selectedPaymentMethod ) {
 			return false;
 		}
 		if ( ! $selectedShippingMethods ) {
-			// display a custom coupon error message if the coupon is invalid
-			add_filter( 'woocommerce_coupon_error', [ $this, 'error_message_for_invalid_shipping_method' ] , 10, 2 );
-
 			return false;
 		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @since 1.0.0
-	 * @method error_message_for_invalid_payment_method
-	 * @param string $err
-	 * @param int $err_code
-	 * @return string
-	 * Display custom error message for invalid coupon.
-	 */
-	public function error_message_for_invalid_payment_method( $err, $err_code )
-	{
-		if ( $err_code === 100 ) {
-			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your payment method does not support this coupon.', 'hex-coupon-for-woocommerce');
-		}
-
-		return $err;
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author Wphex
-	 * @since 1.0.0
-	 * @method error_message_for_invalid_shipping_method
-	 * @param string $err
-	 * @param int $err_code
-	 * @return string
-	 * Display custom error message for invalid coupon.
-	 */
-	public function error_message_for_invalid_shipping_method( $err, $err_code )
-	{
-		if ( $err_code === 100 ) {
-			// Change the error message for the INVALID_FILTERED error here
-			$err = esc_html__( 'Invalid coupon. Your shipping method does not support this coupon.', 'hex-coupon-for-woocommerce');
-		}
-
-		return $err;
 	}
 }

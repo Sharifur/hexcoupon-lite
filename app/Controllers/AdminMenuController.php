@@ -71,7 +71,7 @@ class AdminMenuController extends BaseController
 			'hexcoupon-page',
 			[ $this, 'render_hexcoupon' ],
 			'dashicons-admin-settings',
-			40
+			57
 		);
 	}
 
