@@ -27,6 +27,7 @@ use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\WooCommerce\CouponCategory;
 use HexCoupon\App\Core\WooCommerce\CouponEmailSMS;
 use HexCoupon\App\Core\WooCommerce\CouponPaymentandShipping;
+use HexCoupon\App\Core\WooCommerce\CouponSingleDaysAndHoursTab;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeneralTab;
 use HexCoupon\App\Core\WooCommerce\CouponSingleGeographicRestrictions;
 use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
@@ -60,6 +61,7 @@ final class Core extends BootManager
 			PaymentAndShippingTabController::class,
 			CouponSingleGeneralTab::class,
 			CouponGeneralTabController::class,
+			CouponSingleDaysAndHoursTab::class,
 			CouponSingleGeographicRestrictions::class,
 			CouponGeographicRestrictionTabController::class,
 			CouponSingleUsageRestriction::class,

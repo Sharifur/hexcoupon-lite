@@ -19,5 +19,6 @@ class ActivationService
 
 	public static function activate()
 	{
+
 	}
 }

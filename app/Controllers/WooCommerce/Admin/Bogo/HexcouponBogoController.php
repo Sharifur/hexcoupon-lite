@@ -125,8 +125,9 @@ class HexcouponBogoController extends BaseController
 			}
 		}
 
+		$coupon_discount_type = get_post_meta( $coupon_id, 'discount_type', true );
 
-		if ( $cart->get_applied_coupons() )
+		if ( $cart->get_applied_coupons() && 'buy_x_get_x_bogo' === $coupon_discount_type )
 			$cart->add_fee( __( 'Total Bogo Discount', 'hex-coupon-for-woocommerce' ), -$total_subtotal );
 
 		return $total_subtotal;

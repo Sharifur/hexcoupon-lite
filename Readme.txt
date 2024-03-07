@@ -5,8 +5,8 @@ Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, dis
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.4.3
-Version: 1.1.3
-Stable tag: 1.1.3
+Version: 1.1.4
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

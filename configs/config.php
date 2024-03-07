@@ -9,9 +9,9 @@ return array(
 	'plugin_prefix'		=> 'hexcoupon',
 	'plugin_slug'		=> 'hexcoupon',
 	'namaspace_root'	=> 'HexCoupon',
-	'plugin_version'	=> '1.1.3',
+	'plugin_version'	=> '1.1.4',
 	'plugin_name'		=> 'HexCoupon',
-	'dev_mode'			=> false,
+	'dev_mode'			=> true,
 	'root_dir'			=> dirname(__DIR__),
 	'middlewares'		=> [
 		'auth'	=> HexCoupon\App\Controllers\Middleware\Auth::class,

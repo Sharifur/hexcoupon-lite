@@ -100,7 +100,7 @@ class CouponPaymentandShipping
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method add_custom_coupon_tab
+	 * @method add_custom_coupon_tab_content
 	 * @return void
 	 * Displays the content of custom tab 'Payment & shipping method'.
 	 */
