@@ -592,20 +592,24 @@
            Sharable URL Coupon
        ========================================
        */
-		// Show or hide redirect link input field upon changing the radio button
-		const applyRedirectSharableLink = $("input[name='sharable_url_coupon[apply_redirect_sharable_link]']");
-		const redirectLinkField = $(".redirect_link_field");
+		const redirectLinkVal = $('#redirect_link');
 
-		applyRedirectSharableLink.on("change", function() {
-			if ($(this).is(":checked") && $(this).val() === 'redirect_back_to_origin') {
-				redirectLinkField.hide();
-			} else if ($(this).is(":checked") && $(this).val() === 'redirect_to_custom_link') {
-				redirectLinkField.show();
+		// Show or hide the corresponding field based on the selected value on page loads
+		if (redirectLinkVal.val() === 'redirect_to_custom_local_url') {
+			$('.custom_local_url_field').show();
+		} else {
+			$('.custom_local_url_field').hide();
+		}
+
+		// Show or hide the corresponding field based on the selected value on change
+		redirectLinkVal.change(function() {
+			if ($(this).val() === 'redirect_to_custom_local_url') {
+				$('.custom_local_url_field').show();
+			} else {
+				$('.custom_local_url_field').hide();
 			}
 		});
 
-		// Trigger the change event initially to apply the appropriate visibility
-		applyRedirectSharableLink.trigger("change");
 
 		// Add readonly property to the sharable_url input field
 		$('#sharable_url').prop('readonly', true);

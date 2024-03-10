@@ -111,23 +111,7 @@ class CouponSingleSharableUrl {
 			]
 		);
 
-		// get 'apply_redirect_sharable_link' meta field data
-		$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
-
 		echo '<div class="options_group redirect_url">';
-
-		woocommerce_wp_radio(
-			[
-				'id' => 'apply_redirect_sharable_link',
-				'name' => 'sharable_url_coupon[apply_redirect_sharable_link]',
-				'label' => '',
-				'options' => [
-					'redirect_to_custom_link' => esc_html__( 'Redirect to a custom URL', 'hex-coupon-for-woocommerce' ),
-					'redirect_back_to_origin' => esc_html__( 'Redirect back to original', 'hex-coupon-for-woocommerce' ),
-				],
-				'value' => ! empty( $apply_redirect_sharable_link ) ? $apply_redirect_sharable_link : 'redirect_to_custom_link',
-			]
-		);
 
 		$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
 
@@ -141,11 +125,30 @@ class CouponSingleSharableUrl {
 			'id' => 'redirect_link',
 			'name' => 'sharable_url_coupon[redirect_link]',
 			'options' => [
-				esc_url( $cart_url ) => 'Cart Page',
-				esc_url( $checkout_url ) => 'Checkout Page',
+				'no_redirect' => esc_html__( 'No Redirect', 'hex-coupon-for-woocommerce' ),
+				esc_url( $cart_url ) => esc_html__( 'Cart Page', 'hex-coupon-for-woocommerce' ),
+				esc_url( $checkout_url ) => esc_html__( 'Checkout Page', 'hex-coupon-for-woocommerce' ),
+				'redirect_to_custom_local_url' => esc_html__( 'Redirect to Custom Local URL', 'hex-coupon-for-woocommerce' ),
 			],
 			'value' => $redirect_link,
 		] );
+
+		$custom_local_url = ! empty( $sharable_url_coupon['custom_local_url'] ) ? $sharable_url_coupon['custom_local_url'] : '';
+
+		woocommerce_wp_text_input(
+			[
+				'id' => 'custom_local_url',
+				'name' => 'sharable_url_coupon[custom_local_url]',
+				'label' => esc_html__( 'Custom Local URL', 'hex-coupon-for-woocommerce' ),
+				'desc_tip' => true,
+				'description' => esc_html__( 'Provide a valid URL within in your WordPress website.', 'hex-coupon-for-woocommerce' ),
+				'type' => 'text',
+				'value' => $custom_local_url,
+				'class' => 'sharable-url form-control',
+				'placeholder' => esc_html__( 'Enter URl', 'hex-coupon-for-woocommerce' ),
+				'data_type' => 'url',
+			]
+		);
 
 		echo '</div></div>';
 	}

@@ -23,7 +23,6 @@ class PaymentAndShippingTabController extends BaseController
 	public function register()
 	{
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_all_meta_data' ] );
-//		add_filter( 'woocommerce_coupon_is_valid', [ $this, 'apply_coupon_meta_data' ], 10, 2 );
 	}
 
 	/**

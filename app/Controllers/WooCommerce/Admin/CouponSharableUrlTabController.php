@@ -24,7 +24,6 @@ class CouponSharableUrlTabController extends BaseController {
 	{
 		add_action( 'woocommerce_process_shop_coupon_meta', [ $this, 'save_coupon_all_meta_data' ] );
 		add_action( 'wp_loaded', [ $this, 'apply_coupon_activation_via_url' ] );
-		add_action( 'woocommerce_process_shop_coupon_meta', [ $this,'delete_post_meta' ] );
 	}
 
 	/**
@@ -85,21 +84,14 @@ class CouponSharableUrlTabController extends BaseController {
 			$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
 			$coupon = new \WC_Coupon( $coupon_code );
 
+			$is_coupon_applied = WC()->cart->has_discount( $coupon_code );
+
+
 			$sharable_url_coupon = get_post_meta( $coupon->get_id(), 'sharable_url_coupon', true );
 
 			$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
 
-			$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
-
-			if ( 'redirect_back_to_origin' === $apply_redirect_sharable_link ) {
-				// Get the referring URL
-				$redirect_link = wp_get_referer();
-
-					// If there's no referring URL or, it's the current page, redirect to the home page
-				if ( ! $redirect_link || $redirect_link === get_permalink() ) {
-					$redirect_link = home_url();
-				}
-			}
+			$custom_local_url = ! empty( $sharable_url_coupon['custom_local_url'] ) ? $sharable_url_coupon['custom_local_url'] : home_url();
 
 			// Check is the coupon valid or not
 			$discounts = new \WC_Discounts( WC()->cart );
@@ -113,11 +105,25 @@ class CouponSharableUrlTabController extends BaseController {
 
 			if ( $coupon_code_search ) {
 				if ( $response && 'yes' === $apply_automatic_coupon_by_url ) {
-					WC()->cart->apply_coupon( $coupon_code );
-					wp_safe_redirect( $redirect_link );
+					// show user defined success message for url coupon, if set
+					add_filter( 'woocommerce_coupon_message', [ $this, 'custom_success_msg_for_url_coupon' ], 10, 3 );
+
+					if ( 'no_redirect' === $redirect_link ) {
+						WC()->cart->apply_coupon( $coupon_code );
+						$url = home_url();
+						wp_safe_redirect( $url );
+					} elseif ( 'redirect_to_custom_local_url' === $redirect_link ) {
+						WC()->cart->apply_coupon( $coupon_code );
+						wp_safe_redirect( $custom_local_url );
+					} else {
+						WC()->cart->apply_coupon( $coupon_code );
+						wp_safe_redirect( $redirect_link );
+					}
+
 					exit();
 				}
 			}
+
 		}
 	}
 
@@ -125,22 +131,22 @@ class CouponSharableUrlTabController extends BaseController {
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method delete_post_meta
-	 * @param int $coupon_id
-	 * @return void
-	 * Delete post meta-data of Sharable url coupon tab.
+	 * @method custom_success_msg_for_url_coupon
+	 * Showing custom success message for url coupon
 	 */
-	public function delete_post_meta( $coupon_id )
-	{
-		$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
+	public function custom_success_msg_for_url_coupon( $msg, $msg_code, $coupon ) {
+		$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
 
-		$apply_redirect_sharable_link = ! empty( $sharable_url_coupon['apply_redirect_sharable_link'] ) ? $sharable_url_coupon['apply_redirect_sharable_link'] : '';
+		$coupon = new \WC_Coupon( $coupon_code );
 
-		// check if redirect sharable link matches with 'redirect_back_to_origin' or not
-		if ( 'redirect_back_to_origin'  === $apply_redirect_sharable_link ) {
-			unset( $sharable_url_coupon['redirect_link'] );
-			update_post_meta( $coupon_id, 'sharable_url_coupon', $sharable_url_coupon );
+		$sharable_url_coupon = get_post_meta( $coupon->get_id(), 'sharable_url_coupon', true );
+		// Success message for successful url coupon
+		$message_for_coupon_discount_url = ! empty( $sharable_url_coupon['message_for_coupon_discount_url'] ) ? $sharable_url_coupon['message_for_coupon_discount_url'] : '';
+
+		if( $msg === esc_html__( 'Coupon code applied successfully.', 'woocommerce' ) && ! empty( $message_for_coupon_discount_url ) ) {
+			$msg = sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $message_for_coupon_discount_url ) );
 		}
-	}
 
+		return $msg;
+	}
 }

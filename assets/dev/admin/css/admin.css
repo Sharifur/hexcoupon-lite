@@ -262,6 +262,10 @@ span.day-title {
 	color: #ffffff;
 }
 
+.custom_local_url_field {
+	display: none;
+}
+
 .sharable_url_coupon_tab p.copy-sharable-url {
 	background: #2271B1;
 	color: #ffffff;
@@ -333,11 +337,17 @@ ul li.select2-selection__choice {
 	border-bottom: none !important;
 }
 
-#woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_options a::before,
-#woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before,
-#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon a::before,
-#woocommerce-coupon-data ul.wc-tabs li.sms_email_tab_tab a::before {
-	content: '\f111'
+#woocommerce-coupon-data ul.wc-tabs li.custom_coupon_tab_tab a::before {
+	content: '\f174';
+}
+#woocommerce-coupon-data ul.wc-tabs li.days_and_hours_tab_tab a::before {
+	content: '\f469';
+}
+#woocommerce-coupon-data ul.wc-tabs li.geographic_restriction a::before {
+	content: '\f231';
+}
+#woocommerce-coupon-data ul.wc-tabs li.sharable_url_coupon_tab_tab a::before {
+	content: '\f103';
 }
 
 .product-item-whole {
