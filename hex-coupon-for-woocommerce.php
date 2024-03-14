@@ -90,16 +90,6 @@ add_action( 'before_woocommerce_init', function() {
 } );
 
 /**
- * Load the plugin text-domain
- *
- * @return void
- */
-add_action( 'init', 'load_hexcoupon_textdomain', 1 );
-function load_hexcoupon_textdomain() {
-	load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
-}
-
-/**
  * Redirect users to the dashboard of HexCoupon after activating the plugin
  *
  * @return void

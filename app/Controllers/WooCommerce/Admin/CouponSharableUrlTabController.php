@@ -82,20 +82,14 @@ class CouponSharableUrlTabController extends BaseController {
 	{
 		if ( isset( $_GET['coupon_code'] ) ) {
 			$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
-			$coupon = new \WC_Coupon( $coupon_code );
+			WC()->session->set( 'invalid_coupon_code', $coupon_code );
+			$stored_coupon_code = WC()->session->get( 'coupon_code' );
+			error_log($stored_coupon_code);
+			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
 
-			$is_coupon_applied = WC()->cart->has_discount( $coupon_code );
-
-
-			$sharable_url_coupon = get_post_meta( $coupon->get_id(), 'sharable_url_coupon', true );
-
+			$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
 			$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
-
 			$custom_local_url = ! empty( $sharable_url_coupon['custom_local_url'] ) ? $sharable_url_coupon['custom_local_url'] : home_url();
-
-			// Check is the coupon valid or not
-			$discounts = new \WC_Discounts( WC()->cart );
-			$response = $discounts->is_coupon_valid( $coupon );
 
 			// Check if the given url has the right coupon code
 			$sharable_url = ! empty( $sharable_url_coupon['sharable_url'] ) ? $sharable_url_coupon['sharable_url'] : '';
@@ -104,7 +98,7 @@ class CouponSharableUrlTabController extends BaseController {
 			$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? $sharable_url_coupon['apply_automatic_coupon_by_url'] : '';
 
 			if ( $coupon_code_search ) {
-				if ( $response && 'yes' === $apply_automatic_coupon_by_url ) {
+				if ( 'yes' === $apply_automatic_coupon_by_url ) {
 					// show user defined success message for url coupon, if set
 					add_filter( 'woocommerce_coupon_message', [ $this, 'custom_success_msg_for_url_coupon' ], 10, 3 );
 
@@ -136,10 +130,9 @@ class CouponSharableUrlTabController extends BaseController {
 	 */
 	public function custom_success_msg_for_url_coupon( $msg, $msg_code, $coupon ) {
 		$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
+		$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
 
-		$coupon = new \WC_Coupon( $coupon_code );
-
-		$sharable_url_coupon = get_post_meta( $coupon->get_id(), 'sharable_url_coupon', true );
+		$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
 		// Success message for successful url coupon
 		$message_for_coupon_discount_url = ! empty( $sharable_url_coupon['message_for_coupon_discount_url'] ) ? $sharable_url_coupon['message_for_coupon_discount_url'] : '';
 
