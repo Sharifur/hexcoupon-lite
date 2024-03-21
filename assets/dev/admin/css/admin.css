@@ -1,3 +1,8 @@
+/* Specific days and hours */
+#days_and_hours_tab .options_group {
+	border-bottom: none;
+}
+
 #coupon_apply_on_saturday_label,
 #coupon_apply_on_sunday_label,
 #coupon_apply_on_monday_label,
@@ -167,7 +172,7 @@ input:checked + .slider:before {
 }
 
 .woocommerce_options_panel .options_group__saturdayWrap .form-field {
-	padding: 0px !important;
+	padding: 0 !important;
 	position: relative;
 }
 
@@ -366,7 +371,6 @@ ul li.select2-selection__choice {
 }
 
 .product-item-whole:not(:last-child) {
-	border-bottom: 1px solid #ddd;
 	padding-bottom: 20px !important;
 	margin-bottom: 20px;
 }

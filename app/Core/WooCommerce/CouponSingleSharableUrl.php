@@ -1,6 +1,7 @@
 <?php
 namespace HexCoupon\App\Core\WooCommerce;
 
+use HexCoupon\App\Core\Helpers\QrCodeGeneratorHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class CouponSingleSharableUrl {
@@ -19,6 +20,30 @@ class CouponSingleSharableUrl {
 	{
 		add_action( 'woocommerce_coupon_data_tabs', [ $this, 'add_sharable_url_coupon_tab' ] );
 		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_sharable_url_coupon_tab_content' ] );
+		// Hook to generate qr code on clicking the publish button
+		add_action( 'save_post', [ $this, 'generate_qr_code_on_publish' ], 10, 3 );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method generate_qr_code_on_publish
+	 * @param array $tabs
+	 * @return array
+	 * Controlling the QR code publication on coupon publish
+	 */
+	public function generate_qr_code_on_publish( $post_id, $post, $update )
+	{
+		// Checking if the publish button is clicked and the post type is 'shop_coupon'
+		if ( 'shop_coupon' !== $post->post_type || ! $update ) {
+			return;
+		}
+
+		// Generate QR code only if the coupon status is 'publish'
+		if ( 'publish' === $post->post_status ) {
+			QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( $post_id );
+		}
 	}
 
 	/**
@@ -70,7 +95,7 @@ class CouponSingleSharableUrl {
 			]
 		);
 
-		$coupon_id = isset( $_GET['coupon_id'] ) ? intval( $_GET['coupon_id'] ) : 0;
+		$coupon_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : 0;
 
 		$coupon_code = get_the_title( $coupon_id ); // get the coupon code title
 
@@ -149,6 +174,11 @@ class CouponSingleSharableUrl {
 				'data_type' => 'url',
 			]
 		);
+
+
+		echo '<p class="form-field"><img src="' . plugin_dir_url( __FILE__ ) . '../../../assets/images/qr_code_' . $coupon_id . '.png' . '" width="120" height="120" alt="QR Code"> </p>';
+
+		echo '<p class="form-field" style="font-size: 14px; margin-top: -25px;margin-left: 10px;"><a href="' . plugin_dir_url( __FILE__ ) . '../../../assets/images/qr_code_' . $coupon_id . '.png' . '" download="qr_code_' . $coupon_id . '.png">'.esc_html__( 'Download Image', 'hexcoupon-for-woocommerce' ).'</a></p>';
 
 		echo '</div></div>';
 	}

@@ -2,6 +2,7 @@
 
 namespace HexCoupon\App\Services;
 
+use HexCoupon\App\Core\Helpers\QrCodeGeneratorHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 
 class ActivationService
@@ -19,11 +20,12 @@ class ActivationService
 
 	public static function activate()
 	{
-		add_action('init', [__CLASS__, 'load_hexcoupon_textdomain'], 1);
+		add_action( 'init', [ __CLASS__, 'load_hexcoupon_textdomain' ], 1 );
+		QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( 0 );
 	}
 
 	public static function load_hexcoupon_textdomain()
 	{
-		load_plugin_textdomain('hex-coupon-for-woocommerce', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+		load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 }

@@ -81,12 +81,10 @@ class CouponSharableUrlTabController extends BaseController {
 	public function apply_coupon_activation_via_url()
 	{
 		if ( isset( $_GET['coupon_code'] ) ) {
-			$coupon_code = sanitize_text_field( $_GET['coupon_code'] ); // get coupon code from the url
-			WC()->session->set( 'invalid_coupon_code', $coupon_code );
-			$stored_coupon_code = WC()->session->get( 'coupon_code' );
-			error_log($stored_coupon_code);
-			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
+			// getting coupon code from the url
+			$coupon_code = sanitize_text_field( $_GET['coupon_code'] );
 
+			$coupon_id = wc_get_coupon_id_by_code( $coupon_code );
 			$sharable_url_coupon = get_post_meta( $coupon_id, 'sharable_url_coupon', true );
 			$redirect_link = ! empty( $sharable_url_coupon['redirect_link'] ) ? $sharable_url_coupon['redirect_link'] : '';
 			$custom_local_url = ! empty( $sharable_url_coupon['custom_local_url'] ) ? $sharable_url_coupon['custom_local_url'] : home_url();
@@ -97,28 +95,26 @@ class CouponSharableUrlTabController extends BaseController {
 
 			$apply_automatic_coupon_by_url = ! empty( $sharable_url_coupon['apply_automatic_coupon_by_url'] ) ? $sharable_url_coupon['apply_automatic_coupon_by_url'] : '';
 
-			if ( $coupon_code_search ) {
-				if ( 'yes' === $apply_automatic_coupon_by_url ) {
-					// show user defined success message for url coupon, if set
-					add_filter( 'woocommerce_coupon_message', [ $this, 'custom_success_msg_for_url_coupon' ], 10, 3 );
+			if ( $coupon_code_search && ! WC()->cart->has_discount( $coupon_code ) && 'yes' === $apply_automatic_coupon_by_url ) {
+				// show user defined success message for url coupon, if set
+				 add_filter( 'woocommerce_coupon_message', [ $this, 'custom_success_msg_for_url_coupon' ], 10, 3 );
 
-					if ( 'no_redirect' === $redirect_link ) {
-						WC()->cart->apply_coupon( $coupon_code );
-						$url = home_url();
-						wp_safe_redirect( $url );
-					} elseif ( 'redirect_to_custom_local_url' === $redirect_link ) {
-						WC()->cart->apply_coupon( $coupon_code );
-						wp_safe_redirect( $custom_local_url );
-					} else {
-						WC()->cart->apply_coupon( $coupon_code );
-						wp_safe_redirect( $redirect_link );
-					}
-
-					exit();
+				if ( 'no_redirect' === $redirect_link ) {
+					WC()->cart->apply_coupon( $coupon_code );
+					$url = home_url();
+					wp_safe_redirect( $url );
+				} elseif ( 'redirect_to_custom_local_url' === $redirect_link ) {
+					WC()->cart->apply_coupon( $coupon_code );
+					wp_safe_redirect( $custom_local_url );
+				} else {
+					WC()->cart->apply_coupon( $coupon_code );
+					wp_safe_redirect( $redirect_link );
 				}
-			}
 
+				exit();
+			}
 		}
+
 	}
 
 	/**

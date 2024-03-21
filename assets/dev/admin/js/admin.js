@@ -546,26 +546,6 @@
 			$('#reset_option_value').val(resetValue);
 		});
 
-		var resetUsageLimit = $("#reset_usage_limit");
-
-		// On clicking the checkbox
-		$(resetUsageLimit).on("change",function (){
-			if($(this).is(":checked")){
-				paragraphs.show();
-			}
-			else {
-				paragraphs.hide();
-			}
-		});
-
-		// On page load
-		if($(resetUsageLimit).is(":checked")){
-			paragraphs.show();
-		}
-		else {
-			paragraphs.hide();
-		}
-
 		/*
        ========================================
            Geographic Restriction
@@ -894,9 +874,7 @@
        ========================================
        */
 
-
 		const applyDaysHoursOfWeek = $("#apply_days_hours_of_week");
-		const dayTimeHoursBlock = $(".day_time_hours_block");
 		const totalHoursCountSaturday = $("#total_hours_count_saturday");
 		const totalHoursCountSunday = $("#total_hours_count_sunday");
 		const totalHoursCountMonday = $("#total_hours_count_monday");
@@ -906,10 +884,7 @@
 		const totalHoursCountFriday = $("#total_hours_count_friday");
 
 		// Show hide days and hours on page load
-		if(applyDaysHoursOfWeek.is(":checked")) {
-			dayTimeHoursBlock.show();
-		} else {
-			dayTimeHoursBlock.hide();
+		if(! applyDaysHoursOfWeek.is(":checked")) {
 			totalHoursCountSaturday.val('0');
 			totalHoursCountSunday.val('0');
 			totalHoursCountMonday.val('0');
@@ -948,15 +923,6 @@
 		} else {
 			$(".allowed_individual_customer").hide();
 		}
-
-		// Show hide days and hours on the basis of clicking the checkbox
-		applyDaysHoursOfWeek.on("change", function () {
-			if ($(this).is(":checked")) {
-				dayTimeHoursBlock.show();
-			} else {
-				dayTimeHoursBlock.hide();
-			}
-		});
 
 		// Show hide days and hours and apply days & hour on the basis of clicking the discount_type select input
 		// Get the currently selected option's value
@@ -1025,6 +991,7 @@
 				$("#"+dayShortName+"_deactivated_text").show();
 				$("#total_hours_count_"+dayFullName).val('0');
 				$(".add_more_hours_"+dayShortName+"_pro_text").hide();
+				$("p."+dayFullName+" .appededItem.first-input").remove();
 			}
 		}
 

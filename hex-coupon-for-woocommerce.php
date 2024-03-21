@@ -2,16 +2,16 @@
 /**
  * @package hexcoupon
  *
- * Plugin Name: HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules
+ * Plugin Name: HexCoupon: Ultimate WooCommerce Toolkit
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: WpHex
  * Requires at least: 5.4
  * Tested up to: 6.4.3
  * Requires PHP: 7.1
  * WC requires at least: 6.0
- * WC tested up to: 8.6.1
+ * WC tested up to: 8.7.0
  * Author URI: https://wphex.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,6 +25,8 @@ use HexCoupon\App\Core\Core;
 if ( ! defined( 'ABSPATH' ) ) die();
 
 define( 'HEXCOUPON_FILE', __FILE__ );
+
+require_once __DIR__ .'/qrcode/qrcode.php';
 
 require_once __DIR__ . '/configs/bootstrap.php';
 

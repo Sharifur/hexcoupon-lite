@@ -1,12 +1,12 @@
-=== HexCoupon: Ultimate WooCommerce Toolkit for Coupons, Store Credits, Loyalty Rewards, BOGO Offers, and Custom Discount Rules ===
+=== HexCoupon: Ultimate WooCommerce Toolkit ===
 Contributors: wphex
 Donate link: https://example.com/
-Tags: coupons for woocommerce, coupons, bogo, buy one get one, store credit, discounts, dynamic pricing, woocommerce coupon
+Tags: bogo, buy one get one, store credit, royalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.4.3
-Version: 1.1.4
-Stable tag: 1.1.4
+Version: 1.1.5
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,14 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.1.5 ==
+Added QR Code in the URL tab to enhance marketing ability
+
+Solved URL coupon success message not displaying issue.
+
+== 1.1.4 ==
+Fixed dynamic time not being saved for wednesday issue.
+
 == 1.1.3 ==
 Fixed always displaying shipping zone error while applying the coupon
 
