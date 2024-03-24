@@ -481,7 +481,7 @@
 		}
 
 		function convertTitleToName(title){
-			return title.replace(" ","-").toLowerCase();
+			return title.replaceAll(" ","-").replaceAll("-","_").toLowerCase();
 		}
 
 		function addProductItem(element, min = null, max = null){
