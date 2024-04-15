@@ -44,9 +44,9 @@
             transition: all .2s;
         }
         &:checked {
-            background: var(--main-color-one);
-            border-color: var(--main-color-one);
-            background: var(--main-color-one);
+            background: var(--hex-main-color-one);
+            border-color: var(--hex-main-color-one);
+            background: var(--hex-main-color-one);
             &::after {
                 visibility: visible;
                 opacity: 1;
@@ -62,14 +62,14 @@
         line-height: 26px;
         font-size: 16px;
         font-weight: 400;
-        color: var(--heading-color);
+        color: var(--hex-heading-color);
         margin: 0;
         flex: 1;
         @include responsive(xs) {
             font-size: 15px;
         }
         a {
-            color: var(--main-color-one);
+            color: var(--hex-main-color-one);
             font-weight: 500;
         }
     }

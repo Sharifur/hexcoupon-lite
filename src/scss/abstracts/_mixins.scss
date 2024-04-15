@@ -85,16 +85,16 @@
 //placeholder
 @mixin placeholder {
      ::-webkit-input-placeholder {
-        @content;
+        @content
     }
      :-moz-placeholder {
-        @content;
+        @content
     }
      ::-moz-placeholder {
-        @content;
+        @content
     }
      :-ms-input-placeholder {
-        @content;
+        @content
     }
 }
 
@@ -194,25 +194,19 @@
 
 @mixin even() {
     &:nth-child(even) {
-        @content;
+        @content
     }
 }
 
 @mixin odd() {
     &:nth-child(odd) {
-        @content;
+        @content
     }
 }
 
-@mixin fontAwesome($content) {
+@mixin fontawesomeIcon($content) {
     content: $content;
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-}
-
-@mixin lineAwesome($content) {
-    content: $content;
-    font-family: "Line Awesome Free";
+    font-family: "Font Awesome 5 Free";
     font-weight: 900;
 }
 
@@ -285,8 +279,7 @@
     transform: skewY($deg);
 }
 
-
-/*  */
+/* Flexbox */
 
 @mixin flexCenter {
     display: flex;
@@ -318,66 +311,76 @@
     font-size: $font-size;
 }
 
-
-/* Media Queries */
-
+// Media query 
 @mixin responsive($breakpoint) {
-    @if $breakpoint==allxl {
-        @media (min-width: 1200px) and (max-width: 1880px) {
-            @content;
-        }
-        ;
-    }
-    @if $breakpoint==allDesktop {
-        @media (min-width: 992px) and (max-width: 1799.98px) {
-            @content;
-        }
-        ;
-    }
     @if $breakpoint==xxxl {
-        @media (min-width: 1600px) and (max-width: 1849.98px) {
+        @media (min-width: 1700px) and (max-width: 1849.98px) {
             @content;
         }
         ;
     }
     @if $breakpoint==xxl {
-        @media (min-width: 1400px) and (max-width: 1599.98px) {
+        @media (min-width: 1536px) and (max-width: 1699.98px) {
+            @content;
+        }
+        ;
+    }
+    @if $breakpoint==min-xxl {
+        @media (min-width: 1536px) {
             @content;
         }
         ;
     }
     @if $breakpoint==xl {
-        @media (min-width: 1200px) and (max-width: 1399.98px) {
+        @media (min-width: 1280px) and (max-width: 1535.98px) {
             @content;
         }
         ;
     }
-    @if $breakpoint==min-lg {
-        @media (min-width: 992px) {
+    @if $breakpoint==min-xl {
+        @media (min-width: 1280px) {
             @content;
         }
         ;
     }
     @if $breakpoint==lg {
-        @media (min-width: 992px) and (max-width: 1199.98px) {
+        @media (min-width: 1024px) and (max-width: 1279.98px) {
+            @content;
+        }
+        ;
+    }
+    @if $breakpoint==min-lg {
+        @media (min-width: 1024px) {
             @content;
         }
         ;
     }
     @if $breakpoint==allPhone {
-        @media (min-width: 300px) and (max-width: 991.98px) {
+        @media (min-width: 100px) and (max-width: 1023.98px) {
             @content;
         }
         ;
     }
     @if $breakpoint==md {
-        @media (min-width: 768px) and (max-width: 991.98px) {
+        @media (min-width: 768px) and (max-width: 1023.98px) {
+            @content;
+        }
+        ;
+    }
+    @if $breakpoint==min-md {
+        @media (min-width: 768px) {
             @content;
         }
         ;
     }
     @if $breakpoint==sm {
         @media only screen and (max-width: 767.98px) {
+            @content;
+        }
+        ;
+    }
+    @if $breakpoint==min-sm {
+        @media screen and (min-width: 576px) {
             @content;
         }
         ;
@@ -394,12 +397,6 @@
         }
         ;
     }
-    @if $breakpoint==xvxs {
-        @media only screen and (max-width: 400px) {
-            @content;
-        }
-        ;
-    }
     @if $breakpoint==vxxs {
         @media only screen and (max-width: 375px) {
             @content;
@@ -407,7 +404,7 @@
         ;
     }
     @if $breakpoint==phone {
-        @media only screen and (max-width: 300px) {
+        @media only screen and (max-width: 320px) {
             @content;
         }
         ;

@@ -133,6 +133,7 @@ class AssetsManager
 
 		wp_localize_script( hexcoupon_prefix( 'main' ), 'hexCuponData', [
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
 			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
 			'translate_array' => [

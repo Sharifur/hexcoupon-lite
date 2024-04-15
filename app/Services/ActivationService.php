@@ -4,6 +4,7 @@ namespace HexCoupon\App\Services;
 
 use HexCoupon\App\Core\Helpers\QrCodeGeneratorHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
+use HexCoupon\App\Core\Helpers\StoreCreditHelpers;
 
 class ActivationService
 {
@@ -22,6 +23,15 @@ class ActivationService
 	{
 		add_action( 'init', [ __CLASS__, 'load_hexcoupon_textdomain' ], 1 );
 		QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( 0 );
+
+		StoreCreditHelpers::getInstance()->create_hex_store_credit_logs_table();
+		StoreCreditHelpers::getInstance()->create_hex_notification_table();
+		StoreCreditHelpers::getInstance()->create_hex_store_credit_table();
+
+		$store_credit_enable_settings = [
+			'enable' => true,
+		];
+		update_option( 'store_credit_enable_data', $store_credit_enable_settings );
 	}
 
 	public static function load_hexcoupon_textdomain()

@@ -14,7 +14,7 @@
         width: 0;
         height: 0;
         &:checked+.slider {
-            background-color: var(--main-color-one);
+            background-color: var(--hex-main-color-one);
             &:before {
                 -webkit-transform: translateX(20px);
                 -ms-transform: translateX(20px);
@@ -25,7 +25,7 @@
             }
         }
         &:focus+.slider {
-            box-shadow: 0 0 1px var(--main-color-one);
+            box-shadow: 0 0 1px var(--hex-main-color-one);
         }
     }
     .slider {

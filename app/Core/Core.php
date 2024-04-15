@@ -37,6 +37,8 @@ use HexCoupon\App\Core\WooCommerce\CouponShortcode;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Services\ActivationService;
 use HexCoupon\App\Services\DeactivationService;
+use HexCoupon\App\Controllers\Api\StoreCreditSettingsApiController;
+use HexCoupon\App\Core\WooCommerce\StoreCredit;
 use Kathamo\Framework\Lib\BootManager;
 
 final class Core extends BootManager
@@ -84,6 +86,8 @@ final class Core extends BootManager
 			GetAnyListedProductForAnyListedProduct::class,
 			GetSpecificProductAndCombinationOfProductForProductCategory::class,
 			GetAnyProductFromListForProductCategory::class,
+			StoreCredit::class,
+			StoreCreditSettingsApiController::class,
 		];
 	}
 }
