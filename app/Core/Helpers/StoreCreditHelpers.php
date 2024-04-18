@@ -230,10 +230,11 @@ class StoreCreditHelpers {
 		foreach ( $results as $result ) {
 			$user_info = get_userdata( $result['user_id'] );
 
-			$user_first_name = $user_info->first_name;
-			$user_last_name = $user_info->last_name;
-			$user_full_name = ( empty( $user_first_name ) && empty( $user_last_name ) ) ? $user_info->user_nicename : $user_first_name . ' ' . $user_last_name;
-			$user_email = $user_info->user_email;
+			$user_nicename = ! empty( $user_info->user_nicename ) ? $user_info->user_nicename : '';
+
+			$user_full_name = ( empty( $user_info->user_nicename ) || empty( $user_info->first_name ) ) ? $user_nicename : $user_info->first_name . ' ' . $user_info->last_name;
+			$user_email = ! empty( $user_info->user_email ) ? $user_info->user_email : 'test@test.com';
+
 			$order_id = $result['order_id'];
 
 			$order_edit_page_link = admin_url( 'post.php?post=' . $order_id . '&action=edit' );

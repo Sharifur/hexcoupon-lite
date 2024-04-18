@@ -139,7 +139,7 @@ const StoreCreditLogs = () => {
 						{isHovering && (
 							<div className="absolute inset-0 flex items-center justify-center bg-blur">
 								<div className="bg-purple-600 text-white p-4 rounded-md cursor-pointer">
-									Upgrade to Pro
+									<a href="https://hexcoupon.com/pricing/">Upgrade to Pro</a>
 								</div>
 							</div>
 						)}
@@ -166,7 +166,7 @@ const StoreCreditLogs = () => {
 								{isHovering && (
 									<tr>
 										<td colSpan="6" style={{ textAlign: 'center', padding: '10px' }}>
-											Upgrade to Pro
+											<a href="https://hexcoupon.com/pricing/" target="_blank">Upgrade to Pro</a>
 										</td>
 									</tr>
 								)}

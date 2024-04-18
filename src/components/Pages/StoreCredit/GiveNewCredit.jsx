@@ -66,35 +66,21 @@ const GiveNewCredit = () => {
 	}, [nonce]);
 
 	const sendStoreCreditInfo = () => {
-		axios
-			.post(getPostRequestUrl('store_credit_save'), {
-				nonce: getNonce(),
-				action: 'store_credit_save',
-				amount: storeCreditAmount,
-				adminId: adminInfo.admin_id,
-				adminName: adminInfo.admin_name,
-				note: note,
-				userIds: selectedUsers,
-			}, {
-				headers: {
-					"Content-Type": "multipart/form-data"
-				}
-			})
-			.then((response) => {
-				console.log(response)
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-
-		toast.success('New credit given and a confirmation email was sent to the customer!', {
-			position: 'top-center',
-			autoClose: 1000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: false,
-			draggable: true,
-		});
+		toast.success(
+			({ closeToast }) => (
+				<div>
+					Upgrade to <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b>Pro</b></a> to use this feature!
+				</div>
+			),
+			{
+				position: 'top-center',
+				autoClose: false,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: false,
+				draggable: true,
+			}
+		);
 	}
 
 	return (

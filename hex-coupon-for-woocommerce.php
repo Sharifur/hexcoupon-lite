@@ -430,17 +430,17 @@ function refunded_order_data_notice( $order )
 }
 
 // mailtrap email service configuration
-add_action( 'phpmailer_init', 'mailtrap_check' );
-
-function mailtrap_check( $phpmailer )
-{
-	$phpmailer->isSMTP();
-	$phpmailer->Host = 'sandbox.smtp.mailtrap.io';
-	$phpmailer->SMTPAuth = true;
-	$phpmailer->Port = 2525;
-	$phpmailer->Username = '06d811eada3301';
-	$phpmailer->Password = '149556ee9e6445';
-}
+//add_action( 'phpmailer_init', 'mailtrap_check' );
+//
+//function mailtrap_check( $phpmailer )
+//{
+//	$phpmailer->isSMTP();
+//	$phpmailer->Host = 'sandbox.smtp.mailtrap.io';
+//	$phpmailer->SMTPAuth = true;
+//	$phpmailer->Port = 2525;
+//	$phpmailer->Username = '06d811eada3301';
+//	$phpmailer->Password = '149556ee9e6445';
+//}
 
 add_action( 'woocommerce_blocks_loaded', 'store_credit_block_support' );
 
