@@ -4,6 +4,8 @@ namespace HexCoupon\App\Core;
 
 use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
+use HexCoupon\App\Controllers\ConvertCartPageToClassic;
+use HexCoupon\App\Controllers\RedirectUserToPluginDashboard;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\PaymentAndShippingTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponSharableUrlTabController;
@@ -23,7 +25,12 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForA
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyListedProductForAnyListedProduct;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductAndCombinationOfProductForProductCategory;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForProductCategory;
+use HexCoupon\App\Controllers\WooCommerce\StoreCredit\SaveStoreCreditOptionsValueControllers;
+use HexCoupon\App\Controllers\WooCommerce\StoreCredit\StoreCreditRefund;
+use HexCoupon\App\Core\Helpers\StoreCredit\UpdateOrderTotalOnCheckoutPage;
 use HexCoupon\App\Core\Lib\SingleTon;
+use HexCoupon\App\Core\WooCommerce\AddCustomLinksInAllPluginsPage;
+use HexCoupon\App\Core\WooCommerce\CheckoutBlock\StoreBlock;
 use HexCoupon\App\Core\WooCommerce\CouponCategory;
 use HexCoupon\App\Core\WooCommerce\CouponEmailSMS;
 use HexCoupon\App\Core\WooCommerce\CouponPaymentandShipping;
@@ -35,6 +42,9 @@ use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
 use HexCoupon\App\Core\WooCommerce\CouponShortcode;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
+use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditCheckbox;
+use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditDeductionRow;
+use HexCoupon\App\Core\WooCommerce\StoreCredit\StoreCreditRowInCheckoutOrderDetails;
 use HexCoupon\App\Services\ActivationService;
 use HexCoupon\App\Services\DeactivationService;
 use HexCoupon\App\Controllers\Api\StoreCreditSettingsApiController;
@@ -88,6 +98,16 @@ final class Core extends BootManager
 			GetAnyProductFromListForProductCategory::class,
 			StoreCredit::class,
 			StoreCreditSettingsApiController::class,
+			AddCustomLinksInAllPluginsPage::class,
+			RedirectUserToPluginDashboard::class,
+			ConvertCartPageToClassic::class,
+			StoreCreditRefund::class,
+			AddStoreCreditCheckbox::class,
+			StoreCreditRowInCheckoutOrderDetails::class,
+			AddStoreCreditDeductionRow::class,
+			UpdateOrderTotalOnCheckoutPage::class,
+			SaveStoreCreditOptionsValueControllers::class,
+			StoreBlock::class,
 		];
 	}
 }

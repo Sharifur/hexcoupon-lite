@@ -33,6 +33,14 @@ class StoreCredit
 		add_action( 'woocommerce_account_store-credit_endpoint', [$this, 'store_credit_page_endpoint_content'] );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method store_credit_in_my_account_page
+	 * @return mixed
+	 * @since 1.0.0
+	 * Show 'Store Credit' tab in the 'My Account' page
+	 */
 	public function store_credit_in_my_account_page( $all_menu_links )
 	{
 		$all_menu_links = array_slice( $all_menu_links, 0, 6, true )
@@ -42,11 +50,27 @@ class StoreCredit
 		return $all_menu_links;
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method store_credit_menu_page_endpoint
+	 * @return mixed
+	 * @since 1.0.0
+	 * Register 'store-credit' endpoint
+	 */
 	public function store_credit_menu_page_endpoint()
 	{
 		return add_rewrite_endpoint( 'store-credit', EP_PAGES );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method store_credit_page_endpoint_content
+	 * @return void
+	 * @since 1.0.0
+	 * Show content in the 'store-credit' endpoint
+	 */
 	public function store_credit_page_endpoint_content()
 	{
 		$store_credit_logs = StoreCreditPaymentHelpers::getInstance()->show_log_on_user_end();

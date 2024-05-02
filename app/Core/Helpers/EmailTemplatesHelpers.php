@@ -1,8 +1,7 @@
 <?php
+namespace HexCoupon\App\Core\Helpers;
 
-namespace HexCouponPro\App\Core\Helpers;
-
-use HexCouponPro\App\Core\Lib\SingleTon;
+use HexCoupon\App\Core\Lib\SingleTon;
 
 class EmailTemplatesHelpers {
 	use SingleTon;
