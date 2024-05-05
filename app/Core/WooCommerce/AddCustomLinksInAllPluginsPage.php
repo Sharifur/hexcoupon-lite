@@ -17,31 +17,29 @@ class AddCustomLinksInAllPluginsPage
 	 */
 	public function register()
 	{
-		add_filter( 'plugin_action_links', [ $this, 'hexcoupon_plugin_page_action_list' ], 10, 2 );
+		add_filter( 'plugin_row_meta', [ $this, 'hexcoupon_plugin_row_meta' ], 10, 2 );
 	}
 
 	/**
-	 * Add custom link besides deactivate text in the plugin page
+	 * Add custom link besides 'View Details' link in the all plugin page
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public function hexcoupon_plugin_page_action_list( $actions, $plugin_file )
+	public function hexcoupon_plugin_row_meta( $links, $file )
 	{
-		// Specify the directory and file name of the specific plugin
-		$specific_plugin_directory = 'hex-coupon-for-woocommerce';
-		$specific_plugin_file = 'hex-coupon-for-woocommerce.php';
-
 		$support_link = 'https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/';
 		$documentation_link = 'https://hexcoupon.com/docs/';
+		$upgrade = 'https://hexcoupon.com/pricing/';
 
-		// Check if the current plugin is the specific one
-		if ( strpos( $plugin_file, $specific_plugin_directory . '/' . $specific_plugin_file ) !== false ) {
-			// Add custom link(s) beside the "Deactivate" link
-			$actions[] = '<a href=" ' . esc_url( $support_link ) . ' " target="_blank">'. __( 'Support', 'hex-coupon-for-woocommerce' ) .'</a>';
-			$actions[] = '<a href=" ' . esc_url( $documentation_link ) . ' " target="_blank"><b>'. __( 'Documentation', 'hex-coupon-for-woocommerce' ) .'</b></a>';
+		if ( 'hex-coupon-for-woocommerce/hex-coupon-for-woocommerce.php' == $file ) {
+			$row_meta = [
+				'hexcoupon-support' => '<a rel="noopener" href="' . esc_url( $support_link ) . '" style="color: #23c507;font-weight: bold;" aria-label="' . esc_attr( esc_html__('Support', 'hex-coupon-for-woocommerce' ) ) . '" target="_blank">' . esc_html__( 'Support', 'hex-coupon-for-woocommerce' ) . '</a>',
+				'hexcoupon-documentation' => '<a rel="noopener" href="' . esc_url( $documentation_link ) . '" style="color: #23c507;font-weight: bold;" aria-label="' . esc_attr( esc_html__('Documentation', 'hex-coupon-for-woocommerce' ) ) . '" target="_blank">' . esc_html__( 'Documentation', 'hex-coupon-for-woocommerce' ) . '</a>',
+				'hexcoupon-upgrade' => '<a rel="noopener" href="' . esc_url( $upgrade ) . '" style="color: #984BF6;font-weight: bold;" aria-label="' . esc_attr( esc_html__('Upgrade to Pro', 'hex-coupon-for-woocommerce' ) ) . '" target="_blank">' . esc_html__( 'Upgrade to Pro', 'hex-coupon-for-woocommerce' ) . '</a>',
+			];
+
+			return array_merge($links, $row_meta);
 		}
-
-		return $actions;
+		return (array)$links;
 	}
-
 }

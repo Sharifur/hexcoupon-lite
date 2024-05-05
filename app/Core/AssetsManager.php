@@ -121,7 +121,7 @@ class AssetsManager
 		// Enqueuing script for store credit block
 		wp_enqueue_script(
 			hexcoupon_prefix( 'checkout-main' ),
-			hexcoupon_url( "/build/index.js" ),
+			hexcoupon_url( "build/index.js" ),
 			['jquery','wp-element'],
 			$this->version,
 			true
@@ -192,7 +192,7 @@ class AssetsManager
 		// enqueuing file for 'WooCommerce Checkout' page
 		wp_enqueue_script(
 			hexcoupon_prefix( 'checkout-block' ),
-			hexcoupon_url( "/build/index.js" ),
+			hexcoupon_url( "build/index.js" ),
 			['jquery','wp-element'],
 			$this->version,
 			true
@@ -201,7 +201,7 @@ class AssetsManager
 		// enqueuing file for 'WooCommerce Checkout' page
 		wp_enqueue_script(
 			hexcoupon_prefix( 'checkout-frontend' ),
-			hexcoupon_url( "/build/checkout-block-frontend.js" ),
+			hexcoupon_url( "build/checkout-block-frontend.js" ),
 			['jquery','wp-element'],
 			$this->version,
 			true

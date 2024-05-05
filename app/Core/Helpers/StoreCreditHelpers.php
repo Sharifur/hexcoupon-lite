@@ -37,7 +37,7 @@ class StoreCreditHelpers {
 			amount DOUBLE NOT NULL,
 			order_id BIGINT UNSIGNED NOT NULL,
 			type BIGINT UNSIGNED NOT NULL COMMENT '0=credit,1=debit',
-			created_at TIMESTAMP NOT NULL,
+			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			admin_id BIGINT UNSIGNED NULL,
 			admin_name LONGTEXT NULL,
 			note LONGTEXT NULL,

@@ -5,6 +5,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
 const { nonce, postUrl } = storeCreditData;
+// const nonce = window.storeCreditData?.nonce;
+// const postUrl = window.storeCreditData?.postUrl;
 
 function getPostRequestUrl(action) {
 	return `${postUrl}?action=${action}`;

@@ -30,6 +30,7 @@ class UpdateOrderTotalOnCheckoutPage {
 	public function update_order_total_based_on_checkbox()
 	{
 		$total_available_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
+		$total_available_store_credit = $total_available_store_credit ?? 0;
 		?>
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
