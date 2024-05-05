@@ -42,7 +42,7 @@ class AddStoreCreditDeductionRow extends BaseController
 			// Adding a new row in the checkout thank_you page
 			$new_row = [
 				'recurr_not' => [
-					'label' => esc_html__( 'Deducted Store Credit: ', 'hex-coupon-for-woocommerce-pro' ),
+					'label' => esc_html__( 'Deducted Store Credit: ', 'hex-coupon-for-woocommerce' ),
 					'value' => '-' . esc_html( $deducted_store_credit_amount )
 				]
 			];
@@ -58,7 +58,7 @@ class AddStoreCreditDeductionRow extends BaseController
 			// Define the new row data
 			$new_row = [
 				'recurr_not' => [
-					'label' => esc_html__( 'Deducted Store Credit:', 'hex-coupon-for-woocommerce-pro' ),
+					'label' => esc_html__( 'Deducted Store Credit:', 'hex-coupon-for-woocommerce' ),
 					'value' => esc_html( $deducted_store_credit )
 				]
 			];

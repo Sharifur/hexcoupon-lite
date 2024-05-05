@@ -65,46 +65,6 @@ class StoreCreditPaymentHelpers
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method error_message_for_low_store_credit
-	 * @return mixed
-	 * Showing error message for low store credit
-	 */
-	public function error_message_for_low_store_credit()
-	{
-		global $post;
-
-		// Getting the chosen payment method
-		$chosen_payment_method = isset( $_POST['payment_method'] ) ? sanitize_text_field( wp_unslash( $_POST['payment_method'] ) ) : '';
-
-		function is_checkout_block() {
-			return WC_Blocks_Utils::has_block_in_page( wc_get_page_id('checkout'), 'woocommerce/checkout' );
-		}
-
-
-		// Checking if the chosen payment method is store credit
-		if ( $chosen_payment_method === 'hex_store_credit' ) {
-			$available_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
-
-			// Getting the cart total amount
-			$cart_total = WC()->cart->total;
-
-			// Show the error message to the user if store credit amount is not sufficient to make the order.
-			if ( $available_store_credit < $cart_total ) {
-				$error_message = esc_html__( 'You do not have enough store credit to make this payment', 'hex-coupon-for-woocommerce' );
-				wc_add_notice( $error_message, 'error' );
-			} else {
-				if ( ! is_checkout_block() ) {
-					$amount_to_deduct = floatval( WC()->cart->total );
-					$this->deduct_store_credit( $amount_to_deduct );
-				}
-			}
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
 	 * @method deduct_store_credit
 	 * @return mixed
 	 * Deduct store credit after order payment

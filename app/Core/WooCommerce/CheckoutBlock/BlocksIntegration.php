@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 use Automattic\WooCommerce\Blocks\Integrations\IntegrationInterface;
 

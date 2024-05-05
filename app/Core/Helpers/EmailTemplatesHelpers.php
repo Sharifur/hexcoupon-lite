@@ -115,11 +115,11 @@ class EmailTemplatesHelpers {
 				<div class="header_img">
 					<img src="<?php echo esc_url( $email_header_img ); ?>" alt="">
 				</div>
-				<p style="margin-bottom: 10px;"><?php printf( esc_html__( 'Hello %s,', 'hex-coupon-for-woocommerce-pro' ), esc_html( $user_name ) ); ?></p>
-				<p><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce-pro' ), esc_html( $note ) ); ?></p>
+				<p style="margin-bottom: 10px;"><?php printf( esc_html__( 'Hello %s,', 'hex-coupon-for-woocommerce' ), esc_html( $user_name ) ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $note ) ); ?></p>
 				<p style="padding: 20px;"><?php esc_html_e( 'Thanks for shopping with ', 'hex-coupon-for-woocommerce' ); ?><b><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $site_title ) ); ?></b></p>
 				<p><?php esc_html_e( 'Best Regards,', 'hex-coupon-for-woocommerce' ); ?></p>
-				<p><b><?php printf( esc_html__( 'The %s Team', 'hex-coupon-for-woocommerc' ), esc_html( $site_title ) ); ?></b></p>
+				<p><b><?php printf( esc_html__( 'The %s Team', 'hex-coupon-for-woocommerce' ), esc_html( $site_title ) ); ?></b></p>
 			</div>
 
 			<?php else : ?>
@@ -134,7 +134,7 @@ class EmailTemplatesHelpers {
 						<p><b><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $amount ) ); ?></b><?php esc_html_e( ' Store Credit', 'hex-coupon-for-woocommerce' ) ?></p>
 						<p><span><?php esc_html_e( 'ID: ', 'hex-coupon-for-woocommerce' ); ?><b><?php printf( esc_html__( '%s . ', 'hex-coupon-for-woocommerce' ), esc_html( $order_id ) ); ?></b></span><span><?php esc_html_e( 'Issued: ', 'hex-coupon-for-woocommerce' ); ?><b><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $formatted_date ) ); ?></b></span></p>
 					</div>
-					<p class="hex_links"><a class="hex_link_one" href="<?php echo esc_url( $shop_page_url ); ?>"><?php esc_html_e( 'Shop Now', 'hex-coupon-for-woocommerc' ); ?></a><a class="hex_link_two" href="<?php echo esc_url( $store_credit_url ); ?>"><?php esc_html_e( 'View Balance', 'hex-coupon-for-woocommerce' ); ?></a></p>
+					<p class="hex_links"><a class="hex_link_one" href="<?php echo esc_url( $shop_page_url ); ?>"><?php esc_html_e( 'Shop Now', 'hex-coupon-for-woocommerce' ); ?></a><a class="hex_link_two" href="<?php echo esc_url( $store_credit_url ); ?>"><?php esc_html_e( 'View Balance', 'hex-coupon-for-woocommerce' ); ?></a></p>
 				</div>
 				<p style="padding-bottom: 20px;"><?php printf( esc_html__( 'You can use these credits for any future purchases on %s and you have the flexibility to choose what you want, whenever you want', 'hex-coupon-for-woocommerce' ), esc_html( $site_title ) ); ?></p>
 				<p style="padding-bottom: 20px;"><?php esc_html_e( 'Thanks for shopping with ', 'hex-coupon-for-woocommerce' ); ?><b><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $site_title ) ); ?></b></p>

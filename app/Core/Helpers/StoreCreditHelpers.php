@@ -359,9 +359,9 @@ class StoreCreditHelpers {
 		$user_lastname = $user_data->user_lastname;
 		$user_name = $user_firstname . ' ' . $user_lastname;
 
-		$note = "We're writting to let you know that a store credit refund has been processed against your recent return of order #" . $order_id . ". Please follow through the below details";
+		$note = esc_html__( "We're writting to let you know that a store credit refund has been processed against your recent return of order #", "hex-coupon-for-woocommerce" ) . $order_id . esc_html__( ". Please follow through the below details", "hex-coupon-for-woocommerce" );
 		$to = $user_email;
-		$subject = "Store credit confirmation information";
+		$subject = esc_html__( 'Store credit confirmation information', 'hex-coupon-for-woocommerce' );
 		$message = EmailTemplatesHelpers::getInstance()->templateMarkup( $note, $user_name, $site_title, $order_id, $amount, $formatted_date, $type );
 		$headers = "From: $admin_email\r\n";
 		$headers .= "Content-Type: text/html; charset=UTF-8\r\n"; // Set content type to HTML
@@ -419,7 +419,7 @@ class StoreCreditHelpers {
 			$user_name = $user_firstname . ' ' . $user_lastname;
 
 			$to = $user_email;
-			$subject = "Confirmation of gift credit from admin";
+			$subject = esc_html__( 'Confirmation of gift credit from admin', 'hex-coupon-for-woocommerce' );
 
 			$message = EmailTemplatesHelpers::getInstance()->templateMarkup( $note, $user_name, $site_title, $order_id, $amount, $date, $type );
 			$headers = "From: $admin_email\r\n";

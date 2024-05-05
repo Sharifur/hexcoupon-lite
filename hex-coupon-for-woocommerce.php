@@ -5,13 +5,13 @@
  * Plugin Name: HexCoupon: Ultimate WooCommerce Toolkit
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: WpHex
  * Requires at least: 5.4
- * Tested up to: 6.4.3
+ * Tested up to: 6.5.2
  * Requires PHP: 7.1
  * WC requires at least: 6.0
- * WC tested up to: 8.7.0
+ * WC tested up to: 8.8.3
  * Author URI: https://wphex.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -103,7 +103,7 @@ function store_credit_block_support()
 add_filter ( 'woocommerce_blocks_loaded', 'checkout_block_for_store_credit' );
 function checkout_block_for_store_credit()
 {
-	require_once 'app/Core/WooCommerce/CheckoutBlock/class-blocks-integration.php';
+	require_once 'app/Core/WooCommerce/CheckoutBlock/BlocksIntegration.php';
 
 	add_action(
 		'woocommerce_blocks_checkout_block_registration',

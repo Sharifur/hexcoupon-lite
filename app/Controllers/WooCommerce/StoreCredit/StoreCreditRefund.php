@@ -43,7 +43,7 @@ class StoreCreditRefund
 
 			$user_data = get_userdata( $user_id );
 			$user_email = $user_data->user_email;
-			$notification_message = 'You got store credit ' . wc_price( $amount ) . 'for the as refund';
+			$notification_message = esc_html__( 'You got store credit ', 'hex-coupon-for-woocommerce' ) . wc_price( $amount ) . esc_html__( 'as refund', 'hex-coupon-for-woocommerce' );
 			$status = 1;
 
 			// Get the admin ID who performed the refund
@@ -67,7 +67,7 @@ class StoreCreditRefund
 			$formatted_date = date_i18n( get_option( 'date_format' ), $status_change_date );
 
 			$status = 1;
-			$notification_message = 'You got store credit ' . wc_price( $amount ) . 'for the as refund';
+			$notification_message = esc_html__( 'You got store credit ', 'hex-coupon-for-woocommerce' ) . wc_price( $amount ) . esc_html__( 'as refund', 'hex-coupon-for-woocommerce' );
 
 			$user_data = get_userdata( $user_id );
 			$user_email = $user_data->user_email;

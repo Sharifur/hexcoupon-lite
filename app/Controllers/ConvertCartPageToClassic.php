@@ -22,7 +22,7 @@ class ConvertCartPageToClassic extends Controller
 	}
 
 	/**
-	 * Override the cart page with the old woocommerce classic pattern content
+	 * Override the cart page with the old woocommerce legacy pattern
 	 *
 	 * @return void
 	 */

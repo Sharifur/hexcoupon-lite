@@ -43,7 +43,7 @@ class StoreCreditRowInCheckoutOrderDetails {
 		}
 		?>
 		<tr class="store-credit">
-			<th><?php esc_html_e( 'Store Credit Used', 'hex-coupon-for-woocommerce-pro' ); ?></th>
+			<th><?php esc_html_e( 'Store Credit Used', 'hex-coupon-for-woocommerce' ); ?></th>
 			<td><?php echo '-' . esc_html( $deducted_credit ); ?></td>
 		</tr>
 

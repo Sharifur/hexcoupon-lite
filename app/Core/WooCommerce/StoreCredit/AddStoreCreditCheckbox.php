@@ -31,11 +31,11 @@ class AddStoreCreditCheckbox {
 	{
 		$show_total_remaining_amount = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
 
-		echo '<div class="store-credit-checkbox"><h3>' . esc_html__( 'Available Store Credit: ', 'hex-coupon-for-woocommerce-pro' ) . esc_html( number_format( $show_total_remaining_amount, 2 ) ) . '</h3>';
+		echo '<div class="store-credit-checkbox"><h3>' . esc_html__( 'Available Store Credit: ', 'hex-coupon-for-woocommerce' ) . esc_html( number_format( $show_total_remaining_amount, 2 ) ) . '</h3>';
 		woocommerce_form_field( 'store_credit_checkbox', [
 			'type' => 'checkbox',
 			'class' => array( 'input-checkbox' ),
-			'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce-pro' ),
+			'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce' ),
 			'required' => true,
 		], WC()->checkout->get_value( 'store_credit_checkbox' ) );
 		echo '</div>';
