@@ -31,7 +31,7 @@ class SaveStoreCreditOptionsValueControllers extends BaseController
 	 */
 	public function save_store_credit_checkbox_field( $order_id )
 	{
-		if ( isset( $_POST['store_credit_checkbox'] ) || isset( $_POST['use_store_credit'] ) ) {
+		if ( isset( $_POST['store_credit_checkbox'] ) && $_POST['store_credit_checkbox'] != 0 ) {
 			update_post_meta( $order_id, 'store_credit_checkbox', 'yes' );
 			$order = wc_get_order( $order_id );
 

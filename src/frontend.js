@@ -4,30 +4,28 @@ import { CheckboxControl } from '@wordpress/components';
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
-const { nonce, postUrl } = storeCreditData;
-// const nonce = window.storeCreditData?.nonce;
-// const postUrl = window.storeCreditData?.postUrl;
-
-function getPostRequestUrl(action) {
-	return `${postUrl}?action=${action}`;
-}
-
-function getNonce() {
-	return nonce;
-}
 
 // Global import
 const { registerCheckoutBlock } = wc.blocksCheckout;
 
 const Block = ({ children, checkoutExtensionData }) => {
+	const [postUrl, setPostUrl] = useState('');
+	const [storeCredit, setStoreCredit] = useState('0');
+
+	const nonce = window.storeCreditData?.nonce;
 	const remainingCredit = parseFloat(window.storeCreditData.total_remaining_store_credit);
 	const cartTotal = parseFloat(window.storeCreditData.cart_total);
-
 	const deductedTotal = parseFloat(remainingCredit) > parseFloat(cartTotal) ? cartTotal : remainingCredit;
 
-	const [storeCredit, setStoreCredit] = useState('');
 	const { setExtensionData } = checkoutExtensionData;
 	const myRef = useRef(null);
+
+	useEffect(() => {
+		// Set postUrl once window.storeCreditData.postUrl is available
+		if (window.storeCreditData && window.storeCreditData.postUrl) {
+			setPostUrl(window.storeCreditData.postUrl);
+		}
+	}, []);
 
 	// Function to handle checkbox change
 	useEffect(() => {
@@ -35,37 +33,52 @@ const Block = ({ children, checkoutExtensionData }) => {
 	}, [storeCredit, setExtensionData]);
 
 	const onInputChange = useCallback(
-		(value) => {
-			setStoreCredit(value);
-			setExtensionData('hex-coupon-for-woocommerce', 'use_store_credit', value);
+		(isChecked) => {
+			// Convert isChecked to '1' if true, '0' if false
+			const valueToSend = isChecked ? '1' : '0';
+			setStoreCredit(valueToSend);
+			setExtensionData('hex-coupon-for-woocommerce', 'use_store_credit', valueToSend);
+			// Call submitStoreCreditSettings with the checkbox value
+			submitStoreCreditSettings(storeCredit, valueToSend);
 		},
-		[setStoreCredit, setExtensionData]
-	)
+		[setStoreCredit, setExtensionData, storeCredit]
+	);
+
 
 	useEffect(() => {
 		// Ensure that submitStoreCreditSettings is called with the updated text content
 		if (myRef.current) {
-			submitStoreCreditSettings(myRef.current.textContent);
+			submitStoreCreditSettings(myRef.current.textContent, storeCredit);
 		}
 	}, [myRef.current, storeCredit]);
 
-	const submitStoreCreditSettings = (value) => {
-		axios
-			.post(getPostRequestUrl('store_credit_deduction_save'), {
-				nonce: getNonce(),
-				action: 'store_credit_deduction_save',
-				deductedStoreCredit: value,
-			}, {
-				headers: {
-					"Content-Type": "multipart/form-data"
-				}
-			})
+	const submitStoreCreditSettings = (deductedValue, enableValue) => {
+		axios.post(getPostRequestUrl('store_credit_deduction_and_enable_save'), {
+			nonce: getNonce(),
+			action: 'store_credit_deduction_and_enable_save',
+			deductedStoreCredit: deductedValue,
+			useStoreCredit: enableValue,
+		}, {
+			headers: {
+				"Content-Type": "multipart/form-data"
+			}
+		})
 			.then((response) => {
 				// Handle response if needed
 			})
 			.catch((error) => {
 				console.error('Error:', error);
 			});
+	};
+
+	// Function to get the request URL
+	function getPostRequestUrl(action) {
+		return `${postUrl}?action=${action}`;
+	}
+
+	// Function to get the nonce
+	function getNonce() {
+		return nonce;
 	}
 
 	return (
@@ -74,11 +87,11 @@ const Block = ({ children, checkoutExtensionData }) => {
 				<h5>{__("Available Store Credit: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)}</h5>
 				<CheckboxControl className="store_credit_chckbox" label={__("Use Store Credit", "hex-coupon-for-woocommerce")} onChange={onInputChange} name="use_store_credit" style={{marginRight:"5px"}}/>
 
-				{storeCredit && (
+				{storeCredit === '1' && (
 					<span style={{fontWeight:"bold"}}>
-					{storeCredit && __("Store Credit Used: -", "hex-coupon-for-woocommerce")}
+                        {storeCredit && __("Store Credit Used: -", "hex-coupon-for-woocommerce")}
 						<b ref={myRef}>{storeCredit && deductedTotal.toFixed(2)}</b>
-				</span>
+                    </span>
 				)}
 			</div>
 		</>
@@ -91,5 +104,3 @@ const options = {
 };
 
 registerCheckoutBlock(options);
-
-

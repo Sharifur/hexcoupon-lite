@@ -29,16 +29,20 @@ class AddStoreCreditCheckbox {
 	 */
 	public function add_store_credit_checkbox_in_checkout()
 	{
-		$show_total_remaining_amount = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
+		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
 
-		echo '<div class="store-credit-checkbox"><h3>' . esc_html__( 'Available Store Credit: ', 'hex-coupon-for-woocommerce' ) . esc_html( number_format( $show_total_remaining_amount, 2 ) ) . '</h3>';
-		woocommerce_form_field( 'store_credit_checkbox', [
-			'type' => 'checkbox',
-			'class' => array( 'input-checkbox' ),
-			'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce' ),
-			'required' => true,
-		], WC()->checkout->get_value( 'store_credit_checkbox' ) );
-		echo '</div>';
+		if ( $store_credit_enable_data['enable'] ) {
+			$show_total_remaining_amount = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
+
+			echo '<div class="store-credit-checkbox"><h3>' . esc_html__( 'Available Store Credit: ', 'hex-coupon-for-woocommerce' ) . esc_html( number_format( $show_total_remaining_amount, 2 ) ) . '</h3>';
+			woocommerce_form_field( 'store_credit_checkbox', [
+				'type' => 'checkbox',
+				'class' => array( 'input-checkbox' ),
+				'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce' ),
+				'required' => true,
+			], WC()->checkout->get_value( 'store_credit_checkbox' ) );
+			echo '</div>';
+		}
 	}
 
 }

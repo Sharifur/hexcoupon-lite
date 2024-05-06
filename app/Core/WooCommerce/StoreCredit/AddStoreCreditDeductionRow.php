@@ -33,12 +33,13 @@ class AddStoreCreditDeductionRow extends BaseController
 		$order_id = $myorder_obj->get_id();
 		$order = wc_get_order( $order_id );
 
-		$store_credit_checkbox_checked = get_post_meta( $order_id, 'store_credit_checkbox', true ) === 'yes';
+		$store_credit_checkbox_checked = get_post_meta( $order_id, 'use_store_credit', true );
+		$store_credit_checkbox = get_post_meta( $order_id, 'store_credit_checkbox', true );
 		$deducted_store_credit_amount = get_post_meta( $order_id, 'deducted_store_credit_amount', true );
 		$deducted_store_credit = get_post_meta( $order_id, 'deducted_store_credit', true );
 		$deducted_store_credit_amount = ! empty( $deducted_store_credit_amount ) ? number_format( $deducted_store_credit_amount, 2 ) : 0;
 
-		if ( $store_credit_checkbox_checked ) {
+		if ( $store_credit_checkbox_checked || $store_credit_checkbox === 'yes' ) {
 			// Adding a new row in the checkout thank_you page
 			$new_row = [
 				'recurr_not' => [

@@ -83,7 +83,13 @@ function display_bogo_discount_in_couopon_type_column( $discount_types ) {
 /**
  * Block Support for store credit
  */
-add_action( 'woocommerce_blocks_loaded', 'store_credit_block_support' );
+// enabling store credit block support based on whether it is enabled or not
+$store_credit_enable_data = get_option( 'store_credit_enable_data' );
+
+if ( $store_credit_enable_data['enable'] ) {
+	add_action( 'woocommerce_blocks_loaded', 'store_credit_block_support' );
+	add_filter ( 'woocommerce_blocks_loaded', 'checkout_block_for_store_credit' );
+}
 
 function store_credit_block_support()
 {
@@ -100,7 +106,6 @@ function store_credit_block_support()
 }
 
 // Store Credit block checkout
-add_filter ( 'woocommerce_blocks_loaded', 'checkout_block_for_store_credit' );
 function checkout_block_for_store_credit()
 {
 	require_once 'app/Core/WooCommerce/CheckoutBlock/BlocksIntegration.php';

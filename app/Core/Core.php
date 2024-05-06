@@ -25,6 +25,7 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForA
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyListedProductForAnyListedProduct;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductAndCombinationOfProductForProductCategory;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForProductCategory;
+use HexCoupon\App\Controllers\WooCommerce\StoreCredit\FlushRewriteForStoreCredit;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\SaveStoreCreditOptionsValueControllers;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\StoreCreditRefund;
 use HexCoupon\App\Core\Helpers\StoreCredit\UpdateOrderTotalOnCheckoutPage;
@@ -108,6 +109,7 @@ final class Core extends BootManager
 			UpdateOrderTotalOnCheckoutPage::class,
 			SaveStoreCreditOptionsValueControllers::class,
 			StoreBlock::class,
+			FlushRewriteForStoreCredit::class,
 		];
 	}
 }

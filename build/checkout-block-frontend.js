@@ -4244,19 +4244,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const {
-  nonce,
-  postUrl
-} = storeCreditData;
-// const nonce = window.storeCreditData?.nonce;
-// const postUrl = window.storeCreditData?.postUrl;
-
-function getPostRequestUrl(action) {
-  return `${postUrl}?action=${action}`;
-}
-function getNonce() {
-  return nonce;
-}
 
 // Global import
 const {
@@ -4266,34 +4253,47 @@ const Block = ({
   children,
   checkoutExtensionData
 }) => {
+  const [postUrl, setPostUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [storeCredit, setStoreCredit] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('0');
+  const nonce = window.storeCreditData?.nonce;
   const remainingCredit = parseFloat(window.storeCreditData.total_remaining_store_credit);
   const cartTotal = parseFloat(window.storeCreditData.cart_total);
   const deductedTotal = parseFloat(remainingCredit) > parseFloat(cartTotal) ? cartTotal : remainingCredit;
-  const [storeCredit, setStoreCredit] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const {
     setExtensionData
   } = checkoutExtensionData;
   const myRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    // Set postUrl once window.storeCreditData.postUrl is available
+    if (window.storeCreditData && window.storeCreditData.postUrl) {
+      setPostUrl(window.storeCreditData.postUrl);
+    }
+  }, []);
 
   // Function to handle checkbox change
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setExtensionData('hex-coupon-for-woocommerce', 'use_store_credit', storeCredit);
   }, [storeCredit, setExtensionData]);
-  const onInputChange = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(value => {
-    setStoreCredit(value);
-    setExtensionData('hex-coupon-for-woocommerce', 'use_store_credit', value);
-  }, [setStoreCredit, setExtensionData]);
+  const onInputChange = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(isChecked => {
+    // Convert isChecked to '1' if true, '0' if false
+    const valueToSend = isChecked ? '1' : '0';
+    setStoreCredit(valueToSend);
+    setExtensionData('hex-coupon-for-woocommerce', 'use_store_credit', valueToSend);
+    // Call submitStoreCreditSettings with the checkbox value
+    submitStoreCreditSettings(storeCredit, valueToSend);
+  }, [setStoreCredit, setExtensionData, storeCredit]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     // Ensure that submitStoreCreditSettings is called with the updated text content
     if (myRef.current) {
-      submitStoreCreditSettings(myRef.current.textContent);
+      submitStoreCreditSettings(myRef.current.textContent, storeCredit);
     }
   }, [myRef.current, storeCredit]);
-  const submitStoreCreditSettings = value => {
-    axios__WEBPACK_IMPORTED_MODULE_4__["default"].post(getPostRequestUrl('store_credit_deduction_save'), {
+  const submitStoreCreditSettings = (deductedValue, enableValue) => {
+    axios__WEBPACK_IMPORTED_MODULE_4__["default"].post(getPostRequestUrl('store_credit_deduction_and_enable_save'), {
       nonce: getNonce(),
-      action: 'store_credit_deduction_save',
-      deductedStoreCredit: value
+      action: 'store_credit_deduction_and_enable_save',
+      deductedStoreCredit: deductedValue,
+      useStoreCredit: enableValue
     }, {
       headers: {
         "Content-Type": "multipart/form-data"
@@ -4304,6 +4304,16 @@ const Block = ({
       console.error('Error:', error);
     });
   };
+
+  // Function to get the request URL
+  function getPostRequestUrl(action) {
+    return `${postUrl}?action=${action}`;
+  }
+
+  // Function to get the nonce
+  function getNonce() {
+    return nonce;
+  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wc-block-components"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Available Store Credit: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CheckboxControl, {
@@ -4314,7 +4324,7 @@ const Block = ({
     style: {
       marginRight: "5px"
     }
-  }), storeCredit && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }), storeCredit === '1' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     style: {
       fontWeight: "bold"
     }
