@@ -4,11 +4,8 @@ namespace HexCoupon\App\Controllers;
 
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Services\AddNewCouponMenuService;
-use HexCoupon\App\Services\AdminMenuService;
 use HexCoupon\App\Services\AllCouponsMeuService;
 use HexCoupon\App\Services\CouponCategoryMenuService;
-use Kathamo\Framework\Lib\Http\Request;
-use function Symfony\Component\VarDumper\Dumper\esc;
 
 class AdminMenuController extends BaseController
 {
@@ -18,7 +15,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method register
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Register all hooks for adding menus in the dashboard area.
 	 */
@@ -31,7 +28,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method show_hexcoupon_plugin_menu
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Checks whether 'Woocommerce' plugin is active or not and based on that the 'Hexcoupon' menu is then displayed.
 	 */
@@ -58,7 +55,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_hexcoupon_menu
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Add a menu named 'HexCoupon' in the admin dashboard area.
 	 */
@@ -79,7 +76,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_different_submenu
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Add a different first submenu for HexCoupon menu page.
 	 */
@@ -100,7 +97,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_all_coupons_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Add a sub-menu named 'Add All Coupons' in the admin dashboard area under the menu 'HexCoupon'.
 	 */
@@ -120,7 +117,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_addnew_coupon_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Add a sub-menu named 'Add New Coupon' in the admin dashboard area under the menu 'HexCoupon'.
 	 */
@@ -140,7 +137,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_coupon_category_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Add a sub-menu named 'Coupon Category' in the admin dashboard area under the menu 'HexCoupon'.
 	 */
@@ -160,7 +157,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method add_coupon_insights_submenu
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Adding Coupon Insights submenu page in the WooCommerce marketing menu page.
 	 */
@@ -185,7 +182,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method render_all_coupons_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Rednders the 'All Coupons' sub-menu page content.
 	 */
@@ -200,7 +197,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method render_addnew_coupon_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Rednders the 'Add New Coupon' sub-menu page content.
 	 */
@@ -215,7 +212,7 @@ class AdminMenuController extends BaseController
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method render_coupon_category_submenu
-	 * @return string
+	 * @return void
 	 * @since 1.0.0
 	 * Rednders the 'Coupon Category' sub-menu page content.
 	 */

@@ -4,7 +4,6 @@ namespace HexCoupon\App\Controllers;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\Helpers\StoreCreditHelpers;
 use Kathamo\Framework\Lib\Controller;
-use CodesVault\Howdyqb\DB;
 
 class AjaxApiController extends Controller
 {
@@ -637,10 +636,10 @@ class AjaxApiController extends Controller
 	 */
 	public function get_additional_data()
 	{
-// Get current date
+		// Get current date
 		$current_date = new \DateTime();
 
-// Initialize counts
+		// Initialize counts
 		$active_coupons_count = 0;
 		$expired_coupons_count = 0;
 		$redeemed_coupons_count = 0;
@@ -648,24 +647,24 @@ class AjaxApiController extends Controller
 		$bogo_coupon_count = 0;
 		$geographic_restriction_count = 0;
 
-// Get all coupons
+		// Get all coupons
 		$coupons = get_posts( [
 			'post_type' => 'shop_coupon',
 			'numberposts' => -1,
 		] );
 
-// Loop through each coupon
+		// Loop through each coupon
 		foreach ( $coupons as $coupon ) {
-// Create WC_Coupon object
+			// Create WC_Coupon object
 			$coupon_obj = new \WC_Coupon( $coupon->ID );
 
-// Get expiry date
+			// Get expiry date
 			$expiry_date = $coupon_obj->get_date_expires();
 
 			$redeemed_coupons_count += $coupon_obj->get_usage_count();
 
 
-// Compare expiry date with current date
+			// Compare expiry date with current date
 			if ( $expiry_date ) {
 				if ( $expiry_date < $current_date ) {
 					$expired_coupons_count++;
@@ -676,7 +675,7 @@ class AjaxApiController extends Controller
 				$active_coupons_count++; // Coupons without expiry dates are considered active
 			}
 
-// Check if the coupon is a sharable URL coupon
+			// Check if the coupon is a sharable URL coupon
 			$sharable_url_coupon_meta = get_post_meta( $coupon->ID, 'sharable_url_coupon', true );
 			if ( isset( $sharable_url_coupon_meta['apply_automatic_coupon_by_url'] ) && $sharable_url_coupon_meta['apply_automatic_coupon_by_url'] === 'yes' ) {
 				$sharable_url_coupons_count++;

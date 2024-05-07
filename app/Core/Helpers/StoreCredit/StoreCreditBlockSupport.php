@@ -5,7 +5,7 @@ namespace HexCoupon\App\Core\Helpers\StoreCredit;
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 use HexCoupon\App\Core\Helpers\StoreCreditPaymentHelpers;
 
-if (!defined('ABSPATH')) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 final class StoreCreditBlockSupport extends AbstractPaymentMethodType
 {
