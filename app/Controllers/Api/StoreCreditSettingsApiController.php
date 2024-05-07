@@ -40,6 +40,10 @@ class StoreCreditSettingsApiController extends Controller
 			$store_credit_enable_settings = [
 				'enable' => rest_sanitize_boolean( $dataArray['enable'] ),
 			];
+
+			// Apply filter hook to modify the data array for pro version
+			$store_credit_enable_settings = apply_filters( 'store_credit_settings_data', $store_credit_enable_settings, $dataArray );
+
 			update_option( 'store_credit_enable_data', $store_credit_enable_settings ); // saving the value in the option table
 
 			wp_send_json( $_POST );
