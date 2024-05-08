@@ -12,7 +12,8 @@ class StoreCreditHelpers {
 	/**
 	 * Constructor to initialize global $wpdb
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		global $wpdb;
 		$this->wpdb = $wpdb;
 
@@ -24,7 +25,7 @@ class StoreCreditHelpers {
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method create_hex_store_credit_logs_table
-	 * @return string
+	 * @return void
 	 * Creating table called 'hex_store_credit_logs_table'
 	 */
 	public function create_hex_store_credit_logs_table()
@@ -54,7 +55,7 @@ class StoreCreditHelpers {
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method create_hex_notification_table
-	 * @return string
+	 * @return void
 	 * Creating table called 'hex_notification_table'
 	 */
 	public function create_hex_notification_table()
@@ -78,7 +79,7 @@ class StoreCreditHelpers {
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method create_hex_store_credit_table
-	 * @return string
+	 * @return void
 	 * Creating table called 'hex_store_credit'
 	 */
 	public function create_hex_store_credit_table()
@@ -221,7 +222,8 @@ class StoreCreditHelpers {
 	 * @return array
 	 * Get refunded order for store credit logs
 	 */
-	public function get_all_refunded_order_data() {
+	public function get_all_refunded_order_data()
+	{
 		// Select all rows from the table
 		$results = $this->wpdb->get_results( "SELECT * FROM $this->table_name ORDER BY id DESC", ARRAY_A );
 
@@ -394,108 +396,6 @@ class StoreCreditHelpers {
 			$data,
 			$data_types,
 		);
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method send_confirmation_email_for_gift_credit
-	 * @return void
-	 * Send confirmation email for gift store credit and save the notification log in database
-	 */
-	public function send_confirmation_email_for_gift_credit( $userIds, $amount, $note, $order_id, $date )
-	{
-		$table_name = $this->wpdb->prefix . 'hex_notification';
-		$admin_email = get_bloginfo( 'admin_email' );
-		$site_title = get_bloginfo( 'name' );
-		$type = 0;
-
-		foreach( $userIds as $userId ) {
-			$user_data = get_userdata( $userId );
-			$user_email = $user_data->user_email;
-			$user_firstname = $user_data->first_name;
-			$user_lastname = $user_data->last_name;
-			$user_name = $user_firstname . ' ' . $user_lastname;
-
-			$to = $user_email;
-			$subject = esc_html__( 'Confirmation of gift credit from admin', 'hex-coupon-for-woocommerce' );
-
-			$message = EmailTemplatesHelpers::getInstance()->templateMarkup( $note, $user_name, $site_title, $order_id, $amount, $date, $type );
-			$headers = "From: $admin_email\r\n";
-			$headers .= "Content-Type: text/html; charset=UTF-8\r\n"; // Set content type to HTML
-
-			$send_mail = wp_mail( $to, $subject, $message, $headers );
-
-
-			if ( $send_mail ) {
-				$status = 1;
-			} else {
-				$status = 0;
-			}
-
-			// Data to be inserted
-			$data = [
-				'status' => $status,
-				'user_id' => $userId,
-			];
-
-			// Data types that to be inserted
-			$data_types = [
-				'status' => '%d',
-				'user_id' => '%d',
-			];
-
-			$this->wpdb->insert(
-				$table_name,
-				$data,
-				$data_types,
-			);
-
-		}
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method send_store_credit_info
-	 * @return void
-	 * Send store credit information to the 'hex_store_credit' table
-	 */
-	public function send_store_credit_info( $amount, $user_ids )
-	{
-		$table_name = $this->wpdb->prefix . 'hex_store_credit';
-
-		if ( ! empty( $user_ids ) ) {
-			foreach ( $user_ids as $user_id ) {
-				// Data to be inserted
-				$data = [
-					'amount' => $amount,
-					'user_id' => $user_id,
-				];
-
-				// Data types that to be inserted
-				$data_types = [
-					'amount' => '%f',
-					'user_id' => '%d',
-				];
-
-				$row_exists_for_credit_table = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT * FROM $table_name WHERE user_id = %d", $user_id ) );
-
-				if ( ! $row_exists_for_credit_table ) {
-					$this->wpdb->insert(
-						$table_name,
-						$data,
-						$data_types,
-					);
-				} else {
-					$this->wpdb->query(
-						$this->wpdb->prepare( "UPDATE $table_name SET amount = amount + %f, updated_at = CURRENT_TIMESTAMP() WHERE user_id = %d", $amount, $user_id )
-					);
-				}
-			}
-		}
 	}
 
 	/**

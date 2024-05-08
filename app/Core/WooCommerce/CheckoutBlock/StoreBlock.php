@@ -18,7 +18,8 @@ class StoreBlock {
 	 * @return void
 	 * Showing error message for low store credit
 	 */
-	public function register() {
+	public function register()
+	{
 		add_action( 'woocommerce_store_api_checkout_update_order_from_request', [ &$this, 'update_order_meta_for_store_credit' ], 10, 2 );
 		add_action( 'admin_post_store_credit_deduction_and_enable_save', [ $this, 'store_credit_deduction_and_enable_save' ] );
 	}
@@ -27,7 +28,7 @@ class StoreBlock {
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method store_credit_deduction_save
+	 * @method store_credit_deduction_and_enable_save
 	 * @return void
 	 * Getting store credit amount that is deducted from the main order total in checkout block
 	 */
@@ -40,7 +41,6 @@ class StoreBlock {
 
 			$deducted_store_credit = [
 				'deducted_store_credit' => $dataArray['deductedStoreCredit'],
-				'use_store_credit' => $dataArray['useStoreCredit'],
 			];
 
 			session_start();
@@ -64,9 +64,10 @@ class StoreBlock {
 	 */
 	public static function update_order_meta_for_store_credit( $order, $request )
 	{
-		$data = isset( $request['extensions']['hex-coupon-for-woocommerce'] ) ? $request['extensions']['hex-coupon-for-woocommerce'] : array();
+		$data = isset( $request['extensions']['hex-coupon-for-woocommerce'] ) ? $request['extensions']['hex-coupon-for-woocommerce'] : [];
 
 		$order->update_meta_data( 'use_store_credit', $data['use_store_credit'] );
+
 		if ( $data['use_store_credit'] == 1 ) {
 			session_start();
 			$deducted_store_credit_amount = isset( $_SESSION['deducted_store_credit_amount'] ) ? $_SESSION['deducted_store_credit_amount'] : '';

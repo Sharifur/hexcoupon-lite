@@ -14,6 +14,7 @@ class AllCouponsMeuService extends Service
 		$data = [
 			'redirect_link' => 'edit.php?post_type=shop_coupon',
 		];
+
 		return $data;
 	}
 }

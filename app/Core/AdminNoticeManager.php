@@ -118,7 +118,7 @@ class AdminNoticeManager
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method show_`install`action_notice_for_woocommerce
+	 * @method show_active_and_installation_notice_for_woocommerce
 	 * @since 1.0.0
 	 * Display the 'WooCommerce' installation notice after 'Hexcoupon' plugin activation.
 	 */
@@ -134,9 +134,7 @@ class AdminNoticeManager
 				'href' => [],
 			],
 			'p' => [],
-			'b' => [
-
-			]
+			'b' => []
 		];
 
 		if( ! array_key_exists( 'woocommerce/woocommerce.php', $all_plugins_list ) ) {

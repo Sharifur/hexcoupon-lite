@@ -27,6 +27,7 @@ class AssetsManager
 		if ( $this->configs['dev_mode'] ) {
 			return $this->version = time();
 		}
+
 		$this->version = $this->configs['plugin_version'];
 	}
 

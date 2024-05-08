@@ -11,6 +11,11 @@ class StoreCreditPaymentHelpers
 	private $table_name;
 
 	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method __construct
+	 * @return void
 	 * Constructor to initialize global $wpdb
 	 */
 	public function __construct()
@@ -71,13 +76,31 @@ class StoreCreditPaymentHelpers
 	 */
 	public function deduct_store_credit( $order_amount )
 	{
-		$table_name = $this->wpdb->prefix . 'hex_store_credit';
+		global $wpdb;
 
+		// Retrieve the table name
+		$table_name = $wpdb->prefix . 'hex_store_credit';
+
+		// Get the current user's ID
 		$user_id = get_current_user_id();
 
-		$amount_to_deduct = $order_amount;
+		// Retrieve the current amount from the database
+		$current_amount = $wpdb->get_var( $wpdb->prepare( "SELECT amount FROM $table_name WHERE user_id = %d", $user_id ) );
 
-		$this->wpdb->query( $this->wpdb->prepare( "UPDATE $table_name SET amount = amount - %f WHERE user_id = %d", $amount_to_deduct, $user_id ) );
+		// If the current amount exists
+		if ( $current_amount !== null ) {
+			// Calculate the new amount after deducting the order amount
+			$new_amount = $current_amount - $order_amount;
+
+			// Update the database with the new amount
+			$wpdb->update(
+				$table_name,
+				array( 'amount' => round( $new_amount, 2 ) ),
+				array( 'user_id' => $user_id ),
+				array( '%f' ),
+				array( '%d' )
+			);
+		}
 	}
 
 	/**
