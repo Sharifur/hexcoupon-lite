@@ -98,36 +98,39 @@ class AssetsManager
 			'all'
 		);
 
-		//load react js and css only on the hexcoupon plugin page
-		$screen = get_current_screen();
+		if ( ! IS_PRO_ACTIVE ) {
+			//load react js and css only on the hexcoupon plugin page
+			$screen = get_current_screen();
 
-		if ( $screen->base === "toplevel_page_hexcoupon-page" ){
+			if ( $screen->base === "toplevel_page_hexcoupon-page" ){
+				wp_enqueue_script(
+					hexcoupon_prefix( 'main' ),
+					hexcoupon_url( "dist/assets/index.js" ),
+					['jquery','wp-element'],
+					$this->version,
+					true
+				);
+
+				wp_enqueue_style(
+					hexcoupon_prefix( 'main' ),
+					hexcoupon_url( "dist/assets/index.css" ),
+					[],
+					$this->version,
+					"all"
+				);
+			}
+		}
+
+		if ( IS_PRO_ACTIVE ) {
+			// Enqueuing script for store credit block
 			wp_enqueue_script(
-				hexcoupon_prefix( 'main' ),
-				hexcoupon_url( "/dist/assets/index.js" ),
+				hexcoupon_prefix( 'checkout-main' ),
+				hexcoupon_url( "build/index.js" ),
 				['jquery','wp-element'],
 				$this->version,
 				true
 			);
-
-			wp_enqueue_style(
-				hexcoupon_prefix( 'main' ),
-				hexcoupon_url( "/dist/assets/index.css" ),
-				[],
-				$this->version,
-				"all"
-			);
 		}
-
-		// Enqueuing script for store credit block
-		wp_enqueue_script(
-			hexcoupon_prefix( 'checkout-main' ),
-			hexcoupon_url( "build/index.js" ),
-			['jquery','wp-element'],
-			$this->version,
-			true
-		);
-
 
 		$coupon_dashboard_label_text = [
 			'couponsCreatedLabel' => esc_html__( 'Coupons Created', 'hex-coupon-for-woocommerce' ),
@@ -190,23 +193,27 @@ class AssetsManager
 			'all'
 		);
 
-		// enqueuing file for 'WooCommerce Checkout' page
-		wp_enqueue_script(
-			hexcoupon_prefix( 'checkout-block' ),
-			hexcoupon_url( "build/index.js" ),
-			['jquery','wp-element'],
-			$this->version,
-			true
-		);
+		if ( ! IS_PRO_ACTIVE ) {
+			// enqueuing file for 'WooCommerce Checkout' page
+			wp_enqueue_script(
+				hexcoupon_prefix( 'checkout-block' ),
+				hexcoupon_url( "build/index.js" ),
+				['jquery','wp-element'],
+				$this->version,
+				true
+			);
+		}
 
-		// enqueuing file for 'WooCommerce Checkout' page
-		wp_enqueue_script(
-			hexcoupon_prefix( 'checkout-frontend' ),
-			hexcoupon_url( "build/checkout-block-frontend.js" ),
-			['jquery','wp-element'],
-			$this->version,
-			true
-		);
+		if ( ! IS_PRO_ACTIVE ) {
+			// enqueuing file for 'WooCommerce Checkout' page
+			wp_enqueue_script(
+				hexcoupon_prefix( 'checkout-frontend' ),
+				hexcoupon_url( "build/checkout-block-frontend.js" ),
+				['jquery','wp-element'],
+				$this->version,
+				true
+			);
+		}
 
 		$total_remaining_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
 

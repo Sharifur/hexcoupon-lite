@@ -5,6 +5,8 @@
 		// destructuring internationalization functions for making text translatable
 		const { __, _x, _n, _nx } = wp.i18n;
 
+		let isProActive = pro_data.is_pro_active;
+
 		/*
        ==================================================
            Restricting users from selecting the same item
@@ -439,13 +441,15 @@
 		$("#selectedValuesContainer").insertAfter(".all_selected_products .options_group");
 
 		// show premium feature text clicking on min max input field
-		$(document).on('click','.product-quantity-input', function (){
-			$('body').focusout().removeClass('show');
-			$(this).closest('.product-wrap').find('.product-wrap-pro').addClass('show');
-		});
-		$(document).on('focusout', '.product-quantity-input', function (){
-			$('.product-wrap-pro').removeClass('show');
-		});
+		if(! isProActive){
+			$(document).on('click','.product-quantity-input', function (){
+				$('body').focusout().removeClass('show');
+				$(this).closest('.product-wrap').find('.product-wrap-pro').addClass('show');
+			});
+			$(document).on('focusout', '.product-quantity-input', function (){
+				$('.product-wrap-pro').removeClass('show');
+			});
+		}
 
 		$(document).on("click",".remove_product", function (){
 			// get value from remove product element
