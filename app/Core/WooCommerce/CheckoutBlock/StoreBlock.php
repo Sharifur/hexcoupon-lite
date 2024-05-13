@@ -16,7 +16,6 @@ class StoreBlock {
 	 * @since 1.0.0
 	 * @method __construct
 	 * @return void
-	 * Showing error message for low store credit
 	 */
 	public function register()
 	{
@@ -64,7 +63,14 @@ class StoreBlock {
 	 */
 	public static function update_order_meta_for_store_credit( $order, $request )
 	{
-		$data = isset( $request['extensions']['hex-coupon-for-woocommerce'] ) ? $request['extensions']['hex-coupon-for-woocommerce'] : [];
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
+
+		if ( ! $is_pro_active ) {
+			$data = isset( $request['extensions']['hex-coupon-for-woocommerce'] ) ? $request['extensions']['hex-coupon-for-woocommerce'] : [];
+		} else {
+			$data = isset( $request['extensions']['hex-coupon-for-woocommerce-pro'] ) ? $request['extensions']['hex-coupon-for-woocommerce-pro'] : [];
+		}
+
 
 		$order->update_meta_data( 'use_store_credit', $data['use_store_credit'] );
 

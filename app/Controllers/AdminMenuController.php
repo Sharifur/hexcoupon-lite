@@ -85,7 +85,7 @@ class AdminMenuController extends BaseController
 		$menu_slug = 'hexcoupon-page';
 		add_submenu_page(
 			$menu_slug,
-			esc_html__( 'Dashboard', 'hex-coupon-for-woocommerce' ),
+			esc_html__( 'HexCoupon', 'hex-coupon-for-woocommerce' ),
 			esc_html__( 'Dashboard', 'hex-coupon-for-woocommerce' ),
 			'manage_options',
 			$menu_slug,

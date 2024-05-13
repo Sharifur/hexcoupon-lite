@@ -4316,7 +4316,7 @@ const Block = ({
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "wc-block-components"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Available Store Credit: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CheckboxControl, {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Available Store Credit Free: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.CheckboxControl, {
     className: "store_credit_chckbox",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Use Store Credit", "hex-coupon-for-woocommerce"),
     onChange: onInputChange,

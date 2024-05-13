@@ -154,7 +154,7 @@ class AjaxApiController extends Controller
 	 * @return array
 	 * Get all user data of current admin.
 	 */
-	private function current_user_data()
+	public function current_user_data()
 	{
 		$current_user_data = StoreCreditHelpers::getInstance()->get_current_user_data();
 

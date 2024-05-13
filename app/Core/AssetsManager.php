@@ -2,7 +2,6 @@
 
 namespace HexCoupon\App\Core;
 
-use HexCoupon\App\Controllers\AjaxApiController;
 use HexCoupon\App\Core\Helpers\StoreCreditPaymentHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 
@@ -12,9 +11,13 @@ class AssetsManager
 	private $version = '';
 	private $configs = [];
 
+	private $is_pro_active;
+
 	public function register()
 	{
 		$this->configs = hexcoupon_get_config();
+
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
 
 		$this->before_register_assets();
 
@@ -98,7 +101,7 @@ class AssetsManager
 			'all'
 		);
 
-		if ( ! IS_PRO_ACTIVE ) {
+		if ( ! $this->is_pro_active ) {
 			//load react js and css only on the hexcoupon plugin page
 			$screen = get_current_screen();
 
@@ -121,7 +124,7 @@ class AssetsManager
 			}
 		}
 
-		if ( IS_PRO_ACTIVE ) {
+		if ( ! $this->is_pro_active ) {
 			// Enqueuing script for store credit block
 			wp_enqueue_script(
 				hexcoupon_prefix( 'checkout-main' ),
@@ -193,7 +196,7 @@ class AssetsManager
 			'all'
 		);
 
-		if ( ! IS_PRO_ACTIVE ) {
+		if ( ! $this->is_pro_active ) {
 			// enqueuing file for 'WooCommerce Checkout' page
 			wp_enqueue_script(
 				hexcoupon_prefix( 'checkout-block' ),
@@ -204,7 +207,7 @@ class AssetsManager
 			);
 		}
 
-		if ( ! IS_PRO_ACTIVE ) {
+		if ( ! $this->is_pro_active ) {
 			// enqueuing file for 'WooCommerce Checkout' page
 			wp_enqueue_script(
 				hexcoupon_prefix( 'checkout-frontend' ),

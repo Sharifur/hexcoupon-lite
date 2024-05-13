@@ -82,8 +82,17 @@ class Blocks_Integration implements IntegrationInterface {
 	 */
 	public function register_block_frontend_scripts() {
 		$script_path       = '/build/checkout-block-frontend.js';
-		$script_url        = plugins_url( '/hex-coupon-for-woocommerce' . $script_path );
-		$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce/build/checkout-block-frontend.asset.php';
+		$script_pro_path       = '/build-pro/checkout-block-frontend.js';
+
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
+
+		if ( ! $is_pro_active ) {
+			$script_url        = plugins_url( '/hex-coupon-for-woocommerce' . $script_path );
+			$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce/build/checkout-block-frontend.asset.php';
+		} else {
+			$script_url        = plugins_url( '/hex-coupon-for-woocommerce-pro' . $script_pro_path );
+			$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce-pro/build-pro/checkout-block-frontend.asset.php';
+		}
 
 		$script_asset = file_exists( $script_asset_path )
 			? require $script_asset_path
