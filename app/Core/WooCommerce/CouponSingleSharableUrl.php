@@ -22,6 +22,8 @@ class CouponSingleSharableUrl {
 		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_sharable_url_coupon_tab_content' ] );
 		// Hook to generate qr code on clicking the publish button
 		add_action( 'save_post', [ $this, 'generate_qr_code_on_publish' ], 10, 3 );
+
+		add_action( 'load-post.php', [ $this, 'create_qr_code_on_page_edit' ] );
 	}
 
 	/**
@@ -50,6 +52,24 @@ class CouponSingleSharableUrl {
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
+	 * @method create_qr_code_on_page_edit
+	 * @return void
+	 * Creating QR code when
+	 */
+	public function create_qr_code_on_page_edit() {
+		$post_id = intval( $_GET['post'] );
+
+		$file_exists = file_exists( plugins_url( '/hex-coupon-for-woocommerce/assets/images/qr_code_' . $post_id ) );
+
+		if ( ! $file_exists ) {
+			QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( $post_id );
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
 	 * @method add_sharable_url_coupon_tab
 	 * @param array $tabs
 	 * @return array
@@ -62,6 +82,7 @@ class CouponSingleSharableUrl {
 			'target'   => 'sharable_url_coupon_tab',
 			'class'    => array( 'sharable_url_coupon' ),
 		);
+
 		return $tabs;
 	}
 
@@ -174,7 +195,6 @@ class CouponSingleSharableUrl {
 				'data_type' => 'url',
 			]
 		);
-
 
 		echo '<p class="form-field"><img src="' . plugin_dir_url( __FILE__ ) . '../../../assets/images/qr_code_' . $coupon_id . '.png' . '" width="120" height="120" alt="QR Code"> </p>';
 

@@ -51,13 +51,23 @@ class Blocks_Integration implements IntegrationInterface {
 	}
 
 	/**
-	 * Register scripts for delivery date block editor.
+	 * Register scripts block editor.
 	 *
 	 * @return void
 	 */
 	public function register_block_editor_scripts() {
-		$script_path       = '/build/index.js';
-		$script_url        = plugins_url( 'hex-coupon-for-woocommerce' . $script_path );
+		// Getting payment system data from pro version
+		$store_credit_payment_system_data = get_option( 'store_credit_payment_system_data' );
+
+		$script_path = '/build/index.js';
+		$script_path_pro = '/build-pro/index.js';
+
+		if ( ! empty( $store_credit_payment_system_data['storeCreditPayment'] ) && $store_credit_payment_system_data['storeCreditPayment'] === 'full_payment' ) {
+			$script_url = plugins_url( 'hex-coupon-for-woocommerce-pro' . $script_path_pro );
+		} else {
+			$script_url = plugins_url( 'hex-coupon-for-woocommerce' . $script_path );
+		}
+
 		$script_asset_path = plugins_url( 'hex-coupon-for-woocommerce/build/index.asset.php' );
 		$script_asset      = file_exists( $script_asset_path )
 			? require $script_asset_path
@@ -81,17 +91,18 @@ class Blocks_Integration implements IntegrationInterface {
 	 * @return void
 	 */
 	public function register_block_frontend_scripts() {
-		$script_path       = '/build/checkout-block-frontend.js';
-		$script_pro_path       = '/build-pro/checkout-block-frontend.js';
+		$script_path		= '/build/checkout-block-frontend.js';
+		$script_pro_path	= '/build-pro/checkout-block-frontend.js';
 
-		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
+		// Getting payment system data from pro version
+		$store_credit_payment_system_data = get_option( 'store_credit_payment_system_data' );
 
-		if ( ! $is_pro_active ) {
-			$script_url        = plugins_url( '/hex-coupon-for-woocommerce' . $script_path );
-			$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce/build/checkout-block-frontend.asset.php';
-		} else {
+		if ( ! empty( $store_credit_payment_system_data['storeCreditPayment'] ) && $store_credit_payment_system_data['storeCreditPayment'] === 'full_payment' ) {
 			$script_url        = plugins_url( '/hex-coupon-for-woocommerce-pro' . $script_pro_path );
 			$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce-pro/build-pro/checkout-block-frontend.asset.php';
+		} else {
+			$script_url        = plugins_url( '/hex-coupon-for-woocommerce' . $script_path );
+			$script_asset_path = WP_PLUGIN_DIR . '/hex-coupon-for-woocommerce/build/checkout-block-frontend.asset.php';
 		}
 
 		$script_asset = file_exists( $script_asset_path )

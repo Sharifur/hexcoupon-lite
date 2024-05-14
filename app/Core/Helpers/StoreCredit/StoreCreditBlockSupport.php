@@ -31,8 +31,7 @@ final class StoreCreditBlockSupport extends AbstractPaymentMethodType
 		if ( ! $this->is_pro_active ) {
 			wp_register_script(
 				'wc-store-credit-blocks-integration',
-				plugin_dir_url(__FILE__) . '../../../../build/index.js',
-
+				plugins_url(  '/hex-coupon-for-woocommerce/build/index.js' ),
 				[
 					'wc-blocks-registry',
 					'wc-settings',
@@ -45,8 +44,7 @@ final class StoreCreditBlockSupport extends AbstractPaymentMethodType
 		} else {
 			wp_register_script(
 				'wc-store-credit-blocks-integration',
-				plugins_url( '../../../../hex-coupon-for-woocommerce-pro/build-pro/index.js', dirname( __FILE__ ) ),
-
+				plugins_url(  '/hex-coupon-for-woocommerce-pro/build-pro/index.js' ),
 				[
 					'wc-blocks-registry',
 					'wc-settings',
