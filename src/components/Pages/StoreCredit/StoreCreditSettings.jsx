@@ -1,19 +1,20 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react";
 import Switch from "../../utils/switch/Switch";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {getNonce, getPostRequestUrl} from "../../../utils/helper";
-import {useI18n} from "@wordpress/react-i18n";
-import {Skeleton} from "../../Skeleton";
+import { getNonce, getPostRequestUrl } from "../../../utils/helper";
+import { useI18n } from "@wordpress/react-i18n";
+import { Skeleton } from "../../Skeleton";
+import { useNavigate } from "react-router-dom";
+import coinImg from "../../../img/coin.png";
 
 const StoreCreditSettings = () => {
 	const { __ } = useI18n();
-
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
-
 	const [switchState, setSwitchState] = useState(false);
+	const navigate = useNavigate();
 
 	const handleSwitchChange = (newSwitchState) => {
 		setSwitchState(newSwitchState);
@@ -25,13 +26,13 @@ const StoreCreditSettings = () => {
 				nonce: getNonce(),
 				action: 'store_credit_settings_save',
 				enable: switchState,
-
 			}, {
 				headers: {
 					"Content-Type": "multipart/form-data"
 				}
 			})
 			.then((response) => {
+				// handle response if needed
 			})
 			.catch((error) => {
 				console.error('Error:', error);
@@ -47,6 +48,11 @@ const StoreCreditSettings = () => {
 			closeOnClick: true,
 			pauseOnHover: false,
 			draggable: true,
+			onClose: () => {
+				if (switchState) {
+					navigate('/store-credit/settings');
+				}
+			}
 		});
 	};
 
@@ -71,28 +77,39 @@ const StoreCreditSettings = () => {
 	}, [nonce]);
 
 	return (
-		<>
-			<h2 className="store_credit_enable_title">{__("Store credit settings", "hex-coupon-for-woocommerce")}</h2>
+		<div className="store-credit-settings">
+			<h2 className="store_credit_enable_title">{__("Store Credit Settings", "hex-coupon-for-woocommerce")}</h2>
 			{isLoading ? (
 				<Skeleton height={500} radius={10} />
 			) : (
 				<>
-					<p>
-						<span className="store_credit_enable_text">{__("Enable Store credit on Refund", "hex-coupon-for-woocommerce")}</span>
-						<Switch isChecked={switchState} onSwitchChange={handleSwitchChange} />
-					</p>
+					<div className="store-credit-option">
+						<div className="store-credit-icon">
+							<img src={coinImg} alt="Point Loyalties Icon" />
+						</div>
+						<div className="store-credit-details">
+							<h3>{__("Store Credit", "hex-coupon-for-woocommerce")}</h3>
+							<p>{__("Enable on refund","hex-coupon-for-woocommerce")}</p>
+						</div>
+						<div className="store-credit-toggle">
+							<Switch isChecked={switchState} onSwitchChange={handleSwitchChange} />
+						</div>
+					</div>
 
-					<input
-						type="submit"
-						value="Save"
-						className="store_credit_enable_button py-2.5 pl-4 pr-4 bg-purple-600 text-white cursor-pointer mt-2.5"
-						onClick={handleButtonClick}
-					/>
+					<div className="save-button-container">
+						<input
+							type="submit"
+							value={__("Save","hex-coupon-for-woocommerce")}
+							className="save-button"
+							onClick={handleButtonClick}
+						/>
+					</div>
 					<ToastContainer />
 				</>
 			)}
-		</>
+		</div>
 	);
 }
 
 export default StoreCreditSettings;
+

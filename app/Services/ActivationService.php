@@ -2,6 +2,7 @@
 
 namespace HexCoupon\App\Services;
 
+use HexCoupon\App\Core\Helpers\LoyaltyProgram\CreateAllTables;
 use HexCoupon\App\Core\Helpers\QrCodeGeneratorHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\Helpers\StoreCreditHelpers;
@@ -27,6 +28,8 @@ class ActivationService
 		StoreCreditHelpers::getInstance()->create_hex_store_credit_logs_table();
 		StoreCreditHelpers::getInstance()->create_hex_notification_table();
 		StoreCreditHelpers::getInstance()->create_hex_store_credit_table();
+
+		CreateAllTables::getInstance()->create_points_transactions_table();
 
 		// enabling store credit on plugin activation
 		$store_credit_enable_settings = [

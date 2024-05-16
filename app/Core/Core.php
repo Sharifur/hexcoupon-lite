@@ -28,6 +28,8 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForPro
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\FlushRewriteForStoreCredit;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\SaveStoreCreditOptionsValueControllers;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\StoreCreditRefund;
+use HexCoupon\App\Core\Helpers\LoyaltyProgram\DisplayAllNotice;
+use HexCoupon\App\Core\Helpers\LoyaltyProgram\LoyaltyProgramHelpers;
 use HexCoupon\App\Core\Helpers\StoreCredit\UpdateOrderTotalOnCheckoutPage;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\WooCommerce\AddCustomLinksInAllPluginsPage;
@@ -42,6 +44,7 @@ use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
 use HexCoupon\App\Core\WooCommerce\CouponShortcode;
+use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\LoyaltyProgram;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditCheckbox;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditDeductionRow;
@@ -112,6 +115,9 @@ final class Core extends BootManager
 			SaveStoreCreditOptionsValueControllers::class,
 			StoreBlock::class,
 			FlushRewriteForStoreCredit::class,
+			DisplayAllNotice::class,
+			LoyaltyProgramHelpers::class,
+			LoyaltyProgram::class,
 		];
 	}
 }

@@ -84,7 +84,7 @@ const Block = ({ children, checkoutExtensionData }) => {
 	return (
 		<>
 			<div className="wc-block-components">
-				<h5>{__("Available Store Credit Free: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)}</h5>
+				<h5>{__("Available Store Credit: ", "hex-coupon-for-woocommerce") + remainingCredit.toFixed(2)}</h5>
 				<CheckboxControl className="store_credit_chckbox" label={__("Use Store Credit", "hex-coupon-for-woocommerce")} onChange={onInputChange} name="use_store_credit" style={{marginRight:"5px"}}/>
 
 				{storeCredit === '1' && (

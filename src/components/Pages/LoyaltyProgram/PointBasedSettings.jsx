@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import {Skeleton} from "../../Skeleton";
+import Tooltip from '@mui/material/Tooltip';
 
 const PointBasedLoyaltySettings = () => {
 	const { nonce, ajaxUrl } = loyaltyProgramData;
@@ -129,7 +130,10 @@ const PointBasedLoyaltySettings = () => {
 										/>
 									</label>
 									<label>
-										{__("Spending Amount", "hex-coupon-for-woocommerce")} <IconInfoCircle style={{ marginLeft: "5px" }} />
+										{__("Spending Amount", "hex-coupon-for-woocommerce")}
+										<Tooltip title={__("Amount to spend to earn points on every purchase", "hex-coupon-for-woocommerce")}>
+											<IconInfoCircle style={{ marginLeft: "5px" }} />
+										</Tooltip>
 										<input
 											type="number"
 											value={settings.pointsOnPurchase.spendingAmount}

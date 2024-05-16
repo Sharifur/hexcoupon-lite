@@ -46,6 +46,10 @@
 			display: flex;
 			align-items: center;
 
+			.loyalty-settings-icon {
+				color: var(--hex-main-color-one);
+			}
+
 			.toggle-checkbox {
 				display: none;
 			}

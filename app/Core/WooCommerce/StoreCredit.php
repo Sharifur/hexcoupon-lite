@@ -27,12 +27,12 @@ class StoreCredit
 		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
 
 		if ( $store_credit_enable_data['enable'] ) {
-			// Action hook for adding 'All Coupons' and 'Store Credit' menu page in the 'My Account' Page Menu
+			// Action hook for adding 'Store Credit' menu page in the 'My Account' Page Menu
 			add_filter ( 'woocommerce_account_menu_items', [ $this, 'store_credit_in_my_account_page' ], 40 );
 			// Action hook for registering permalink endpoint
 			add_action( 'init', [ $this, 'store_credit_menu_page_endpoint' ] );
-			// Action hook for displaying 'All Coupons' page content
-			add_action( 'woocommerce_account_store-credit_endpoint', [$this, 'store_credit_page_endpoint_content'] );
+			// Action hook for displaying 'Store Credit' page content
+			add_action( 'woocommerce_account_store-credit_endpoint', [ $this, 'store_credit_page_endpoint_content' ] );
 		}
 	}
 

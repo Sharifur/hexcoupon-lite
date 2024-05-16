@@ -94,12 +94,12 @@ const LoyaltyProgramSettings = () => {
 							<img src={coinImg} alt="Point Loyalties Icon" />
 						</div>
 						<div className="loyalty-details">
-							<h3>Point Loyalties</h3>
-							<p>Customize point loyalties settings</p>
+							<h3>{__("Point Loyalties","hex-coupon-for-woocommerce")}</h3>
+							<p>{__("Customize point loyalties settings","hex-coupon-for-woocommerce")}</p>
 						</div>
 						<div className="loyalty-toggle">
 							<Switch isChecked={switchState} onSwitchChange={handleSwitchChange} />
-							<IconSettings
+							<IconSettings className="loyalty-settings-icon"
 								style={{ display: "inline-block", marginLeft: "5px", cursor: "pointer" }}
 								onClick={handleSettingsClick}
 							/>
@@ -109,7 +109,7 @@ const LoyaltyProgramSettings = () => {
 					<div className="save-button-container">
 						<input
 							type="submit"
-							value="Save"
+							value={__("Save","hex-coupon-for-woocommerce")}
 							className="save-button"
 							onClick={handleButtonClick}
 						/>
