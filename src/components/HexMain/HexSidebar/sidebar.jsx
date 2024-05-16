@@ -57,6 +57,7 @@ const Sidebar = () => {
 								<span className='hexpDashboard__list__item__link__left'><IconHome />{__("Dashboard", "hex-coupon-for-woocommerce")}</span>
 							</Link>
 						</li>
+
 						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
 							<span className={`hexpDashboard__list__item__link`}>
 								<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Store Credit", "hex-coupon-for-wocommerce")}</span>
@@ -76,6 +77,25 @@ const Sidebar = () => {
 								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
 									<Link to="/store-credit/give-new-credit" onClick={() => handleLinkClick('/store-credit/give-new-credit')} className={`hexpDashboard__list__item__link ${activeLink === '/store-credit/give-new-credit' ? 'active' : ''}`}>
 										<span className="hexpDashboard__list__item__link__left">{__("Give New Credit", "hex-coupon-for-woocommerce")}</span>
+									</Link>
+								</li>
+							</ul>
+						</li>
+
+						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
+							<span className={`hexpDashboard__list__item__link`}>
+								<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Loyalty Program", "hex-coupon-for-wocommerce")}</span>
+								<span className="arrowIcon"><TbChevronDown /></span>
+							</span>
+							<ul className="hexpDashboard__list submenu">
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<Link to="/loyalty-program/loyalty-program-settings" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-settings')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-settings' ? 'active' : ''}`}>
+										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Settings", "hex-coupon-for-woocommerce")}</span>
+									</Link>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<Link to="/loyalty-program/loyalty-program-logs" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-logs')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-logs' ? 'active' : ''}`}>
+										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Logs", "hex-coupon-for-woocommerce")}</span>
 									</Link>
 								</li>
 							</ul>

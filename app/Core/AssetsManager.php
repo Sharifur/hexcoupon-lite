@@ -101,8 +101,8 @@ class AssetsManager
 			'all'
 		);
 
-		if ( ! $this->is_pro_active ) {
-			//load react js and css only on the hexcoupon plugin page
+		//load react js and css only on the hexcoupon plugin page
+		if ( $this->is_pro_active ) {
 			$screen = get_current_screen();
 
 			if ( $screen->base === "toplevel_page_hexcoupon-page" ){
@@ -124,8 +124,8 @@ class AssetsManager
 			}
 		}
 
+		// Enqueuing script for store credit block
 		if ( ! $this->is_pro_active ) {
-			// Enqueuing script for store credit block
 			wp_enqueue_script(
 				hexcoupon_prefix( 'checkout-main' ),
 				hexcoupon_url( "build/index.js" ),
@@ -169,6 +169,14 @@ class AssetsManager
 				'yesterdayLabel' => $coupon_dashboard_label_text['yesterdayLabel'],
 				'todayLabel' => $coupon_dashboard_label_text['todayLabel'],
 			]
+		] );
+
+		wp_localize_script( hexcoupon_prefix( 'main' ), 'loyaltyProgramData', [
+			'check' => 'hello',
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 		] );
 
 		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );

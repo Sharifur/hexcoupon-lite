@@ -57,7 +57,7 @@ class CouponSingleSharableUrl {
 	 * Creating QR code when
 	 */
 	public function create_qr_code_on_page_edit() {
-		$post_id = intval( $_GET['post'] );
+		$post_id = ! empty( $_GET['post'] ) && intval( $_GET['post'] );
 
 		$file_exists = file_exists( plugins_url( '/hex-coupon-for-woocommerce/assets/images/qr_code_' . $post_id ) );
 

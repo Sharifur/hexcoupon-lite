@@ -49,6 +49,7 @@ use HexCoupon\App\Core\WooCommerce\StoreCredit\StoreCreditRowInCheckoutOrderDeta
 use HexCoupon\App\Services\ActivationService;
 use HexCoupon\App\Services\DeactivationService;
 use HexCoupon\App\Controllers\Api\StoreCreditSettingsApiController;
+use HexCoupon\App\Controllers\Api\LoyaltyProgramSettingsApiController;
 use HexCoupon\App\Core\WooCommerce\StoreCredit;
 use Kathamo\Framework\Lib\BootManager;
 
@@ -99,6 +100,7 @@ final class Core extends BootManager
 			GetAnyProductFromListForProductCategory::class,
 			StoreCredit::class,
 			StoreCreditSettingsApiController::class,
+			LoyaltyProgramSettingsApiController::class,
 			AddCustomLinksInAllPluginsPage::class,
 			RedirectUserToPluginDashboard::class,
 			ConvertCartPageToClassic::class,

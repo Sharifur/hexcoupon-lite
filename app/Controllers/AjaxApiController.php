@@ -19,6 +19,8 @@ class AjaxApiController extends Controller
 	public function register()
 	{
 		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
+		add_action( 'wp_ajax_loyalty_program_enable_data', [ $this, 'loyalty_program_enable_data' ] );
+		add_action( 'wp_ajax_point_loyalty_program_data', [ $this, 'point_loyalty_program_data' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
 		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'today_yesterday_coupon_created'] );
@@ -28,6 +30,56 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_weekly_coupon_creation_data', [ $this, 'weekly_coupon_creation_data'] );
 		add_action( 'wp_ajax_weekly_coupon_active_expired_data', [ $this, 'weekly_coupon_active_expired_data'] );
 		add_action( 'wp_ajax_weeklyCouponRedeemedData', [ $this, 'weeklyCouponRedeemedData'] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method loyalty_program_enable_data
+	 * @return void
+	 * Getting loyalty program enable data
+	 */
+	public function loyalty_program_enable_data()
+	{
+		$loyalty_program_enable_settings = $this->loyalty_program_enable_settings();
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => 'hello',
+				'type' => 'success',
+				'loyaltyProgramEnable' => array_map( 'esc_html', $loyalty_program_enable_settings ),
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
+	}
+
+	public function point_loyalty_program_data()
+	{
+		$point_loyalty_program_settings = $this->point_loyalty_program_settings();
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => 'hello',
+				'type' => 'success',
+				'pointLoyaltyProgramData' => $point_loyalty_program_settings,
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
 	}
 
 	/**
@@ -144,6 +196,30 @@ class AjaxApiController extends Controller
 		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
 
 		return $store_credit_enable_data;
+	}
+
+	public function loyalty_program_enable_settings()
+	{
+		$loyalty_program_enable_data = get_option( 'loyalty_program_enable_settings' );
+
+		return $loyalty_program_enable_data;
+	}
+
+	public function point_loyalty_program_settings()
+	{
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
+		$points_for_signup = get_option( 'pointsForSignup' );
+		$points_for_referral = get_option( 'pointsForReferral' );
+		$conversion_rate = get_option( 'conversionRate' );
+
+		$point_loyalty_program_settings = [
+			'pointsOnPurchase' => $points_on_purchase,
+			'pointsForSignup' => $points_for_signup,
+			'pointsForReferral' => $points_for_referral,
+			'conversionRate' => $conversion_rate,
+		];
+
+		return $point_loyalty_program_settings;
 	}
 
 	/**

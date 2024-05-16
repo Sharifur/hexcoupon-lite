@@ -7,6 +7,9 @@ import StoreCreditSettings from "./components/Pages/StoreCredit/StoreCreditSetti
 import StoreCreditLogs from "./components/Pages/StoreCredit/StoreCreditLogs";
 import StoreCreditUserLogs from "./components/Pages/StoreCredit/StoreCreditUserLogs";
 import GiveNewCredit from "./components/Pages/StoreCredit/GiveNewCredit";
+import LoyaltyProgramSettings from "./components/pages/LoyaltyProgram/LoyaltyProgramSettings";
+import LoyaltyProgramLogs from "./components/Pages/LoyaltyProgram/LoyaltyProgramLogs";
+import PointBasedLoyaltySettings from "./components/Pages/LoyaltyProgram/PointBasedSettings";
 
 function App() {
 	return (
@@ -22,6 +25,9 @@ function App() {
 								<Route element={<StoreCreditLogs />} path="/store-credit/store-credit-logs" />
 								<Route element={<StoreCreditUserLogs />} path="/store-credit-user-logs/:userId" />
 								<Route element={<GiveNewCredit />} path="/store-credit/give-new-credit" />
+								<Route element={<LoyaltyProgramSettings />} path="/loyalty-program/loyalty-program-settings" />
+								<Route element={<LoyaltyProgramLogs />} path="/loyalty-program/loyalty-program-logs" />
+								<Route element={<PointBasedLoyaltySettings />} path="/loyalty-program/point-based-loyalty-settings" />
 							</Routes>
 						</MainContainer>
 					</div>

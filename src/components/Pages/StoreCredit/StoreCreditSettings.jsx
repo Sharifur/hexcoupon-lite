@@ -13,7 +13,7 @@ const StoreCreditSettings = () => {
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 
-	const [switchState, setSwitchState] = useState(false)
+	const [switchState, setSwitchState] = useState(false);
 
 	const handleSwitchChange = (newSwitchState) => {
 		setSwitchState(newSwitchState);
@@ -72,7 +72,7 @@ const StoreCreditSettings = () => {
 
 	return (
 		<>
-			<h2 className="store_credit_enable_title">{__("Store credit settings", "woocommerce")}</h2>
+			<h2 className="store_credit_enable_title">{__("Store credit settings", "hex-coupon-for-woocommerce")}</h2>
 			{isLoading ? (
 				<Skeleton height={500} radius={10} />
 			) : (

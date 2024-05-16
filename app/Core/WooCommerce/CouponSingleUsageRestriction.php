@@ -18,7 +18,11 @@ class CouponSingleUsageRestriction {
 	 */
 	public function register()
 	{
-		add_action( 'woocommerce_coupon_options_usage_restriction', [ $this, 'coupon_usage_restriction_meta_fields' ], 10, 1 );
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE;
+
+		if ( ! $is_pro_active ) {
+			add_action( 'woocommerce_coupon_options_usage_restriction', [ $this, 'coupon_usage_restriction_meta_fields' ], 10, 1 );
+		}
 	}
 
 	/**
@@ -198,13 +202,6 @@ class CouponSingleUsageRestriction {
 						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hex-coupon-for-woocommerce' ); ?></span>
 						<div class="product-wrap-inner">
 							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hex-coupon-for-woocommerce' ); ?></p>
-							<input class="product-quantity-input" placeholder='quantity' type='number' readonly>
-						</div>
-					</div>
-					<div class="product_max product-wrap">
-						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hex-coupon-for-woocommerce' ); ?></span>
-						<div class="product-wrap-inner">
-							<p class="product-wrap-para"><?php echo esc_html__( 'max quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input" placeholder='Quantity' type='number' readonly>
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product'></a>

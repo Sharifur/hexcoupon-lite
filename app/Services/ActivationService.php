@@ -28,10 +28,17 @@ class ActivationService
 		StoreCreditHelpers::getInstance()->create_hex_notification_table();
 		StoreCreditHelpers::getInstance()->create_hex_store_credit_table();
 
+		// enabling store credit on plugin activation
 		$store_credit_enable_settings = [
 			'enable' => true,
 		];
 		update_option( 'store_credit_enable_data', $store_credit_enable_settings );
+
+		// enabling loyalty program on plugin activation
+		$loyalty_program_enable_settings = [
+			'enable' => true,
+		];
+		update_option( 'loyalty_program_enable_settings', $loyalty_program_enable_settings );
 	}
 
 	public static function load_hexcoupon_textdomain()
