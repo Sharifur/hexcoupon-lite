@@ -113,6 +113,11 @@
 						}
 					}
 					&.has-children {
+						.hexpDashboard__list__item__link {
+							&:focus {
+								box-shadow: none;
+							}
+						}
 						&.active {
 							>.hexpDashboard__list__item__link {
 								background: var(--hex-lite-main-color);
