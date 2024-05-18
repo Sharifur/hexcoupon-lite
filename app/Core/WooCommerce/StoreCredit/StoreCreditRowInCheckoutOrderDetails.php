@@ -32,6 +32,7 @@ class StoreCreditRowInCheckoutOrderDetails {
 		global $woocommerce;
 		$total = $woocommerce->cart->total;
 		$total_available_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
+		$total_available_store_credit = $total_available_store_credit ?? 0.0;
 
 		$deducted_credit = 0;
 

@@ -26,5 +26,24 @@
 				}
 			});
 		});
+
+		// copy referral link after clicking the copy button
+		$('.copy-referral-link').on('click',function(){
+			// Get the input field
+			var referralLink = $('#referral-link');
+
+			// Select the input field text
+			referralLink.select();
+			referralLink[0].setSelectionRange(0, 99999); // For mobile devices
+
+			// Copy the text inside the input field
+			navigator.clipboard.writeText(referralLink.val()).then(function() {
+				// Alert the copied text
+				alert('Referral link copied to clipboard!');
+			}, function(err) {
+				// If something goes wrong
+				alert('Failed to copy the referral link: ' + err);
+			});
+		});
 	});
 })(jQuery);

@@ -81,9 +81,24 @@ class LoyaltyProgram
 		// If no entry exists, default the current points to 0
 		$current_points = $current_points !== null ? intval( $current_points ) : 0;
 
-		echo '<p>' . sprintf( esc_html__( 'You have %d reward points.', 'text-domain' ), $current_points ) . '</p>';
+		// Creating referral link for each user
+		if ( is_user_logged_in() ) {
+			$user_id = get_current_user_id();
+			$site_url = get_site_url();
+			$referral_link = $site_url . "?ref=" . $user_id;
+		}
 		?>
-		vai go vai
+		<div class="referral-top-bar">
+			<div class="current-points"><?php printf( esc_html__( 'Current Points %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?></div>
+			<div class="points-log-link"><a href="/log"><?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?></a></div>
+		</div>
+		<div class="referral-container">
+			<h2><?php esc_html_e( 'Referral Link', 'hex-coupon-for-woocommerce' ); ?></h2>
+			<div class="referral-box">
+				<input type="text" id="referral-link" value="<?php echo esc_url( $referral_link ); ?>" readonly>
+				<button class="copy-referral-link"><?php esc_html_e( 'Copy', 'hex-coupon-for-woocommerce' ); ?></button>
+			</div>
+		</div>
 		<?php
 	}
 }

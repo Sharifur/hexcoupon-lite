@@ -138,6 +138,7 @@ const PointBasedLoyaltySettings = () => {
 											type="number"
 											value={settings.pointsOnPurchase.spendingAmount}
 											onChange={handleInputChange("pointsOnPurchase", "spendingAmount")}
+											placeholder="$"
 										/>
 									</label>
 								</div>

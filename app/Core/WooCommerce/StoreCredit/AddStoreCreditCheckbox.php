@@ -45,6 +45,7 @@ class AddStoreCreditCheckbox {
 
 			if ( $store_credit_enable_data['enable'] && $store_credit_payment_system_data['storeCreditPayment'] === 'partial_payment' ) {
 				$show_total_remaining_amount = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
+				$show_total_remaining_amount = $show_total_remaining_amount ?? 0.0;
 
 				echo '<div class="store-credit-checkbox"><h3>' . esc_html__( 'Available Store Credit: ', 'hex-coupon-for-woocommerce' ) . esc_html( number_format( $show_total_remaining_amount, 2 ) ) . '</h3>';
 				woocommerce_form_field( 'store_credit_checkbox', [

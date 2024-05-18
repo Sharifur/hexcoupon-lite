@@ -25,10 +25,12 @@ class ActivationService
 		add_action( 'init', [ __CLASS__, 'load_hexcoupon_textdomain' ], 1 );
 		QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( 0 );
 
+		// Creating all necessary tables for store credit
 		StoreCreditHelpers::getInstance()->create_hex_store_credit_logs_table();
 		StoreCreditHelpers::getInstance()->create_hex_notification_table();
 		StoreCreditHelpers::getInstance()->create_hex_store_credit_table();
 
+		// Creating all necessary tables for loyalty program
 		CreateAllTables::getInstance()->create_points_transactions_table();
 
 		// enabling store credit on plugin activation
