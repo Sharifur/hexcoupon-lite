@@ -23,9 +23,7 @@ class LoyaltyProgramHelpers
 		add_action( 'user_register', [ $this, 'give_points_on_signup' ] );
 		add_action( 'init', [ $this, 'start_session' ] );
 		add_action( 'template_redirect', [ $this, 'handle_referral' ] );
-
 		add_action( 'user_register', [ $this, 'update_referrer_points' ] );
-
 		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_purchase' ] );
 	}
 

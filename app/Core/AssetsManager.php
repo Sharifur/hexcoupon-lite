@@ -23,6 +23,9 @@ class AssetsManager
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
+
+		add_action('wp_ajax_get_points_multiplier', [ $this, 'get_points_multiplier' ] );
 	}
 
 	private function before_register_assets()
@@ -181,6 +184,47 @@ class AssetsManager
 
 		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
+
+	public function block_scripts()
+	{
+		if ( is_checkout() ) {
+			wp_enqueue_script(
+				'checkout-block-notices',
+				plugins_url('hex-coupon-for-woocommerce/assets/dev/admin/js/checkout-block-notices.js' ),
+				[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+				plugins_url('hex-coupon-for-woocommerce/assets/dev/admin/js/checkout-block-notices.js' ),
+				true
+			);
+
+			wp_localize_script( 'checkout-block-notices', 'custom_ajax_object', [
+				'ajax_url' => admin_url( 'admin-ajax.php '),
+				'nonce' => wp_create_nonce( 'custom_nonce' )
+			] );
+
+//			wp_localize_script( hexcoupon_prefix( 'main' ), 'loyaltyProgramData', [
+//				'check' => 'hello',
+//				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+//				'postUrl' => admin_url( 'admin-post.php' ),
+//				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+//				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+//			] );
+		}
+	}
+	public function get_points_multiplier() {
+		check_ajax_referer('custom_nonce', 'security');
+
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
+		$spending_amount = ! empty( $points_on_purchase['spendingAmount'] ) ? $points_on_purchase['spendingAmount']: 0;
+		$point_amount = ! empty( $points_on_purchase['pointAmount'] ) ? $points_on_purchase['pointAmount']: 0;
+
+		$all_points = [
+			'spendingAmount' => $spending_amount,
+			'pointAmount' => $point_amount,
+		];
+
+		wp_send_json_success($all_points);
+	}
+
 
 	public function public_scripts()
 	{

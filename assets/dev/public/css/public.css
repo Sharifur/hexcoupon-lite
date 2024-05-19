@@ -119,3 +119,19 @@
 	border-radius: 4px;
 	cursor: pointer;
 }
+
+/* Notice for checkout block */
+.custom-checkout-notice-wrapper {
+	padding: 15px;
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-bottom: 20px;
+	font-size: 16px;
+	color: #1e293b;
+}
+
+.custom-checkout-notice-wrapper .components-notice {
+	color: #1e293b;
+	font-weight: bold;
+}
