@@ -11,11 +11,11 @@ wp.domReady(() => {
 			const fetchMultiplier = async () => {
 				try {
 					const response = await jQuery.ajax({
-						url: custom_ajax_object.ajax_url,
+						url: pointsForCheckoutBlock.ajax_url,
 						method: 'POST',
 						data: {
-							action: 'get_points_multiplier',
-							security: custom_ajax_object.nonce
+							action: 'show_loyalty_points_in_checkout',
+							security: pointsForCheckoutBlock.nonce
 						}
 					});
 
@@ -29,37 +29,81 @@ wp.domReady(() => {
 			};
 
 			const calculatePoints = () => {
-				const totalElement = document.querySelector('.wc-block-components-totals-item__value');
+				const totalElement = document.querySelector('.wc-block-components-totals-footer-item-tax-value');
 				if (totalElement && divider && multiplier) {
 					const totalPrice = parseFloat(totalElement.innerText.replace(/[^\d.-]/g, ''));
 					const calculatedPoints = Math.round((totalPrice / divider) * multiplier);
 					setPoints(calculatedPoints);
+				} else {
+					setPoints(0);
 				}
 			};
 
-			const checkAndCalculatePoints = () => {
-				const totalElement = document.querySelector('.wc-block-components-totals-item__value');
+			const observeTotalElement = () => {
+				const totalElement = document.querySelector('.wc-block-components-totals-footer-item-tax-value');
 				if (totalElement) {
-					calculatePoints();
-					// Observe for changes to the total price element
 					const observer = new MutationObserver(calculatePoints);
-					const config = { childList: true, subtree: true };
+					const config = { childList: true, subtree: true, characterData: true };
+
 					observer.observe(totalElement, config);
 
 					return () => {
-						if (totalElement) {
-							observer.disconnect();
-						}
+						observer.disconnect();
 					};
 				} else {
 					// Retry after a short delay if the element is not found
-					setTimeout(checkAndCalculatePoints, 500);
+					setTimeout(observeTotalElement, 500);
+				}
+			};
+
+			const handlePlaceOrderClick = (event) => {
+				const latestPoints = points; // Capture the latest points value
+				savePoints(pointsForCheckoutBlock.user_id, latestPoints);
+			};
+
+			const attachPlaceOrderListener = () => {
+				const placeOrderButton = document.querySelector('.wc-block-components-checkout-place-order-button');
+				if (placeOrderButton) {
+					placeOrderButton.addEventListener('click', handlePlaceOrderClick);
+				} else {
+					// Retry after a short delay if the button is not found
+					setTimeout(attachPlaceOrderListener, 500);
 				}
 			};
 
 			fetchMultiplier();
-			checkAndCalculatePoints();
-		}, [divider, multiplier]);
+			// Initial calculation on page load
+			calculatePoints();
+			const disconnectObserver = observeTotalElement();
+			attachPlaceOrderListener();
+
+			return () => {
+				if (disconnectObserver) {
+					disconnectObserver();
+				}
+			};
+		}, [divider, multiplier, points]);
+
+		const savePoints = async (userId, points) => {
+			try {
+				const response = await jQuery.ajax({
+					url: pointsForCheckoutBlock.ajax_url,
+					method: 'POST',
+					data: {
+						action: 'save_loyalty_points',
+						security: pointsForCheckoutBlock.nonce,
+						user_id: userId,
+						points: points
+					}
+				});
+
+				if (!response.success) {
+					console.error('Failed to save points:', response.data);
+				}
+			} catch (error) {
+				console.error('Error saving points:', error);
+			}
+		};
 
 		return createElement(
 			Notice,

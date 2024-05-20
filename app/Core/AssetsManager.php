@@ -13,6 +13,14 @@ class AssetsManager
 
 	private $is_pro_active;
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method register
+	 * @return void
+	 * Registering all the hooks that are needed
+	 */
 	public function register()
 	{
 		$this->configs = hexcoupon_get_config();
@@ -24,10 +32,16 @@ class AssetsManager
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
-
-		add_action('wp_ajax_get_points_multiplier', [ $this, 'get_points_multiplier' ] );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method before_register_assets
+	 * @return void
+	 *
+	 */
 	private function before_register_assets()
 	{
 		if ( $this->configs['dev_mode'] ) {
@@ -37,6 +51,14 @@ class AssetsManager
 		$this->version = $this->configs['plugin_version'];
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method admin_scripts
+	 * @return void
+	 * Enqueuing all the scripts for back-end
+	 */
 	public function admin_scripts()
 	{
 		$folder_prefix = hexcoupon_get_config('dev_mode') ? '/dev' : '/dist';
@@ -185,6 +207,14 @@ class AssetsManager
 		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method block_scripts
+	 * @return void
+	 * Enqueuing all the scripts for block front-end
+	 */
 	public function block_scripts()
 	{
 		if ( is_checkout() ) {
@@ -196,36 +226,23 @@ class AssetsManager
 				true
 			);
 
-			wp_localize_script( 'checkout-block-notices', 'custom_ajax_object', [
+			$user_id = get_current_user_id();
+			wp_localize_script( 'checkout-block-notices', 'pointsForCheckoutBlock', [
 				'ajax_url' => admin_url( 'admin-ajax.php '),
-				'nonce' => wp_create_nonce( 'custom_nonce' )
+				'nonce' => wp_create_nonce( 'custom_nonce' ),
+				'user_id' => $user_id,
 			] );
-
-//			wp_localize_script( hexcoupon_prefix( 'main' ), 'loyaltyProgramData', [
-//				'check' => 'hello',
-//				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-//				'postUrl' => admin_url( 'admin-post.php' ),
-//				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
-//				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
-//			] );
 		}
 	}
-	public function get_points_multiplier() {
-		check_ajax_referer('custom_nonce', 'security');
 
-		$points_on_purchase = get_option( 'pointsOnPurchase' );
-		$spending_amount = ! empty( $points_on_purchase['spendingAmount'] ) ? $points_on_purchase['spendingAmount']: 0;
-		$point_amount = ! empty( $points_on_purchase['pointAmount'] ) ? $points_on_purchase['pointAmount']: 0;
-
-		$all_points = [
-			'spendingAmount' => $spending_amount,
-			'pointAmount' => $point_amount,
-		];
-
-		wp_send_json_success($all_points);
-	}
-
-
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method public_scripts
+	 * @return void
+	 * Enqueuing all the scripts for front-end
+	 */
 	public function public_scripts()
 	{
 		$folder_prefix = hexcoupon_get_config( 'dev_mode' ) ? '/dev' : '/dist';

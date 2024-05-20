@@ -135,3 +135,27 @@
 	color: #1e293b;
 	font-weight: bold;
 }
+
+
+/*Store Credit*/
+.store-credit-logs-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.store-credit-balance {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333;
+}
+
+.store-credit-logs-table {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#store_credit_filter {
+	padding: 2px;
+	max-height: 50px;
+	font-size: 16px;
+}

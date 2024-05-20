@@ -247,4 +247,55 @@ class LoyaltyProgramHelpers
 		}
 
 	}
+
+
+	public function give_points_after_order_purchase_in_block( $user_id, $points )
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+
+		// Get the total points for the user, defaulting to 0 if no entry exists
+		$current_points = $wpdb->get_var( $wpdb->prepare(
+			"SELECT points FROM $table_name WHERE user_id = %d",
+			$user_id
+		) );
+
+		// If no entry exists, default the current points to 0
+		$current_points = $current_points !== null ? intval( $current_points ) : 0;
+
+		// Calculate the new points balance
+		$new_points_balance = $current_points + $points;
+
+		// Prepare the data for insertion or update
+		$data = [
+			'user_id' => $user_id,
+			'points'  => $new_points_balance,
+		];
+
+		// Check if the user ID already exists in the table
+		$existing_entry = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $table_name WHERE user_id = %d",
+			$user_id
+		) );
+
+		// If the user ID doesn't exist, insert a new row
+		if ( ! $existing_entry ) {
+			// Insert the user's points balance into the database
+			$wpdb->insert(
+				$table_name,
+				$data,
+				['%d', '%d']
+			);
+		} else {
+			// Update the user's points balance in the database
+			$wpdb->update(
+				$table_name,
+				['points' => $new_points_balance],
+				['user_id' => $user_id],
+				['%d'],
+				['%d']
+			);
+		}
+
+	}
 }

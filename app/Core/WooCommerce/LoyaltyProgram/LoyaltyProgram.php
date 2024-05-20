@@ -22,9 +22,10 @@ class LoyaltyProgram
 		// Action hook for adding 'Loyalty Points' menu page in the 'My Account' Page Menu
 		add_filter ( 'woocommerce_account_menu_items', [ $this, 'loyalty_points_in_my_account_page' ], 40 );
 		// Action hook for registering permalink endpoint
-		add_action( 'init', [ $this, 'loyalty_points_menu_page_endpoint' ] );
+		add_action( 'init', [ $this, 'register_endpoints' ] );
 		// Action hook for displaying 'Loyalty Points' page content
 		add_action( 'woocommerce_account_loyalty-points_endpoint', [ $this, 'loyalty_points_page_endpoint_content' ] );
+		add_action( 'woocommerce_account_loyalty-points-logs_endpoint', [ $this, 'loyalty_points_logs_page_endpoint_content' ] );
 	}
 
 	/**
@@ -48,13 +49,14 @@ class LoyaltyProgram
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method store_credit_menu_page_endpoint
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Register 'loyalty-points' endpoint
 	 */
-	public function loyalty_points_menu_page_endpoint()
+	public function register_endpoints()
 	{
-		return add_rewrite_endpoint( 'loyalty-points', EP_PAGES );
+		add_rewrite_endpoint( 'loyalty-points', EP_PAGES );
+		add_rewrite_endpoint( 'loyalty-points-logs', EP_PAGES );
 	}
 
 	/**
@@ -87,10 +89,11 @@ class LoyaltyProgram
 			$site_url = get_site_url();
 			$referral_link = $site_url . "?ref=" . $user_id;
 		}
+		$logs_page_url = get_site_url() . '/my-account/loyalty-points-logs'
 		?>
 		<div class="referral-top-bar">
 			<div class="current-points"><?php printf( esc_html__( 'Current Points %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?></div>
-			<div class="points-log-link"><a href="/log"><?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?></a></div>
+			<div class="points-log-link"><a href="<?php echo esc_url( $logs_page_url ); ?>"><?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?></a></div>
 		</div>
 		<div class="referral-container">
 			<h2><?php esc_html_e( 'Referral Link', 'hex-coupon-for-woocommerce' ); ?></h2>
@@ -99,6 +102,21 @@ class LoyaltyProgram
 				<button class="copy-referral-link"><?php esc_html_e( 'Copy', 'hex-coupon-for-woocommerce' ); ?></button>
 			</div>
 		</div>
+		<?php
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method loyalty_points_logs_page_endpoint_content
+	 * @return void
+	 * @since 1.0.0
+	 * Show content in the 'loyalty points logs' endpoint
+	 */
+	public function loyalty_points_logs_page_endpoint_content()
+	{
+		?>
+		<h1>Loyalty page logs</h1>
 		<?php
 	}
 }

@@ -7,7 +7,7 @@ import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { useI18n } from "@wordpress/react-i18n";
 import { Skeleton } from "../../Skeleton";
 import { useNavigate } from "react-router-dom";
-import coinImg from "../../../img/coin.png";
+import coinImg from "../../../img/loyalty-icon.png";
 
 const StoreCreditSettings = () => {
 	const { __ } = useI18n();

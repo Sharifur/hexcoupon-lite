@@ -21,6 +21,7 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
 		add_action( 'wp_ajax_loyalty_program_enable_data', [ $this, 'loyalty_program_enable_data' ] );
 		add_action( 'wp_ajax_point_loyalty_program_data', [ $this, 'point_loyalty_program_data' ] );
+		add_action( 'wp_ajax_show_loyalty_points_in_checkout', [ $this, 'show_loyalty_points_in_checkout' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
 		add_action( 'wp_ajax_full_coupon_creation_data', [ $this, 'today_yesterday_coupon_created'] );
@@ -30,6 +31,30 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_weekly_coupon_creation_data', [ $this, 'weekly_coupon_creation_data'] );
 		add_action( 'wp_ajax_weekly_coupon_active_expired_data', [ $this, 'weekly_coupon_active_expired_data'] );
 		add_action( 'wp_ajax_weeklyCouponRedeemedData', [ $this, 'weeklyCouponRedeemedData'] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method show_loyalty_points_in_checkout
+	 * @return void
+	 * Sending data of loyalty points in WooCommerce checkout block page
+	 */
+	public function show_loyalty_points_in_checkout()
+	{
+		check_ajax_referer('custom_nonce', 'security');
+
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
+		$spending_amount = ! empty( $points_on_purchase['spendingAmount'] ) ? $points_on_purchase['spendingAmount']: 0;
+		$point_amount = ! empty( $points_on_purchase['pointAmount'] ) ? $points_on_purchase['pointAmount']: 0;
+
+		$all_points = [
+			'spendingAmount' => $spending_amount,
+			'pointAmount' => $point_amount,
+		];
+
+		wp_send_json_success( $all_points );
 	}
 
 	/**

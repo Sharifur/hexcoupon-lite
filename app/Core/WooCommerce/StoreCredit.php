@@ -79,25 +79,19 @@ class StoreCredit
 		$store_credit_logs = StoreCreditPaymentHelpers::getInstance()->show_log_on_user_end();
 		$remaining_logs = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
 		?>
-		<header class="woocommerce-Address-title title">
-			<h3><?php echo esc_html__( 'Store Credit', 'hex-coupon-for-woocommerce' ); ?></h3>
-
-			<div class="container" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-				<p style="border: 1px solid black; display: inline-block; padding: 10px; "><?php esc_html_e( 'Remaining Balance:', 'hex-coupon-for-woocommerce' ); ?> <?php echo wc_price( $remaining_logs ); ?> </p>
-
-				<div>
-					<span><?php esc_html_e( 'Filter:', 'hex-coupon-for-woocommerce' ); ?> </span>
-					<select id="store_credit_filter" style="padding: 2px; max-height: 50px; font-size: 16px;">
-						<option value="all"><?php esc_html_e( 'All', 'hex-coupon-for-woocommerce' ); ?></option>
-						<option value="in"><?php esc_html_e( 'In', 'hex-coupon-for-woocommerce' ); ?></option>
-						<option value="out"><?php esc_html_e( 'Out' ); ?></option>
-					</select>
-				</div>
+		<div class="store-credit-logs-container">
+			<p class="store-credit-balance"><?php esc_html_e( 'Remaining Balance:', 'hex-coupon-for-woocommerce' ); ?> <?php echo wc_price( $remaining_logs ); ?> </p>
+			<div>
+				<span><?php esc_html_e( 'Filter:', 'hex-coupon-for-woocommerce' ); ?></span>
+				<select id="store_credit_filter">
+					<option value="all"><?php esc_html_e( 'All', 'hex-coupon-for-woocommerce' ); ?></option>
+					<option value="in"><?php esc_html_e( 'In', 'hex-coupon-for-woocommerce' ); ?></option>
+					<option value="out"><?php esc_html_e( 'Out' ); ?></option>
+				</select>
 			</div>
+		</div>
 
-		</header>
-
-		<table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table" id="data-table">
+		<table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table store-credit-logs-table" id="data-table">
 			<thead>
 			<tr>
 				<th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-number">
