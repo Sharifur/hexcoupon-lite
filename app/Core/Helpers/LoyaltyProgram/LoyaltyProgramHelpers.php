@@ -13,12 +13,16 @@ class LoyaltyProgramHelpers
 
 	private $points_on_purchase;
 
+	private $conversion_rate;
+
 	/**
 	 * Registering hooks that are needed
 	 */
 	public function register()
 	{
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
+
+		$this->conversion_rate = get_option( 'conversionRate' );
 
 		add_action( 'user_register', [ $this, 'give_points_on_signup' ] );
 		add_action( 'init', [ $this, 'start_session' ] );
@@ -185,10 +189,12 @@ class LoyaltyProgramHelpers
 	 * @since 1.0.0
 	 * @method give_points_after_order_purchase
 	 * @return void
-	 * Give points to the user on product purchase
+	 * Give points to the user on product successful checkout in legacy checkout page
 	 */
 	public function give_points_after_order_purchase( $order_id )
 	{
+		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
 
@@ -248,7 +254,14 @@ class LoyaltyProgramHelpers
 
 	}
 
-
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method give_points_after_order_purchase_in_block
+	 * @return void
+	 * Giving points after successful checkout in block checkout page
+	 */
 	public function give_points_after_order_purchase_in_block( $user_id, $points )
 	{
 		global $wpdb;
@@ -296,6 +309,6 @@ class LoyaltyProgramHelpers
 				['%d']
 			);
 		}
-
 	}
+
 }

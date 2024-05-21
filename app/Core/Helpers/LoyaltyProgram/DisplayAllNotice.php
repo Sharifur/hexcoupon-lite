@@ -14,19 +14,33 @@ class DisplayAllNotice
 
 	private $points_on_purchase;
 
+	private $enable_point_loyalties;
+
 	/**
 	 * Registering hooks that are needed
 	 */
 	public function register()
 	{
 		$this->points_for_signup = get_option( 'pointsForSignup' );
+		$points_for_signup_enable = $this->points_for_signup['enable'] ?? '';
 
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
+		$points_on_purchase_enable = $this->points_on_purchase['enable'] ?? '';
 
-		add_action( 'woocommerce_register_form_start', [ $this, 'display_signup_points_notice' ] );
+		$this->enable_point_loyalties = get_option( 'loyalty_program_enable_settings' );
 
-		// Add points notice to the checkout page
-		add_action( 'woocommerce_before_checkout_form', [ $this, 'show_points_notice_on_checkout' ] );
+		$this->enable_point_loyalties = $this->enable_point_loyalties['enable'] ?? '';
+
+		if ( $this->enable_point_loyalties ) {
+			if ( $points_for_signup_enable ) {
+				// Showing points notice in my account page
+				add_action( 'woocommerce_register_form_start', [ $this, 'display_signup_points_notice' ] );
+			}
+			if ( $points_on_purchase_enable ) {
+				// Showing points notice to the checkout page
+				add_action( 'woocommerce_before_checkout_form', [ $this, 'show_points_notice_on_checkout' ] );
+			}
+		}
 	}
 
 	/**

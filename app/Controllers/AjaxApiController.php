@@ -43,9 +43,8 @@ class AjaxApiController extends Controller
 	 */
 	public function show_loyalty_points_in_checkout()
 	{
-		check_ajax_referer('custom_nonce', 'security');
+		check_ajax_referer('custom_nonce', 'security' );
 
-		$points_on_purchase = get_option( 'pointsOnPurchase' );
 		$spending_amount = ! empty( $points_on_purchase['spendingAmount'] ) ? $points_on_purchase['spendingAmount']: 0;
 		$point_amount = ! empty( $points_on_purchase['pointAmount'] ) ? $points_on_purchase['pointAmount']: 0;
 
@@ -86,6 +85,14 @@ class AjaxApiController extends Controller
 		}
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method point_loyalty_program_data
+	 * @return void
+	 * Sending point loyalty all settings data
+	 */
 	public function point_loyalty_program_data()
 	{
 		$point_loyalty_program_settings = $this->point_loyalty_program_settings();
@@ -223,6 +230,14 @@ class AjaxApiController extends Controller
 		return $store_credit_enable_data;
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method store_credit_enable_data
+	 * @return array
+	 * Get data about enable disable option of store credit
+	 */
 	public function loyalty_program_enable_settings()
 	{
 		$loyalty_program_enable_data = get_option( 'loyalty_program_enable_settings' );
@@ -230,6 +245,14 @@ class AjaxApiController extends Controller
 		return $loyalty_program_enable_data;
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method store_credit_enable_data
+	 * @return array
+	 * Get data about enable disable option of store credit
+	 */
 	public function point_loyalty_program_settings()
 	{
 		$points_on_purchase = get_option( 'pointsOnPurchase' );
@@ -846,6 +869,14 @@ class AjaxApiController extends Controller
 		return $counts;
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method verify_nonce
+	 * @return bool
+	 * Returning true or false after checking nonce.
+	 */
 	private function verify_nonce()
 	{
 		return isset( $_GET['nonce'] ) && !empty( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'],'hexCuponData-react_nonce' ) == 1 ;

@@ -1,11 +1,13 @@
 wp.domReady(() => {
-	const { createElement, render, useState, useEffect } = wp.element;
+	const { createElement, render, useState, useEffect, useRef } = wp.element;
 	const { Notice } = wp.components;
 
 	const CustomNotice = () => {
 		const [points, setPoints] = useState(0);
 		const [divider, setDivider] = useState(0);
 		const [multiplier, setMultiplier] = useState(0);
+		const pointsRef = useRef(null);
+		const placeOrderListenerAttached = useRef(false);
 
 		useEffect(() => {
 			const fetchMultiplier = async () => {
@@ -56,16 +58,34 @@ wp.domReady(() => {
 				}
 			};
 
-			const handlePlaceOrderClick = (event) => {
-				const latestPoints = points; // Capture the latest points value
-				savePoints(pointsForCheckoutBlock.user_id, latestPoints);
+			const handlePlaceOrderClick = async (event) => {
+				try {
+					const pointsValue = pointsRef.current ? parseInt(pointsRef.current.innerText) : 0;
+					const response = await jQuery.ajax({
+						url: pointsForCheckoutBlock.ajax_url,
+						method: 'POST',
+						data: {
+							action: 'save_loyalty_points',
+							security: pointsForCheckoutBlock.nonce,
+							user_id: pointsForCheckoutBlock.user_id,
+							points: pointsValue // Use the latest points value from the span
+						}
+					});
+
+					if (!response.success) {
+						console.error('Failed to save points:', response.data);
+					}
+				} catch (error) {
+					console.error('Error saving points:', error);
+				}
 			};
 
 			const attachPlaceOrderListener = () => {
 				const placeOrderButton = document.querySelector('.wc-block-components-checkout-place-order-button');
-				if (placeOrderButton) {
+				if (placeOrderButton && !placeOrderListenerAttached.current) {
 					placeOrderButton.addEventListener('click', handlePlaceOrderClick);
-				} else {
+					placeOrderListenerAttached.current = true;
+				} else if (!placeOrderButton) {
 					// Retry after a short delay if the button is not found
 					setTimeout(attachPlaceOrderListener, 500);
 				}
@@ -82,28 +102,7 @@ wp.domReady(() => {
 					disconnectObserver();
 				}
 			};
-		}, [divider, multiplier, points]);
-
-		const savePoints = async (userId, points) => {
-			try {
-				const response = await jQuery.ajax({
-					url: pointsForCheckoutBlock.ajax_url,
-					method: 'POST',
-					data: {
-						action: 'save_loyalty_points',
-						security: pointsForCheckoutBlock.nonce,
-						user_id: userId,
-						points: points
-					}
-				});
-
-				if (!response.success) {
-					console.error('Failed to save points:', response.data);
-				}
-			} catch (error) {
-				console.error('Error saving points:', error);
-			}
-		};
+		}, [divider, multiplier]);
 
 		return createElement(
 			Notice,
@@ -111,7 +110,9 @@ wp.domReady(() => {
 				status: 'info',
 				isDismissible: false,
 			},
-			`You will earn ${points} points with this order.`
+			`You will earn `,
+			createElement('span', { className: 'points-value', ref: pointsRef }, points),
+			` points with this order.`
 		);
 	};
 

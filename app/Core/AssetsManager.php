@@ -31,7 +31,16 @@ class AssetsManager
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
-		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
+
+		$enable_point_loyalties = get_option( 'loyalty_program_enable_settings' );
+		$enable_point_loyalties = $enable_point_loyalties['enable'] ?? '';
+
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
+		$enable_points_on_purchase = ! empty( $points_on_purchase['enable'] ) ? $points_on_purchase['enable']: 0;
+
+		if ( $enable_point_loyalties && $enable_points_on_purchase ) {
+			add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
+		}
 	}
 
 	/**
