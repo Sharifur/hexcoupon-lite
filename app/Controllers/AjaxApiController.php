@@ -43,8 +43,9 @@ class AjaxApiController extends Controller
 	 */
 	public function show_loyalty_points_in_checkout()
 	{
-		check_ajax_referer('custom_nonce', 'security' );
+		check_ajax_referer( 'custom_nonce', 'security' );
 
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
 		$spending_amount = ! empty( $points_on_purchase['spendingAmount'] ) ? $points_on_purchase['spendingAmount']: 0;
 		$point_amount = ! empty( $points_on_purchase['pointAmount'] ) ? $points_on_purchase['pointAmount']: 0;
 

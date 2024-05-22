@@ -92,7 +92,7 @@ class LoyaltyProgram
 		$logs_page_url = get_site_url() . '/my-account/loyalty-points-logs'
 		?>
 		<div class="referral-top-bar">
-			<div class="current-points"><?php printf( esc_html__( 'Current Points %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?></div>
+			<div class="current-points"><?php printf( esc_html__( 'Points earned so far: %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?></div>
 			<div class="points-log-link"><a href="<?php echo esc_url( $logs_page_url ); ?>"><?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?></a></div>
 		</div>
 		<div class="referral-container">
@@ -115,8 +115,36 @@ class LoyaltyProgram
 	 */
 	public function loyalty_points_logs_page_endpoint_content()
 	{
-		?>
-		<h1>Loyalty page logs</h1>
-		<?php
+	?>
+	<div class="loyalty-points-log">
+		<h2>Loyalty Points Log</h2>
+		<table class="loyalty-points-log-table">
+			<thead>
+			<tr>
+				<th><?php echo esc_html__( 'Points', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Reason', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Referer ID', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Date', 'hex-coupon-for-woocommerce' ); ?></th>
+			</tr>
+			</thead>
+			<tbody>
+			<!-- Example log entries -->
+			<tr>
+				<td>50</td>
+				<td>Purchase</td>
+				<td>10</td>
+				<td>2024-05-20</td>
+			</tr>
+			<tr>
+				<td>100</td>
+				<td>Referral</td>
+				<td>11</td>
+				<td>2024-05-18</td>
+			</tr>
+			<!-- Add your log entries here -->
+			</tbody>
+		</table>
+	</div>
+	<?php
 	}
 }

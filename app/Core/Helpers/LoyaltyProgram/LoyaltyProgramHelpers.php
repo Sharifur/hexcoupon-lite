@@ -9,6 +9,8 @@ class LoyaltyProgramHelpers
 	private $wpdb;
 	private $table_name;
 
+	private $store_credit_table;
+
 	private $pointsForSignup;
 
 	private $points_on_purchase;
@@ -20,8 +22,13 @@ class LoyaltyProgramHelpers
 	 */
 	public function register()
 	{
-		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
+		global $wpdb;
 
+		$this->wpdb = $wpdb;
+		$this->table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+		$this->store_credit_table = $wpdb->prefix . 'hex_store_credit';
+
+		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
 		$this->conversion_rate = get_option( 'conversionRate' );
 
 		add_action( 'user_register', [ $this, 'give_points_on_signup' ] );
@@ -56,9 +63,10 @@ class LoyaltyProgramHelpers
 	 */
 	public function give_points_on_signup( $user_id )
 	{
-		global $wpdb;
+		$wpdb = $this->wpdb;
 
-		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+		$table_name = $this->table_name;
+		$store_credit_table = $this->store_credit_table;
 
 		// Retrieve the signup points from the options
 		$points_for_signup = get_option( 'pointsForSignup' );
@@ -94,6 +102,26 @@ class LoyaltyProgramHelpers
 			$data,
 			$data_types
 		);
+
+		//** Mechanism to send converting points to store credit and sending it to the database **
+		// Getting current store credit amount
+		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+		// Calculate the new credit balance
+		$new_credit_balance = round( $points_for_signup / $points_to_be_converted, 2 );
+
+		// Prepare the data for insertion or update
+		$store_credit_data = [
+			'user_id' => $user_id,
+			'amount'  => $new_credit_balance,
+		];
+
+		// Insert the user's points balance into the database
+		$wpdb->insert(
+			$store_credit_table,
+			$store_credit_data,
+			['%d', '%f']
+		);
 	}
 
 	/**
@@ -123,9 +151,10 @@ class LoyaltyProgramHelpers
 	 */
 	public function update_referrer_points()
 	{
-		global $wpdb;
+		$wpdb = $this->wpdb;
 
-		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+		$table_name = $this->table_name;
+		$store_credit_table = $this->store_credit_table;
 
 		if ( isset( $_SESSION['referrer_id'] ) ) {
 			$referrer_id = intval( $_SESSION['referrer_id'] );
@@ -177,6 +206,52 @@ class LoyaltyProgramHelpers
 					);
 				}
 
+				//** Mechanism to send converting points to store credit and sending it to the database **
+				// Getting current store credit amount
+				$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+				$current_credit = $wpdb->get_var( $wpdb->prepare(
+					"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+					$referrer_id
+				) );
+
+				// If no entry exists, default the current credit to 0
+				$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+
+				// Calculate the new credit balance
+				$new_credit_balance = round( $current_credit + ( $points_for_referral / $points_to_be_converted ), 2 );
+
+				// Check if the user ID already exists in the table
+				$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+					"SELECT * FROM $store_credit_table WHERE user_id = %d",
+					$referrer_id
+				) );
+
+				// Prepare the data for insertion or update
+				$store_credit_data = [
+					'user_id' => $referrer_id,
+					'amount'  => $new_credit_balance,
+				];
+
+				// If the user ID doesn't exist, insert a new row
+				if ( ! $existing_store_credit_entry ) {
+					// Insert the user's points balance into the database
+					$wpdb->insert(
+						$store_credit_table,
+						$store_credit_data,
+						['%d', '%f']
+					);
+				} else {
+					// Update the user's points balance in the database
+					$wpdb->update(
+						$store_credit_table,
+						['amount' => $new_credit_balance],
+						['user_id' => $referrer_id],
+						['%f'],
+						['%d']
+					);
+				}
+
 				// Clear the referrer ID from the session
 				unset( $_SESSION['referrer_id'] );
 			}
@@ -193,10 +268,10 @@ class LoyaltyProgramHelpers
 	 */
 	public function give_points_after_order_purchase( $order_id )
 	{
-		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+		$wpdb = $this->wpdb;
 
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+		$table_name = $this->table_name;
+		$store_credit_table = $this->store_credit_table;
 
 		$order = wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
@@ -252,6 +327,52 @@ class LoyaltyProgramHelpers
 			);
 		}
 
+		//** Mechanism to send converting points to store credit and sending it to the database **
+		// Getting current store credit amount
+		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+		$current_credit = $wpdb->get_var( $wpdb->prepare(
+			"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+			$user_id
+		) );
+
+		// If no entry exists, default the current credit to 0
+		$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+
+		// Calculate the new credit balance
+		$new_credit_balance = round( $current_credit + ( $total_points / $points_to_be_converted ), 2 );
+
+		// Check if the user ID already exists in the table
+		$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $store_credit_table WHERE user_id = %d",
+			$user_id
+		) );
+
+		// Prepare the data for insertion or update
+		$store_credit_data = [
+			'user_id' => $user_id,
+			'amount'  => $new_credit_balance,
+		];
+
+		// If the user ID doesn't exist, insert a new row
+		if ( ! $existing_store_credit_entry ) {
+			// Insert the user's points balance into the database
+			$wpdb->insert(
+				$store_credit_table,
+				$store_credit_data,
+				['%d', '%f']
+			);
+		} else {
+			// Update the user's points balance in the database
+			$wpdb->update(
+				$store_credit_table,
+				['amount' => $new_credit_balance],
+				['user_id' => $user_id],
+				['%f'],
+				['%d']
+			);
+		}
+
 	}
 
 	/**
@@ -264,8 +385,10 @@ class LoyaltyProgramHelpers
 	 */
 	public function give_points_after_order_purchase_in_block( $user_id, $points )
 	{
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'hex_loyalty_program_points';
+		$wpdb = $this->wpdb;
+
+		$table_name = $this->table_name;
+		$store_credit_table = $this->store_credit_table;
 
 		// Get the total points for the user, defaulting to 0 if no entry exists
 		$current_points = $wpdb->get_var( $wpdb->prepare(
@@ -306,6 +429,51 @@ class LoyaltyProgramHelpers
 				['points' => $new_points_balance],
 				['user_id' => $user_id],
 				['%d'],
+				['%d']
+			);
+		}
+
+		//** Getting current store credit amount **
+		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+		$current_credit = $wpdb->get_var( $wpdb->prepare(
+			"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+			$user_id
+		) );
+
+		// If no entry exists, default the current credit to 0
+		$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+
+		// Calculate the new credit balance
+		$new_credit_balance = round( $current_credit + ( $points / $points_to_be_converted ), 2 );
+
+		// Check if the user ID already exists in the table
+		$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $store_credit_table WHERE user_id = %d",
+			$user_id
+		) );
+
+		// Prepare the data for insertion or update
+		$store_credit_data = [
+			'user_id' => $user_id,
+			'amount'  => $new_credit_balance,
+		];
+
+		// If the user ID doesn't exist, insert a new row
+		if ( ! $existing_store_credit_entry ) {
+			// Insert the user's points balance into the database
+			$wpdb->insert(
+				$store_credit_table,
+				$store_credit_data,
+				['%d', '%f']
+			);
+		} else {
+			// Update the user's points balance in the database
+			$wpdb->update(
+				$store_credit_table,
+				['amount' => $new_credit_balance],
+				['user_id' => $user_id],
+				['%f'],
 				['%d']
 			);
 		}
