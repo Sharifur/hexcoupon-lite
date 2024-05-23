@@ -307,6 +307,7 @@ class LoyaltyProgramHelpers
 
 		$table_name = $this->table_name;
 		$store_credit_table = $this->store_credit_table;
+		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
 		$order = wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
@@ -412,8 +413,8 @@ class LoyaltyProgramHelpers
 		// ** Mechanism to send logs for in the loyalty_points_log table after order checkout ** //
 		$loyalty_points_log_data = [
 			'user_id' => intval( $user_id ),
-			'points'  => floatval( $points_for_signup ),
-			'reason'  => boolval( 0 ),
+			'points'  => floatval( $total_points ),
+			'reason'  => boolval( 2 ),
 			'converted_credit'  => floatval( $new_credit_balance ),
 			'conversion_rate'  => floatval( $points_to_be_converted ),
 		];
