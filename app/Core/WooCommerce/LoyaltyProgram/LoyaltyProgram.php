@@ -9,6 +9,8 @@ class LoyaltyProgram
 
 	private $user;
 
+	private $points_converstion_rate;
+
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
@@ -19,6 +21,8 @@ class LoyaltyProgram
 	 */
 	public function register()
 	{
+		$this->points_converstion_rate = get_option( 'conversionRate' );
+
 		// Action hook for adding 'Loyalty Points' menu page in the 'My Account' Page Menu
 		add_filter ( 'woocommerce_account_menu_items', [ $this, 'loyalty_points_in_my_account_page' ], 40 );
 		// Action hook for registering permalink endpoint
@@ -89,17 +93,33 @@ class LoyaltyProgram
 			$site_url = get_site_url();
 			$referral_link = $site_url . "?ref=" . $user_id;
 		}
-		$logs_page_url = get_site_url() . '/my-account/loyalty-points-logs'
+		$logs_page_url = get_site_url() . '/my-account/loyalty-points-logs';
+
+		$conversion_rate = $this->points_converstion_rate['points'] ?? 0;
+		$allowed_html = [
+			'b' => [
+				'class'
+			]
+		];
 		?>
 		<div class="referral-top-bar">
-			<div class="current-points"><?php printf( esc_html__( 'Points earned so far: %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?></div>
-			<div class="points-log-link"><a href="<?php echo esc_url( $logs_page_url ); ?>"><?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?></a></div>
+			<div class="current-points">
+				<?php printf( esc_html__( 'Points earned so far: %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?>
+			</div>
+			<div class="points-log-link">
+				<a href="<?php echo esc_url( $logs_page_url ); ?>">
+					<?php esc_html_e( 'View Log', 'hex-coupon-for-woocommerce' ); ?>
+				</a>
+			</div>
 		</div>
 		<div class="referral-container">
 			<h2><?php esc_html_e( 'Referral Link', 'hex-coupon-for-woocommerce' ); ?></h2>
 			<div class="referral-box">
 				<input type="text" id="referral-link" value="<?php echo esc_url( $referral_link ); ?>" readonly>
 				<button class="copy-referral-link"><?php esc_html_e( 'Copy', 'hex-coupon-for-woocommerce' ); ?></button>
+			</div>
+			<div class="conversion-rate">
+				<?php echo wp_kses( "Your points are converted to store credit. The conversion rate is <b>'{$conversion_rate}'</b> points per store credit.", $allowed_html ); ?>
 			</div>
 		</div>
 		<?php
@@ -115,33 +135,64 @@ class LoyaltyProgram
 	 */
 	public function loyalty_points_logs_page_endpoint_content()
 	{
+		$user_id = get_current_user_id();
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
+
+		// Query to get data from the log table for the current user
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM $table_name WHERE user_id = %d",
+				$user_id
+			),
+			ARRAY_A
+		);
 	?>
 	<div class="loyalty-points-log">
-		<h2>Loyalty Points Log</h2>
+		<h2><?php esc_html_e( 'Loyalty Points Log', 'hex-coupon-for-woocommerce' ); ?></h2>
 		<table class="loyalty-points-log-table">
 			<thead>
 			<tr>
 				<th><?php echo esc_html__( 'Points', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Reason', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Referer ID', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Converted Credit', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Conversion Rate', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Date', 'hex-coupon-for-woocommerce' ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
-			<!-- Example log entries -->
+			<?php if ( ! $results ) : ?>
+				<tr>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+					<td><?php esc_html_e( 'No data yet', 'hex-coupon-for-woocommerce' ); ?></td>
+				</tr>
+			<?php endif; ?>
+			<?php
+			if ( $results ) : foreach( $results as $item ) :
+				switch ( $item['reason'] ) {
+					case 0 :
+						$reason = 'SignUP';
+					case 1 :
+						$reason = 'Referral';
+					case 2 :
+						$reason = 'Purchase';
+				}
+			?>
 			<tr>
-				<td>50</td>
-				<td>Purchase</td>
-				<td>10</td>
-				<td>2024-05-20</td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['points'] ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $reason ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['referrer_id'] ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['converted_credit'] ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['conversion_rate'] ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['created_at'] ) ); ?></td>
 			</tr>
-			<tr>
-				<td>100</td>
-				<td>Referral</td>
-				<td>11</td>
-				<td>2024-05-18</td>
-			</tr>
-			<!-- Add your log entries here -->
+			<?php endforeach; endif; ?>
 			</tbody>
 		</table>
 	</div>

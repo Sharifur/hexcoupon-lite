@@ -32,6 +32,7 @@ class ActivationService
 
 		// Creating all necessary tables for loyalty program
 		CreateAllTables::getInstance()->create_points_transactions_table();
+		CreateAllTables::getInstance()->create_points_log_table();
 
 		// enabling store credit on plugin activation
 		$store_credit_enable_settings = [

@@ -11,6 +11,8 @@ class LoyaltyProgramHelpers
 
 	private $store_credit_table;
 
+	private $loyalty_points_log_table;
+
 	private $pointsForSignup;
 
 	private $points_on_purchase;
@@ -27,6 +29,7 @@ class LoyaltyProgramHelpers
 		$this->wpdb = $wpdb;
 		$this->table_name = $wpdb->prefix . 'hex_loyalty_program_points';
 		$this->store_credit_table = $wpdb->prefix . 'hex_store_credit';
+		$this->loyalty_points_log_table = $wpdb->prefix . 'hex_loyalty_points_log';
 
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
 		$this->conversion_rate = get_option( 'conversionRate' );
@@ -67,6 +70,7 @@ class LoyaltyProgramHelpers
 
 		$table_name = $this->table_name;
 		$store_credit_table = $this->store_credit_table;
+		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
 		// Retrieve the signup points from the options
 		$points_for_signup = get_option( 'pointsForSignup' );
@@ -91,10 +95,7 @@ class LoyaltyProgramHelpers
 		];
 
 		// Specify the data types for the insert function
-		$data_types = [
-			'%d',
-			'%d',
-		];
+		$data_types = [	'%d', '%d' ];
 
 		// Insert or update the user's points balance in the database
 		$wpdb->replace(
@@ -103,7 +104,7 @@ class LoyaltyProgramHelpers
 			$data_types
 		);
 
-		//** Mechanism to send converting points to store credit and sending it to the database **
+		// ** Mechanism to send converting points to store credit and sending it to the database ** //
 		// Getting current store credit amount
 		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
 
@@ -120,7 +121,22 @@ class LoyaltyProgramHelpers
 		$wpdb->insert(
 			$store_credit_table,
 			$store_credit_data,
-			['%d', '%f']
+			[ '%d', '%f' ]
+		);
+
+		// ** Mechanism to send logs for in the loyalty_points_log table ** //
+		$loyalty_points_log_data = [
+			'user_id' => intval( $user_id ),
+			'points'  => floatval( $points_for_signup ),
+			'reason'  => boolval( 0 ),
+			'converted_credit'  => floatval( $new_credit_balance ),
+			'conversion_rate'  => floatval( $points_to_be_converted ),
+		];
+
+		$wpdb->insert(
+			$loyalty_points_log_table,
+			$loyalty_points_log_data,
+			[ '%d', '%f', '%d', '%f', '%f' ],
 		);
 	}
 
@@ -149,12 +165,13 @@ class LoyaltyProgramHelpers
 	 * @return void
 	 * Give points to the referrer user id
 	 */
-	public function update_referrer_points()
+	public function update_referrer_points( $user_id )
 	{
 		$wpdb = $this->wpdb;
 
 		$table_name = $this->table_name;
 		$store_credit_table = $this->store_credit_table;
+		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
 		if ( isset( $_SESSION['referrer_id'] ) ) {
 			$referrer_id = intval( $_SESSION['referrer_id'] );
@@ -251,6 +268,24 @@ class LoyaltyProgramHelpers
 						['%d']
 					);
 				}
+
+				// ** Mechanism to send loyalty points logs to the 'hex_loyalty_points_table' **
+				$converted_credit = round( $points_for_referral / $points_to_be_converted, 2 );
+
+				$loyalty_points_log_data = [
+					'user_id' => intval( $referrer_id ),
+					'points'  => floatval( $points_for_referral ),
+					'reason'  => boolval( 1 ),
+					'referee_id' => intval( $user_id ),
+					'converted_credit'  => floatval( $converted_credit ),
+					'conversion_rate'  => floatval( $points_to_be_converted ),
+				];
+
+				$wpdb->insert(
+					$loyalty_points_log_table,
+					$loyalty_points_log_data,
+					[ '%d', '%f', '%d', '%f', '%f' ],
+				);
 
 				// Clear the referrer ID from the session
 				unset( $_SESSION['referrer_id'] );
