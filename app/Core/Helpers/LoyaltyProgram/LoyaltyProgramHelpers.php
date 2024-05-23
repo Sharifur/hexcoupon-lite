@@ -38,7 +38,7 @@ class LoyaltyProgramHelpers
 		add_action( 'init', [ $this, 'start_session' ] );
 		add_action( 'template_redirect', [ $this, 'handle_referral' ] );
 		add_action( 'user_register', [ $this, 'update_referrer_points' ] );
-		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_purchase' ] );
+		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_checkout' ] );
 	}
 
 	/**
@@ -297,11 +297,11 @@ class LoyaltyProgramHelpers
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method give_points_after_order_purchase
+	 * @method give_points_after_order_checkout
 	 * @return void
 	 * Give points to the user on product successful checkout in legacy checkout page
 	 */
-	public function give_points_after_order_purchase( $order_id )
+	public function give_points_after_order_checkout( $order_id )
 	{
 		$wpdb = $this->wpdb;
 
@@ -407,6 +407,22 @@ class LoyaltyProgramHelpers
 				['%d']
 			);
 		}
+
+
+		// ** Mechanism to send logs for in the loyalty_points_log table after order checkout ** //
+		$loyalty_points_log_data = [
+			'user_id' => intval( $user_id ),
+			'points'  => floatval( $points_for_signup ),
+			'reason'  => boolval( 0 ),
+			'converted_credit'  => floatval( $new_credit_balance ),
+			'conversion_rate'  => floatval( $points_to_be_converted ),
+		];
+
+		$wpdb->insert(
+			$loyalty_points_log_table,
+			$loyalty_points_log_data,
+			[ '%d', '%f', '%d', '%f', '%f' ],
+		);
 
 	}
 

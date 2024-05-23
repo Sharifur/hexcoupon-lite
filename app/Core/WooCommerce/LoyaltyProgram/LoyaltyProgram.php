@@ -182,12 +182,17 @@ class LoyaltyProgram
 						$reason = 'Referral';
 					case 2 :
 						$reason = 'Purchase';
+					default :
+						$reason = 'SignUP';
 				}
+
+			// Assigning 'Null' if there is null value
+			$referee_id = $item['referee_id'] ?? 'Null';
 			?>
 			<tr>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['points'] ) ); ?></td>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $reason ) ); ?></td>
-				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['referrer_id'] ) ); ?></td>
+				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $referee_id ) ); ?></td>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['converted_credit'] ) ); ?></td>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['conversion_rate'] ) ); ?></td>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['created_at'] ) ); ?></td>
