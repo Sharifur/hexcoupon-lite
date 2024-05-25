@@ -409,13 +409,14 @@ class LoyaltyProgramHelpers
 			);
 		}
 
+		// ** Mechanism to send logs in the loyalty_points_log table after order checkout ** //
+		$credit_for_purchase = $total_points / $points_to_be_converted;
 
-		// ** Mechanism to send logs for in the loyalty_points_log table after order checkout ** //
 		$loyalty_points_log_data = [
 			'user_id' => intval( $user_id ),
-			'points'  => floatval( $total_points ),
-			'reason'  => boolval( 2 ),
-			'converted_credit'  => floatval( $new_credit_balance ),
+			'points'  => round(  $total_points ),
+			'reason'  => strval( 2 ),
+			'converted_credit'  => round( $credit_for_purchase, 2 ),
 			'conversion_rate'  => floatval( $points_to_be_converted ),
 		];
 
@@ -424,7 +425,6 @@ class LoyaltyProgramHelpers
 			$loyalty_points_log_data,
 			[ '%d', '%f', '%d', '%f', '%f' ],
 		);
-
 	}
 
 	/**
@@ -441,6 +441,7 @@ class LoyaltyProgramHelpers
 
 		$table_name = $this->table_name;
 		$store_credit_table = $this->store_credit_table;
+		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
 		// Get the total points for the user, defaulting to 0 if no entry exists
 		$current_points = $wpdb->get_var( $wpdb->prepare(
@@ -529,6 +530,23 @@ class LoyaltyProgramHelpers
 				['%d']
 			);
 		}
+
+		// ** Mechanism to send logs in the loyalty_points_log table after order checkout ** //
+		$credit_for_purchase = $points / $points_to_be_converted;
+
+		$loyalty_points_log_data = [
+			'user_id' => intval( $user_id ),
+			'points'  => round(  $points ),
+			'reason'  => strval( 2 ),
+			'converted_credit'  => round( $credit_for_purchase, 2 ),
+			'conversion_rate'  => floatval( $points_to_be_converted ),
+		];
+
+		$wpdb->insert(
+			$loyalty_points_log_table,
+			$loyalty_points_log_data,
+			[ '%d', '%f', '%d', '%f', '%f' ],
+		);
 	}
 
 }

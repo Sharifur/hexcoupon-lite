@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 import { Skeleton } from "../../Skeleton";
 import { ToastContainer } from "react-toastify";
 import Table from "../../utils/table/Table";
@@ -14,17 +15,19 @@ import BodyCardHeaderTItle from "../../Pagebody/card/BodyCardHeaderTItle";
 import BodyCardHeaderRight from "../../Pagebody/card/BodyCardHeaderRight";
 import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import ButtonWrapper from "../../utils/button/ButtonWrapper";
-import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { IconChevronLeft } from "@tabler/icons-react";
 
-const LoyaltyProgramLogs = () => {
+const LoyaltyProgramUserLogs = () => {
+	const { userId } = useParams();
 	const { nonce, ajaxUrl } = loyaltyProgramLogs;
 	const [isLoading, setIsLoading] = useState(true);
-	const [storeCreditFullLogs, setStoreCreditFullLogs] = useState([]);
+	const [userLogs, setUserLogs] = useState([]);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filterOption, setFilterOption] = useState("all");
-	const [searchQuery, setSearchQuery] = useState("");
+	const navigate = useNavigate();
 	const itemsPerPage = 10;
+	const [userName, setUserName] = useState('');
 
 	useEffect(() => {
 		axios
@@ -32,6 +35,7 @@ const LoyaltyProgramLogs = () => {
 				params: {
 					nonce: nonce,
 					action: "point_loyalty_program_logs",
+					user_id: userId, // Fetch logs for the specific user
 				},
 				headers: {
 					"Content-Type": "application/json",
@@ -39,7 +43,11 @@ const LoyaltyProgramLogs = () => {
 			})
 			.then(({ data }) => {
 				if (data && data.pointsLoyaltyLogs) {
-					setStoreCreditFullLogs(data.pointsLoyaltyLogs);
+					const logs = data.pointsLoyaltyLogs.filter(log => log.user_id === userId);
+					setUserLogs(logs);
+					if (logs.length > 0) {
+						setUserName(logs[0].user_name); // Set userName from the first log entry
+					}
 				} else {
 					console.error("Invalid data format", data);
 				}
@@ -48,18 +56,18 @@ const LoyaltyProgramLogs = () => {
 				console.error("Error:", error);
 			})
 			.finally(() => setIsLoading(false));
-	}, [nonce, ajaxUrl]);
+	}, [nonce, ajaxUrl, userId]);
 
 	const getReason = (reasonCode) => {
 		switch (reasonCode) {
 			case "0":
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800">Signup</span>;
+				return "Signup";
 			case "1":
-				return <span className="px-2.5 py-2 bg-cyan-100 text-cyan-800">Referral</span>;
+				return "Referral";
 			case "2":
-				return <span className="px-2.5 py-2 bg-indigo-100 text-indigo-800">Purchase</span>;
+				return "Purchase";
 			default:
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800">Unknown</span>;
+				return "Unknown";
 		}
 	};
 
@@ -72,20 +80,18 @@ const LoyaltyProgramLogs = () => {
 		setCurrentPage(0); // Reset to first page on filter change
 	};
 
-	const handleSearchChange = (event) => {
-		setSearchQuery(event.target.value);
-		setCurrentPage(0); // Reset to first page on search
-	};
-
-	const filteredLogs = storeCreditFullLogs.filter((log) => {
+	const filteredLogs = userLogs.filter((log) => {
 		const matchesFilter = filterOption === "all" || getReason(log.reason).toLowerCase() === filterOption;
-		const matchesSearch = log.user_name.toLowerCase().includes(searchQuery.toLowerCase());
-		return matchesFilter && matchesSearch;
+		return matchesFilter;
 	});
 
 	const offset = currentPage * itemsPerPage;
 	const currentLogs = filteredLogs.slice(offset, offset + itemsPerPage);
 	const pageCount = Math.ceil(filteredLogs.length / itemsPerPage);
+
+	const goBack = () => {
+		navigate(-1);
+	};
 
 	return (
 		<>
@@ -94,7 +100,7 @@ const LoyaltyProgramLogs = () => {
 					<BodyCardHeader className="p-4" isFlex={true}>
 						<BodyCardHeaderLeft isFlex={true}>
 							<BodyCardHeaderLeftItem>
-								<BodyCardHeaderTItle>Loyalty Program Logs</BodyCardHeaderTItle>
+								<BodyCardHeaderTItle icon={<IconChevronLeft onClick={goBack} />} children={`${userName}'s Loyalty Points log`} />
 							</BodyCardHeaderLeftItem>
 						</BodyCardHeaderLeft>
 						<BodyCardHeaderRight>
@@ -109,13 +115,6 @@ const LoyaltyProgramLogs = () => {
 									<option value="referral">Referral</option>
 									<option value="purchase">Purchase</option>
 								</select>
-								<input
-									type="text"
-									placeholder="Search by Name or display name"
-									value={searchQuery}
-									onChange={handleSearchChange}
-									className="py-2.5 pl-4 pr-4 h-[34px] w-[170px] !ring-1 !border-transparent !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
-								/>
 							</ButtonWrapper>
 						</BodyCardHeaderRight>
 					</BodyCardHeader>
@@ -138,14 +137,7 @@ const LoyaltyProgramLogs = () => {
 									{currentLogs.length > 0 ? (
 										currentLogs.map((log, index) => (
 											<tr key={index}>
-												<td>
-													<Link
-														to={`/loyalty-program-user-logs/${log.user_id}`}
-														style={{ textDecoration: "underline" }}
-													>
-														{log.user_name}
-													</Link>
-												</td>
+												<td>{log.user_name}</td>
 												<td>{log.user_email}</td>
 												<td>{log.points}</td>
 												<td>{getReason(log.reason)}</td>
@@ -156,8 +148,8 @@ const LoyaltyProgramLogs = () => {
 											</tr>
 										))
 									) : (
-										<tr style={{textAlign:"center"}}>
-											<td colSpan="8">No logs available</td>
+										<tr style={{ textAlign: "center" }}>
+											<td colSpan="8">No Data Available</td>
 										</tr>
 									)}
 								</TBody>
@@ -184,4 +176,4 @@ const LoyaltyProgramLogs = () => {
 	);
 };
 
-export default LoyaltyProgramLogs;
+export default LoyaltyProgramUserLogs;

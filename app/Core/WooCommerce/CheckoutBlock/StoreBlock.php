@@ -42,7 +42,9 @@ class StoreBlock {
 				'deducted_store_credit' => $dataArray['deductedStoreCredit'],
 			];
 
-			session_start();
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+			}
 			$_SESSION['deducted_store_credit_amount'] = $deducted_store_credit['deducted_store_credit'];
 
 			wp_send_json( $_POST );

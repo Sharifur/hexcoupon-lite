@@ -156,7 +156,7 @@ class LoyaltyProgram
 			<tr>
 				<th><?php echo esc_html__( 'Points', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Reason', 'hex-coupon-for-woocommerce' ); ?></th>
-				<th><?php echo esc_html__( 'Referer ID', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Referrer ID', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Converted Credit', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Conversion Rate', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Date', 'hex-coupon-for-woocommerce' ); ?></th>
@@ -177,17 +177,20 @@ class LoyaltyProgram
 			if ( $results ) : foreach( $results as $item ) :
 				switch ( $item['reason'] ) {
 					case 0 :
-						$reason = 'SignUP';
+						$reason = 'Signup';
+						break;
 					case 1 :
 						$reason = 'Referral';
+						break;
 					case 2 :
 						$reason = 'Purchase';
+						break;
 					default :
-						$reason = 'SignUP';
+						$reason = 'Signup';
 				}
 
 			// Assigning 'Null' if there is null value
-			$referee_id = $item['referee_id'] ?? 'Null';
+			$referee_id = $item['referee_id'] ?? 'NA';
 			?>
 			<tr>
 				<td><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $item['points'] ) ); ?></td>

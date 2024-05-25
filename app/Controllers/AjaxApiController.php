@@ -21,6 +21,7 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
 		add_action( 'wp_ajax_loyalty_program_enable_data', [ $this, 'loyalty_program_enable_data' ] );
 		add_action( 'wp_ajax_point_loyalty_program_data', [ $this, 'point_loyalty_program_data' ] );
+		add_action( 'wp_ajax_point_loyalty_program_logs', [ $this, 'point_loyalty_program_logs' ] );
 		add_action( 'wp_ajax_show_loyalty_points_in_checkout', [ $this, 'show_loyalty_points_in_checkout' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
@@ -32,6 +33,56 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_weekly_coupon_active_expired_data', [ $this, 'weekly_coupon_active_expired_data'] );
 		add_action( 'wp_ajax_weeklyCouponRedeemedData', [ $this, 'weeklyCouponRedeemedData'] );
 	}
+
+	public function point_loyalty_program_logs()
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
+
+		$results = $wpdb->get_results(
+			"SELECT * FROM $table_name",
+			ARRAY_A
+		);
+
+		foreach ( $results as &$item ) {
+			$user_data = get_userdata( $item['user_id'] );
+			if ( $user_data ) {
+				$user_email = $user_data->user_email;
+
+				$item['user_email'] = $user_email;
+				$first_name = $user_data->first_name;
+				$last_name = $user_data->last_name;
+
+				if ( ! $first_name && ! $last_name ) {
+					$item['user_name'] = $user_data->display_name;
+				} else {
+					$item['user_name'] = $first_name . ' ' . $last_name;
+				}
+
+			}
+		}
+
+		unset( $item );
+
+
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => 'hello',
+				'type' => 'success',
+
+				// store credit data
+				'pointsLoyaltyLogs' => $results
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
+	}
+
 
 	/**
 	 * @package hexcoupon

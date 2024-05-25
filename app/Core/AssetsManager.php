@@ -213,6 +213,13 @@ class AssetsManager
 			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 		] );
 
+		wp_localize_script( hexcoupon_prefix( 'main' ), 'loyaltyProgramLogs', [
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+		] );
+
 		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 
