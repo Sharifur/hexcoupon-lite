@@ -61,13 +61,13 @@ const LoyaltyProgramUserLogs = () => {
 	const getReason = (reasonCode) => {
 		switch (reasonCode) {
 			case "0":
-				return "Signup";
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Signup</span>;
 			case "1":
-				return "Referral";
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Referral</span>;
 			case "2":
-				return "Purchase";
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Purchase</span>;
 			default:
-				return "Unknown";
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Unknown</span>;
 		}
 	};
 
@@ -81,7 +81,7 @@ const LoyaltyProgramUserLogs = () => {
 	};
 
 	const filteredLogs = userLogs.filter((log) => {
-		const matchesFilter = filterOption === "all" || getReason(log.reason).toLowerCase() === filterOption;
+		const matchesFilter = filterOption === "all" || getReason(log.reason) === filterOption;
 		return matchesFilter;
 	});
 

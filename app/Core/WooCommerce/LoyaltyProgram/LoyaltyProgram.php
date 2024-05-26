@@ -140,14 +140,28 @@ class LoyaltyProgram
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
 
+		$items_per_page = 10;
+		$page = isset( $_GET['cpage'] ) ? abs( (int) $_GET['cpage'] ) : 1;
+		$offset = ( $page * $items_per_page ) - $items_per_page;
+
+		$query = "SELECT * FROM {$table_name} WHERE user_id = {$user_id}";
+
+		$total_query = "SELECT COUNT(1) FROM (${query}) AS combined_table";
+		$total = $wpdb->get_var( $total_query );
+
+		$results = $wpdb->get_results( $query.' ORDER BY id DESC LIMIT '. $offset.', '. $items_per_page, ARRAY_A );
+
+
+
+
 		// Query to get data from the log table for the current user
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM $table_name WHERE user_id = %d",
-				$user_id
-			),
-			ARRAY_A
-		);
+//		$results = $wpdb->get_results(
+//			$wpdb->prepare(
+//				"SELECT * FROM $table_name WHERE user_id = %d",
+//				$user_id
+//			),
+//			ARRAY_A
+//		);
 	?>
 	<div class="loyalty-points-log">
 		<h2><?php esc_html_e( 'Loyalty Points Log', 'hex-coupon-for-woocommerce' ); ?></h2>
@@ -203,7 +217,16 @@ class LoyaltyProgram
 			<?php endforeach; endif; ?>
 			</tbody>
 		</table>
+		<p><b><?php esc_html_e( 'All points are converted to store credit. Use store credit to make purchase on our store.', 'hex-coupon-for-woocommerce' );?></b></p>
 	</div>
 	<?php
+		echo paginate_links( array(
+			'base' => add_query_arg( 'cpage', '%#%' ),
+			'format' => '',
+			'prev_text' => __('&laquo;'),
+			'next_text' => __('&raquo;'),
+			'total' => ceil($total / $items_per_page),
+			'current' => $page
+		) );
 	}
 }
