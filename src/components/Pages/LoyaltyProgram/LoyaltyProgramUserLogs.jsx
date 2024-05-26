@@ -17,8 +17,10 @@ import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import ButtonWrapper from "../../utils/button/ButtonWrapper";
 import ReactPaginate from "react-paginate";
 import { IconChevronLeft } from "@tabler/icons-react";
+import { useI18n } from "@wordpress/react-i18n";
 
 const LoyaltyProgramUserLogs = () => {
+	const { __ } = useI18n();
 	const { userId } = useParams();
 	const { nonce, ajaxUrl } = loyaltyProgramLogs;
 	const [isLoading, setIsLoading] = useState(true);
@@ -58,16 +60,29 @@ const LoyaltyProgramUserLogs = () => {
 			.finally(() => setIsLoading(false));
 	}, [nonce, ajaxUrl, userId]);
 
-	const getReason = (reasonCode) => {
+	const getReasonString = (reasonCode) => {
 		switch (reasonCode) {
 			case "0":
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Signup</span>;
+				return __("Signup");
 			case "1":
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Referral</span>;
+				return __("Referral");
 			case "2":
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Purchase</span>;
+				return __("Purchase");
 			default:
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">Unknown</span>;
+				return __("Unknown");
+		}
+	};
+
+	const getReasonElement = (reasonCode) => {
+		switch (reasonCode) {
+			case "0":
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Signup")}</span>;
+			case "1":
+				return <span className="px-2.5 py-2 bg-cyan-100 text-cyan-800 w-full text-center">{__("Referral")}</span>;
+			case "2":
+				return <span className="px-2.5 py-2 bg-indigo-100 text-indigo-800 w-full text-center">{__("Purchase")}</span>;
+			default:
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Unknown")}</span>;
 		}
 	};
 
@@ -81,7 +96,8 @@ const LoyaltyProgramUserLogs = () => {
 	};
 
 	const filteredLogs = userLogs.filter((log) => {
-		const matchesFilter = filterOption === "all" || getReason(log.reason) === filterOption;
+		const reasonString = getReasonString(log.reason).toLowerCase();
+		const matchesFilter = filterOption === "all" || reasonString === filterOption;
 		return matchesFilter;
 	});
 
@@ -110,10 +126,10 @@ const LoyaltyProgramUserLogs = () => {
 									onChange={handleFilterChange}
 									className="customSelect py-2.5 pl-4 pr-4 h-[34px] !ring-1 !border-transparent !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
 								>
-									<option value="all">All</option>
-									<option value="signup">Signup</option>
-									<option value="referral">Referral</option>
-									<option value="purchase">Purchase</option>
+									<option value="all">{__("All")}</option>
+									<option value="signup">{__("Signup")}</option>
+									<option value="referral">{__("Referral")}</option>
+									<option value="purchase">{__("Purchase")}</option>
 								</select>
 							</ButtonWrapper>
 						</BodyCardHeaderRight>
@@ -124,14 +140,14 @@ const LoyaltyProgramUserLogs = () => {
 						<>
 							<Table className="border text-left">
 								<THead>
-									<Th>Customer Name</Th>
-									<Th>Email</Th>
-									<Th>Points</Th>
-									<Th>Reason</Th>
-									<Th>Referrer ID</Th>
-									<Th>Converted Credit</Th>
-									<Th>Conversion Rate</Th>
-									<Th>Date</Th>
+									<Th>{__("Customer Name")}</Th>
+									<Th>{__("Email")}</Th>
+									<Th>{__("Points")}</Th>
+									<Th>{__("Reason")}</Th>
+									<Th>{__("Referrer ID")}</Th>
+									<Th>{__("Converted Credit")}</Th>
+									<Th>{__("Conversion Rate")}</Th>
+									<Th>{__("Date")}</Th>
 								</THead>
 								<TBody>
 									{currentLogs.length > 0 ? (
@@ -140,7 +156,7 @@ const LoyaltyProgramUserLogs = () => {
 												<td>{log.user_name}</td>
 												<td>{log.user_email}</td>
 												<td>{log.points}</td>
-												<td>{getReason(log.reason)}</td>
+												<td>{getReasonElement(log.reason)}</td>
 												<td>{log.referee_id ? log.referee_id : "NA"}</td>
 												<td>{log.converted_credit}</td>
 												<td>{log.conversion_rate}</td>

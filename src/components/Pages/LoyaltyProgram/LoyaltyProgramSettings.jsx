@@ -84,7 +84,7 @@ const LoyaltyProgramSettings = () => {
 
 	return (
 		<div className="loyalty-program-settings">
-			<h2 className="store_credit_enable_title">{__("Loyalty Program Settings", "hex-coupon-for-woocommerce")}</h2>
+			<h2 className="store_credit_enable_title">{__("Loyalty Program Settings")}</h2>
 			{isLoading ? (
 				<Skeleton height={500} radius={10} />
 			) : (
@@ -94,8 +94,8 @@ const LoyaltyProgramSettings = () => {
 							<img src={coinImg} alt="Point Loyalties Icon" />
 						</div>
 						<div className="loyalty-details">
-							<h3>{__("Point Loyalties","hex-coupon-for-woocommerce")}</h3>
-							<p>{__("Customize point loyalties settings","hex-coupon-for-woocommerce")}</p>
+							<h3>{__("Point Loyalties")}</h3>
+							<p>{__("Customize point loyalties settings")}</p>
 						</div>
 						<div className="loyalty-toggle">
 							<Switch isChecked={switchState} onSwitchChange={handleSwitchChange} />
@@ -109,7 +109,7 @@ const LoyaltyProgramSettings = () => {
 					<div className="save-button-container">
 						<input
 							type="submit"
-							value={__("Save","hex-coupon-for-woocommerce")}
+							value={__("Save")}
 							className="save-button"
 							onClick={handleButtonClick}
 						/>

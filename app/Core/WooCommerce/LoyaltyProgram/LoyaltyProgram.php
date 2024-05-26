@@ -141,7 +141,7 @@ class LoyaltyProgram
 		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
 
 		$items_per_page = 10;
-		$page = isset( $_GET['cpage'] ) ? abs( (int) $_GET['cpage'] ) : 1;
+		$page = isset( $_GET['log'] ) ? abs( (int) $_GET['log'] ) : 1;
 		$offset = ( $page * $items_per_page ) - $items_per_page;
 
 		$query = "SELECT * FROM {$table_name} WHERE user_id = {$user_id}";
@@ -150,18 +150,6 @@ class LoyaltyProgram
 		$total = $wpdb->get_var( $total_query );
 
 		$results = $wpdb->get_results( $query.' ORDER BY id DESC LIMIT '. $offset.', '. $items_per_page, ARRAY_A );
-
-
-
-
-		// Query to get data from the log table for the current user
-//		$results = $wpdb->get_results(
-//			$wpdb->prepare(
-//				"SELECT * FROM $table_name WHERE user_id = %d",
-//				$user_id
-//			),
-//			ARRAY_A
-//		);
 	?>
 	<div class="loyalty-points-log">
 		<h2><?php esc_html_e( 'Loyalty Points Log', 'hex-coupon-for-woocommerce' ); ?></h2>
@@ -220,13 +208,13 @@ class LoyaltyProgram
 		<p><b><?php esc_html_e( 'All points are converted to store credit. Use store credit to make purchase on our store.', 'hex-coupon-for-woocommerce' );?></b></p>
 	</div>
 	<?php
-		echo paginate_links( array(
-			'base' => add_query_arg( 'cpage', '%#%' ),
+		echo paginate_links( [
+			'base' => add_query_arg( 'log', '%#%' ),
 			'format' => '',
-			'prev_text' => __('&laquo;'),
-			'next_text' => __('&raquo;'),
+			'prev_text' => __( '« Prev' ),
+			'next_text' => __( 'Next »' ),
 			'total' => ceil($total / $items_per_page),
 			'current' => $page
-		) );
+		] );
 	}
 }

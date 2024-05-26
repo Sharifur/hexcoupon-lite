@@ -101,7 +101,7 @@ const PointBasedLoyaltySettings = () => {
 	return (
 		<div className="point-based-loyalty-settings">
 			<h1>
-				<IconChevronLeft onClick={goBack} className="back-icon" /> {__("Point Loyalty Settings", "hex-coupon-for-woocommerce")}
+				<IconChevronLeft onClick={goBack} className="back-icon" /> {__("Point Loyalty Settings")}
 			</h1>
 
 			<div className="settings-section">
@@ -112,8 +112,8 @@ const PointBasedLoyaltySettings = () => {
 						<div className="setting-item">
 							<div className="setting-header">
 								<div className="switch-container">
-									<span>{__("Point on Purchase", "hex-coupon-for-woocommerce")}</span>
-									<span className="switch-enabled">{__("Enabled", "hex-coupon-for-woocommerce")}</span>
+									<span>{__("Point on Purchase")}</span>
+									<span className="switch-enabled">{__("Enabled")}</span>
 									<Switch
 										isChecked={settings.pointsOnPurchase.enable}
 										onSwitchChange={handleSwitchChange("pointsOnPurchase")}
@@ -122,7 +122,7 @@ const PointBasedLoyaltySettings = () => {
 
 								<div className="setting-body">
 									<label>
-										{__("Point Amount", "hex-coupon-for-woocommerce")}
+										{__("Point Amount")}
 										<input
 											type="number"
 											value={settings.pointsOnPurchase.pointAmount}
@@ -130,8 +130,8 @@ const PointBasedLoyaltySettings = () => {
 										/>
 									</label>
 									<label>
-										{__("Spending Amount", "hex-coupon-for-woocommerce")}
-										<Tooltip title={__("Amount to spend to earn points on every purchase", "hex-coupon-for-woocommerce")}>
+										{__("Spending Amount")}
+										<Tooltip title={__("Amount to spend to earn points on every purchase")}>
 											<IconInfoCircle style={{ marginLeft: "5px" }} />
 										</Tooltip>
 										<input
@@ -148,8 +148,8 @@ const PointBasedLoyaltySettings = () => {
 						<div className="setting-item">
 							<div className="setting-header">
 								<div className="switch-container">
-									<span>{__("Points for Signup", "hex-coupon-for-woocommerce")}</span>
-									<span className="switch-enabled">{__("Enabled", "hex-coupon-for-woocommerce")}</span>
+									<span>{__("Points for Signup")}</span>
+									<span className="switch-enabled">{__("Enabled")}</span>
 									<Switch
 										isChecked={settings.pointsForSignup.enable}
 										onSwitchChange={handleSwitchChange("pointsForSignup")}
@@ -157,7 +157,7 @@ const PointBasedLoyaltySettings = () => {
 								</div>
 								<div className="setting-body">
 									<label>
-										{__("Point Amount", "hex-coupon-for-woocommerce")}
+										{__("Point Amount")}
 										<input
 											type="number"
 											value={settings.pointsForSignup.pointAmount}
@@ -171,8 +171,8 @@ const PointBasedLoyaltySettings = () => {
 						<div className="setting-item">
 							<div className="setting-header">
 								<div className="switch-container">
-									<span>{__("Points for Referral", "hex-coupon-for-woocommerce")}</span>
-									<span className="switch-enabled">{__("Enabled", "hex-coupon-for-woocommerce")}</span>
+									<span>{__("Points for Referral")}</span>
+									<span className="switch-enabled">{__("Enabled")}</span>
 									<Switch
 										isChecked={settings.pointsForReferral.enable}
 										onSwitchChange={handleSwitchChange("pointsForReferral")}
@@ -180,7 +180,7 @@ const PointBasedLoyaltySettings = () => {
 								</div>
 								<div className="setting-body">
 									<label>
-										{__("Point Amount", "hex-coupon-for-woocommerce")}
+										{__("Point Amount")}
 										<input
 											type="number"
 											value={settings.pointsForReferral.pointAmount}
@@ -192,7 +192,7 @@ const PointBasedLoyaltySettings = () => {
 						</div>
 
 						<div className="conversion-rate">
-							<p>{__("Points", "hex-coupon-for-woocommerce")}</p>
+							<p>{__("Points")}</p>
 							<label>
 								<input
 									type="number"
@@ -201,12 +201,12 @@ const PointBasedLoyaltySettings = () => {
 								/>
 								<span>{settings.conversionRate.points} POINTS = {settings.conversionRate.credit} S.CREDIT</span>
 							</label>
-							<p>{__("No. of points required to convert in 1 store credit", "hex-coupon-for-woocommerce")}</p>
+							<p>{__("No. of points required to convert in 1 store credit")}</p>
 						</div>
 
 						<div className="save-button-area">
 							<button className="save-button" onClick={handleSave}>
-								{__("Save Changes", "hex-coupon-for-woocommerce")}
+								{__("Save Changes")}
 							</button>
 							<ToastContainer />
 						</div>
