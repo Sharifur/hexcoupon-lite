@@ -40,7 +40,7 @@ class AjaxApiController extends Controller
 		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
 
 		$results = $wpdb->get_results(
-			"SELECT * FROM $table_name",
+			"SELECT * FROM $table_name ORDER BY id DESC",
 			ARRAY_A
 		);
 

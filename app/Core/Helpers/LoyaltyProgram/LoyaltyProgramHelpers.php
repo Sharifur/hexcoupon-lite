@@ -107,7 +107,7 @@ class LoyaltyProgramHelpers
 			$data_types
 		);
 
-		// ** Mechanism to send converting points to store credit and sending it to the database ** //
+		// ** Mechanism to send converting points to store credit and sending it to the database 'store_credit_table' ** //
 		// Getting current store credit amount
 		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
 
@@ -127,7 +127,7 @@ class LoyaltyProgramHelpers
 			[ '%d', '%f' ]
 		);
 
-		// ** Mechanism to send logs for in the loyalty_points_log table ** //
+		// ** Mechanism to send logs in the 'hex_loyalty_points_log' table ** //
 		$loyalty_points_log_data = [
 			'user_id' => intval( $user_id ),
 			'points'  => floatval( $points_for_signup ),
@@ -145,25 +145,7 @@ class LoyaltyProgramHelpers
 		$loyalty_points_primary_key = $wpdb->insert_id;
 
 		// ** Mechanism to send logs for loyalty points in the store credit log table ** //
-		$data = [
-			'user_id' => $user_id,
-			'amount' => $new_credit_balance,
-			'type' => 1,
-			'status' => 1,
-			'label' => 2,
-			'loyalty_points_id' => $loyalty_points_primary_key,
-		];
-
-		$data_types = [
-			'user_id' => '%d',
-			'amount' => '%f',
-			'type' => '%d',
-			'status' => '%d',
-			'label' => '%d',
-			'loyalty_points_id' => '%d'
-		];
-
-		$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
+		$this->send_logs_to_the_store_credit_log_table( $user_id, $new_credit_balance, $loyalty_points_primary_key );
 	}
 
 	/**
@@ -316,25 +298,7 @@ class LoyaltyProgramHelpers
 				$loyalty_points_primary_key = $wpdb->insert_id;
 
 				// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
-				$data = [
-					'user_id' => $referrer_id,
-					'amount' => $converted_credit,
-					'type' => 1,
-					'status' => 1,
-					'label' => 2,
-					'loyalty_points_id' => $loyalty_points_primary_key,
-				];
-
-				$data_types = [
-					'user_id' => '%d',
-					'amount' => '%f',
-					'type' => '%d',
-					'status' => '%d',
-					'label' => '%d',
-					'loyalty_points_id' => '%d'
-				];
-
-				$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
+				$this->send_logs_to_the_store_credit_log_table( $referrer_id, $converted_credit, $loyalty_points_primary_key );
 
 				// Clear the referrer ID from the session
 				unset( $_SESSION['referrer_id'] );
@@ -478,25 +442,7 @@ class LoyaltyProgramHelpers
 		$loyalty_points_primary_key = $wpdb->insert_id;
 
 		// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
-		$data = [
-			'user_id' => $user_id,
-			'amount' => round( $credit_for_purchase, 2 ),
-			'type' => 1,
-			'status' => 1,
-			'label' => 2,
-			'loyalty_points_id' => $loyalty_points_primary_key,
-		];
-
-		$data_types = [
-			'user_id' => '%d',
-			'amount' => '%f',
-			'type' => '%d',
-			'status' => '%d',
-			'label' => '%d',
-			'loyalty_points_id' => '%d'
-		];
-
-		$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
+		$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
 	}
 
 	/**
@@ -623,9 +569,22 @@ class LoyaltyProgramHelpers
 		$loyalty_points_primary_key = $wpdb->insert_id;
 
 		// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+		$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method send_logs_to_the_store_credit_log_table
+	 * @return void
+	 * Sending logs to the 'hex_store_credit_logs' table for user getting points
+	 */
+	private function send_logs_to_the_store_credit_log_table( $user_id, $credit, $loyalty_points_primary_key )
+	{
 		$data = [
 			'user_id' => $user_id,
-			'amount' => round( $credit_for_purchase, 2 ),
+			'amount' => round( $credit, 2 ),
 			'type' => 1,
 			'status' => 1,
 			'label' => 2,
