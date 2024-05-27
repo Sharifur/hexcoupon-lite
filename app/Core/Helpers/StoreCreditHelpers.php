@@ -35,6 +35,7 @@ class StoreCreditHelpers {
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			user_id BIGINT UNSIGNED,
 			store_credit_id BIGINT UNSIGNED NOT NULL,
+			loyalty_points_id BIGINT UNSIGNED NOT NULL,
 			amount DOUBLE NOT NULL,
 			order_id BIGINT UNSIGNED NOT NULL,
 			type BIGINT UNSIGNED NOT NULL COMMENT '0=credit,1=debit',
@@ -43,7 +44,7 @@ class StoreCreditHelpers {
 			admin_name LONGTEXT NULL,
 			note LONGTEXT NULL,
 			status BIGINT UNSIGNED NOT NULL COMMENT '0=used, 1=received',
-			label BIGINT UNSIGNED NOT NULL COMMENT '0=refund credits, 1=gift credits',
+			label BIGINT UNSIGNED NOT NULL COMMENT '0=refund credits, 1=gift credits, 2=loyalty points',
 			PRIMARY KEY (id)
 			) ENGINE=InnoDB;";
 

@@ -10,6 +10,7 @@ class LoyaltyProgramHelpers
 	private $table_name;
 
 	private $store_credit_table;
+	private $store_credit_logs_table;
 
 	private $loyalty_points_log_table;
 
@@ -29,6 +30,8 @@ class LoyaltyProgramHelpers
 		$this->wpdb = $wpdb;
 		$this->table_name = $wpdb->prefix . 'hex_loyalty_program_points';
 		$this->store_credit_table = $wpdb->prefix . 'hex_store_credit';
+		$this->store_credit_logs_table = $wpdb->prefix . 'hex_store_credit_logs';
+
 		$this->loyalty_points_log_table = $wpdb->prefix . 'hex_loyalty_points_log';
 
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
@@ -138,6 +141,29 @@ class LoyaltyProgramHelpers
 			$loyalty_points_log_data,
 			[ '%d', '%f', '%d', '%f', '%f' ],
 		);
+
+		$loyalty_points_primary_key = $wpdb->insert_id;
+
+		// ** Mechanism to send logs for loyalty points in the store credit log table ** //
+		$data = [
+			'user_id' => $user_id,
+			'amount' => $new_credit_balance,
+			'type' => 1,
+			'status' => 1,
+			'label' => 2,
+			'loyalty_points_id' => $loyalty_points_primary_key,
+		];
+
+		$data_types = [
+			'user_id' => '%d',
+			'amount' => '%f',
+			'type' => '%d',
+			'status' => '%d',
+			'label' => '%d',
+			'loyalty_points_id' => '%d'
+		];
+
+		$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
 	}
 
 	/**
@@ -233,7 +259,7 @@ class LoyaltyProgramHelpers
 				) );
 
 				// If no entry exists, default the current credit to 0
-				$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+				$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
 
 				// Calculate the new credit balance
 				$new_credit_balance = round( $current_credit + ( $points_for_referral / $points_to_be_converted ), 2 );
@@ -274,11 +300,11 @@ class LoyaltyProgramHelpers
 
 				$loyalty_points_log_data = [
 					'user_id' => intval( $referrer_id ),
-					'points'  => floatval( $points_for_referral ),
-					'reason'  => boolval( 1 ),
+					'points' => floatval( $points_for_referral ),
+					'reason' => boolval( 1 ),
 					'referee_id' => intval( $user_id ),
-					'converted_credit'  => floatval( $converted_credit ),
-					'conversion_rate'  => floatval( $points_to_be_converted ),
+					'converted_credit' => floatval( $converted_credit ),
+					'conversion_rate' => floatval( $points_to_be_converted ),
 				];
 
 				$wpdb->insert(
@@ -286,6 +312,29 @@ class LoyaltyProgramHelpers
 					$loyalty_points_log_data,
 					[ '%d', '%f', '%d', '%f', '%f' ],
 				);
+
+				$loyalty_points_primary_key = $wpdb->insert_id;
+
+				// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+				$data = [
+					'user_id' => $referrer_id,
+					'amount' => $converted_credit,
+					'type' => 1,
+					'status' => 1,
+					'label' => 2,
+					'loyalty_points_id' => $loyalty_points_primary_key,
+				];
+
+				$data_types = [
+					'user_id' => '%d',
+					'amount' => '%f',
+					'type' => '%d',
+					'status' => '%d',
+					'label' => '%d',
+					'loyalty_points_id' => '%d'
+				];
+
+				$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
 
 				// Clear the referrer ID from the session
 				unset( $_SESSION['referrer_id'] );
@@ -373,7 +422,7 @@ class LoyaltyProgramHelpers
 		) );
 
 		// If no entry exists, default the current credit to 0
-		$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+		$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
 
 		// Calculate the new credit balance
 		$new_credit_balance = round( $current_credit + ( $total_points / $points_to_be_converted ), 2 );
@@ -425,6 +474,29 @@ class LoyaltyProgramHelpers
 			$loyalty_points_log_data,
 			[ '%d', '%f', '%d', '%f', '%f' ],
 		);
+
+		$loyalty_points_primary_key = $wpdb->insert_id;
+
+		// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+		$data = [
+			'user_id' => $user_id,
+			'amount' => round( $credit_for_purchase, 2 ),
+			'type' => 1,
+			'status' => 1,
+			'label' => 2,
+			'loyalty_points_id' => $loyalty_points_primary_key,
+		];
+
+		$data_types = [
+			'user_id' => '%d',
+			'amount' => '%f',
+			'type' => '%d',
+			'status' => '%d',
+			'label' => '%d',
+			'loyalty_points_id' => '%d'
+		];
+
+		$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
 	}
 
 	/**
@@ -495,7 +567,7 @@ class LoyaltyProgramHelpers
 		) );
 
 		// If no entry exists, default the current credit to 0
-		$current_credit = $current_credit !== null ? intval( $current_credit ) : 0;
+		$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
 
 		// Calculate the new credit balance
 		$new_credit_balance = round( $current_credit + ( $points / $points_to_be_converted ), 2 );
@@ -547,6 +619,29 @@ class LoyaltyProgramHelpers
 			$loyalty_points_log_data,
 			[ '%d', '%f', '%d', '%f', '%f' ],
 		);
+
+		$loyalty_points_primary_key = $wpdb->insert_id;
+
+		// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+		$data = [
+			'user_id' => $user_id,
+			'amount' => round( $credit_for_purchase, 2 ),
+			'type' => 1,
+			'status' => 1,
+			'label' => 2,
+			'loyalty_points_id' => $loyalty_points_primary_key,
+		];
+
+		$data_types = [
+			'user_id' => '%d',
+			'amount' => '%f',
+			'type' => '%d',
+			'status' => '%d',
+			'label' => '%d',
+			'loyalty_points_id' => '%d'
+		];
+
+		$this->wpdb->insert( $this->store_credit_logs_table, $data, $data_types );
 	}
 
 }
