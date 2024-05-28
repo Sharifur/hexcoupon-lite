@@ -69,41 +69,45 @@ class LoyaltyProgramSettingsApiController extends Controller
 			$dataArray = json_decode( $formData, true );
 
 			$points_on_purchase = [
-				'enable' => rest_sanitize_boolean( $dataArray['settings']['pointsOnPurchase']['enable'] ),
-				'pointAmount' => sanitize_text_field( $dataArray['settings']['pointsOnPurchase']['pointAmount'] ),
-				'spendingAmount' => sanitize_text_field( $dataArray['settings']['pointsOnPurchase']['spendingAmount'] ),
+				'enable' => isset($dataArray['settings']['pointsOnPurchase']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsOnPurchase']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsOnPurchase']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsOnPurchase']['pointAmount']) : '',
+				'spendingAmount' => isset($dataArray['settings']['pointsOnPurchase']['spendingAmount']) ? sanitize_text_field($dataArray['settings']['pointsOnPurchase']['spendingAmount']) : '',
 			];
-
-			update_option( 'pointsOnPurchase', $points_on_purchase );
+			update_option('pointsOnPurchase', $points_on_purchase);
 
 			$points_for_signup = [
-				'enable' => rest_sanitize_boolean( $dataArray['settings']['pointsForSignup']['enable'] ),
-				'pointAmount' => sanitize_text_field( $dataArray['settings']['pointsForSignup']['pointAmount'] ),
+				'enable' => isset($dataArray['settings']['pointsForSignup']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForSignup']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForSignup']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForSignup']['pointAmount']) : '',
 			];
-
-			update_option( 'pointsForSignup', $points_for_signup );
+			update_option('pointsForSignup', $points_for_signup);
 
 			$points_for_referral = [
-				'enable' => rest_sanitize_boolean( $dataArray['settings']['pointsForReferral']['enable'] ),
-				'pointAmount' => sanitize_text_field( $dataArray['settings']['pointsForReferral']['pointAmount'] ),
+				'enable' => isset($dataArray['settings']['pointsForReferral']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForReferral']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForReferral']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForReferral']['pointAmount']) : '',
 			];
-
-			update_option( 'pointsForReferral', $points_for_referral );
+			update_option('pointsForReferral', $points_for_referral);
 
 			$conversion_rate = [
-				'credit' => sanitize_text_field( $dataArray['settings']['conversionRate']['credit'] ),
-				'points' => sanitize_text_field( $dataArray['settings']['conversionRate']['points'] ),
+				'credit' => isset($dataArray['settings']['conversionRate']['credit']) ? sanitize_text_field($dataArray['settings']['conversionRate']['credit']) : '',
+				'points' => isset($dataArray['settings']['conversionRate']['points']) ? sanitize_text_field($dataArray['settings']['conversionRate']['points']) : '',
 			];
+			update_option('conversionRate', $conversion_rate);
 
-			update_option( 'conversionRate', $conversion_rate );
+			$all_labels = [
+				'logPageTitle' => isset( $dataArray['settings']['allLoyaltyLabels']['logPageTitle'] ) ? sanitize_text_field( $dataArray['settings']['allLoyaltyLabels']['logPageTitle'] ) : '',
+				'referralLinkLabel' => isset( $dataArray['settings']['allLoyaltyLabels']['referralLinkLabel'] ) ? sanitize_text_field( $dataArray['settings']['allLoyaltyLabels']['referralLinkLabel']) : '',
+				'pointsText' => isset( $dataArray['settings']['allLoyaltyLabels']['pointsText'] ) ? sanitize_text_field( $dataArray['settings']['allLoyaltyLabels']['pointsText']) : '',
+			];
+			update_option('allLoyaltyLabels', $all_labels );
 
-			wp_send_json( $_POST );
+			wp_send_json($_POST);
 		} else {
-			wp_send_json( [
+			wp_send_json([
 				'error' => 'Nonce verification failed',
 			], 403); // 403 Forbidden status code
 		}
 	}
+
 
 	/**
 	 * @package hexcoupon

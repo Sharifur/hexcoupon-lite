@@ -101,10 +101,14 @@ class LoyaltyProgram
 				'class'
 			]
 		];
+
+		$all_loyalty_labels = get_option( 'allLoyaltyLabels' );
+		$points_text = $all_loyalty_labels['pointsText'] ?? 'Points earned so far';
+		$referral_link_label = $all_loyalty_labels['referralLinkLabel'] ?? 'Referral Link';
 		?>
 		<div class="referral-top-bar">
 			<div class="current-points">
-				<?php printf( esc_html__( 'Points earned so far: %s', 'hex-coupon-for-woocommerce' ), esc_html( $current_points ) ); ?>
+				<?php printf( esc_html__( '%s: %s', 'hex-coupon-for-woocommerce' ), esc_html( $points_text ), esc_html( $current_points ) ); ?>
 			</div>
 			<div class="points-log-link">
 				<a href="<?php echo esc_url( $logs_page_url ); ?>">
@@ -113,7 +117,7 @@ class LoyaltyProgram
 			</div>
 		</div>
 		<div class="referral-container">
-			<h2><?php esc_html_e( 'Referral Link', 'hex-coupon-for-woocommerce' ); ?></h2>
+			<h2><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $referral_link_label ) )?></h2>
 			<div class="referral-box">
 				<input type="text" id="referral-link" value="<?php echo esc_url( $referral_link ); ?>" readonly>
 				<button class="copy-referral-link"><?php esc_html_e( 'Copy', 'hex-coupon-for-woocommerce' ); ?></button>
@@ -150,9 +154,14 @@ class LoyaltyProgram
 		$total = $wpdb->get_var( $total_query );
 
 		$results = $wpdb->get_results( $query.' ORDER BY id DESC LIMIT '. $offset.', '. $items_per_page, ARRAY_A );
+
+		$all_loyalty_labels = get_option( 'allLoyaltyLabels' );
+		$log_page_title = $all_loyalty_labels['logPageTitle'] ?? 'Loyalty Points Log';
 	?>
 	<div class="loyalty-points-log">
-		<h2><?php esc_html_e( 'Loyalty Points Log', 'hex-coupon-for-woocommerce' ); ?></h2>
+		<h2>
+			<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $log_page_title ) ); ?>
+		</h2>
 		<table class="loyalty-points-log-table">
 			<thead>
 			<tr>
@@ -205,7 +214,7 @@ class LoyaltyProgram
 			<?php endforeach; endif; ?>
 			</tbody>
 		</table>
-		<p><b><?php esc_html_e( 'All points are converted to store credit. Use store credit to make purchase on our store.', 'hex-coupon-for-woocommerce' );?></b></p>
+		<p><b><?php esc_html_e( 'All points you get are converted to store credit. Use store credit to make purchase on our store.', 'hex-coupon-for-woocommerce' );?></b></p>
 	</div>
 	<?php
 		echo paginate_links( [

@@ -70,7 +70,9 @@ class StoreBlock {
 		$order->update_meta_data( 'use_store_credit', $data['use_store_credit'] );
 
 		if ( $data['use_store_credit'] == 1 ) {
-			session_start();
+			if ( session_status() === PHP_SESSION_NONE ) {
+				session_start();
+			}
 			$deducted_store_credit_amount = isset( $_SESSION['deducted_store_credit_amount'] ) ? $_SESSION['deducted_store_credit_amount'] : '';
 
 			$order->update_meta_data( 'deducted_store_credit', $deducted_store_credit_amount );

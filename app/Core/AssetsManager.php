@@ -159,15 +159,15 @@ class AssetsManager
 		}
 
 		// Enqueuing script for store credit block
-		if ( ! $this->is_pro_active ) {
-			wp_enqueue_script(
-				hexcoupon_prefix( 'checkout-main' ),
-				hexcoupon_url( "build/index.js" ),
-				['jquery','wp-element'],
-				$this->version,
-				true
-			);
-		}
+//		if ( ! $this->is_pro_active ) {
+//			wp_enqueue_script(
+//				hexcoupon_prefix( 'checkout-main' ),
+//				hexcoupon_url( "build/index.js" ),
+//				['jquery','wp-element'],
+//				$this->version,
+//				true
+//			);
+//		}
 
 		$coupon_dashboard_label_text = [
 			'couponsCreatedLabel' => esc_html__( 'Coupons Created', 'hex-coupon-for-woocommerce' ),
@@ -249,6 +249,39 @@ class AssetsManager
 				'user_id' => $user_id,
 			] );
 		}
+		// admin side
+		if ( ! $this->is_pro_active ) {
+			wp_enqueue_script(
+				hexcoupon_prefix( 'checkout-main' ),
+				hexcoupon_url( "build/index.js" ),
+				['jquery','wp-element'],
+				$this->version,
+				true
+			);
+		}
+
+		// frond end side
+		if ( ! $this->is_pro_active ) {
+			// enqueuing file for 'WooCommerce Checkout' page
+			wp_enqueue_script(
+				hexcoupon_prefix( 'checkout-block' ),
+				hexcoupon_url( "build/index.js" ),
+				['jquery','wp-element'],
+				$this->version,
+				true
+			);
+		}
+
+		if ( ! $this->is_pro_active ) {
+			// enqueuing file for 'WooCommerce Checkout' page
+			wp_enqueue_script(
+				hexcoupon_prefix( 'checkout-frontend' ),
+				hexcoupon_url( "build/checkout-block-frontend.js" ),
+				['jquery','wp-element'],
+				$this->version,
+				true
+			);
+		}
 	}
 
 	/**
@@ -281,27 +314,27 @@ class AssetsManager
 			'all'
 		);
 
-		if ( ! $this->is_pro_active ) {
-			// enqueuing file for 'WooCommerce Checkout' page
-			wp_enqueue_script(
-				hexcoupon_prefix( 'checkout-block' ),
-				hexcoupon_url( "build/index.js" ),
-				['jquery','wp-element'],
-				$this->version,
-				true
-			);
-		}
-
-		if ( ! $this->is_pro_active ) {
-			// enqueuing file for 'WooCommerce Checkout' page
-			wp_enqueue_script(
-				hexcoupon_prefix( 'checkout-frontend' ),
-				hexcoupon_url( "build/checkout-block-frontend.js" ),
-				['jquery','wp-element'],
-				$this->version,
-				true
-			);
-		}
+//		if ( ! $this->is_pro_active ) {
+//			// enqueuing file for 'WooCommerce Checkout' page
+//			wp_enqueue_script(
+//				hexcoupon_prefix( 'checkout-block' ),
+//				hexcoupon_url( "build/index.js" ),
+//				['jquery','wp-element'],
+//				$this->version,
+//				true
+//			);
+//		}
+//
+//		if ( ! $this->is_pro_active ) {
+//			// enqueuing file for 'WooCommerce Checkout' page
+//			wp_enqueue_script(
+//				hexcoupon_prefix( 'checkout-frontend' ),
+//				hexcoupon_url( "build/checkout-block-frontend.js" ),
+//				['jquery','wp-element'],
+//				$this->version,
+//				true
+//			);
+//		}
 
 		$total_remaining_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
 
