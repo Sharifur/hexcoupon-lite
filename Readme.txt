@@ -4,9 +4,9 @@ Donate link: https://example.com/
 Tags: bogo, buy one get one, store credit, royalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
-Tested up to: 6.4.3
-Version: 1.1.6
-Stable tag: 1.1.6
+Tested up to: 6.5.3
+Version: 1.1.7
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,10 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.1.7 ==
+Added a brand new feature 'Loyalty Points'.
+Fixed QR code issue on existing published coupon.
+
 == 1.1.6 ==
 Added new feature "store credit" for both block pattern and legacy pattern
 

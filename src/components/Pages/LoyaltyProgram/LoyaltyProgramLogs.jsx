@@ -127,7 +127,7 @@ const LoyaltyProgramLogs = () => {
 								</select>
 								<input
 									type="text"
-									placeholder="Search by Name or display name"
+									placeholder="Search by Name"
 									value={searchQuery}
 									onChange={handleSearchChange}
 									className="py-2.5 pl-4 pr-4 h-[34px] w-[170px]"

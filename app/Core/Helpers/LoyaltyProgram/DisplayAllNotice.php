@@ -86,8 +86,8 @@ class DisplayAllNotice
 		$spending_amount = ! empty( $this->points_on_purchase['spendingAmount'] ) ? $this->points_on_purchase['spendingAmount']: 0;
 		$point_amount = ! empty( $this->points_on_purchase['pointAmount'] ) ? $this->points_on_purchase['pointAmount']: 0;
 
-		// Getting the total value of order
-		$total_value = $cart->get_total( 'edit' );
+		// Getting the sub-total value of order
+		$total_value = $cart->get_subtotal();
 
 		// Calculating the points for full order
 		$convert_point_on_per_spending = $total_value / $spending_amount;

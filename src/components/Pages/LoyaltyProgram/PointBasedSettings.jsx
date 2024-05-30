@@ -8,7 +8,6 @@ import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { Skeleton } from "../../Skeleton";
 import Tooltip from '@mui/material/Tooltip';
-import { __ } from "@wordpress/i18n";
 
 const PointBasedLoyaltySettings = () => {
 	const { nonce, ajaxUrl } = loyaltyProgramData;
@@ -173,7 +172,6 @@ const PointBasedLoyaltySettings = () => {
 											type="number"
 											value={settings.pointsOnPurchase.spendingAmount}
 											onChange={handleInputChange("pointsOnPurchase", "spendingAmount")}
-											placeholder="$"
 										/>
 									</label>
 								</div>
