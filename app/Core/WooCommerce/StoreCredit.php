@@ -25,8 +25,9 @@ class StoreCredit
 	public function register()
 	{
 		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
+		$store_credit_enable_data = $store_credit_enable_data['enable'] ?? 0;
 
-		if ( $store_credit_enable_data['enable'] ) {
+		if ( $store_credit_enable_data ) {
 			// Action hook for adding 'Store Credit' menu page in the 'My Account' Page Menu
 			add_filter ( 'woocommerce_account_menu_items', [ $this, 'store_credit_in_my_account_page' ], 40 );
 			// Action hook for registering permalink endpoint

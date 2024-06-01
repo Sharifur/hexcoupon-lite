@@ -150,7 +150,7 @@ Learn more about how [Appsero collects and uses this data](https://appsero.com/p
 == Changelog ==
 == 1.1.7 ==
 Added a brand new feature 'Loyalty Points'.
-Fixed QR code issue on existing published coupon.
+Fixed QR Code Image issue on existing published coupon.
 
 == 1.1.6 ==
 Added new feature "store credit" for both block pattern and legacy pattern

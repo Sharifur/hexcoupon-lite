@@ -4,7 +4,6 @@ import { CheckboxControl } from '@wordpress/components';
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 
-
 // Global import
 const { registerCheckoutBlock } = wc.blocksCheckout;
 
@@ -13,7 +12,8 @@ const Block = ({ children, checkoutExtensionData }) => {
 	const [storeCredit, setStoreCredit] = useState('0');
 
 	const nonce = window.storeCreditData?.nonce;
-	const remainingCredit = parseFloat(window.storeCreditData.total_remaining_store_credit);
+	const remainingCredit = parseFloat(window.storeCreditData?.total_remaining_store_credit || 0);
+
 	const cartTotal = parseFloat(window.storeCreditData.cart_total);
 	const deductedTotal = parseFloat(remainingCredit) > parseFloat(cartTotal) ? cartTotal : remainingCredit;
 

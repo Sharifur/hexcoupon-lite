@@ -73,25 +73,25 @@ class LoyaltyProgramSettingsApiController extends Controller
 				'pointAmount' => isset($dataArray['settings']['pointsOnPurchase']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsOnPurchase']['pointAmount']) : '',
 				'spendingAmount' => isset($dataArray['settings']['pointsOnPurchase']['spendingAmount']) ? sanitize_text_field($dataArray['settings']['pointsOnPurchase']['spendingAmount']) : '',
 			];
-			update_option('pointsOnPurchase', $points_on_purchase);
+			update_option( 'pointsOnPurchase', $points_on_purchase );
 
 			$points_for_signup = [
 				'enable' => isset($dataArray['settings']['pointsForSignup']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForSignup']['enable']) : '',
 				'pointAmount' => isset($dataArray['settings']['pointsForSignup']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForSignup']['pointAmount']) : '',
 			];
-			update_option('pointsForSignup', $points_for_signup);
+			update_option( 'pointsForSignup', $points_for_signup );
 
 			$points_for_referral = [
 				'enable' => isset($dataArray['settings']['pointsForReferral']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForReferral']['enable']) : '',
 				'pointAmount' => isset($dataArray['settings']['pointsForReferral']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForReferral']['pointAmount']) : '',
 			];
-			update_option('pointsForReferral', $points_for_referral);
+			update_option( 'pointsForReferral', $points_for_referral );
 
 			$conversion_rate = [
 				'credit' => isset($dataArray['settings']['conversionRate']['credit']) ? sanitize_text_field($dataArray['settings']['conversionRate']['credit']) : '',
 				'points' => isset($dataArray['settings']['conversionRate']['points']) ? sanitize_text_field($dataArray['settings']['conversionRate']['points']) : '',
 			];
-			update_option('conversionRate', $conversion_rate);
+			update_option( 'conversionRate', $conversion_rate );
 
 			$all_labels = [
 				'logPageTitle' => isset( $dataArray['settings']['allLoyaltyLabels']['logPageTitle'] ) ? sanitize_text_field( $dataArray['settings']['allLoyaltyLabels']['logPageTitle'] ) : '',
@@ -100,7 +100,7 @@ class LoyaltyProgramSettingsApiController extends Controller
 			];
 			update_option('allLoyaltyLabels', $all_labels );
 
-			wp_send_json($_POST);
+			wp_send_json( $_POST );
 		} else {
 			wp_send_json([
 				'error' => 'Nonce verification failed',
@@ -127,7 +127,16 @@ class LoyaltyProgramSettingsApiController extends Controller
 		$user_id = isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : 0;
 		$points = isset( $_POST['points'] ) ? intval( $_POST['points'] ) : 0;
 
-		if ( $user_id > 0 && $points >= 0 ) {
+//		if ( $user_id > 0 && $points >= 0 ) {
+//			// Replace this with your actual function to save points
+//			LoyaltyProgramHelpers::getInstance()->give_points_after_order_purchase_in_block( $user_id, $points );
+//			wp_send_json_success( 'Points saved' );
+//		} else {
+//			wp_send_json_error( 'Invalid data' );
+//		}
+		error_log($points);
+
+		if ( $user_id > 0 ) {
 			// Replace this with your actual function to save points
 			LoyaltyProgramHelpers::getInstance()->give_points_after_order_purchase_in_block( $user_id, $points );
 			wp_send_json_success( 'Points saved' );

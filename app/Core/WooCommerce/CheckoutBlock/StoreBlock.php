@@ -67,9 +67,11 @@ class StoreBlock {
 	{
 		$data = isset( $request['extensions']['hex-coupon-for-woocommerce'] ) ? $request['extensions']['hex-coupon-for-woocommerce'] : [];
 
-		$order->update_meta_data( 'use_store_credit', $data['use_store_credit'] );
+		if ( ! empty( $data['use_store_credit'] ) ) {
+			$order->update_meta_data( 'use_store_credit', $data['use_store_credit'] );
+		}
 
-		if ( $data['use_store_credit'] == 1 ) {
+		if ( ! empty( $data['use_store_credit'] ) && $data['use_store_credit'] == 1 ) {
 			if ( session_status() === PHP_SESSION_NONE ) {
 				session_start();
 			}

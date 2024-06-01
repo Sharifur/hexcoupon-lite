@@ -32,15 +32,7 @@ class AssetsManager
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 
-		$enable_point_loyalties = get_option( 'loyalty_program_enable_settings' );
-		$enable_point_loyalties = $enable_point_loyalties['enable'] ?? '';
-
-		$points_on_purchase = get_option( 'pointsOnPurchase' );
-		$enable_points_on_purchase = ! empty( $points_on_purchase['enable'] ) ? $points_on_purchase['enable']: 0;
-
-		if ( $enable_point_loyalties && $enable_points_on_purchase ) {
-			add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
-		}
+		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
 	}
 
 	/**
@@ -222,21 +214,32 @@ class AssetsManager
 	 */
 	public function block_scripts()
 	{
-		if ( is_checkout() ) {
-			wp_enqueue_script(
-				'checkout-block-notices',
-				plugins_url('hex-coupon-for-woocommerce/assets/dev/public/js/checkout-block-notices.js' ),
-				[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wc-blocks-checkout', 'wp-data' ],
-				plugins_url('hex-coupon-for-woocommerce/assets/dev/public/js/checkout-block-notices.js' ),
-				true
-			);
+		$point_loyalties = get_option( 'loyalty_program_enable_settings' );
+		$enable_point_loyalties = $point_loyalties['enable'] ?? 0;
 
-			$user_id = get_current_user_id();
-			wp_localize_script( 'checkout-block-notices', 'pointsForCheckoutBlock', [
-				'ajax_url' => admin_url( 'admin-ajax.php '),
-				'nonce' => wp_create_nonce( 'custom_nonce' ),
-				'user_id' => $user_id,
-			] );
+		$points_on_purchase = get_option( 'pointsOnPurchase' );
+		$points_on_purchase_enable = $points_on_purchase['enable'] ?? 0;
+
+		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
+		$store_credit_enable_data = $store_credit_enable_data['enable'] ?? 0;
+
+		if ( is_checkout() ) {
+			if ( $enable_point_loyalties && $points_on_purchase_enable ) {
+				wp_enqueue_script(
+					'checkout-block-notices',
+					plugins_url('hex-coupon-for-woocommerce/assets/dev/public/js/checkout-block-notices.js' ),
+					[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor', 'wc-blocks-checkout', 'wp-data' ],
+					plugins_url('hex-coupon-for-woocommerce/assets/dev/public/js/checkout-block-notices.js' ),
+					true
+				);
+
+				$user_id = get_current_user_id();
+				wp_localize_script( 'checkout-block-notices', 'pointsForCheckoutBlock', [
+					'ajax_url' => admin_url( 'admin-ajax.php '),
+					'nonce' => wp_create_nonce( 'custom_nonce' ),
+					'user_id' => $user_id,
+				] );
+			}
 
 			// Admin back-end
 			if ( ! $this->is_pro_active && is_admin() ) {
@@ -250,7 +253,7 @@ class AssetsManager
 			}
 
 			// user front-end
-			if ( ! $this->is_pro_active ) {
+			if ( ! $this->is_pro_active && $store_credit_enable_data ) {
 				// enqueuing file for 'WooCommerce Checkout' page
 				wp_enqueue_script(
 					hexcoupon_prefix( 'checkout-block' ),
@@ -261,7 +264,7 @@ class AssetsManager
 				);
 			}
 
-			if ( ! $this->is_pro_active ) {
+			if ( ! $this->is_pro_active && $store_credit_enable_data ) {
 				// enqueuing file for 'WooCommerce Checkout' page
 				wp_enqueue_script(
 					hexcoupon_prefix( 'checkout-frontend' ),
@@ -309,23 +312,21 @@ class AssetsManager
 		global $woocommerce;
 		$total_price = $woocommerce->cart->total;
 
-		if ( ! is_admin() ) {
-			wp_localize_script( hexcoupon_prefix( 'checkout-block' ), 'storeCreditData', [
-				'total_remaining_store_credit' => $total_remaining_store_credit,
-				'cart_total' => $total_price,
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'postUrl' => admin_url( 'admin-post.php' ),
-				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
-				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
-			] );
+		wp_localize_script( hexcoupon_prefix( 'checkout-block' ), 'storeCreditData', [
+			'total_remaining_store_credit' => $total_remaining_store_credit,
+			'cart_total' => $total_price,
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+		] );
 
-			wp_localize_script( hexcoupon_prefix( 'checkout-frontend' ), 'hexCuponData', [
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'postUrl' => admin_url( 'admin-post.php' ),
-				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
-				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
-			] );
-		}
+		wp_localize_script( hexcoupon_prefix( 'checkout-frontend' ), 'hexCuponData', [
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+		] );
 
 	}
 }

@@ -45,6 +45,38 @@ class ActivationService
 			'enable' => true,
 		];
 		update_option( 'loyalty_program_enable_settings', $loyalty_program_enable_settings );
+
+		$points_on_purchase = [
+			'enable' => 1,
+			'pointAmount' => '100',
+			'spendingAmount' => '1',
+		];
+		update_option( 'pointsOnPurchase', $points_on_purchase );
+
+		$points_for_signup = [
+			'enable' => 1,
+			'pointAmount' => '100',
+		];
+		update_option( 'pointsForSignup', $points_for_signup );
+
+		$points_for_referral = [
+			'enable' => 1,
+			'pointAmount' => '100',
+		];
+		update_option( 'pointsForReferral', $points_for_referral );
+
+		$conversion_rate = [
+			'credit' => '1',
+			'points' => '100',
+		];
+		update_option( 'conversionRate', $conversion_rate );
+
+		$all_labels = [
+			'logPageTitle' =>  'Loyalty Points Log',
+			'referralLinkLabel' => 'Share Referral Link',
+			'pointsText' => 'Points earned so far',
+		];
+		update_option('allLoyaltyLabels', $all_labels );
 	}
 
 	public static function load_hexcoupon_textdomain()

@@ -25,11 +25,10 @@ class DisplayAllNotice
 		$points_for_signup_enable = $this->points_for_signup['enable'] ?? '';
 
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
-		$points_on_purchase_enable = $this->points_on_purchase['enable'] ?? '';
+		$points_on_purchase_enable = $this->points_on_purchase['enable'] ?? 0;
 
 		$this->enable_point_loyalties = get_option( 'loyalty_program_enable_settings' );
-
-		$this->enable_point_loyalties = $this->enable_point_loyalties['enable'] ?? '';
+		$this->enable_point_loyalties = $this->enable_point_loyalties['enable'] ?? 0;
 
 		if ( $this->enable_point_loyalties ) {
 			if ( $points_for_signup_enable ) {

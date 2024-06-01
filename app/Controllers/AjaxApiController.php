@@ -34,6 +34,14 @@ class AjaxApiController extends Controller
 		add_action( 'wp_ajax_weeklyCouponRedeemedData', [ $this, 'weeklyCouponRedeemedData'] );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method point_loyalty_program_logs
+	 * @return void
+	 * Sending data of loyalty points logs in log page
+	 */
 	public function point_loyalty_program_logs()
 	{
 		global $wpdb;
