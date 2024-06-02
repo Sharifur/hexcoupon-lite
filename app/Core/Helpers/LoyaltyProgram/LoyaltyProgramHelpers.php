@@ -446,32 +446,6 @@ class LoyaltyProgramHelpers
 		$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
 	}
 
-
-
-	function get_order_subtotal_once($order_id) {
-		// Use a static variable to ensure the code runs only once
-		static $has_run = false;
-
-		// Check if the function has already been run
-		if ($has_run) {
-			return;
-		}
-
-		// Mark the function as run
-		$has_run = true;
-
-		// Get the order object
-		$order = wc_get_order($order_id);
-
-		if ($order) {
-			// Get the order subtotal
-			$order_subtotal = $order->get_subtotal();
-
-			// Do something with the order subtotal
-			error_log('Order Subtotal: ' . $order_subtotal); // Example: Log the subtotal
-		}
-	}
-
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
@@ -554,7 +528,7 @@ class LoyaltyProgramHelpers
 				);
 			}
 
-			//** Getting current store credit amount **
+			// ** Getting current store credit amount for inserting credit to the 'store credit table' **
 			$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
 
 			$current_credit = $wpdb->get_var( $wpdb->prepare(
@@ -589,7 +563,7 @@ class LoyaltyProgramHelpers
 					['%d', '%f']
 				);
 			} else {
-				// Update the user's points balance in the database
+				// Update the user's credit balance in the database
 				$wpdb->update(
 					$store_credit_table,
 					['amount' => $new_credit_balance],

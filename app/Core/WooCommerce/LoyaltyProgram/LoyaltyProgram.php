@@ -10,6 +10,7 @@ class LoyaltyProgram
 	private $user;
 
 	private $points_converstion_rate;
+	private $loyalty_program_settings;
 
 	/**
 	 * @package hexcoupon
@@ -22,14 +23,20 @@ class LoyaltyProgram
 	public function register()
 	{
 		$this->points_converstion_rate = get_option( 'conversionRate' );
+		$this->loyalty_program_settings = get_option( 'loyalty_program_enable_settings' );
+		$loyalty_program_enable = $this->loyalty_program_settings['enable'] ?? 0;
 
-		// Action hook for adding 'Loyalty Points' menu page in the 'My Account' Page Menu
-		add_filter ( 'woocommerce_account_menu_items', [ $this, 'loyalty_points_in_my_account_page' ], 40 );
-		// Action hook for registering permalink endpoint
-		add_action( 'init', [ $this, 'register_endpoints' ] );
-		// Action hook for displaying 'Loyalty Points' page content
-		add_action( 'woocommerce_account_loyalty-points_endpoint', [ $this, 'loyalty_points_page_endpoint_content' ] );
-		add_action( 'woocommerce_account_loyalty-points-logs_endpoint', [ $this, 'loyalty_points_logs_page_endpoint_content' ] );
+		// Making it on/off based on Loyalty Program on/off settings data
+		if ( $loyalty_program_enable ) {
+			// Action hook for adding 'Loyalty Points' menu page in the 'My Account' Page Menu
+			add_filter ( 'woocommerce_account_menu_items', [ $this, 'loyalty_points_in_my_account_page' ], 40 );
+			// Action hook for registering permalink endpoint
+			add_action( 'init', [ $this, 'register_endpoints' ] );
+
+			// Action hook for displaying 'Loyalty Points' page content
+			add_action( 'woocommerce_account_loyalty-points_endpoint', [ $this, 'loyalty_points_page_endpoint_content' ] );
+			add_action( 'woocommerce_account_loyalty-points-logs_endpoint', [ $this, 'loyalty_points_logs_page_endpoint_content' ] );
+		}
 	}
 
 	/**
