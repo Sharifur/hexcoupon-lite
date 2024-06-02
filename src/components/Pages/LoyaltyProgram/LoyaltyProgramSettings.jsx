@@ -105,7 +105,9 @@ const LoyaltyProgramSettings = () => {
 							/>
 						</div>
 					</div>
-
+					<div className="store-credit-enable-notice">
+						<p>{__("'Loyalty points' are auto converted to 'Store Credit'. So, enable 'Store Credit' to enjoy this feature")}</p>
+					</div>
 					<div className="save-button-container">
 						<input
 							type="submit"

@@ -33,10 +33,12 @@
 				font-weight: 500;
 
 				.switch-container {
-
+					> span:first-child {
+						width: 220px;
+					}
 					.switch-enabled {
-						margin-left: 100px;
 						margin-right: 10px;
+						margin-left: 0;
 						font-size: 16px;
 					}
 				}
@@ -53,10 +55,11 @@
 
 					input {
 						width: 150px;
-						padding: 5px;
 						margin-left: 10px;
 						border: 1px solid #ccc;
 						border-radius: 4px;
+						line-height: 1;
+						padding:6px;
 					}
 				}
 			}
@@ -66,8 +69,6 @@
 			padding: 20px;
 			.save-button {
 				display: block;
-				width: 14%;
-				padding: 15px;
 				background-color: var(--hex-main-color-one);
 				color: white;
 				border: none;
@@ -77,6 +78,8 @@
 				text-align: center;
 				margin-top: 20px;
 				transition: background-color 0.3s;
+				padding: 10px 22px;
+				width: auto;
 
 				&:hover {
 					background-color: rgba(167, 96, 254, 0.68);
@@ -87,6 +90,7 @@
 		.conversion-rate {
 			margin-top: 20px;
 			padding: 20px;
+			border-bottom: 1px solid #e0e0e0;
 
 			label {
 				display: flex;
@@ -94,6 +98,7 @@
 				align-items: center;
 				margin-bottom: 10px;
 				font-size: 16px;
+				gap: 10px;
 
 				input {
 					width: 70%;
@@ -106,13 +111,13 @@
 			span {
 				width: 25%;
 				display: block;
-				margin-top: 10px;
-				padding: 5px;
 				font-size: 14px;
 				color: #666;
 				text-align: center;
 				border: 1px solid #a760fe;
 				background: rgba(167, 96, 254, 0.08);
+				margin-top: 0;
+				padding: 8px 5px;
 			}
 		}
 	}

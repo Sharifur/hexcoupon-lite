@@ -23,9 +23,10 @@ class FlushRewriteForStoreCredit
 	function custom_flush_rewrite_rules() {
 		// Getting the value from your options table
 		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
+		$enable_store_credit = $store_credit_enable_data['enable'] ?? 0;
 
 		// Checking if the value is set to true
-		if ( $store_credit_enable_data['enable'] ) {
+		if ( $enable_store_credit ) {
 			// Flush rewrite rules
 			flush_rewrite_rules();
 		}

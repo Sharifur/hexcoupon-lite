@@ -66,14 +66,6 @@ class AssetsManager
 		$js_file_extension = hexcoupon_get_config('dev_mode') ? '.js' : '.min.js';
 		$css_file_extension = hexcoupon_get_config('dev_mode') ? '.css' : '.min.css';
 
-		wp_enqueue_style(
-			hexcoupon_prefix( 'admin' ),
-			hexcoupon_asset_url( $folder_prefix. "/admin/css/arman-vai" .$css_file_extension ),
-			array(),
-			$this->version,
-			'all'
-		);
-
 		if ( ( str_contains( $_SERVER['REQUEST_URI'], 'post-new.php' ) && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'shop_coupon') ||
 			( isset( $_GET['post'] ) && isset( $_GET['action'] ) && $_GET['action'] === 'edit' ) ) {
 

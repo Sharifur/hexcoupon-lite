@@ -19,6 +19,7 @@ class LoyaltyProgramHelpers
 	private $points_on_purchase;
 
 	private $conversion_rate;
+	private $loyalty_program_enable_settings;
 
 	/**
 	 * Registering hooks that are needed
@@ -31,6 +32,8 @@ class LoyaltyProgramHelpers
 		$this->table_name = $wpdb->prefix . 'hex_loyalty_program_points';
 		$this->store_credit_table = $wpdb->prefix . 'hex_store_credit';
 		$this->store_credit_logs_table = $wpdb->prefix . 'hex_store_credit_logs';
+
+		$this->loyalty_program_enable_settings = get_option( 'loyalty_program_enable_settings' );
 
 		$this->loyalty_points_log_table = $wpdb->prefix . 'hex_loyalty_points_log';
 
@@ -176,19 +179,22 @@ class LoyaltyProgramHelpers
 	 */
 	public function update_referrer_points( $user_id )
 	{
+		$enable_loyalty_program = $this->loyalty_program_enable_settings['enable'] ?? 0;
+
+		// Retrieve the signup points from the options
+		$points_for_referral = get_option( 'pointsForReferral' );
+		$enable_referral = $points_for_referral['enable'] ?? 0;
+		$points_for_referral = ! empty( $points_for_referral['pointAmount'] ) ? intval( $points_for_referral['pointAmount'] ) : 0;
+
 		$wpdb = $this->wpdb;
 
 		$table_name = $this->table_name;
 		$store_credit_table = $this->store_credit_table;
 		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
-		if ( isset( $_SESSION['referrer_id'] ) ) {
+		if ( $enable_loyalty_program && $enable_referral && isset( $_SESSION['referrer_id'] ) ) {
 			$referrer_id = intval( $_SESSION['referrer_id'] );
 			if ( $referrer_id ) {
-				// Retrieve the signup points from the options
-				$points_for_referral = get_option( 'pointsForReferral' );
-				$points_for_referral = ! empty( $points_for_referral['pointAmount'] ) ? intval( $points_for_referral['pointAmount'] ) : 0;
-
 				// Get the total points for the user, defaulting to 0 if no entry exists
 				$current_points = $wpdb->get_var( $wpdb->prepare(
 					"SELECT points FROM $table_name WHERE user_id = %d",
