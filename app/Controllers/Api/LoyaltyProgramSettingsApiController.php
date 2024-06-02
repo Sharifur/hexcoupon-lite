@@ -1,7 +1,6 @@
 <?php
 namespace HexCoupon\App\Controllers\Api;
 
-use HexCoupon\App\Core\Helpers\LoyaltyProgram\LoyaltyProgramHelpers;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Traits\NonceVerify;
 use Kathamo\Framework\Lib\Controller;
@@ -20,8 +19,6 @@ class LoyaltyProgramSettingsApiController extends Controller
 	{
 		add_action( 'admin_post_loyalty_program_settings_save', [ $this, 'loyalty_program_settings_save' ] );
 		add_action( 'admin_post_points_loyalty_settings_save', [ $this, 'points_loyalty_settings_save' ] );
-
-		add_action( 'wp_ajax_save_loyalty_points', [ $this, 'save_loyalty_points' ] );
 	}
 
 	/**
@@ -107,42 +104,4 @@ class LoyaltyProgramSettingsApiController extends Controller
 			], 403); // 403 Forbidden status code
 		}
 	}
-
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method save_loyalty_points
-	 * @return void
-	 * Saving points after successful order checkout
-	 */
-	public function save_loyalty_points()
-	{
-		if ( ! check_ajax_referer( 'custom_nonce', 'security', false ) ) {
-			wp_send_json_error('Nonce verification failed' );
-			return;
-		}
-
-		$user_id = isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : 0;
-		$points = isset( $_POST['points'] ) ? intval( $_POST['points'] ) : 0;
-
-//		if ( $user_id > 0 && $points >= 0 ) {
-//			// Replace this with your actual function to save points
-//			LoyaltyProgramHelpers::getInstance()->give_points_after_order_purchase_in_block( $user_id, $points );
-//			wp_send_json_success( 'Points saved' );
-//		} else {
-//			wp_send_json_error( 'Invalid data' );
-//		}
-		error_log($points);
-
-		if ( $user_id > 0 ) {
-			// Replace this with your actual function to save points
-			LoyaltyProgramHelpers::getInstance()->give_points_after_order_purchase_in_block( $user_id, $points );
-			wp_send_json_success( 'Points saved' );
-		} else {
-			wp_send_json_error( 'Invalid data' );
-		}
-	}
-
 }

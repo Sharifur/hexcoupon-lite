@@ -21,6 +21,15 @@ HexCoupon ensures that discounts are visible in various stages, including the pr
 ##USEFUL LINKS##
 **[HexCoupon Website Link ](https://hexcoupon.com/)** |  **[Need Support?](https://hexcoupon.com/support)** | **[Documentation](https://hexcoupon.com/docs/)**
 
+<h4>New Features-</h4>
+<ul>
+	<li>Toggle On/Off Loyalty Program: Easily activate or deactivate the loyalty program based on your business needs.</li>
+	<li>Points on Purchase: Reward customers with points for every purchase they make, encouraging repeat business.</li>
+	<li>Points for Referrals: Boost your customer base by offering points to users who refer friends and family.</li>
+	<li>Customizable User Text: Personalize the messages displayed to your users, enhancing their experience and engagement.</li>
+	<li>Comprehensive Loyalty Program Log: Keep track of all activities within the loyalty program with a detailed log.</li>
+</ul>
+
 <h4>MAJOR FEATURES-</h4>
 <ul>
 	<li><strong>Discounts coupons -</strong> HexCoupon simplifies the process of creating coupons and generating unique and engaging promotional offers for your online store.</li>

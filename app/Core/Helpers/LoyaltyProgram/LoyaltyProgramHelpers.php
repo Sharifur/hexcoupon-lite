@@ -42,7 +42,7 @@ class LoyaltyProgramHelpers
 		add_action( 'template_redirect', [ $this, 'handle_referral' ] );
 		add_action( 'user_register', [ $this, 'update_referrer_points' ] );
 		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_checkout' ] );
-		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_purchase_in_block' ] );
+		add_action( 'woocommerce_thankyou', [ $this, 'give_points_after_order_purchase_in_block' ], 10, 1 );
 	}
 
 	/**
@@ -446,6 +446,32 @@ class LoyaltyProgramHelpers
 		$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
 	}
 
+
+
+	function get_order_subtotal_once($order_id) {
+		// Use a static variable to ensure the code runs only once
+		static $has_run = false;
+
+		// Check if the function has already been run
+		if ($has_run) {
+			return;
+		}
+
+		// Mark the function as run
+		$has_run = true;
+
+		// Get the order object
+		$order = wc_get_order($order_id);
+
+		if ($order) {
+			// Get the order subtotal
+			$order_subtotal = $order->get_subtotal();
+
+			// Do something with the order subtotal
+			error_log('Order Subtotal: ' . $order_subtotal); // Example: Log the subtotal
+		}
+	}
+
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
@@ -454,123 +480,147 @@ class LoyaltyProgramHelpers
 	 * @return void
 	 * Giving points after successful checkout in block checkout page
 	 */
-	public function give_points_after_order_purchase_in_block( $user_id, $points )
+	public function give_points_after_order_purchase_in_block( $order_id )
 	{
-		$wpdb = $this->wpdb;
+		// Using a static variable to ensure the code runs only once
+		static $has_run = false;
 
-		$table_name = $this->table_name;
-		$store_credit_table = $this->store_credit_table;
-		$loyalty_points_log_table = $this->loyalty_points_log_table;
-
-		// Get the total points for the user, defaulting to 0 if no entry exists
-		$current_points = $wpdb->get_var( $wpdb->prepare(
-			"SELECT points FROM $table_name WHERE user_id = %d",
-			$user_id
-		) );
-
-		// If no entry exists, default the current points to 0
-		$current_points = $current_points !== null ? intval( $current_points ) : 0;
-
-		// Calculate the new points balance
-		$new_points_balance = $current_points + $points;
-
-		// Prepare the data for insertion or update
-		$data = [
-			'user_id' => $user_id,
-			'points'  => $new_points_balance,
-		];
-
-		// Check if the user ID already exists in the table
-		$existing_entry = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE user_id = %d",
-			$user_id
-		) );
-
-		// If the user ID doesn't exist, insert a new row
-		if ( ! $existing_entry ) {
-			// Insert the user's points balance into the database
-			$wpdb->insert(
-				$table_name,
-				$data,
-				['%d', '%d']
-			);
-		} else {
-			// Update the user's points balance in the database
-			$wpdb->update(
-				$table_name,
-				['points' => $new_points_balance],
-				['user_id' => $user_id],
-				['%d'],
-				['%d']
-			);
+		// Check if the function has already been run
+		if ( $has_run ) {
+			return;
 		}
 
-		//** Getting current store credit amount **
-		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+		// Mark the function as run
+		$has_run = true;
 
-		$current_credit = $wpdb->get_var( $wpdb->prepare(
-			"SELECT amount FROM $store_credit_table WHERE user_id = %d",
-			$user_id
-		) );
+		// Get the order object
+		$order = wc_get_order( $order_id );
 
-		// If no entry exists, default the current credit to 0
-		$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
+		if ( $order ) {
+			// Get the order subtotal
+			$order_subtotal = $order->get_subtotal();
+			$user_id = $order->get_user_id();
+			$pointAmount = $this->points_on_purchase['pointAmount'] ?? 0;
+			$spendingAmount = $this->points_on_purchase['spendingAmount'] ?? 0;
 
-		// Calculate the new credit balance
-		$new_credit_balance = round( $current_credit + ( $points / $points_to_be_converted ), 2 );
+			$points = ( $order_subtotal / $spendingAmount ) * $pointAmount;
 
-		// Check if the user ID already exists in the table
-		$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $store_credit_table WHERE user_id = %d",
-			$user_id
-		) );
+			$wpdb = $this->wpdb;
 
-		// Prepare the data for insertion or update
-		$store_credit_data = [
-			'user_id' => $user_id,
-			'amount'  => $new_credit_balance,
-		];
+			$table_name = $this->table_name;
+			$store_credit_table = $this->store_credit_table;
+			$loyalty_points_log_table = $this->loyalty_points_log_table;
 
-		// If the user ID doesn't exist, insert a new row
-		if ( ! $existing_store_credit_entry ) {
-			// Insert the user's points balance into the database
+			// Get the total points for the user, defaulting to 0 if no entry exists
+			$current_points = $wpdb->get_var( $wpdb->prepare(
+				"SELECT points FROM $table_name WHERE user_id = %d",
+				$user_id
+			) );
+
+			// If no entry exists, default the current points to 0
+			$current_points = $current_points !== null ? intval( $current_points ) : 0;
+
+			// Calculate the new points balance
+			$new_points_balance = $current_points + $points;
+
+			// Prepare the data for insertion or update
+			$data = [
+				'user_id' => $user_id,
+				'points'  => $new_points_balance,
+			];
+
+			// Check if the user ID already exists in the table
+			$existing_entry = $wpdb->get_row( $wpdb->prepare(
+				"SELECT * FROM $table_name WHERE user_id = %d",
+				$user_id
+			) );
+
+			// If the user ID doesn't exist, insert a new row
+			if ( ! $existing_entry ) {
+				// Insert the user's points balance into the database
+				$wpdb->insert(
+					$table_name,
+					$data,
+					['%d', '%d']
+				);
+			} else {
+				// Update the user's points balance in the database
+				$wpdb->update(
+					$table_name,
+					['points' => $new_points_balance],
+					['user_id' => $user_id],
+					['%d'],
+					['%d']
+				);
+			}
+
+			//** Getting current store credit amount **
+			$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+			$current_credit = $wpdb->get_var( $wpdb->prepare(
+				"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+				$user_id
+			) );
+
+			// If no entry exists, default the current credit to 0
+			$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
+
+			// Calculate the new credit balance
+			$new_credit_balance = round( $current_credit + ( $points / $points_to_be_converted ), 2 );
+
+			// Check if the user ID already exists in the table
+			$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+				"SELECT * FROM $store_credit_table WHERE user_id = %d",
+				$user_id
+			) );
+
+			// Prepare the data for insertion or update
+			$store_credit_data = [
+				'user_id' => $user_id,
+				'amount'  => $new_credit_balance,
+			];
+
+			// If the user ID doesn't exist, insert a new row
+			if ( ! $existing_store_credit_entry ) {
+				// Insert the user's points balance into the database
+				$wpdb->insert(
+					$store_credit_table,
+					$store_credit_data,
+					['%d', '%f']
+				);
+			} else {
+				// Update the user's points balance in the database
+				$wpdb->update(
+					$store_credit_table,
+					['amount' => $new_credit_balance],
+					['user_id' => $user_id],
+					['%f'],
+					['%d']
+				);
+			}
+
+			// ** Mechanism to send logs in the loyalty_points_log table after order checkout ** //
+			$credit_for_purchase = $points / $points_to_be_converted;
+
+			$loyalty_points_log_data = [
+				'user_id' => intval( $user_id ),
+				'points'  => round(  $points ),
+				'reason'  => strval( 2 ),
+				'converted_credit'  => round( $credit_for_purchase, 2 ),
+				'conversion_rate'  => floatval( $points_to_be_converted ),
+			];
+
 			$wpdb->insert(
-				$store_credit_table,
-				$store_credit_data,
-				['%d', '%f']
+				$loyalty_points_log_table,
+				$loyalty_points_log_data,
+				[ '%d', '%f', '%d', '%f', '%f' ],
 			);
-		} else {
-			// Update the user's points balance in the database
-			$wpdb->update(
-				$store_credit_table,
-				['amount' => $new_credit_balance],
-				['user_id' => $user_id],
-				['%f'],
-				['%d']
-			);
+
+			$loyalty_points_primary_key = $wpdb->insert_id;
+
+			// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+			$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
 		}
-
-		// ** Mechanism to send logs in the loyalty_points_log table after order checkout ** //
-		$credit_for_purchase = $points / $points_to_be_converted;
-
-		$loyalty_points_log_data = [
-			'user_id' => intval( $user_id ),
-			'points'  => round(  $points ),
-			'reason'  => strval( 2 ),
-			'converted_credit'  => round( $credit_for_purchase, 2 ),
-			'conversion_rate'  => floatval( $points_to_be_converted ),
-		];
-
-		$wpdb->insert(
-			$loyalty_points_log_table,
-			$loyalty_points_log_data,
-			[ '%d', '%f', '%d', '%f', '%f' ],
-		);
-
-		$loyalty_points_primary_key = $wpdb->insert_id;
-
-		// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
-		$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
 	}
 
 	/**
