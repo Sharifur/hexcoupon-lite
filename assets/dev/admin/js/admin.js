@@ -4,8 +4,11 @@
 
 		// destructuring internationalization functions for making text translatable
 		const { __, _x, _n, _nx } = wp.i18n;
+		let isProActive = false;
 
-		let isProActive = pro_data.is_pro_active;
+		if (typeof pro_data !== 'undefined' && pro_data.is_pro_active) {
+			isProActive = pro_data.is_pro_active;
+		}
 
 		/*
        ==================================================

@@ -10,6 +10,7 @@ class AjaxApiController extends Controller
 	use SingleTon;
 
 	private $base_url = 'hexcoupon/v1/';
+	private $is_pro_active;
 
 	/**
 	 * Register hooks callback
@@ -18,6 +19,8 @@ class AjaxApiController extends Controller
 	 */
 	public function register()
 	{
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+
 		add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
 		add_action( 'wp_ajax_loyalty_program_enable_data', [ $this, 'loyalty_program_enable_data' ] );
 		add_action( 'wp_ajax_point_loyalty_program_data', [ $this, 'point_loyalty_program_data' ] );
@@ -47,10 +50,17 @@ class AjaxApiController extends Controller
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
 
-		$results = $wpdb->get_results(
-			"SELECT * FROM $table_name ORDER BY id DESC LIMIT 15",
-			ARRAY_A
-		);
+		if ( $this->is_pro_active ) {
+			$results = $wpdb->get_results(
+				"SELECT * FROM $table_name ORDER BY id DESC",
+				ARRAY_A
+			);
+		} else {
+			$results = $wpdb->get_results(
+				"SELECT * FROM $table_name ORDER BY id DESC LIMIT 15",
+				ARRAY_A
+			);
+		}
 
 		foreach ( $results as &$item ) {
 			$user_data = get_userdata( $item['user_id'] );

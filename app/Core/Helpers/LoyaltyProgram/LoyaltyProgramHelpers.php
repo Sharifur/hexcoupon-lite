@@ -186,130 +186,270 @@ class LoyaltyProgramHelpers
 		$enable_referral = $points_for_referral['enable'] ?? 0;
 		$points_for_referral = ! empty( $points_for_referral['pointAmount'] ) ? intval( $points_for_referral['pointAmount'] ) : 0;
 
-		$wpdb = $this->wpdb;
-
-		$table_name = $this->table_name;
-		$store_credit_table = $this->store_credit_table;
-		$loyalty_points_log_table = $this->loyalty_points_log_table;
+//		$wpdb = $this->wpdb;
+//
+//		$table_name = $this->table_name;
+//		$store_credit_table = $this->store_credit_table;
+//		$loyalty_points_log_table = $this->loyalty_points_log_table;
 
 		if ( $enable_loyalty_program && $enable_referral && isset( $_SESSION['referrer_id'] ) ) {
 			$referrer_id = intval( $_SESSION['referrer_id'] );
 			if ( $referrer_id ) {
-				// Get the total points for the user, defaulting to 0 if no entry exists
-				$current_points = $wpdb->get_var( $wpdb->prepare(
-					"SELECT points FROM $table_name WHERE user_id = %d",
-					$referrer_id
-				) );
-
-				// If no entry exists, default the current points to 0
-				$current_points = $current_points !== null ? intval( $current_points ) : 0;
-
-				// Calculate the new points balance
-				$new_points_balance = $current_points + $points_for_referral;
-
-				// Prepare the data for insertion or update
-				$data = [
-					'user_id' => $referrer_id,
-					'points'  => $new_points_balance,
+				$user_meta_data = [
+					'give_referral_point' => true,
+					'referrer_id' => $referrer_id,
+					'referral_points' => $points_for_referral,
 				];
 
-				// Check if the user ID already exists in the table
-				$existing_entry = $wpdb->get_row( $wpdb->prepare(
-					"SELECT * FROM $table_name WHERE user_id = %d",
-					$referrer_id
-				) );
-
-				// If the user ID doesn't exist, insert a new row
-				if ( ! $existing_entry ) {
-					// Insert the user's points balance into the database
-					$wpdb->insert(
-						$table_name,
-						$data,
-						['%d', '%d']
-					);
-				} else {
-					// Update the user's points balance in the database
-					$wpdb->update(
-						$table_name,
-						['points' => $new_points_balance],
-						['user_id' => $referrer_id],
-						['%d'],
-						['%d']
-					);
+				foreach ( $user_meta_data as $meta_key => $meta_value ) {
+					update_user_meta( $user_id, $meta_key, $meta_value );
 				}
 
-				//** Mechanism to send converting points to store credit and sending it to the database **
-				// Getting current store credit amount
-				$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
-
-				$current_credit = $wpdb->get_var( $wpdb->prepare(
-					"SELECT amount FROM $store_credit_table WHERE user_id = %d",
-					$referrer_id
-				) );
-
-				// If no entry exists, default the current credit to 0
-				$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
-
-				// Calculate the new credit balance
-				$new_credit_balance = round( $current_credit + ( $points_for_referral / $points_to_be_converted ), 2 );
-
-				// Check if the user ID already exists in the table
-				$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
-					"SELECT * FROM $store_credit_table WHERE user_id = %d",
-					$referrer_id
-				) );
-
-				// Prepare the data for insertion or update
-				$store_credit_data = [
-					'user_id' => $referrer_id,
-					'amount'  => $new_credit_balance,
-				];
-
-				// If the user ID doesn't exist, insert a new row
-				if ( ! $existing_store_credit_entry ) {
-					// Insert the user's points balance into the database
-					$wpdb->insert(
-						$store_credit_table,
-						$store_credit_data,
-						['%d', '%f']
-					);
-				} else {
-					// Update the user's points balance in the database
-					$wpdb->update(
-						$store_credit_table,
-						['amount' => $new_credit_balance],
-						['user_id' => $referrer_id],
-						['%f'],
-						['%d']
-					);
-				}
-
-				// ** Mechanism to send loyalty points logs to the 'hex_loyalty_points_table' **
-				$converted_credit = round( $points_for_referral / $points_to_be_converted, 2 );
-
-				$loyalty_points_log_data = [
-					'user_id' => intval( $referrer_id ),
-					'points' => floatval( $points_for_referral ),
-					'reason' => boolval( 1 ),
-					'referee_id' => intval( $user_id ),
-					'converted_credit' => floatval( $converted_credit ),
-					'conversion_rate' => floatval( $points_to_be_converted ),
-				];
-
-				$wpdb->insert(
-					$loyalty_points_log_table,
-					$loyalty_points_log_data,
-					[ '%d', '%f', '%d', '%f', '%f' ],
-				);
-
-				$loyalty_points_primary_key = $wpdb->insert_id;
-
-				// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
-				$this->send_logs_to_the_store_credit_log_table( $referrer_id, $converted_credit, $loyalty_points_primary_key );
+//				// Get the total points for the user, defaulting to 0 if no entry exists
+//				$current_points = $wpdb->get_var( $wpdb->prepare(
+//					"SELECT points FROM $table_name WHERE user_id = %d",
+//					$referrer_id
+//				) );
+//
+//				// If no entry exists, default the current points to 0
+//				$current_points = $current_points !== null ? intval( $current_points ) : 0;
+//
+//				// Calculate the new points balance
+//				$new_points_balance = $current_points + $points_for_referral;
+//
+//				// Prepare the data for insertion or update
+//				$data = [
+//					'user_id' => $referrer_id,
+//					'points'  => $new_points_balance,
+//				];
+//
+//				// Check if the user ID already exists in the table
+//				$existing_entry = $wpdb->get_row( $wpdb->prepare(
+//					"SELECT * FROM $table_name WHERE user_id = %d",
+//					$referrer_id
+//				) );
+//
+//				// If the user ID doesn't exist, insert a new row
+//				if ( ! $existing_entry ) {
+//					// Insert the user's points balance into the database
+//					$wpdb->insert(
+//						$table_name,
+//						$data,
+//						['%d', '%d']
+//					);
+//				} else {
+//					// Update the user's points balance in the database
+//					$wpdb->update(
+//						$table_name,
+//						['points' => $new_points_balance],
+//						['user_id' => $referrer_id],
+//						['%d'],
+//						['%d']
+//					);
+//				}
+//
+//				//** Mechanism to send converting points to store credit and sending it to the database **
+//				// Getting current store credit amount
+//				$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+//
+//				$current_credit = $wpdb->get_var( $wpdb->prepare(
+//					"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+//					$referrer_id
+//				) );
+//
+//				// If no entry exists, default the current credit to 0
+//				$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
+//
+//				// Calculate the new credit balance
+//				$new_credit_balance = round( $current_credit + ( $points_for_referral / $points_to_be_converted ), 2 );
+//
+//				// Check if the user ID already exists in the table
+//				$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+//					"SELECT * FROM $store_credit_table WHERE user_id = %d",
+//					$referrer_id
+//				) );
+//
+//				// Prepare the data for insertion or update
+//				$store_credit_data = [
+//					'user_id' => $referrer_id,
+//					'amount'  => $new_credit_balance,
+//				];
+//
+//				// If the user ID doesn't exist, insert a new row
+//				if ( ! $existing_store_credit_entry ) {
+//					// Insert the user's points balance into the database
+//					$wpdb->insert(
+//						$store_credit_table,
+//						$store_credit_data,
+//						['%d', '%f']
+//					);
+//				} else {
+//					// Update the user's points balance in the database
+//					$wpdb->update(
+//						$store_credit_table,
+//						['amount' => $new_credit_balance],
+//						['user_id' => $referrer_id],
+//						['%f'],
+//						['%d']
+//					);
+//				}
+//
+//				// ** Mechanism to send loyalty points logs to the 'hex_loyalty_points_table' **
+//				$converted_credit = round( $points_for_referral / $points_to_be_converted, 2 );
+//
+//				$loyalty_points_log_data = [
+//					'user_id' => intval( $referrer_id ),
+//					'points' => floatval( $points_for_referral ),
+//					'reason' => boolval( 1 ),
+//					'referee_id' => intval( $user_id ),
+//					'converted_credit' => floatval( $converted_credit ),
+//					'conversion_rate' => floatval( $points_to_be_converted ),
+//				];
+//
+//				$wpdb->insert(
+//					$loyalty_points_log_table,
+//					$loyalty_points_log_data,
+//					[ '%d', '%f', '%d', '%f', '%f' ],
+//				);
+//
+//				$loyalty_points_primary_key = $wpdb->insert_id;
+//
+//				// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+//				$this->send_logs_to_the_store_credit_log_table( $referrer_id, $converted_credit, $loyalty_points_primary_key );
 
 				// Clear the referrer ID from the session
 				unset( $_SESSION['referrer_id'] );
 			}
+		}
+	}
+
+	public function give_referral_after_purchase( $user_id )
+	{
+		$give_referral_point = get_user_meta( $user_id, 'give_referral_point', true );
+
+		if ( $give_referral_point ) {
+			$points_for_referral = get_user_meta( $user_id, 'referral_points', true );
+			$referrer_id = get_user_meta( $user_id, 'referrer_id', true );
+
+			$wpdb = $this->wpdb;
+
+			$table_name = $this->table_name;
+			$store_credit_table = $this->store_credit_table;
+			$loyalty_points_log_table = $this->loyalty_points_log_table;
+
+			// Get the total points for the user, defaulting to 0 if no entry exists
+			$current_points = $wpdb->get_var( $wpdb->prepare(
+				"SELECT points FROM $table_name WHERE user_id = %d",
+				$referrer_id
+			) );
+
+			// If no entry exists, default the current points to 0
+			$current_points = $current_points !== null ? intval( $current_points ) : 0;
+
+			// Calculate the new points balance
+			$new_points_balance = $current_points + $points_for_referral;
+
+			// Prepare the data for insertion or update
+			$data = [
+				'user_id' => $referrer_id,
+				'points'  => $new_points_balance,
+			];
+
+			// Check if the user ID already exists in the table
+			$existing_entry = $wpdb->get_row( $wpdb->prepare(
+				"SELECT * FROM $table_name WHERE user_id = %d",
+				$referrer_id
+			) );
+
+			// If the user ID doesn't exist, insert a new row
+			if ( ! $existing_entry ) {
+				// Insert the user's points balance into the database
+				$wpdb->insert(
+					$table_name,
+					$data,
+					['%d', '%d']
+				);
+			} else {
+				// Update the user's points balance in the database
+				$wpdb->update(
+					$table_name,
+					['points' => $new_points_balance],
+					['user_id' => $referrer_id],
+					['%d'],
+					['%d']
+				);
+			}
+
+			//** Mechanism to send converting points to store credit and sending it to the database **
+			// Getting current store credit amount
+			$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+
+			$current_credit = $wpdb->get_var( $wpdb->prepare(
+				"SELECT amount FROM $store_credit_table WHERE user_id = %d",
+				$referrer_id
+			) );
+
+			// If no entry exists, default the current credit to 0
+			$current_credit = $current_credit !== null ? floatval( $current_credit ) : 0;
+
+			// Calculate the new credit balance
+			$new_credit_balance = round( $current_credit + ( $points_for_referral / $points_to_be_converted ), 2 );
+
+			// Check if the user ID already exists in the table
+			$existing_store_credit_entry = $wpdb->get_row( $wpdb->prepare(
+				"SELECT * FROM $store_credit_table WHERE user_id = %d",
+				$referrer_id
+			) );
+
+			// Prepare the data for insertion or update
+			$store_credit_data = [
+				'user_id' => $referrer_id,
+				'amount'  => $new_credit_balance,
+			];
+
+			// If the user ID doesn't exist, insert a new row
+			if ( ! $existing_store_credit_entry ) {
+				// Insert the user's points balance into the database
+				$wpdb->insert(
+					$store_credit_table,
+					$store_credit_data,
+					['%d', '%f']
+				);
+			} else {
+				// Update the user's points balance in the database
+				$wpdb->update(
+					$store_credit_table,
+					['amount' => $new_credit_balance],
+					['user_id' => $referrer_id],
+					['%f'],
+					['%d']
+				);
+			}
+
+			// ** Mechanism to send loyalty points logs to the 'hex_loyalty_points_table' **
+			$converted_credit = round( $points_for_referral / $points_to_be_converted, 2 );
+
+			$loyalty_points_log_data = [
+				'user_id' => intval( $referrer_id ),
+				'points' => floatval( $points_for_referral ),
+				'reason' => boolval( 1 ),
+				'referee_id' => intval( $user_id ),
+				'converted_credit' => floatval( $converted_credit ),
+				'conversion_rate' => floatval( $points_to_be_converted ),
+			];
+
+			$wpdb->insert(
+				$loyalty_points_log_table,
+				$loyalty_points_log_data,
+				[ '%d', '%f', '%d', '%f', '%f' ],
+			);
+
+			$loyalty_points_primary_key = $wpdb->insert_id;
+
+			// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
+			$this->send_logs_to_the_store_credit_log_table( $referrer_id, $converted_credit, $loyalty_points_primary_key );
+
+			update_user_meta( $user_id, 'give_referral_point', 0 );
 		}
 	}
 
@@ -600,6 +740,11 @@ class LoyaltyProgramHelpers
 
 			// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
 			$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
+
+			/**
+			 * Giving points for referral after referee makes his/her first purchase
+			 */
+			$this->give_referral_after_purchase( $user_id );
 		}
 	}
 

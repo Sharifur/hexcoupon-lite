@@ -69,7 +69,7 @@ const GiveNewCredit = () => {
 		toast.info(
 			({ closeToast }) => (
 				<div>
-					Upgrade to <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>Pro</b></a> to use this feature!
+					{__("Upgrade to","hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>{__("Pro","hex-coupon-for-woocommerce")}</b></a> {__("to use this feature!","hex-coupon-for-woocommerce")}
 				</div>
 			),
 			{

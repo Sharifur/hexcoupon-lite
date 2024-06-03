@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useI18n } from '@wordpress/react-i18n';
 import { Link, useLocation } from 'react-router-dom';
-import { IconBook, IconHelpSquareRounded, IconHome } from "@tabler/icons-react";
+import {
+	IconBook,
+	IconBox,
+	IconCoin,
+	IconDiscount,
+	IconHelpSquareRounded,
+	IconHome,
+	IconReceipt2
+} from "@tabler/icons-react";
 import { TbMenu2, TbChevronDown, TbCoins } from "react-icons/tb";
 import LogoImg from '../../../img/logo.png';
 import { useSidebar } from '../../context/SidebarContext';
 
 const Sidebar = () => {
+	const [siteUrl, setSiteUrl] = useState('')
+	useEffect(() => {
+		setSiteUrl(window.location.href);
+
+	}, []);
+
+	const trimmedUrl = siteUrl.split('wp-admin/')[0]
+
+	const finalUrl = trimmedUrl+'wp-admin/post-new.php?post_type=shop_coupon';
+
 	const { __ } = useI18n();
 
 	const location = useLocation();
@@ -35,7 +53,7 @@ const Sidebar = () => {
 	};
 
 	const storeCredit = ['/store-credit', '/store-credit/store-credit-settings', '/store-credit/store-credit-logs'];
-
+	const loyaltyProgram = ['/loyalty-program/loyalty-program-settings', '/loyalty-program/loyalty-program-logs'];
 
 	const { toggleSidebar, closeSidebar, isSidebarActive } = useSidebar();
 
@@ -60,7 +78,24 @@ const Sidebar = () => {
 
 						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
 							<span className={`hexpDashboard__list__item__link`}>
-								<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Store Credit", "hex-coupon-for-wocommerce")}</span>
+								<span className='hexpDashboard__list__item__link__left'><IconDiscount />{__("Coupon", "hex-coupon-for-wocommerce")}</span>
+								<span className="arrowIcon"><TbChevronDown /></span>
+							</span>
+							<ul className="hexpDashboard__list submenu">
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl} className={`hexpDashboard__list__item__link`}>{__("Add New Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl+"#general_coupon_data_bogo"} className={`hexpDashboard__list__item__link`}>{__("Bogo Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl+"#sharable_url_coupon_tab"} className={`hexpDashboard__list__item__link`}>{__("URL Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+							</ul>
+						</li>
+						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
+							<span className={`hexpDashboard__list__item__link`}>
+								<span className='hexpDashboard__list__item__link__left'><IconCoin />{__("Store Credit", "hex-coupon-for-wocommerce")}</span>
 								<span className="arrowIcon"><TbChevronDown /></span>
 							</span>
 							<ul className="hexpDashboard__list submenu">
@@ -82,7 +117,7 @@ const Sidebar = () => {
 							</ul>
 						</li>
 
-						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
+						<li className={`hexpDashboard__list__item has-children ${loyaltyProgram.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
 							<span className={`hexpDashboard__list__item__link`}>
 								<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Loyalty Program", "hex-coupon-for-wocommerce")}</span>
 								<span className="arrowIcon"><TbChevronDown /></span>
@@ -108,7 +143,13 @@ const Sidebar = () => {
 								<a href="https://hexcoupon.com/docs/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><IconBook />{__("Documentation", "hex-coupon-for-woocommerce")}</span></a>
 							</li>
 							<li className='hexpDashboard__list__item'>
+								<a href="https://hexcoupon.com/pricing/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><IconReceipt2 />{__("Upgrade to Pro", "hex-coupon-for-woocommerce")}</span></a>
+							</li>
+							<li className='hexpDashboard__list__item'>
 								<a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><IconHelpSquareRounded />{__("Support", "hex-coupon-for-woocommerce")}</span></a>
+							</li>
+							<li className='hexpDashboard__list__item'>
+								<a href="https://profiles.wordpress.org/wphex/#content-plugins" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><IconBox />{__("Our Products", "hex-coupon-for-woocommerce")}</span></a>
 							</li>
 						</ul>
 					</div>

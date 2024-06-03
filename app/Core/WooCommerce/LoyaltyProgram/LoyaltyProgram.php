@@ -133,6 +133,11 @@ class LoyaltyProgram
 				<?php echo wp_kses( "Your points are converted to store credit. The conversion rate is <b>'{$conversion_rate}'</b> points per store credit.", $allowed_html ); ?>
 			</div>
 		</div>
+		<div class="referral-container two">
+			<h3 class="notice notice-info">
+				<?php esc_html_e( 'You will only get points for referral when the referee makes a successful purchase', 'hex-coupon-for-woocommerce' ); ?>
+			</h3>
+		</div>
 		<?php
 	}
 
@@ -174,7 +179,7 @@ class LoyaltyProgram
 			<tr>
 				<th><?php echo esc_html__( 'Points', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Reason', 'hex-coupon-for-woocommerce' ); ?></th>
-				<th><?php echo esc_html__( 'Referrer ID', 'hex-coupon-for-woocommerce' ); ?></th>
+				<th><?php echo esc_html__( 'Referee ID', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Converted Credit', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Conversion Rate', 'hex-coupon-for-woocommerce' ); ?></th>
 				<th><?php echo esc_html__( 'Date', 'hex-coupon-for-woocommerce' ); ?></th>
