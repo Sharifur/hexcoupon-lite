@@ -46,6 +46,20 @@ class LoyaltyProgramHelpers
 		add_action( 'user_register', [ $this, 'update_referrer_points' ] );
 		add_action( 'woocommerce_checkout_order_processed', [ $this, 'give_points_after_order_checkout' ] );
 		add_action( 'woocommerce_thankyou', [ $this, 'give_points_after_order_purchase_in_block' ], 10, 1 );
+		add_action( 'woocommerce_order_status_changed', [ $this, 'give_referral_points_after_order_completed' ], 10, 4 );
+	}
+
+	public function give_referral_points_after_order_completed( $order_id, $old_status, $new_status, $order )
+	{
+		$order = wc_get_order( $order_id );
+		$user_id = $order->get_user_id();
+
+		if ( 'completed' === $new_status ) {
+			/**
+			 * Giving points for referral after referee makes his/her first purchase
+			 */
+			$this->give_referral_after_purchase( $user_id );
+		}
 	}
 
 	/**
@@ -740,11 +754,6 @@ class LoyaltyProgramHelpers
 
 			// ** Mechanism to send logs for loyalty points in the 'hex_store_credit_logs' table ** //
 			$this->send_logs_to_the_store_credit_log_table( $user_id, $credit_for_purchase, $loyalty_points_primary_key );
-
-			/**
-			 * Giving points for referral after referee makes his/her first purchase
-			 */
-			$this->give_referral_after_purchase( $user_id );
 		}
 	}
 
