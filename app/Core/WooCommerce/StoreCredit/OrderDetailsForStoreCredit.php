@@ -34,7 +34,7 @@ class OrderDetailsForStoreCredit {
 		if ( $deducted_store_credit ) {
 			echo '<tr>';
 			echo '<td class="label">' . esc_html__( 'Store Credit Used:', 'hex-coupon-for-woocommerce' ) . '</td>';
-			echo '<td class="total">-' . wc_price( $deducted_store_credit ) . '</td>';
+			echo '<td class="total"><span class="woocommerce-Price-amount amount">-' . esc_html( $deducted_store_credit ) . '</span></td>';
 			echo '</tr>';
 		}
 	}
