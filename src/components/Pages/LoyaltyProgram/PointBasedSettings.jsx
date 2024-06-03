@@ -16,7 +16,7 @@ const PointBasedLoyaltySettings = () => {
 	const navigate = useNavigate();
 
 	const goBack = () => {
-		navigate(-1);
+		navigate(-1, { state: { refresh: true } });
 	};
 
 	const [settings, setSettings] = useState({

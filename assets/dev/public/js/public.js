@@ -4,14 +4,11 @@
 		$(".product_addition_notice span.dashicons-dismiss").on("click",function(){
 			$(".product_addition_notice").hide();
 		});
-
 		$('#store_credit_filter').on('change', function() {
 			// Get the selected option value
 			var filterValue = $(this).val();
-
 			// Get all table rows
 			var rows = $('#data-table tbody tr');
-
 			// Loop through each row and toggle its visibility based on the filter value
 			rows.each(function() {
 				var row = $(this);
@@ -26,24 +23,31 @@
 				}
 			});
 		});
-
 		// copy referral link after clicking the copy button
 		$('.copy-referral-link').on('click',function(){
 			// Get the input field
 			var referralLink = $('#referral-link');
-
 			// Select the input field text
 			referralLink.select();
 			referralLink[0].setSelectionRange(0, 99999); // For mobile devices
-
-			// Copy the text inside the input field
-			navigator.clipboard.writeText(referralLink.val()).then(function() {
-				// Alert the copied text
-				alert('Referral link copied to clipboard!');
-			}, function(err) {
-				// If something goes wrong
-				alert('Failed to copy the referral link: ' + err);
-			});
+			// Try to use the Clipboard API
+			if (navigator.clipboard) {
+				navigator.clipboard.writeText(referralLink.val()).then(function() {
+					// Alert the copied text
+					alert('Referral link copied to clipboard!');
+				}, function(err) {
+					// If something goes wrong
+					alert('Failed to copy the referral link: ' + err);
+				});
+			} else {
+				// Fallback for browsers that don't support navigator.clipboard
+				try {
+					document.execCommand('copy');
+					alert('Referral link copied to clipboard!');
+				} catch (err) {
+					alert('Failed to copy the referral link: ' + err);
+				}
+			}
 		});
 	});
 })(jQuery);

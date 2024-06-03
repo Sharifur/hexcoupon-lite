@@ -66,7 +66,7 @@ const GiveNewCredit = () => {
 	}, [nonce]);
 
 	const sendStoreCreditInfo = () => {
-		toast.error(
+		toast.info(
 			({ closeToast }) => (
 				<div>
 					Upgrade to <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>Pro</b></a> to use this feature!

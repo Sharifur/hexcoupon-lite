@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Skeleton } from "../../Skeleton";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Table from "../../utils/table/Table";
 import THead from "../../utils/table/THead";
 import Th from "../../utils/table/Th";
@@ -26,7 +26,7 @@ const LoyaltyProgramLogs = () => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [filterOption, setFilterOption] = useState("all");
 	const [searchQuery, setSearchQuery] = useState("");
-	const itemsPerPage = 10;
+	const itemsPerPage = 15;
 
 	useEffect(() => {
 		axios
@@ -79,6 +79,17 @@ const LoyaltyProgramLogs = () => {
 	};
 
 	const handlePageClick = (data) => {
+		if (data.selected > 0) {
+			toast.info('Upgrade to Pro to view more logs!', {
+				position: 'top-center',
+				autoClose: 2000,
+				hideProgressBar: true,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+			});
+			return;
+		}
 		setCurrentPage(data.selected);
 	};
 
@@ -152,25 +163,34 @@ const LoyaltyProgramLogs = () => {
 								</THead>
 								<TBody>
 									{currentLogs.length > 0 ? (
-										currentLogs.map((log, index) => (
-											<tr key={index}>
-												<td>
-													<Link
-														to={`/loyalty-program-user-logs/${log.user_id}`}
-														style={{ textDecoration: "underline" }}
-													>
-														{log.user_name}
-													</Link>
+										<>
+											{currentLogs.map((log, index) => (
+												<tr key={index}>
+													<td>
+														<Link
+															to={`/loyalty-program-user-logs/${log.user_id}`}
+															style={{ textDecoration: "underline" }}
+														>
+															{log.user_name}
+														</Link>
+													</td>
+													<td>{log.user_email}</td>
+													<td>{log.points}</td>
+													<td>{getReasonElement(log.reason)}</td>
+													<td>{log.referee_id ? log.referee_id : "NA"}</td>
+													<td>{log.converted_credit}</td>
+													<td>{log.conversion_rate}</td>
+													<td>{log.created_at}</td>
+												</tr>
+											))}
+											<tr className="bg-yellow-100">
+												<td colSpan="8" className="text-center py-4">
+													<span className="text-yellow-800 font-semibold">
+														{__("Upgrade to","hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>{__("Pro","hex-coupon-for-woocommerce")}</b></a> {__("to view more logs!","hex-coupon-for-woocommerce")}
+													</span>
 												</td>
-												<td>{log.user_email}</td>
-												<td>{log.points}</td>
-												<td>{getReasonElement(log.reason)}</td>
-												<td>{log.referee_id ? log.referee_id : "NA"}</td>
-												<td>{log.converted_credit}</td>
-												<td>{log.conversion_rate}</td>
-												<td>{log.created_at}</td>
 											</tr>
-										))
+										</>
 									) : (
 										<tr style={{ textAlign: "center" }}>
 											<td colSpan="8">{__("No logs available")}</td>
