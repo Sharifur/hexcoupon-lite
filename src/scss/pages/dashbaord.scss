@@ -80,6 +80,9 @@
 				&__inner {
 					height: calc(100vh - 230px);
 					overflow-y: auto;
+					&::-webkit-scrollbar {
+						display: none;
+					}
 					@include responsive(lg) {
 						height: calc(100vh - 100px);
 					}

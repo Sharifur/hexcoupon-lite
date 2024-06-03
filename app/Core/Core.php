@@ -49,6 +49,7 @@ use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\LoyaltyProgram;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditCheckbox;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditDeductionRow;
+use HexCoupon\App\Core\WooCommerce\StoreCredit\OrderDetailsForStoreCredit;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\StoreCreditRowInCheckoutOrderDetails;
 use HexCoupon\App\Services\ActivationService;
 use HexCoupon\App\Services\DeactivationService;
@@ -120,6 +121,7 @@ final class Core extends BootManager
 			LoyaltyProgramHelpers::class,
 			LoyaltyProgram::class,
 			FlushRewriteForLoyaltyProgram::class,
+			OrderDetailsForStoreCredit::class,
 		];
 	}
 }
