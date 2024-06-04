@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { useI18n } from "@wordpress/react-i18n";
 import { Skeleton } from "../../Skeleton";
-import { useNavigate } from "react-router-dom";
 import loyaltyCoinImg from "../../../img/loyalty-icon.png";
 
 const StoreCreditSettings = () => {
@@ -14,7 +13,6 @@ const StoreCreditSettings = () => {
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [switchState, setSwitchState] = useState(false);
-	const navigate = useNavigate();
 
 	const handleSwitchChange = (newSwitchState) => {
 		setSwitchState(newSwitchState);
@@ -48,11 +46,6 @@ const StoreCreditSettings = () => {
 			closeOnClick: true,
 			pauseOnHover: false,
 			draggable: true,
-			onClose: () => {
-				if (switchState) {
-					navigate('/store-credit/settings');
-				}
-			}
 		});
 	};
 
