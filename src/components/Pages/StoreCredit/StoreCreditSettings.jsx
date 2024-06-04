@@ -4,9 +4,10 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
 import { Skeleton } from "../../Skeleton";
 import loyaltyCoinImg from "../../../img/loyalty-icon.png";
+import { __ } from '@wordpress/i18n';
 
 const StoreCreditSettings = () => {
 	const { __ } = useI18n();

@@ -19,7 +19,9 @@ class CouponShortcode
 	{
 		add_filter( 'manage_edit-shop_coupon_columns', [ $this, 'custom_coupon_list_table_columns' ] );
 		add_action( 'manage_shop_coupon_posts_custom_column', [ $this, 'custom_coupon_list_table_column_values' ], 10, 2);
-		add_shortcode('hexcoupon', [ $this, 'display_coupon_info_shortcode' ] );
+		if ( class_exists( 'WooCommerce' ) ) {
+			add_shortcode('hexcoupon', [ $this, 'display_coupon_info_shortcode' ] );
+		}
 	}
 
 	/**

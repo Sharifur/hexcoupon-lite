@@ -26,9 +26,9 @@ function App() {
 								<Route element={<StoreCreditLogs />} path="/store-credit/store-credit-logs" />
 								<Route element={<StoreCreditUserLogs />} path="/store-credit-user-logs/:userId" />
 								<Route element={<GiveNewCredit />} path="/store-credit/give-new-credit" />
-								<Route element={<LoyaltyProgramSettings />} path="/loyalty-program/loyalty-program-settings" />
-								<Route element={<LoyaltyProgramLogs />} path="/loyalty-program/loyalty-program-logs" />
-								<Route element={<PointBasedLoyaltySettings />} path="/loyalty-program/point-based-loyalty-settings" />
+								{/*<Route element={<LoyaltyProgramSettings />} path="/loyalty-program/loyalty-program-settings" />*/}
+								{/*<Route element={<LoyaltyProgramLogs />} path="/loyalty-program/loyalty-program-logs" />*/}
+								{/*<Route element={<PointBasedLoyaltySettings />} path="/loyalty-program/point-based-loyalty-settings" />*/}
 								<Route element={<LoyaltyProgramUserLogs />} path="/loyalty-program-user-logs/:userId" />
 							</Routes>
 						</MainContainer>

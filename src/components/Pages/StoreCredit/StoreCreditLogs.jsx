@@ -15,7 +15,8 @@ import Button from "../../utils/button/Button";
 import BodyCardHeaderRight from "../../Pagebody/card/BodyCardHeaderRight";
 import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import { Link } from "react-router-dom";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
+import { __ } from '@wordpress/i18n';
 
 const StoreCreditLogs = () => {
 	const { __ } = useI18n();

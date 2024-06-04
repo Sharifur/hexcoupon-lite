@@ -223,7 +223,7 @@ class AssetsManager
 		$store_credit_enable_data = get_option( 'store_credit_enable_data' );
 		$store_credit_enable_data = $store_credit_enable_data['enable'] ?? 0;
 
-		if ( is_checkout() ) {
+		if ( class_exists( 'WooCommerce' ) && is_checkout() ) {
 			if ( $enable_point_loyalties && $points_on_purchase_enable ) {
 				wp_enqueue_script(
 					'checkout-block-notices',
@@ -309,24 +309,26 @@ class AssetsManager
 
 		$total_remaining_store_credit = StoreCreditPaymentHelpers::getInstance()->show_total_remaining_amount();
 
-		global $woocommerce;
-		$total_price = $woocommerce->cart->total;
+		if ( class_exists( 'WooCommerce' ) ) {
+			global $woocommerce;
+			$total_price = $woocommerce->cart->total;
 
-		wp_localize_script( hexcoupon_prefix( 'checkout-block' ), 'storeCreditData', [
-			'total_remaining_store_credit' => $total_remaining_store_credit,
-			'cart_total' => $total_price,
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'postUrl' => admin_url( 'admin-post.php' ),
-			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
-			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
-		] );
+			wp_localize_script( hexcoupon_prefix( 'checkout-block' ), 'storeCreditData', [
+				'total_remaining_store_credit' => $total_remaining_store_credit,
+				'cart_total' => $total_price,
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'postUrl' => admin_url( 'admin-post.php' ),
+				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+			] );
 
-		wp_localize_script( hexcoupon_prefix( 'checkout-frontend' ), 'hexCuponData', [
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'postUrl' => admin_url( 'admin-post.php' ),
-			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
-			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
-		] );
+			wp_localize_script( hexcoupon_prefix( 'checkout-frontend' ), 'hexCuponData', [
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'postUrl' => admin_url( 'admin-post.php' ),
+				'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+			] );
+		}
 
 	}
 }
