@@ -78,21 +78,6 @@ const LoyaltyProgramLogs = () => {
 		}
 	};
 
-	const handlePageClick = (data) => {
-		if (data.selected > 0) {
-			toast.info('Upgrade to Pro to view more logs!', {
-				position: 'top-center',
-				autoClose: 2000,
-				hideProgressBar: true,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-			});
-			return;
-		}
-		setCurrentPage(data.selected);
-	};
-
 	const handleFilterChange = (event) => {
 		setFilterOption(event.target.value);
 		setCurrentPage(0); // Reset to first page on filter change
@@ -185,18 +170,28 @@ const LoyaltyProgramLogs = () => {
 											))}
 											<tr className="bg-yellow-100">
 												<td colSpan="8" className="text-center py-4">
-													<span className="text-yellow-800 font-semibold">
-														{__("Upgrade to","hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>{__("Pro","hex-coupon-for-woocommerce")}</b></a> {__("to view more logs!","hex-coupon-for-woocommerce")}
-													</span>
+													  <span className="text-yellow-800 font-semibold">
+															{__("Free version supports 15 logs only, Upgrade to", "hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{ color: "#A760FE" }}>{__("Pro", "hex-coupon-for-woocommerce")}</b></a> {__("to view more logs!", "hex-coupon-for-woocommerce")}
+													  </span>
 												</td>
 											</tr>
 										</>
 									) : (
-										<tr style={{ textAlign: "center" }}>
-											<td colSpan="8">{__("No logs available")}</td>
-										</tr>
+										<>
+											<tr style={{ textAlign: "center" }}>
+												<td colSpan="8">{__("No logs available")}</td>
+											</tr>
+											<tr className="bg-yellow-100">
+												<td colSpan="8" className="text-center py-4">
+													<span className="text-yellow-800 font-semibold">
+														{__("Free version supports 15 logs only, Upgrade to", "hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{ color: "#A760FE" }}>{__("Pro", "hex-coupon-for-woocommerce")}</b></a> {__("to view more logs!", "hex-coupon-for-woocommerce")}
+													</span>
+												</td>
+											</tr>
+										</>
 									)}
 								</TBody>
+
 							</Table>
 							<ReactPaginate
 								previousLabel={"previous"}
@@ -206,7 +201,6 @@ const LoyaltyProgramLogs = () => {
 								pageCount={pageCount}
 								marginPagesDisplayed={2}
 								pageRangeDisplayed={5}
-								onPageChange={handlePageClick}
 								containerClassName={"pagination"}
 								subContainerClassName={"pages pagination"}
 								activeClassName={"active"}

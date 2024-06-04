@@ -15,8 +15,10 @@ import Button from "../../utils/button/Button";
 import BodyCardHeaderRight from "../../Pagebody/card/BodyCardHeaderRight";
 import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import { Link } from "react-router-dom";
+import { useI18n } from "@wordpress/react-i18n";
 
 const StoreCreditLogs = () => {
+	const { __ } = useI18n();
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [isHovering, setIsHovering] = useState(false);
@@ -138,9 +140,7 @@ const StoreCreditLogs = () => {
 					>
 						{isHovering && (
 							<div className="absolute inset-0 flex items-center justify-center bg-blur">
-								<div className="bg-purple-600 text-white p-4 rounded-md cursor-pointer">
-									<a href="https://hexcoupon.com/pricing/">Upgrade to Pro</a>
-								</div>
+								<a className="upgrade-text bg-purple-600 text-white p-4 rounded-md cursor-pointer" href="https://hexcoupon.com/pricing/">{__("Upgrade to Pro","hex-coupon-for-woocommerce")}</a>
 							</div>
 						)}
 						<Table className="border text-left">
@@ -166,7 +166,7 @@ const StoreCreditLogs = () => {
 								{isHovering && (
 									<tr>
 										<td colSpan="6" style={{ textAlign: 'center', padding: '10px' }}>
-											<a href="https://hexcoupon.com/pricing/" target="_blank">Upgrade to Pro</a>
+											<a href="https://hexcoupon.com/pricing/" target="_blank">{__("Upgrade to Pro","hex-coupon-for-woocommerce")}</a>
 										</td>
 									</tr>
 								)}
@@ -177,8 +177,11 @@ const StoreCreditLogs = () => {
 				<style>
 					{`
                     .bg-blur {
-                        background-color: rgba(255, 255, 255, 0.8); /* Adjust the opacity as needed */
-                        backdrop-filter: blur(5px); /* Adjust the blur radius as needed */
+                        background-color: rgba(255, 255, 255, 0.8);
+                        backdrop-filter: blur(5px);
+                    }
+                    .upgrade-text:hover {
+                    	color: #ffffff;
                     }
                 `}
 				</style>

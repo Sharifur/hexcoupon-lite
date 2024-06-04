@@ -135,7 +135,7 @@ class LoyaltyProgram
 		</div>
 		<div class="referral-container two">
 			<h3 class="notice notice-info">
-				<?php esc_html_e( 'You will only get points for referral when the referee makes a successful purchase', 'hex-coupon-for-woocommerce' ); ?>
+				<?php esc_html_e( 'You will only get points for referral when the referral user makes a successful purchase', 'hex-coupon-for-woocommerce' ); ?>
 			</h3>
 		</div>
 		<?php

@@ -66,8 +66,8 @@ class ActivationService
 		update_option( 'pointsForReferral', $points_for_referral );
 
 		$conversion_rate = [
-			'credit' => '0',
-			'points' => '0',
+			'credit' => '1',
+			'points' => '1',
 		];
 		update_option( 'conversionRate', $conversion_rate );
 

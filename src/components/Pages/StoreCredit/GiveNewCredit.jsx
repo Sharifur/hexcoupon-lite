@@ -11,21 +11,30 @@ import PageBody from "../../Pagebody/PageBody";
 import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { toast, ToastContainer } from "react-toastify";
-import { __ } from '@wordpress/i18n';
+import { useI18n } from "@wordpress/react-i18n";
 import Select from 'react-select';
 
 const GiveNewCredit = () => {
+	const { __ } = useI18n();
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 	const [adminInfo, setAdminInfo] = useState([]);
-
 	const [customers, setCustomers] = useState([]);
+	const [isHovering, setIsHovering] = useState(false);
 
 	const customersInfoForSelect2 = Object.keys(customers).map(customerId => ({
 		value: customerId,
 		label: customers[customerId]
 	}));
+
+	const handleMouseEnter = () => {
+		setIsHovering(true);
+	};
+
+	const handleMouseLeave = () => {
+		setIsHovering(false);
+	};
 
 	const goToPreviousPage = () => {
 		navigate(-1);
@@ -65,23 +74,7 @@ const GiveNewCredit = () => {
 			.finally(() => setIsLoading(false));
 	}, [nonce]);
 
-	const sendStoreCreditInfo = () => {
-		toast.info(
-			({ closeToast }) => (
-				<div>
-					{__("Upgrade to","hex-coupon-for-woocommerce")} <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>{__("Pro","hex-coupon-for-woocommerce")}</b></a> {__("to use this feature!","hex-coupon-for-woocommerce")}
-				</div>
-			),
-			{
-				position: 'top-center',
-				autoClose: false,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: false,
-				draggable: true,
-			}
-		);
-	}
+
 
 	return (
 		<>
@@ -94,52 +87,75 @@ const GiveNewCredit = () => {
 							</BodyCardHeaderLeftItem>
 						</BodyCardHeaderLeft>
 					</BodyCardHeader>
-
-					<div className="main-gift-credit-container grid grid-cols-12 gap-5 p-4">
-						<div className="col-span-12 md:col-span-7 xl:col-span-8">
-							<div className="single__item mt-0">
-								<label htmlFor="store_credit_amount" className="text-md text-[var(--hex-paragraph-color)]">{__("Store credit amount", "hex-coupon-for-woocommerce")}</label>
-								<input
-									type="number"
-									id="store_credit_amount"
-									onChange={(e) => setStoreCreditAmount(e.target.value)}
-									value={storeCreditAmount}
-									placeholder="Enter amount"
-									className="py-2.5 pl-4 pr-4 mt-2 h-[34] w-full !border-transparent !ring-1 !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
-								/>
+					<div
+						className="relative"
+						onMouseEnter={handleMouseEnter}
+						onMouseLeave={handleMouseLeave}
+						style={{ overflow: 'visible' }} // Allow the absolute positioned element to overflow
+					>
+						{isHovering && (
+							<div className="absolute inset-0 flex items-center justify-center bg-blur">
+								<a className="upgrade-text bg-purple-600 text-white p-4 rounded-md cursor-pointer" href="https://hexcoupon.com/pricing/">{__("Upgrade to Pro","hex-coupon-for-woocommerce")}</a>
 							</div>
-							<div className="single__item single__select mt-4">
-								<label htmlFor="myTextArea" className="text-md text-[var(--hex-paragraph-color)]">{__("Grant credit to multiple customers: ", "hex-coupon-for-woocommerce")}</label>
-								<Select
-									closeMenuOnSelect={false}
-									isMulti
-									options={customersInfoForSelect2}
-									onChange={handleUserSelect}
-									className="mt-2"
-								/>
+						)}
+						<div className="main-gift-credit-container grid grid-cols-12 gap-5 p-4">
+							<div className="col-span-12 md:col-span-7 xl:col-span-8">
+								<div className="single__item mt-0">
+									<label htmlFor="store_credit_amount" className="text-md text-[var(--hex-paragraph-color)]">{__("Store credit amount", "hex-coupon-for-woocommerce")}</label>
+									<input
+										type="number"
+										id="store_credit_amount"
+										onChange={(e) => setStoreCreditAmount(e.target.value)}
+										value={storeCreditAmount}
+										placeholder="Enter amount"
+										className="py-2.5 pl-4 pr-4 mt-2 h-[34] w-full !border-transparent !ring-1 !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
+									/>
+								</div>
+								<div className="single__item single__select mt-4">
+									<label htmlFor="myTextArea" className="text-md text-[var(--hex-paragraph-color)]">{__("Grant credit to multiple customers: ", "hex-coupon-for-woocommerce")}</label>
+									<Select
+										closeMenuOnSelect={false}
+										isMulti
+										options={customersInfoForSelect2}
+										onChange={handleUserSelect}
+										className="mt-2"
+									/>
+								</div>
+								<div className="single__item mt-4">
+									<label htmlFor="myTextArea" className="text-md text-[var(--hex-paragraph-color)]">{__("Write message or note:", "hex-coupon-for-woocommerce")}</label>
+									<textarea
+										id="myTextArea"
+										onChange={(e) => setNote(e.target.value)}
+										value={note}
+										rows={4}
+										cols={50}
+										className="py-2.5 pl-4 pr-4 mt-2 h-[auto] w-full !border-transparent !ring-1 !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
+									/>
+								</div>
 							</div>
-							<div className="single__item mt-4">
-								<label htmlFor="myTextArea" className="text-md text-[var(--hex-paragraph-color)]">{__("Write message or note:", "hex-coupon-for-woocommerce")}</label>
-								<textarea
-									id="myTextArea"
-									onChange={(e) => setNote(e.target.value)}
-									value={note}
-									rows={4}
-									cols={50}
-									className="py-2.5 pl-4 pr-4 mt-2 h-[auto] w-full !border-transparent !ring-1 !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
-								/>
-							</div>
-						</div>
-						<div className="col-span-12 md:col-span-5 xl:col-span-4">
-							<div className="creditSummary ring-2 ring-[var(--hex-main-color-one)] p-4 text-center w-full rounded-md">
-								<h1 className="text-3xl">Granting credits:</h1>
-								<p className="mt-2.5 text-md">{"Amount of credits: " + storeCreditAmount}</p>
-								<p className="text-md">{"Granting credits to no. of customer: " + selectedCustomersCount}</p>
-								<Button children={__("Give New Credit Now", "hex-coupon-for-woocommerce")} btnStyle={"primary"} onClick={sendStoreCreditInfo} className="mt-4" />
+							<div className="col-span-12 md:col-span-5 xl:col-span-4">
+								<div className="creditSummary ring-2 ring-[var(--hex-main-color-one)] p-4 text-center w-full rounded-md">
+									<h1 className="text-3xl">Granting credits:</h1>
+									<p className="mt-2.5 text-md">{"Amount of credits: " + storeCreditAmount}</p>
+									<p className="text-md">{"Granting credits to no. of customer: " + selectedCustomersCount}</p>
+									<Button children={__("Give New Credit Now", "hex-coupon-for-woocommerce")} btnStyle={"primary"} onClick="" className="mt-4" />
+								</div>
 							</div>
 						</div>
 					</div>
 				</BodyCard>
+				<style>
+					{`
+                    .bg-blur {
+                        background-color: rgba(255, 255, 255, 0.8);
+                        backdrop-filter: blur(5px);
+                        z-index: 999;
+                    }
+                    .upgrade-text:hover {
+                    	color: #ffffff;
+                    }
+                `}
+				</style>
 			</PageBody>
 			<ToastContainer />
 		</>

@@ -76,7 +76,7 @@ const Sidebar = () => {
 							</Link>
 						</li>
 
-						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
+						<li className={`hexpDashboard__list__item has-children`} onClick={toggleOpenClass}>
 							<span className={`hexpDashboard__list__item__link`}>
 								<span className='hexpDashboard__list__item__link__left'><IconDiscount />{__("Coupon", "hex-coupon-for-wocommerce")}</span>
 								<span className="arrowIcon"><TbChevronDown /></span>
