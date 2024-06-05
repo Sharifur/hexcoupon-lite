@@ -76,23 +76,23 @@ const Sidebar = () => {
 							</Link>
 						</li>
 
-						{/*<li className={`hexpDashboard__list__item has-children`} onClick={toggleOpenClass}>*/}
-						{/*	<span className={`hexpDashboard__list__item__link`}>*/}
-						{/*		<span className='hexpDashboard__list__item__link__left'><IconDiscount />{__("Coupon", "hex-coupon-for-wocommerce")}</span>*/}
-						{/*		<span className="arrowIcon"><TbChevronDown /></span>*/}
-						{/*	</span>*/}
-						{/*	<ul className="hexpDashboard__list submenu">*/}
-						{/*		<li className="hexpDashboard__list__item" onClick={stopPropagation}>*/}
-						{/*			<a href={finalUrl} className={`hexpDashboard__list__item__link`}>{__("Add New Coupon","hex-coupon-for-woocommerce")}</a>*/}
-						{/*		</li>*/}
-						{/*		<li className="hexpDashboard__list__item" onClick={stopPropagation}>*/}
-						{/*			<a href={finalUrl+"#general_coupon_data_bogo"} className={`hexpDashboard__list__item__link`}>{__("Bogo Coupon","hex-coupon-for-woocommerce")}</a>*/}
-						{/*		</li>*/}
-						{/*		<li className="hexpDashboard__list__item" onClick={stopPropagation}>*/}
-						{/*			<a href={finalUrl+"#sharable_url_coupon_tab"} className={`hexpDashboard__list__item__link`}>{__("URL Coupon","hex-coupon-for-woocommerce")}</a>*/}
-						{/*		</li>*/}
-						{/*	</ul>*/}
-						{/*</li>*/}
+						<li className={`hexpDashboard__list__item has-children`} onClick={toggleOpenClass}>
+							<span className={`hexpDashboard__list__item__link`}>
+								<span className='hexpDashboard__list__item__link__left'><IconDiscount />{__("Coupon", "hex-coupon-for-wocommerce")}</span>
+								<span className="arrowIcon"><TbChevronDown /></span>
+							</span>
+							<ul className="hexpDashboard__list submenu">
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl} className={`hexpDashboard__list__item__link`}>{__("Add New Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl+"#general_coupon_data_bogo"} className={`hexpDashboard__list__item__link`}>{__("Bogo Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<a href={finalUrl+"#sharable_url_coupon_tab"} className={`hexpDashboard__list__item__link`}>{__("URL Coupon","hex-coupon-for-woocommerce")}</a>
+								</li>
+							</ul>
+						</li>
 						<li className={`hexpDashboard__list__item has-children ${storeCredit.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
 							<span className={`hexpDashboard__list__item__link`}>
 								<span className='hexpDashboard__list__item__link__left'><IconCoin />{__("Store Credit", "hex-coupon-for-wocommerce")}</span>
@@ -117,24 +117,24 @@ const Sidebar = () => {
 							</ul>
 						</li>
 
-						{/*<li className={`hexpDashboard__list__item has-children ${loyaltyProgram.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>*/}
-						{/*	<span className={`hexpDashboard__list__item__link`}>*/}
-						{/*		<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Loyalty Program", "hex-coupon-for-wocommerce")}</span>*/}
-						{/*		<span className="arrowIcon"><TbChevronDown /></span>*/}
-						{/*	</span>*/}
-						{/*	<ul className="hexpDashboard__list submenu">*/}
-						{/*		<li className="hexpDashboard__list__item" onClick={stopPropagation}>*/}
-						{/*			<Link to="/loyalty-program/loyalty-program-settings" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-settings')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-settings' ? 'active' : ''}`}>*/}
-						{/*				<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Settings", "hex-coupon-for-woocommerce")}</span>*/}
-						{/*			</Link>*/}
-						{/*		</li>*/}
-						{/*		<li className="hexpDashboard__list__item" onClick={stopPropagation}>*/}
-						{/*			<Link to="/loyalty-program/loyalty-program-logs" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-logs')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-logs' ? 'active' : ''}`}>*/}
-						{/*				<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Logs", "hex-coupon-for-woocommerce")}</span>*/}
-						{/*			</Link>*/}
-						{/*		</li>*/}
-						{/*	</ul>*/}
-						{/*</li>*/}
+						<li className={`hexpDashboard__list__item has-children ${loyaltyProgram.includes(activeLink) ? 'active open' : ''}`} onClick={toggleOpenClass}>
+							<span className={`hexpDashboard__list__item__link`}>
+								<span className='hexpDashboard__list__item__link__left'><TbCoins />{__("Loyalty Program", "hex-coupon-for-wocommerce")}</span>
+								<span className="arrowIcon"><TbChevronDown /></span>
+							</span>
+							<ul className="hexpDashboard__list submenu">
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<Link to="/loyalty-program/loyalty-program-settings" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-settings')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-settings' ? 'active' : ''}`}>
+										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Settings", "hex-coupon-for-woocommerce")}</span>
+									</Link>
+								</li>
+								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
+									<Link to="/loyalty-program/loyalty-program-logs" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-logs')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-logs' ? 'active' : ''}`}>
+										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Logs", "hex-coupon-for-woocommerce")}</span>
+									</Link>
+								</li>
+							</ul>
+						</li>
 					</ul>
 					<div className="hexcoupon_resources">
 						<p className='hexcoupon_resources__title'>{__("Our Resources", "hex-coupon-for-woocommerce")}</p>

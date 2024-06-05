@@ -224,6 +224,18 @@ class AssetsManager
 		$store_credit_enable_data = $store_credit_enable_data['enable'] ?? 0;
 
 		if ( class_exists( 'WooCommerce' ) && is_checkout() ) {
+			// Admin back-end
+			if ( ! $this->is_pro_active && is_admin() ) {
+				wp_enqueue_script(
+					hexcoupon_prefix( 'checkout-main' ),
+					hexcoupon_url( "build/index.js" ),
+					['jquery','wp-element'],
+					$this->version,
+					true
+				);
+			}
+
+			// user front-end
 			if ( $enable_point_loyalties && $points_on_purchase_enable ) {
 				wp_enqueue_script(
 					'checkout-block-notices',
@@ -241,18 +253,6 @@ class AssetsManager
 				] );
 			}
 
-			// Admin back-end
-			if ( ! $this->is_pro_active && is_admin() ) {
-				wp_enqueue_script(
-					hexcoupon_prefix( 'checkout-main' ),
-					hexcoupon_url( "build/index.js" ),
-					['jquery','wp-element'],
-					$this->version,
-					true
-				);
-			}
-
-			// user front-end
 			if ( ! $this->is_pro_active && $store_credit_enable_data ) {
 				// enqueuing file for 'WooCommerce Checkout' page
 				wp_enqueue_script(

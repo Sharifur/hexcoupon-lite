@@ -663,7 +663,7 @@ class LoyaltyProgramHelpers
 	 * @return void
 	 * Sending logs to the 'hex_store_credit_logs' table for user getting points
 	 */
-	private function send_logs_to_the_store_credit_log_table( $user_id, $credit, $loyalty_points_primary_key )
+	public function send_logs_to_the_store_credit_log_table( $user_id, $credit, $loyalty_points_primary_key )
 	{
 		$data = [
 			'user_id' => $user_id,

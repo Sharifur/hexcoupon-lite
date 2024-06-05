@@ -4,14 +4,15 @@ import { Skeleton } from "../../Skeleton";
 import Switch from "../../utils/switch/Switch";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
+import { __ } from '@wordpress/i18n';
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { IconSettings } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import coinImg from '../../../img/coin.png';
 
 const LoyaltyProgramSettings = () => {
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = loyaltyProgramData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [switchState, setSwitchState] = useState(false);

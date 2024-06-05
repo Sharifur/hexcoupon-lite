@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { __ } from '@wordpress/i18n';
 
 const StoreCreditLogs = () => {
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [isHovering, setIsHovering] = useState(false);

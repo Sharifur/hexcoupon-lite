@@ -16,10 +16,11 @@ import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import ButtonWrapper from "../../utils/button/ButtonWrapper";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
+import { __ } from '@wordpress/i18n';
 
 const LoyaltyProgramLogs = () => {
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = loyaltyProgramLogs;
 	const [isLoading, setIsLoading] = useState(true);
 	const [storeCreditFullLogs, setStoreCreditFullLogs] = useState([]);

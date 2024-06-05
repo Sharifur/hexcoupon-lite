@@ -13,6 +13,7 @@ const basepath = `/${everythingBefore}/wp-content/plugins/hex-coupon-for-woocomm
 export default defineConfig({
 	base: basepath,
 	build: {
+		sourcemap: true, // Enable source maps
 		rollupOptions: {
 			output: {
 				entryFileNames: `assets/[name].js`,

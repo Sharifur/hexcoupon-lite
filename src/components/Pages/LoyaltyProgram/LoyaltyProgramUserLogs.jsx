@@ -17,10 +17,11 @@ import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import ButtonWrapper from "../../utils/button/ButtonWrapper";
 import ReactPaginate from "react-paginate";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
+import { __ } from '@wordpress/i18n';
 
 const LoyaltyProgramUserLogs = () => {
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const { userId } = useParams();
 	const { nonce, ajaxUrl } = loyaltyProgramLogs;
 	const [isLoading, setIsLoading] = useState(true);

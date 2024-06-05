@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { IconChevronLeft, IconInfoCircle } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import Switch from "../../utils/switch/Switch";
-import { useI18n } from "@wordpress/react-i18n";
+// import { useI18n } from "@wordpress/react-i18n";
+import { __ } from '@wordpress/i18n';
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
@@ -11,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 const PointBasedLoyaltySettings = () => {
 	const { nonce, ajaxUrl } = loyaltyProgramData;
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 

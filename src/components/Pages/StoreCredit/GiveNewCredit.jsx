@@ -16,7 +16,7 @@ import { __ } from '@wordpress/i18n';
 import Select from 'react-select';
 
 const GiveNewCredit = () => {
-	const { __ } = useI18n();
+	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
