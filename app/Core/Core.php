@@ -46,6 +46,7 @@ use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
 use HexCoupon\App\Core\WooCommerce\CouponShortcode;
+use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\CustomFieldsInAccountDetails;
 use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\LoyaltyProgram;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditCheckbox;
@@ -124,6 +125,7 @@ final class Core extends BootManager
 			FlushRewriteForLoyaltyProgram::class,
 			EnablePointsOnReview::class,
 			OrderDetailsForStoreCredit::class,
+			CustomFieldsInAccountDetails::class,
 		];
 	}
 }

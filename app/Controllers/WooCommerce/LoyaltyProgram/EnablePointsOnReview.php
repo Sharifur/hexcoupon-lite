@@ -73,7 +73,6 @@ class EnablePointsOnReview
 		}
 	}
 
-
 	/**
 	 * @package hexcoupon
 	 * @author WpHex

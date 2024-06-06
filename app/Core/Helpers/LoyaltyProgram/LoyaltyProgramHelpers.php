@@ -8,16 +8,11 @@ class LoyaltyProgramHelpers
 
 	private $wpdb;
 	private $table_name;
-
 	private $store_credit_table;
 	private $store_credit_logs_table;
-
 	private $loyalty_points_log_table;
-
 	private $pointsForSignup;
-
 	private $points_on_purchase;
-
 	private $conversion_rate;
 	private $loyalty_program_enable_settings;
 
