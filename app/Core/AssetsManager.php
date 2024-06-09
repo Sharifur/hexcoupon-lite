@@ -228,8 +228,8 @@ class AssetsManager
 			if ( ! $this->is_pro_active && is_admin() ) {
 				wp_enqueue_script(
 					hexcoupon_prefix( 'checkout-main' ),
-					hexcoupon_url( "build/index.js" ),
-					['jquery','wp-element'],
+					hexcoupon_url( 'build/index.js' ),
+					[ 'jquery','wp-element' ],
 					$this->version,
 					true
 				);
@@ -290,6 +290,20 @@ class AssetsManager
 		$folder_prefix = hexcoupon_get_config( 'dev_mode' ) ? '/dev' : '/dist';
 		$js_file_extension = hexcoupon_get_config('dev_mode') ? '.js' : '.min.js';
 		$css_file_extension = hexcoupon_get_config('dev_mode') ? '.css' : '.min.css';
+
+		if ( is_product() ) {
+			wp_enqueue_script(
+				'hexcoupon_share',
+				get_template_directory_uri() . '/js/share.js', // Update this path if necessary
+				array('jquery'),
+				null,
+				true
+			);
+
+			wp_localize_script( 'hexcoupon_share', 'ajax_object', array(
+				'ajax_url' => admin_url( 'admin-ajax.php' )
+			));
+		}
 
 		wp_enqueue_script(
 			hexcoupon_prefix( 'public' ),

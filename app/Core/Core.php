@@ -26,6 +26,7 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyListedProductForAnyLi
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductAndCombinationOfProductForProductCategory;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForProductCategory;
 use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\EnablePointsOnReview;
+use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\EnablePointsOnSocialShare;
 use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\FlushRewriteForLoyaltyProgram;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\FlushRewriteForStoreCredit;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\SaveStoreCreditOptionsValueControllers;
@@ -126,6 +127,7 @@ final class Core extends BootManager
 			EnablePointsOnReview::class,
 			OrderDetailsForStoreCredit::class,
 			CustomFieldsInAccountDetails::class,
+			EnablePointsOnSocialShare::class,
 		];
 	}
 }

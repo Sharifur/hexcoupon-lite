@@ -123,6 +123,7 @@ class LoyaltyProgram
 				</a>
 			</div>
 		</div>
+
 		<div class="referral-container">
 			<h2><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $referral_link_label ) )?></h2>
 			<div class="referral-box">
@@ -133,6 +134,29 @@ class LoyaltyProgram
 				<?php echo wp_kses( "Your points are converted to store credit. The conversion rate is <b>'{$conversion_rate}'</b> points per store credit.", $allowed_html ); ?>
 			</div>
 		</div>
+		<div class="referral-container">
+			<h2><?php esc_html_e( 'Social Share:', 'hex-coupon-for-woocommerce' ); ?> </h2>
+			<?php
+			echo '<div class="social-share-buttons">';
+			// Facebook Share Button
+			echo '<a href="https://www.facebook.com/sharer/sharer.php?u=' . urlencode( $referral_link ) . '" target="_blank">';
+			echo '<img width="40" height="40" src="https://www.pikpng.com/pngl/m/222-2220526_like-share-follow-and-subscribe-transparent-background-facebook.png" alt="Share on Facebook" />';
+			echo '<i class="fa-brands fa-facebook-f"></i>';
+			echo '</a>';
+			// Twitter Share Button
+			echo '<a href="https://twitter.com/intent/tweet?url=' . urlencode( $referral_link ) . '" target="_blank">';
+			echo '<img width="40" height="40" src="https://www.clipartmax.com/png/middle/206-2067679_icon-twitter%403x-twitter-share-button.png" alt="Share on Twitter" />';
+			echo '<i class="lab la-twitter"></i>';
+			echo '</a>';
+			// LinkedIn Share Button
+			echo '<a href="https://www.linkedin.com/shareArticle?mini=true&url=' . urlencode( $referral_link ) . '" target="_blank">';
+			echo '<img width="40" height="40" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgp1b6kjWUD04Wq-sj6aFLLqj_I_pDepYQ4A&s" alt="Share on LinkedIn" />';
+			echo '<i class="lab la-linkedin"></i>';
+			echo '</a>';
+			echo '</div>';
+			?>
+		</div>
+
 		<div class="referral-container two">
 			<h3 class="notice notice-info">
 				<?php esc_html_e( 'You will only get points for referral when the referral user makes a successful purchase', 'hex-coupon-for-woocommerce' ); ?>

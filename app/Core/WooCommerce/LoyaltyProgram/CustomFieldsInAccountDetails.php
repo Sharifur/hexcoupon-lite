@@ -102,14 +102,14 @@ class CustomFieldsInAccountDetails
 	 */
 	public function schedule_daily_event()
 	{
-		$bd_points_giving_on_of = 1;
+		$bd_points_giving_on_of = 0;
 
 		if ( ! wp_next_scheduled( 'daily_gift_points_event_for_bd' ) ) {
 			wp_schedule_event( time(), 'per_minute', 'daily_gift_points_event_for_bd' );
 		}
 
 		if ( $bd_points_giving_on_of == 0 ) {
-			// wp_clear_scheduled_hook('daily_gift_points_event_for_bd');
+			 wp_clear_scheduled_hook('daily_gift_points_event_for_bd');
 		}
 	}
 
