@@ -663,7 +663,7 @@ class LoyaltyProgramHelpers
 		$data = [
 			'user_id' => $user_id,
 			'amount' => round( $credit, 2 ),
-			'type' => 1,
+			'type' => 0,
 			'status' => 1,
 			'label' => 2,
 			'loyalty_points_id' => $loyalty_points_primary_key,

@@ -11,6 +11,7 @@ class LoyaltyProgram
 
 	private $points_converstion_rate;
 	private $loyalty_program_settings;
+	private $points_on_social_share;
 
 	/**
 	 * @package hexcoupon
@@ -25,6 +26,8 @@ class LoyaltyProgram
 		$this->points_converstion_rate = get_option( 'conversionRate' );
 		$this->loyalty_program_settings = get_option( 'loyalty_program_enable_settings' );
 		$loyalty_program_enable = $this->loyalty_program_settings['enable'] ?? 0;
+
+		$this->points_on_social_share = get_option( 'pointsForSocialShare' );
 
 		// Making it on/off based on Loyalty Program on/off settings data
 		if ( $loyalty_program_enable ) {
@@ -134,28 +137,38 @@ class LoyaltyProgram
 				<?php echo wp_kses( "Your points are converted to store credit. The conversion rate is <b>'{$conversion_rate}'</b> points per store credit.", $allowed_html ); ?>
 			</div>
 		</div>
+
+		<?php
+		$enable_points_on_social_share = ! empty( $this->points_on_social_share['enable'] ) ? $this->points_on_social_share['enable'] : 0;
+		if ( $enable_points_on_social_share ) :
+		?>
 		<div class="referral-container">
 			<h2><?php esc_html_e( 'Social Share:', 'hex-coupon-for-woocommerce' ); ?> </h2>
 			<?php
+			$facebook_svg = plugins_url( '/hex-coupon-for-woocommerce/assets/images/Facebook.svg' );
+			$x_svg = plugins_url( '/hex-coupon-for-woocommerce/assets/images/X.svg' );
+			$linkedin_svg = plugins_url( '/hex-coupon-for-woocommerce/assets/images/Linkedin.svg' );
+
 			echo '<div class="social-share-buttons">';
 			// Facebook Share Button
 			echo '<a href="https://www.facebook.com/sharer/sharer.php?u=' . urlencode( $referral_link ) . '" target="_blank">';
-			echo '<img width="40" height="40" src="https://www.pikpng.com/pngl/m/222-2220526_like-share-follow-and-subscribe-transparent-background-facebook.png" alt="Share on Facebook" />';
+			echo '<img width="40" height="40" src="' . esc_url( $facebook_svg ) . '" alt="Share on Facebook" />';
 			echo '<i class="fa-brands fa-facebook-f"></i>';
 			echo '</a>';
 			// Twitter Share Button
 			echo '<a href="https://twitter.com/intent/tweet?url=' . urlencode( $referral_link ) . '" target="_blank">';
-			echo '<img width="40" height="40" src="https://www.clipartmax.com/png/middle/206-2067679_icon-twitter%403x-twitter-share-button.png" alt="Share on Twitter" />';
+			echo '<img width="40" height="40" src="' . esc_url( $x_svg ) . '" alt="Share on Twitter" />';
 			echo '<i class="lab la-twitter"></i>';
 			echo '</a>';
 			// LinkedIn Share Button
 			echo '<a href="https://www.linkedin.com/shareArticle?mini=true&url=' . urlencode( $referral_link ) . '" target="_blank">';
-			echo '<img width="40" height="40" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgp1b6kjWUD04Wq-sj6aFLLqj_I_pDepYQ4A&s" alt="Share on LinkedIn" />';
+			echo '<img width="40" height="40" src="' . esc_url( $linkedin_svg ) . '" alt="Share on LinkedIn" />';
 			echo '<i class="lab la-linkedin"></i>';
 			echo '</a>';
 			echo '</div>';
 			?>
 		</div>
+		<?php endif; ?>
 
 		<div class="referral-container two">
 			<h3 class="notice notice-info">
@@ -231,6 +244,18 @@ class LoyaltyProgram
 						break;
 					case 2 :
 						$reason = 'Purchase';
+						break;
+					case 3 :
+						$reason = 'Review';
+						break;
+					case 4 :
+						$reason = 'Comment';
+						break;
+					case 5 :
+						$reason = 'Birthday';
+						break;
+					case 6 :
+						$reason = 'Social Share';
 						break;
 					default :
 						$reason = 'Signup';

@@ -25,8 +25,6 @@ use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetCombinationOfProductForA
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyListedProductForAnyListedProduct;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetSpecificProductAndCombinationOfProductForProductCategory;
 use HexCoupon\App\Controllers\WooCommerce\Admin\Bogo\GetAnyProductFromListForProductCategory;
-use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\EnablePointsOnReview;
-use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\EnablePointsOnSocialShare;
 use HexCoupon\App\Controllers\WooCommerce\LoyaltyProgram\FlushRewriteForLoyaltyProgram;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\FlushRewriteForStoreCredit;
 use HexCoupon\App\Controllers\WooCommerce\StoreCredit\SaveStoreCreditOptionsValueControllers;
@@ -47,7 +45,6 @@ use HexCoupon\App\Core\WooCommerce\CouponSingleSharableUrl;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageRestriction;
 use HexCoupon\App\Core\WooCommerce\CouponSingleUsageLimits;
 use HexCoupon\App\Core\WooCommerce\CouponShortcode;
-use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\CustomFieldsInAccountDetails;
 use HexCoupon\App\Core\WooCommerce\LoyaltyProgram\LoyaltyProgram;
 use HexCoupon\App\Core\WooCommerce\MyAccount;
 use HexCoupon\App\Core\WooCommerce\StoreCredit\AddStoreCreditCheckbox;
@@ -124,10 +121,7 @@ final class Core extends BootManager
 			LoyaltyProgramHelpers::class,
 			LoyaltyProgram::class,
 			FlushRewriteForLoyaltyProgram::class,
-			EnablePointsOnReview::class,
 			OrderDetailsForStoreCredit::class,
-			CustomFieldsInAccountDetails::class,
-			EnablePointsOnSocialShare::class,
 		];
 	}
 }

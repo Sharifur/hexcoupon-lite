@@ -328,6 +328,10 @@ class AjaxApiController extends Controller
 		$points_on_purchase = get_option( 'pointsOnPurchase' );
 		$points_for_signup = get_option( 'pointsForSignup' );
 		$points_for_referral = get_option( 'pointsForReferral' );
+		$points_for_review = get_option( 'pointsForReview' );
+		$points_for_comment = get_option( 'pointsForComment' );
+		$points_for_birthday = get_option( 'pointsForBirthday' );
+		$points_for_social_share = get_option( 'pointsForSocialShare' );
 		$conversion_rate = get_option( 'conversionRate' );
 		$all_loyalty_labels = get_option( 'allLoyaltyLabels' );
 
@@ -335,6 +339,10 @@ class AjaxApiController extends Controller
 			'pointsOnPurchase' => $points_on_purchase,
 			'pointsForSignup' => $points_for_signup,
 			'pointsForReferral' => $points_for_referral,
+			'pointsForReview' => $points_for_review,
+			'pointsForComment' => $points_for_comment,
+			'pointsForBirthday' => $points_for_birthday,
+			'pointsForSocialShare' => $points_for_social_share,
 			'conversionRate' => $conversion_rate,
 			'allLoyaltyLabels' => $all_loyalty_labels,
 		];

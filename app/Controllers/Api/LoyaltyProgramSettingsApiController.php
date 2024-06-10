@@ -84,6 +84,30 @@ class LoyaltyProgramSettingsApiController extends Controller
 			];
 			update_option( 'pointsForReferral', $points_for_referral );
 
+			$points_for_review = [
+				'enable' => isset($dataArray['settings']['pointsForReview']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForReview']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForReview']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForReview']['pointAmount']) : '',
+			];
+			update_option( 'pointsForReview', $points_for_review );
+
+			$points_for_comment = [
+				'enable' => isset($dataArray['settings']['pointsForComment']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForComment']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForComment']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForComment']['pointAmount']) : '',
+			];
+			update_option( 'pointsForComment', $points_for_comment );
+
+			$points_for_birthday = [
+				'enable' => isset($dataArray['settings']['pointsForBirthday']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForBirthday']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForBirthday']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForBirthday']['pointAmount']) : '',
+			];
+			update_option( 'pointsForBirthday', $points_for_birthday );
+
+			$points_for_social_share = [
+				'enable' => isset($dataArray['settings']['pointsForSocialShare']['enable']) ? rest_sanitize_boolean($dataArray['settings']['pointsForSocialShare']['enable']) : '',
+				'pointAmount' => isset($dataArray['settings']['pointsForSocialShare']['pointAmount']) ? sanitize_text_field($dataArray['settings']['pointsForSocialShare']['pointAmount']) : '',
+			];
+			update_option( 'pointsForSocialShare', $points_for_social_share );
+
 			$conversion_rate = [
 				'credit' => isset($dataArray['settings']['conversionRate']['credit']) ? sanitize_text_field($dataArray['settings']['conversionRate']['credit']) : '',
 				'points' => isset($dataArray['settings']['conversionRate']['points']) ? sanitize_text_field($dataArray['settings']['conversionRate']['points']) : '',

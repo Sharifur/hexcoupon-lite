@@ -54,7 +54,7 @@ class CreateAllTables
             id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id bigint(20) UNSIGNED NOT NULL,
             points DOUBLE NOT NULL,
-            reason BIGINT UNSIGNED NOT NULL COMMENT '0=SignUp Points, 1=Referral Points, 2=Purchase Points, 3=Review, 4=Comment',
+            reason BIGINT UNSIGNED NOT NULL COMMENT '0=SignUp Points, 1=Referral Points, 2=Purchase Points, 3=Review, 4=Comment, 5=Birthday, 6=SocialShare',
             referee_id bigint(20) UNSIGNED NULL,
             converted_credit DOUBLE NOT NULL,
             conversion_rate DOUBLE NOT NULL,

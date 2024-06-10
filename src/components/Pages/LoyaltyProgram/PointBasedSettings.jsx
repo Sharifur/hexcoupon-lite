@@ -20,6 +20,28 @@ const PointBasedLoyaltySettings = () => {
 		navigate(-1, { state: { refresh: true } });
 	};
 
+	const showProMessage = () => {
+		toast.info(
+			({ closeToast }) => (
+				<div>
+					Upgrade to <a href="https://hexcoupon.com/pricing/" target="_blank" rel="noopener noreferrer"><b style={{color:"#A760FE"}}>Pro</b></a> to use this feature!
+				</div>
+			),
+			{
+				position: 'top-center',
+				autoClose: false,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: false,
+				draggable: true,
+			}
+		);
+	};
+
+	const handleProFeatureSwitch = (event) => {
+		showProMessage();
+	};
+
 	const [settings, setSettings] = useState({
 		pointsOnPurchase: { enable: false, pointAmount: 100, spendingAmount: 1 },
 		pointsForSignup: { enable: false, pointAmount: 100 },
@@ -219,6 +241,103 @@ const PointBasedLoyaltySettings = () => {
 											type="number"
 											value={settings.pointsForReferral.pointAmount}
 											onChange={handleInputChange("pointsForReferral", "pointAmount")}
+										/>
+									</label>
+								</div>
+							</div>
+						</div>
+
+
+						<div className="setting-item">
+							<div className="setting-header">
+								<div className="switch-container">
+									<span>{__("Points for Review","hex-coupon-for-woocommerce")}</span>
+									<span className="switch-enabled">{__("Enabled","hex-coupon-for-woocommerce")}</span>
+									<Switch
+										isChecked={false}
+										onClick={handleProFeatureSwitch}
+									/>
+								</div>
+								<div className="setting-body">
+									<label>
+										{__("Point Amount","hex-coupon-for-woocommerce")}
+										<input
+											type="number"
+											value="0"
+											readOnly
+											onClick={showProMessage}
+										/>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div className="setting-item">
+							<div className="setting-header">
+								<div className="switch-container">
+									<span>{__("Points for Comment","hex-coupon-for-woocommerce")}</span>
+									<span className="switch-enabled">{__("Enabled","hex-coupon-for-woocommerce")}</span>
+									<Switch
+										isChecked={false}
+										onClick={handleProFeatureSwitch}
+									/>
+								</div>
+								<div className="setting-body">
+									<label>
+										{__("Point Amount","hex-coupon-for-woocommerce")}
+										<input
+											type="number"
+											value="0"
+											readOnly
+											onClick={showProMessage}
+										/>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div className="setting-item">
+							<div className="setting-header">
+								<div className="switch-container">
+									<span>{__("Points on Birthday","hex-coupon-for-woocommerce")}</span>
+									<span className="switch-enabled">{__("Enabled","hex-coupon-for-woocommerce")}</span>
+									<Switch
+										isChecked={false}
+										onClick={handleProFeatureSwitch}
+									/>
+								</div>
+								<div className="setting-body">
+									<label>
+										{__("Point Amount","hex-coupon-for-woocommerce")}
+										<input
+											type="number"
+											value="0"
+											readOnly
+											onClick={showProMessage}
+										/>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div className="setting-item">
+							<div className="setting-header">
+								<div className="switch-container">
+									<span>{__("Points for Social Share","hex-coupon-for-woocommerce")}</span>
+									<span className="switch-enabled">{__("Enabled","hex-coupon-for-woocommerce")}</span>
+									<Switch
+										isChecked={false}
+										onClick={handleProFeatureSwitch}
+									/>
+								</div>
+								<div className="setting-body">
+									<label>
+										{__("Point Amount","hex-coupon-for-woocommerce")}
+										<input
+											type="number"
+											value="0"
+											readOnly
+											onClick={showProMessage}
 										/>
 									</label>
 								</div>

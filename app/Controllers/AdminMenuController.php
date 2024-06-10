@@ -176,6 +176,7 @@ class AdminMenuController extends BaseController
 	public function render_hexcoupon()
 	{
 		$this->render( '/admin/admin-menu.php' );
+
 	}
 
 	/**
