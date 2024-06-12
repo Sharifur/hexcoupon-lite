@@ -33,7 +33,7 @@ wp.domReady(() => {
 				const totalElement = document.querySelector('.wc-block-components-totals-item__value');
 				if (totalElement && divider && multiplier) {
 					const totalPrice = parseFloat(totalElement.innerText.replace(/[^\d.-]/g, ''));
-					const calculatedPoints = Math.round((totalPrice / divider) * multiplier);
+					const calculatedPoints = Math.floor(totalPrice / divider) * multiplier;
 					setPoints(calculatedPoints);
 				} else {
 					setPoints(0);

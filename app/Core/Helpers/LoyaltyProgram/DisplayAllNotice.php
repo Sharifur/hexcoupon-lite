@@ -89,8 +89,8 @@ class DisplayAllNotice
 		$total_value = $cart->get_subtotal();
 
 		// Calculating the points for full order
-		$convert_point_on_per_spending = $total_value / $spending_amount;
-		$total_points = $convert_point_on_per_spending * $point_amount;
+		$spending_ratio = $total_value / $spending_amount;
+		$total_points = floor( $spending_ratio ) * $point_amount;
 
 		$notice = sprintf( esc_html__( 'You will earn %d points with this order.', 'hex-coupon-for-woocommerce' ), esc_html( $total_points ) );
 

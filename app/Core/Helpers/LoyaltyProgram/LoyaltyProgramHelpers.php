@@ -378,14 +378,14 @@ class LoyaltyProgramHelpers
 
 		$order = wc_get_order( $order_id );
 		$user_id = $order->get_user_id();
-		$order_total = $order->get_total();
+		$order_total = $order->get_subtotal();
 
 		$spending_amount = ! empty( $this->points_on_purchase['spendingAmount'] ) ? $this->points_on_purchase['spendingAmount']: 0;
 		$point_amount = ! empty( $this->points_on_purchase['pointAmount'] ) ? $this->points_on_purchase['pointAmount']: 0;
 
 		// Calculating the points for full order
-		$convert_point_on_per_spending = $order_total / $spending_amount;
-		$total_points = $convert_point_on_per_spending * $point_amount;
+		$spending_ratio = $order_total / $spending_amount;
+		$total_points = floor( $spending_ratio ) * $point_amount;
 
 		// Get the total points for the user, defaulting to 0 if no entry exists
 		$current_points = $wpdb->get_var( $wpdb->prepare(
@@ -530,7 +530,8 @@ class LoyaltyProgramHelpers
 			$pointAmount = $this->points_on_purchase['pointAmount'] ?? 0;
 			$spendingAmount = $this->points_on_purchase['spendingAmount'] ?? 0;
 
-			$points = ( $order_subtotal / $spendingAmount ) * $pointAmount;
+			$spending_ratio = $order_subtotal / $spendingAmount;
+			$points = floor( $spending_ratio ) * $pointAmount;
 
 			$wpdb = $this->wpdb;
 
