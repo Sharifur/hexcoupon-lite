@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IconChevronLeft, IconInfoCircle } from "@tabler/icons-react";
+import { TbChevronLeft, TbInfoCircle } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Switch from "../../utils/switch/Switch";
-// import { useI18n } from "@wordpress/react-i18n";
 import { __ } from '@wordpress/i18n';
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
@@ -12,7 +11,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 const PointBasedLoyaltySettings = () => {
 	const { nonce, ajaxUrl } = loyaltyProgramData;
-	// const { __ } = useI18n();
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
@@ -158,7 +156,7 @@ const PointBasedLoyaltySettings = () => {
 	return (
 		<div className="point-based-loyalty-settings">
 			<h1>
-				<IconChevronLeft onClick={goBack} className="back-icon" /> {__("Point Loyalty Settings","hex-coupon-for-woocommerce")}
+				<TbChevronLeft onClick={goBack} className="back-icon" /> {__("Point Loyalty Settings","hex-coupon-for-woocommerce")}
 			</h1>
 
 			<div className="settings-section">
@@ -189,7 +187,7 @@ const PointBasedLoyaltySettings = () => {
 									<label>
 										{__("Spending Amount","hex-coupon-for-woocommerce")}
 										<Tooltip title={__("Amount to spend to earn points on every purchase","hex-coupon-for-woocommerce")}>
-											<IconInfoCircle style={{ marginLeft: "5px" }} />
+											<TbInfoCircle style={{ marginLeft: "5px" }} />
 										</Tooltip>
 										<input
 											type="number"

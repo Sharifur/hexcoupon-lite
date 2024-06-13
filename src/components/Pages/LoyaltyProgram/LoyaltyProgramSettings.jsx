@@ -4,15 +4,13 @@ import { Skeleton } from "../../Skeleton";
 import Switch from "../../utils/switch/Switch";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-// import { useI18n } from "@wordpress/react-i18n";
-import { __ } from '@wordpress/i18n';
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
-import { IconSettings } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
 import coinImg from '../../../img/coin.png';
+import { __ } from '@wordpress/i18n';
+import { TbSettings } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 const LoyaltyProgramSettings = () => {
-	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = loyaltyProgramData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [switchState, setSwitchState] = useState(false);
@@ -50,12 +48,14 @@ const LoyaltyProgramSettings = () => {
 			closeOnClick: true,
 			pauseOnHover: false,
 			draggable: true,
-			onClose: () => {
-				if (switchState) {
-					navigate('/loyalty-program/point-based-loyalty-settings');
-				}
-			}
+			onClose: handleToastClose
 		});
+	};
+
+	const handleToastClose = () => {
+		if (switchState) {
+			navigate('/loyalty-program/point-based-loyalty-settings');
+		}
 	};
 
 	useEffect(() => {
@@ -77,6 +77,7 @@ const LoyaltyProgramSettings = () => {
 			})
 			.finally(() => setIsLoading(false));
 	}, [nonce]);
+
 
 	const handleSettingsClick = () => {
 		const path = "/loyalty-program/point-based-loyalty-settings";
@@ -100,7 +101,9 @@ const LoyaltyProgramSettings = () => {
 						</div>
 						<div className="loyalty-toggle">
 							<Switch isChecked={switchState} onSwitchChange={handleSwitchChange} />
-							<IconSettings className="loyalty-settings-icon"
+							<TbSettings
+								size={24}
+								className="loyalty-settings-icon"
 								style={{ display: "inline-block", marginLeft: "5px", cursor: "pointer" }}
 								onClick={handleSettingsClick}
 							/>
@@ -125,3 +128,4 @@ const LoyaltyProgramSettings = () => {
 }
 
 export default LoyaltyProgramSettings;
+

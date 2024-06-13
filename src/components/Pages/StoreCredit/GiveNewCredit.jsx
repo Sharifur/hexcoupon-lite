@@ -11,12 +11,10 @@ import PageBody from "../../Pagebody/PageBody";
 import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { toast, ToastContainer } from "react-toastify";
-// import { useI18n } from "@wordpress/react-i18n";
 import { __ } from '@wordpress/i18n';
 import Select from 'react-select';
 
 const GiveNewCredit = () => {
-	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();

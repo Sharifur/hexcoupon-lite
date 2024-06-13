@@ -96,6 +96,11 @@
 				list-style: none;
 				padding: 0;
 				&__item {
+					.hexpDashboard__list__item__link {
+						&:focus {
+							box-shadow: none;
+						}
+					}
 					.submenu {
 						max-height: 0;
 						transition: height .4s ease-in;

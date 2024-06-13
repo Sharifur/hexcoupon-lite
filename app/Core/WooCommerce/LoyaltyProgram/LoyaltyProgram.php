@@ -139,8 +139,10 @@ class LoyaltyProgram
 		</div>
 
 		<?php
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;;
+
 		$enable_points_on_social_share = ! empty( $this->points_on_social_share['enable'] ) ? $this->points_on_social_share['enable'] : 0;
-		if ( $enable_points_on_social_share ) :
+		if ( $is_pro_active && $enable_points_on_social_share ) :
 		?>
 		<div class="referral-container">
 			<h2><?php esc_html_e( 'Social Share:', 'hex-coupon-for-woocommerce' ); ?> </h2>

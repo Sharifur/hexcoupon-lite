@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Skeleton } from "../../Skeleton";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Table from "../../utils/table/Table";
 import THead from "../../utils/table/THead";
 import Th from "../../utils/table/Th";
@@ -16,11 +16,9 @@ import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import ButtonWrapper from "../../utils/button/ButtonWrapper";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-// import { useI18n } from "@wordpress/react-i18n";
 import { __ } from '@wordpress/i18n';
 
 const LoyaltyProgramLogs = () => {
-	// const { __ } = useI18n();
 	const { nonce, ajaxUrl } = loyaltyProgramLogs;
 	const [isLoading, setIsLoading] = useState(true);
 	const [storeCreditFullLogs, setStoreCreditFullLogs] = useState([]);

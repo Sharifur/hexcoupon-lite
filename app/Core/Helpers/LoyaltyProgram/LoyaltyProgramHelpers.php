@@ -29,13 +29,20 @@ class LoyaltyProgramHelpers
 		$this->store_credit_logs_table = $wpdb->prefix . 'hex_store_credit_logs';
 
 		$this->loyalty_program_enable_settings = get_option( 'loyalty_program_enable_settings' );
+		$enable_loyalty_program = ! empty( $this->loyalty_program_enable_settings ) ? $this->loyalty_program_enable_settings : 0;
+
+		$this->pointsForSignup = get_option( 'pointsForSignup' );
+		$enable_points_for_signup = ! empty( $this->pointsForSignup['enable'] ) ? intval( $this->pointsForSignup['enable'] ) : 0;
 
 		$this->loyalty_points_log_table = $wpdb->prefix . 'hex_loyalty_points_log';
 
 		$this->points_on_purchase = get_option( 'pointsOnPurchase' );
 		$this->conversion_rate = get_option( 'conversionRate' );
 
-		add_action( 'user_register', [ $this, 'give_points_on_signup' ] );
+		if ( $enable_loyalty_program && $enable_points_for_signup ) {
+			add_action( 'user_register', [ $this, 'give_points_on_signup' ] );
+		}
+
 		add_action( 'init', [ $this, 'start_session' ] );
 		add_action( 'template_redirect', [ $this, 'handle_referral' ] );
 		add_action( 'user_register', [ $this, 'update_referrer_points' ] );
@@ -130,7 +137,7 @@ class LoyaltyProgramHelpers
 
 		// ** Mechanism to send converting points to store credit and sending it to the database 'store_credit_table' ** //
 		// Getting current store credit amount
-		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+		$points_to_be_converted = ! empty( $this->conversion_rate['points'] ) ? $this->conversion_rate['points'] : 0;
 
 		// Calculate the new credit balance
 		$new_credit_balance = round( $points_for_signup / $points_to_be_converted, 2 );
@@ -196,11 +203,11 @@ class LoyaltyProgramHelpers
 	 */
 	public function update_referrer_points( $user_id )
 	{
-		$enable_loyalty_program = $this->loyalty_program_enable_settings['enable'] ?? 0;
+		$enable_loyalty_program = ! empty( $this->loyalty_program_enable_settings['enable'] ) ? $this->loyalty_program_enable_settings['enable'] : 0;
 
 		// Retrieve the signup points from the options
 		$points_for_referral = get_option( 'pointsForReferral' );
-		$enable_referral = $points_for_referral['enable'] ?? 0;
+		$enable_referral = ! empty( $points_for_referral['enable'] ) ? $points_for_referral['enable'] : 0;
 		$points_for_referral = ! empty( $points_for_referral['pointAmount'] ) ? intval( $points_for_referral['pointAmount'] ) : 0;
 
 		if ( $enable_loyalty_program && $enable_referral && isset( $_SESSION['referrer_id'] ) ) {
@@ -289,7 +296,7 @@ class LoyaltyProgramHelpers
 
 			//** Mechanism to send converting points to store credit and sending it to the database **
 			// Getting current store credit amount
-			$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+			$points_to_be_converted = ! empty( $this->conversion_rate['points'] ) ? $this->conversion_rate['points'] : 0;
 
 			$current_credit = $wpdb->get_var( $wpdb->prepare(
 				"SELECT amount FROM $store_credit_table WHERE user_id = %d",
@@ -432,7 +439,7 @@ class LoyaltyProgramHelpers
 
 		//** Mechanism to send converting points to store credit and sending it to the database **
 		// Getting current store credit amount
-		$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+		$points_to_be_converted = ! empty( $this->conversion_rate['points'] ) ? $this->conversion_rate['points'] : 0;
 
 		$current_credit = $wpdb->get_var( $wpdb->prepare(
 			"SELECT amount FROM $store_credit_table WHERE user_id = %d",
@@ -527,8 +534,8 @@ class LoyaltyProgramHelpers
 			// Get the order subtotal
 			$order_subtotal = $order->get_subtotal();
 			$user_id = $order->get_user_id();
-			$pointAmount = $this->points_on_purchase['pointAmount'] ?? 0;
-			$spendingAmount = $this->points_on_purchase['spendingAmount'] ?? 0;
+			$pointAmount = ! empty( $this->points_on_purchase['pointAmount'] ) ? $this->points_on_purchase['pointAmount'] : 0;
+			$spendingAmount = ! empty( $this->points_on_purchase['spendingAmount'] ) ? $this->points_on_purchase['spendingAmount'] : 0;
 
 			$spending_ratio = $order_subtotal / $spendingAmount;
 			$points = floor( $spending_ratio ) * $pointAmount;
@@ -583,7 +590,7 @@ class LoyaltyProgramHelpers
 			}
 
 			// ** Getting current store credit amount for inserting credit to the 'store credit table' **
-			$points_to_be_converted = $this->conversion_rate['points'] ?? 0;
+			$points_to_be_converted = ! empty( $this->conversion_rate['points'] ) ? $this->conversion_rate['points'] : 0;
 
 			$current_credit = $wpdb->get_var( $wpdb->prepare(
 				"SELECT amount FROM $store_credit_table WHERE user_id = %d",

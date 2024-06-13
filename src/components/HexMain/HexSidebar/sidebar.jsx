@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useI18n } from '@wordpress/react-i18n';
 import { Link, useLocation } from 'react-router-dom';
-import { TbHome, TbMenu2, TbChevronDown, TbCoin, TbCoins, TbBook, TbReceipt2, TbHelpSquareRounded, TbBox, TbDiscount} from "react-icons/tb";
+import { TbHome, TbMenu2, TbChevronDown, TbCoin, TbCoins, TbBook, TbCrown, TbHelpSquareRounded, TbBox, TbDiscount} from "react-icons/tb";
 import LogoImg from '../../../img/logo.png';
 import { useSidebar } from '../../context/SidebarContext';
 
@@ -133,7 +133,7 @@ const Sidebar = () => {
 								<a href="https://hexcoupon.com/docs/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><TbBook size={24}/>{__("Documentation", "hex-coupon-for-woocommerce")}</span></a>
 							</li>
 							<li className='hexpDashboard__list__item'>
-								<a href="https://hexcoupon.com/pricing/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><TbReceipt2 size={24}/>{__("Upgrade to Pro", "hex-coupon-for-woocommerce")}</span></a>
+								<a href="https://hexcoupon.com/pricing/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><TbCrown size={24}/>{__("Upgrade to Pro", "hex-coupon-for-woocommerce")}</span></a>
 							</li>
 							<li className='hexpDashboard__list__item'>
 								<a href="https://wordpress.org/support/plugin/hex-coupon-for-woocommerce/" target="_blank" className='hexpDashboard__list__item__link'><span className="hexpDashboard__list__item__link__left"><TbHelpSquareRounded size={24}/>{__("Support", "hex-coupon-for-woocommerce")}</span></a>
