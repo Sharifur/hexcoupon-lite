@@ -1,7 +1,7 @@
 <?php
-
 namespace HexCoupon\App\Controllers;
 
+use HexCoupon\App\Controllers\Licensing\HandleLicenseAction;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Services\AddNewCouponMenuService;
 use HexCoupon\App\Services\AllCouponsMeuService;
@@ -10,6 +10,7 @@ use HexCoupon\App\Services\CouponCategoryMenuService;
 class AdminMenuController extends BaseController
 {
 	use SingleTon;
+	private $is_pro_active;
 
 	/**
 	 * @package hexcoupon
@@ -21,7 +22,10 @@ class AdminMenuController extends BaseController
 	 */
 	public function register()
 	{
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+
 		add_action( 'plugins_loaded', [ $this, 'show_hexcoupon_plugin_menu' ] );
+		add_action( 'admin_init', [ $this, 'handle_license_action' ] );
 	}
 
 	/**
@@ -43,6 +47,10 @@ class AdminMenuController extends BaseController
 			add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_insights_submenu' ] );
+
+			If ( $this->is_pro_active ) {
+				add_action( 'admin_menu', [ $this, 'add_licensing_submenu' ] );
+			}
 		}
 	}
 
@@ -61,9 +69,11 @@ class AdminMenuController extends BaseController
 	 */
 	public function add_hexcoupon_menu()
 	{
+		$menu_text = $this->is_pro_active ? 'HexCoupon Pro' : 'HexCoupon';
+
 		add_menu_page(
-			esc_html__( 'HexCoupon', 'hex-coupon-for-woocommerce' ),
-			esc_html__( 'HexCoupon', 'hex-coupon-for-woocommerce' ),
+			sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $menu_text ) ),
+			sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $menu_text ) ),
 			'manage_options',
 			'hexcoupon-page',
 			[ $this, 'render_hexcoupon' ],
@@ -156,20 +166,20 @@ class AdminMenuController extends BaseController
 	/**
 	 * @package hexcoupon
 	 * @author WpHex
-	 * @method add_coupon_insights_submenu
+	 * @method add_licensing_submenu
 	 * @return void
 	 * @since 1.0.0
-	 * Adding Coupon Insights submenu page in the WooCommerce marketing menu page.
+	 * Add a sub-menu named 'Coupon Category' in the admin dashboard area under the menu 'HexCoupon'.
 	 */
-	public function add_coupon_insights_submenu()
+	public function add_licensing_submenu()
 	{
 		add_submenu_page(
-			'woocommerce-marketing',
-			esc_html__( 'Coupon Insights', 'hexreport' ),
-			esc_html__( 'Coupon Insights', 'hexreport' ),
-			'manage_options',
 			'hexcoupon-page',
-			[ $this, 'render_coupon_insights' ]
+			esc_html__( 'HexCoupon License', 'hex-coupon-for-woocommerce' ),
+			esc_html__( 'HexCoupon License', 'hex-coupon-for-woocommerce' ),
+			'manage_options',
+			'hexcoupon-license',
+			[ $this, 'hexcoupon_license_submenu_page' ],
 		);
 	}
 
@@ -222,5 +232,50 @@ class AdminMenuController extends BaseController
 		$menu_data = CouponCategoryMenuService::getInstance();
 		$data      = $menu_data->getData();
 		$this->render( '/admin/coupon-category-submenu.php', $data );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method hexcoupon_license_submenu_page
+	 * @return void
+	 * @since 1.0.0
+	 * Rendering the licensing page content
+	 */
+	public function hexcoupon_license_submenu_page()
+	{
+		$this->render( '/admin/licensing.php' );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @method handleLicenseAction
+	 * @return void
+	 * @since 1.0.0
+	 * Handling the licensing action
+	 */
+	public function handle_license_action()
+	{
+		HandleLicenseAction::getInstance()->handle_license_action();
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method add_coupon_insights_submenu
+	 * @return void
+	 * @since 1.0.0
+	 * Adding Coupon Insights submenu page in the WooCommerce marketing menu page.
+	 */
+	public function add_coupon_insights_submenu()
+	{
+		add_submenu_page(
+			'woocommerce-marketing',
+			esc_html__( 'Coupon Insights', 'hexreport' ),
+			esc_html__( 'Coupon Insights', 'hexreport' ),
+			'manage_options',
+			'hexcoupon-page',
+			[ $this, 'render_coupon_insights' ]
+		);
 	}
 }

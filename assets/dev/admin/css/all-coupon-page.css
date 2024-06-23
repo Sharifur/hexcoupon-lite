@@ -1,3 +1,15 @@
 .coupon_shortcode input.shortcode_column {
 	width: 100% !important;
 }
+#toplevel_page_hexcoupon-page .wp-submenu li a[href="admin.php?page=hexcoupon-license"] {
+	background-color: #a760fe !important;
+	color: #ffffff;
+}
+.license-active {
+	color: green;
+	font-size: 16px;
+}
+.license-inactive {
+	color: red;
+	font-size: 16px;
+}
