@@ -9,7 +9,6 @@ const index = () => {
         <>
             <Quick_Links />
             <HexCouponPromo />
-            {/*<BarChartOne />*/}
 			<TopLoyaltyPointsEarner />
         </>
     );

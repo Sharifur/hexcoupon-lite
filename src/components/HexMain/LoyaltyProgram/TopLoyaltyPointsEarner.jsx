@@ -5,21 +5,9 @@ import Table from "../../utils/table/Table";
 import THead from "../../utils/table/THead";
 import Th from "../../utils/table/Th";
 import TBody from "../../utils/table/TBody";
-import { Link } from "react-router-dom";
 import { __ } from '@wordpress/i18n';
-import BodyCardHeaderLeft from "../../Pagebody/card/BodyCardHeaderLeft";
-import BodyCardHeaderLeftItem from "../../Pagebody/card/BodyCardHeaderLeftItem";
-import BodyCardHeaderTItle from "../../Pagebody/card/BodyCardHeaderTItle";
-import {IconChevronLeft} from "@tabler/icons-react";
-import BodyCardHeaderRight from "../../Pagebody/card/BodyCardHeaderRight";
-import ButtonWrapper from "../../utils/button/ButtonWrapper";
-import Button from "../../utils/button/Button";
-import BodyCardHeader from "../../Pagebody/card/BodyCardHeader";
 import HexCardHeaderLeft from "../../HexCardHeader/HexCardHeaderLeft";
 import HexCardHeaderTitle from "../../HexCardHeader/HexCardHeaderTitle";
-import HexCardHeaderRight from "../../HexCardHeader/HexCardHeaderRight";
-import SingleSelect from "../../Global/FormComponent/SingleSelect/SingleSelect";
-import {Bar} from "react-chartjs-2";
 
 const TopLoyaltyPointsEarner = () => {
 	const {nonce,ajaxUrl} = hexCuponData;

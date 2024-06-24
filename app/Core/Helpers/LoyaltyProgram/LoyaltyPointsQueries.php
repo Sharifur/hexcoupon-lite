@@ -55,8 +55,14 @@ class LoyaltyPointsQueries
 		$table_name = $wpdb->prefix . 'hex_loyalty_points_log';
 		$all_reasons = [];
 
+		if ( ! defined( IS_PRO_ACTIVE ) && ! IS_PRO_ACTIVE ) {
+			$query = "SELECT reason, SUM(points) as total_points FROM " . $table_name . " WHERE reason NOT IN ('3', '4', '5', '6') GROUP BY reason ORDER BY total_points DESC";
+		} else {
+			$query = "SELECT reason, SUM(points) as total_points FROM " . $table_name . " GROUP BY reason ORDER BY total_points DESC";
+		}
+
 		$results = $wpdb->get_results(
-			"SELECT reason, SUM(points) as total_points FROM " . $table_name . " WHERE reason NOT IN ('3', '4', '5', '6') GROUP BY reason ORDER BY total_points DESC", ARRAY_A
+			$query, ARRAY_A
 		);
 
 		foreach ( $results as $row ) {
@@ -69,6 +75,18 @@ class LoyaltyPointsQueries
 					break;
 				case 2:
 					$reason = 'Purchase';
+					break;
+				case 3:
+					$reason = 'Review';
+					break;
+				case 4:
+					$reason = 'Comment';
+					break;
+				case 5:
+					$reason = 'Birthday';
+					break;
+				case 6:
+					$reason = 'Social Share';
 					break;
 				default:
 					$reason = 'SignUp';
