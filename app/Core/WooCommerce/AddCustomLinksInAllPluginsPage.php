@@ -32,7 +32,7 @@ class AddCustomLinksInAllPluginsPage
 		$upgrade = 'https://hexcoupon.com/pricing/';
 
 
-		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
 
 		if ( 'hex-coupon-for-woocommerce/hex-coupon-for-woocommerce.php' == $file ) {
 			if ( ! $is_pro_active ) {

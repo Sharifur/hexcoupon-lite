@@ -11,12 +11,12 @@ class DeactivateLicense
 	{
 		$license = trim( get_option( 'hexcoupon_license_key' ) );
 
-		$api_params = array(
+		$api_params = [
 			'edd_action' => 'deactivate_license',
 			'license'    => $license,
 			'item_name'  => urlencode( 'HexCoupon Pro' ), // Name of the product in EDD
 			'url'        => home_url()
-		);
+		];
 
 		$response = wp_remote_post( 'https://wphex.com', array( 'body' => $api_params ) );
 
@@ -29,6 +29,7 @@ class DeactivateLicense
 
 		if ( $license_data->success ) {
 			delete_option( 'hexcoupon_license_status' );
+			set_transient( 'hexcoupon_license_success', esc_html__( 'License deactivated successfully!', 'hex-coupon-for-woocommerce' ), 5 ); // Success message will last for 5 seconds
 		}
 	}
 }

@@ -10,6 +10,9 @@
 		text-align: center;
 		&:last-child {
 			padding-right: 0;
+			.pieChart {
+				margin-top: 20px;
+			}
 		}
 		.tableWrap {
 			thead {

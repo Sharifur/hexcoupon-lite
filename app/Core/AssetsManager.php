@@ -25,7 +25,7 @@ class AssetsManager
 	{
 		$this->configs = hexcoupon_get_config();
 
-		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
 
 		$this->before_register_assets();
 

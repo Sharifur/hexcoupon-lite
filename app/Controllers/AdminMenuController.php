@@ -22,7 +22,7 @@ class AdminMenuController extends BaseController
 	 */
 	public function register()
 	{
-		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
 
 		add_action( 'plugins_loaded', [ $this, 'show_hexcoupon_plugin_menu' ] );
 		add_action( 'admin_init', [ $this, 'handle_license_action' ] );
@@ -47,10 +47,7 @@ class AdminMenuController extends BaseController
 			add_action( 'admin_menu', [ $this, 'add_addnew_coupon_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_category_submenu' ] );
 			add_action( 'admin_menu', [ $this, 'add_coupon_insights_submenu' ] );
-
-			If ( $this->is_pro_active ) {
-				add_action( 'admin_menu', [ $this, 'add_licensing_submenu' ] );
-			}
+			add_action( 'admin_menu', [ $this, 'add_licensing_submenu' ] );
 		}
 	}
 

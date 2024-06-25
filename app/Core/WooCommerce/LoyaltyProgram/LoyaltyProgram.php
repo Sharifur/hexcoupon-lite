@@ -139,7 +139,7 @@ class LoyaltyProgram
 		</div>
 
 		<?php
-		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;;
+		$is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;;
 
 		$enable_points_on_social_share = ! empty( $this->points_on_social_share['enable'] ) ? $this->points_on_social_share['enable'] : 0;
 		if ( $is_pro_active && $enable_points_on_social_share ) :

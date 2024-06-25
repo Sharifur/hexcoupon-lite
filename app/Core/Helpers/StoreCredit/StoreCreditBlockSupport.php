@@ -26,7 +26,7 @@ final class StoreCreditBlockSupport extends AbstractPaymentMethodType
 
 	public function get_payment_method_script_handles()
 	{
-		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
 
 		if ( ! $this->is_pro_active ) {
 			wp_register_script(

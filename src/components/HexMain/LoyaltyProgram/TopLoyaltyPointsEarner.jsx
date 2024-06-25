@@ -8,12 +8,18 @@ import TBody from "../../utils/table/TBody";
 import { __ } from '@wordpress/i18n';
 import HexCardHeaderLeft from "../../HexCardHeader/HexCardHeaderLeft";
 import HexCardHeaderTitle from "../../HexCardHeader/HexCardHeaderTitle";
+import PieChart from "../../HexCharts/PieChart/PieChart";
 
 const TopLoyaltyPointsEarner = () => {
 	const {nonce,ajaxUrl} = hexCuponData;
 	const [isLoading, setIsLoading] = useState(true);
 	const [topPointsEarners, setTopPointsEarners] = useState([]);
 	const [topPointsReasons, setTopPointsReasons] = useState([]);
+	const [topStoreCreditSources, setTopStoreCreditSources] = useState([]);
+	const [topStoreCreditAmounts, setTopStoreCreditAmounts] = useState([]);
+
+	const labels = [ 'Refund Credits', 'Gift Credit', 'Loyalty Points' ];
+	const dataValues = [ 65, 59, 80 ];
 
 	useEffect(() => {
 		axios
@@ -30,6 +36,9 @@ const TopLoyaltyPointsEarner = () => {
 				if (data && data.topPointsEarner) {
 					setTopPointsEarners(data.topPointsEarner);
 					setTopPointsReasons(data.topPointsReasons);
+					setTopStoreCreditSources(data.topStoreCreditSources);
+					setTopStoreCreditAmounts(data.topStoreCreditAmounts);
+
 				} else {
 					console.error("Invalid data format", data);
 				}
@@ -132,7 +141,23 @@ const TopLoyaltyPointsEarner = () => {
 					<Skeleton height={500} radius={10} />
 				) : (
 					<>
-						<div className="loyalty-dashboard-box">A Graph</div>
+						<div className="loyalty-dashboard-box">
+							<div className="hexDashboard__card mt-4 radius-10">
+								<div className="hexDashboard__card__header">
+									<div className="hexDashboard__card__header__flex">
+										<HexCardHeaderLeft>
+											<HexCardHeaderTitle titleHeading={__("Top Store Credit Sources","hex-coupon-for-woocommerce")} />
+										</HexCardHeaderLeft>
+									</div>
+								</div>
+								<div className="pieChart">
+									<PieChart
+										labels={topStoreCreditSources}
+										dataValues={topStoreCreditAmounts}
+									/>
+								</div>
+							</div>
+						</div>
 					</>
 				)}
 			</div>

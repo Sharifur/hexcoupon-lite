@@ -2,6 +2,7 @@
 namespace HexCoupon\App\Controllers;
 
 use HexCoupon\App\Core\Helpers\LoyaltyProgram\LoyaltyPointsQueries;
+use HexCoupon\App\Core\Helpers\StoreCredit\StoreCreditQueries;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\Helpers\StoreCreditHelpers;
 use Kathamo\Framework\Lib\Controller;
@@ -20,7 +21,7 @@ class AjaxApiController extends Controller
 	 */
 	public function register()
 	{
-		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) ? true : false;
+		$this->is_pro_active = defined( 'IS_PRO_ACTIVE' ) && IS_PRO_ACTIVE ? true : false;
 
 		if ( ! $this->is_pro_active ){
 			add_action( 'wp_ajax_all_combined_data', [ $this, 'all_combined_data' ] );
@@ -207,6 +208,14 @@ class AjaxApiController extends Controller
 
 		$top_points_reason = LoyaltyPointsQueries::getInstance()->GetTopReasonsForPoints();
 
+		$top_store_credit_sources = StoreCreditQueries::getInstance()->GetTopStoreCreditSources();
+		$store_credit_sources = [];
+		$store_credit_amounts = [];
+		foreach ( $top_store_credit_sources as $value ) {
+			$store_credit_sources[] = $value['sources'];
+			$store_credit_amounts[] = $value['credit'];
+		}
+
 		// Check the nonce and action
 		if ( $this->verify_nonce() ) {
 			// Nonce is valid, proceed with your code
@@ -231,6 +240,7 @@ class AjaxApiController extends Controller
 				'adminData' => array_map( 'esc_html', $current_user_data ),
 				'allCustomersInfo' => array_map( 'esc_html', $all_customers_info ),
 				'totalStoreCreditAmount' => array_map( 'esc_html', $total_store_credit_amount ),
+
 				// loyalty points
 				'topPointsEarner' => array_map( function( $item ) {
 					return array_map( 'esc_html', $item );
@@ -238,6 +248,10 @@ class AjaxApiController extends Controller
 				'topPointsReasons' => array_map( function ( $item ) {
 					return array_map( 'esc_html', $item );
 				}, $top_points_reason ),
+
+				// store credit
+				'topStoreCreditSources' => array_map( 'esc_html', $store_credit_sources),
+				'topStoreCreditAmounts' => array_map( 'esc_html', $store_credit_amounts ),
 			], 200);
 		} else {
 			// Nonce verification failed, handle the error
