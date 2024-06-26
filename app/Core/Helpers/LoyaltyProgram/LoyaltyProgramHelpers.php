@@ -391,8 +391,12 @@ class LoyaltyProgramHelpers
 		$point_amount = ! empty( $this->points_on_purchase['pointAmount'] ) ? $this->points_on_purchase['pointAmount']: 0;
 
 		// Calculating the points for full order
-		$spending_ratio = $order_total / $spending_amount;
-		$total_points = floor( $spending_ratio ) * $point_amount;
+		if ( $spending_amount != 0 ) {
+			$spending_ratio = $order_total / $spending_amount;
+			$total_points = floor( $spending_ratio ) * $point_amount;
+		} else {
+			$total_points = 0;
+		}
 
 		// Get the total points for the user, defaulting to 0 if no entry exists
 		$current_points = $wpdb->get_var( $wpdb->prepare(
@@ -537,8 +541,12 @@ class LoyaltyProgramHelpers
 			$pointAmount = ! empty( $this->points_on_purchase['pointAmount'] ) ? $this->points_on_purchase['pointAmount'] : 0;
 			$spendingAmount = ! empty( $this->points_on_purchase['spendingAmount'] ) ? $this->points_on_purchase['spendingAmount'] : 0;
 
-			$spending_ratio = $order_subtotal / $spendingAmount;
-			$points = floor( $spending_ratio ) * $pointAmount;
+			if ( $spendingAmount != 0 ) {
+				$spending_ratio = $order_subtotal / $spendingAmount;
+				$points = floor( $spending_ratio ) * $pointAmount;
+			} else {
+				$points = 0;
+			}
 
 			$wpdb = $this->wpdb;
 

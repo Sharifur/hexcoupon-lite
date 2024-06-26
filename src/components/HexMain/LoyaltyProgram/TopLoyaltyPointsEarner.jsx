@@ -18,8 +18,8 @@ const TopLoyaltyPointsEarner = () => {
 	const [topStoreCreditSources, setTopStoreCreditSources] = useState([]);
 	const [topStoreCreditAmounts, setTopStoreCreditAmounts] = useState([]);
 
-	const labels = [ 'Refund Credits', 'Gift Credit', 'Loyalty Points' ];
-	const dataValues = [ 65, 59, 80 ];
+	const labels = [ 'No Data Available',];
+	const dataValues = [ 1 ];
 
 	useEffect(() => {
 		axios
@@ -152,8 +152,8 @@ const TopLoyaltyPointsEarner = () => {
 								</div>
 								<div className="pieChart">
 									<PieChart
-										labels={topStoreCreditSources}
-										dataValues={topStoreCreditAmounts}
+										labels={topStoreCreditSources.length > 0 ? topStoreCreditSources : labels}
+										dataValues={topStoreCreditAmounts.length > 0 ? topStoreCreditAmounts : dataValues}
 									/>
 								</div>
 							</div>
@@ -161,9 +161,6 @@ const TopLoyaltyPointsEarner = () => {
 					</>
 				)}
 			</div>
-
-
-
 		</>
 	);
 };

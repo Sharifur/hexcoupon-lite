@@ -52,7 +52,7 @@ class AddStoreCreditCheckbox {
 					'type' => 'checkbox',
 					'class' => array( 'input-checkbox' ),
 					'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce' ),
-					'required' => true,
+					'required' => false,
 				], WC()->checkout->get_value( 'store_credit_checkbox' ) );
 				echo '</div>';
 			}
@@ -65,7 +65,7 @@ class AddStoreCreditCheckbox {
 					'type' => 'checkbox',
 					'class' => array( 'input-checkbox' ),
 					'label' => esc_html__( 'Deduct credit amount from total', 'hex-coupon-for-woocommerce' ),
-					'required' => true,
+					'required' => false,
 				], WC()->checkout->get_value( 'store_credit_checkbox' ) );
 				echo '</div>';
 			}
