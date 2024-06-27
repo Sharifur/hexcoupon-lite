@@ -11,6 +11,9 @@ import LoyaltyProgramSettings from "./components/pages/LoyaltyProgram/LoyaltyPro
 import LoyaltyProgramLogs from "./components/Pages/LoyaltyProgram/LoyaltyProgramLogs";
 import PointBasedLoyaltySettings from "./components/Pages/LoyaltyProgram/PointBasedSettings";
 import LoyaltyProgramUserLogs from "./components/Pages/LoyaltyProgram/LoyaltyProgramUserLogs";
+import GiftCard from "./components/Pages/GiftCard/GiftCard";
+import Automation from "./components/Pages/Automation/Automation";
+import SpinWheel from "./components/Pages/SpinWheel/SpinWheel";
 
 function App() {
 	return (
@@ -30,6 +33,9 @@ function App() {
 								<Route element={<LoyaltyProgramLogs />} path="/loyalty-program/loyalty-program-logs" />
 								<Route element={<PointBasedLoyaltySettings />} path="/loyalty-program/point-based-loyalty-settings" />
 								<Route element={<LoyaltyProgramUserLogs />} path="/loyalty-program-user-logs/:userId" />
+								<Route element={<GiftCard />} path="/gift-card" />
+								<Route element={<Automation />} path="/automation" />
+								<Route element={<SpinWheel />} path="/spinwheel" />
 							</Routes>
 						</MainContainer>
 					</div>
