@@ -443,7 +443,11 @@
 		// place the 'selectedValuesContainer' container after the all_selected_products option grp input field
 		$("#selectedValuesContainer").insertAfter(".all_selected_products .options_group");
 
-		// show premium feature text clicking on min max input field
+		//** Show premium feature text clicking on min max input field **//
+
+		// Select the input element
+		let $productQuantityInput = $(".product-quantity-input");
+
 		if(! isProActive){
 			$(document).on('click','.product-quantity-input', function (){
 				$('body').focusout().removeClass('show');
@@ -452,14 +456,21 @@
 			$(document).on('focusout', '.product-quantity-input', function (){
 				$('.product-wrap-pro').removeClass('show');
 			});
+
+			$productQuantityInput.attr('readonly', 'readonly');
+
+		} else {
+
+			$productQuantityInput.attr('readonly');
 		}
 
 		$(document).on("click",".remove_product", function (){
 			// get value from remove product element
 			let value = $(this).attr("data-value");
-			// now find this title inside select box element and option
-			$(`#all_selected_products option[value=${value}]`).removeAttr("selected");
-			$(`#all_selected_products`).trigger('change');
+
+			// now find this value inside select box element and option
+			$(`select#all_selected_products option[value=${value}]`).removeAttr("selected");
+			$(`select#all_selected_products`).trigger('change');
 
 			// call this function for handlingAllProductSection task
 			removeProductItemCard($(this));
@@ -503,15 +514,11 @@
 								<span class="product-wrap-pro">${__( "This feature is only available on Pro", "hex-coupon-for-woocommerce" )}</span>
 								<div class="product-wrap-inner">
 									<p class="product-wrap-para">${__("min quantity", "hex-coupon-for-woocommerce")}</p>
-									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No minimum" type="number" readonly="">
+									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="Enter Qty" type="number" min="1">
 								</div>
 							</div>
-							<div class="product_max product-wrap">
-								<span class="product-wrap-pro">${__( "This feature is only available on Pro" , "hex-coupon-for-woocommerce" )}</span>
-								<div class="product-wrap-inner">
-								<p class="product-wrap-para">${__("max quantity", "hex-coupon-for-woocommerce")}</p>
-								<input name="product_max[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="No maximum" type="number" readonly="">
-							</div>
+
+
 							<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
 						</div>
 					</div>

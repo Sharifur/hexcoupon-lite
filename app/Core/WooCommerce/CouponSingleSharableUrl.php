@@ -22,7 +22,7 @@ class CouponSingleSharableUrl {
 		add_filter( 'woocommerce_coupon_data_panels', [ $this, 'add_sharable_url_coupon_tab_content' ] );
 		// Hook to generate qr code on clicking the publish button
 		add_action( 'save_post', [ $this, 'generate_qr_code_on_publish' ], 10, 3 );
-
+		// Hook to generate qr code on clicking the edit post button
 		add_action( 'load-post.php', [ $this, 'create_qr_code_on_page_edit' ] );
 	}
 
@@ -54,10 +54,10 @@ class CouponSingleSharableUrl {
 	 * @since 1.0.0
 	 * @method create_qr_code_on_page_edit
 	 * @return void
-	 * Creating QR code when
+	 * Creating QR code when clicked on edit button
 	 */
 	public function create_qr_code_on_page_edit() {
-		$post_id = ! empty( $_GET['post'] ) && intval( $_GET['post'] );
+		$post_id = ! empty( $_GET['post'] ) ? intval( $_GET['post'] ) : 0;
 
 		$file_exists = file_exists( plugins_url( '/hex-coupon-for-woocommerce/assets/images/qr_code_' . $post_id ) );
 

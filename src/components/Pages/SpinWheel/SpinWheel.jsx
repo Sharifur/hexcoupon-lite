@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Skeleton } from "../../Skeleton";
+import comingSoonImg from "../../../img/coming-soon.gif"
 
 const SpinWheel = () => {
 	const [isLoading, setIsLoading] = useState(true);
@@ -16,15 +17,14 @@ const SpinWheel = () => {
 	return (
 		<>
 			{isLoading ? (
-				<Skeleton height={500} radius={10} />
+				<Skeleton height={1000} radius={10} />
 			) : (
 				<>
 				</>
 			)}
 
 			<div className="coming-soon-wrapper">
-				<h1>Coming Soon</h1>
-				<p>This feature is currently under development. Stay tuned for updates!</p>
+				<img src={comingSoonImg} alt="coming-soon"/>
 			</div>
 		</>
 	)
