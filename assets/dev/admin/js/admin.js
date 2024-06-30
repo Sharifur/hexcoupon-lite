@@ -1048,13 +1048,6 @@
 			showHideDayFields('saturday', 'sat');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountSaturdayVal = totalHoursCountSaturday.val();
-
-		// if(totalHoursCountSaturdayVal == 1){
-		// 	$(".add_more_hours_sat_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for saturday
 		function addSaturdayInputField(){
 			let totalHoursCountSaturdayVal = totalHoursCountSaturday.val();
@@ -1066,26 +1059,6 @@
 			$(".saturday").append(appendedElementSaturday);
 			totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
 			flatPicker('saturday');
-
-			// if (totalHoursCountSaturdayVal < 1) {
-			// 	totalHoursCountSaturdayVal++;
-			//
-			// 	let appendedElementSaturday = "<span class='appededItem first-input'><input type='text' class='time-picker-saturday' name='sat_coupon_start_time_" + totalHoursCountSaturdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_saturday'>-</span><input type='text' class='time-picker-saturday coupon_expiry_time' name='sat_coupon_expiry_time_" + totalHoursCountSaturdayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_saturday cross-hour'></a></span>";
-			//
-			// 	$(".saturday").append(appendedElementSaturday);
-			// 	totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
-			// 	flatPicker('saturday');
-			//
-			// 	if(totalHoursCountSaturdayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_sat_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountSaturdayVal < 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_sat_pro_text").hide();
-			// 	}
-			//
-			// }
 		}
 
 		// Add input field dynamically for saturday when the button is clicked
@@ -1101,14 +1074,6 @@
 			}
 
 			totalHoursCountSaturday.val(totalHoursCountSaturdayVal);
-
-			// // Enable the "Add More Hours" button since an item was removed
-			// $("#sat_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountSaturdayVal < 1 ) {
-			// 	$(".add_more_hours_sat_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1127,14 +1092,6 @@
 			showHideDayFields('sunday', 'sun');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountSundayVal = totalHoursCountSunday.val();
-
-		// if(totalHoursCountSundayVal == 1){
-		// 	// Show the additional hours div when adding hours
-		// 	$(".add_more_hours_sun_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for sunday
 		function addSundayInputField(){
 			let totalHoursCountSundayVal = totalHoursCountSunday.val();
@@ -1146,25 +1103,6 @@
 			$(".sunday").append(appendedElementSunday);
 			totalHoursCountSunday.val(totalHoursCountSundayVal);
 			flatPicker('sunday');
-
-			// if (totalHoursCountSundayVal < 1) {
-			// 	totalHoursCountSundayVal++;
-			//
-			// 	let appendedElementSunday = "<span class='appededItem first-input'><input type='text' class='time-picker-sunday' name='sun_coupon_start_time_" + totalHoursCountSundayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_sunday'>-</span><input type='text' class='time-picker-sunday coupon_expiry_time' name='sun_coupon_expiry_time_" + totalHoursCountSundayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_sunday cross-hour'></a></span>";
-			//
-			// 	$(".sunday").append(appendedElementSunday);
-			// 	totalHoursCountSunday.val(totalHoursCountSundayVal);
-			// 	flatPicker('sunday');
-			//
-			// 	if(totalHoursCountSundayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_sun_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountSundayVal < 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_sun_pro_text").hide();
-			// 	}
-			// }
 		}
 
 		// Add input field dynamically for sunday when the button is clicked
@@ -1180,14 +1118,6 @@
 			}
 
 			totalHoursCountSunday.val(totalHoursCountSundayVal);
-
-			// // Enable the "Add More Hours" button since an item was removed
-			// $("#sun_add_more_hours").prop("disabled", false);
-
-			// If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountSundayVal < 1) {
-			// 	$(".add_more_hours_sun_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1207,14 +1137,6 @@
 			showHideDayFields('monday', 'mon');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountMondayVal = totalHoursCountMonday.val();
-		//
-		// // if(totalHoursCountMondayVal == 1){
-		// // 	// Show the additional hours div when adding hours
-		// // 	$(".add_more_hours_mon_pro_text").show();
-		// // }
-
 		// Function to add input field dynamically for monday
 		function addMondayInputField(){
 			let totalHoursCountMondayVal = totalHoursCountMonday.val();
@@ -1226,26 +1148,6 @@
 			$(".monday").append(appendedElementMonday);
 			totalHoursCountMonday.val(totalHoursCountMondayVal);
 			flatPicker('monday');
-
-			// if (totalHoursCountMondayVal < 1) {
-			// 	totalHoursCountMondayVal++;
-			//
-			// 	let appendedElementMonday = "<span class='appededItem first-input'><input type='text' class='time-picker-monday' name='mon_coupon_start_time_" + totalHoursCountMondayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_monday'>-</span><input type='text' class='time-picker-monday coupon_expiry_time' name='mon_coupon_expiry_time_" + totalHoursCountMondayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_monday cross-hour'></a></span>";
-			//
-			// 	$(".monday").append(appendedElementMonday);
-			// 	totalHoursCountMonday.val(totalHoursCountMondayVal);
-			// 	flatPicker('monday');
-			//
-			// 	if(totalHoursCountMondayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_mon_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountMondayVal < 1) {
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_mon_pro_text").hide();
-			// 	}
-			//
-			// }
 		}
 
 		// Add input field dynamically for monday when the button is clicked
@@ -1261,14 +1163,6 @@
 			}
 
 			totalHoursCountMonday.val(totalHoursCountMondayVal);
-
-			// Enable the "Add More Hours" button since an item was removed
-			// $("#mon_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountMondayVal < 1) {
-			// 	$(".add_more_hours_mon_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1288,14 +1182,6 @@
 			showHideDayFields('tuesday', 'tue');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountTuesdayVal = totalHoursCountTuesday.val();
-		//
-		// if(totalHoursCountTuesdayVal == 1){
-		// 	// Show the additional hours div when adding hours
-		// 	$(".add_more_hours_tue_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for tuesday
 		function addTuesdayInputField(){
 			let totalHoursCountTuesdayVal = totalHoursCountTuesday.val();
@@ -1307,26 +1193,6 @@
 			$(".tuesday").append(appendedElementTuesday);
 			totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
 			flatPicker('tuesday');
-
-			// if (totalHoursCountTuesdayVal < 1) {
-			// 	totalHoursCountTuesdayVal++;
-			//
-			// 	let appendedElementTuesday = "<span class='appededItem first-input'><input type='text' class='time-picker-tuesday' name='tue_coupon_start_time_" + totalHoursCountTuesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_tuesday'>-</span><input type='text' class='time-picker-tuesday coupon_expiry_time' name='tue_coupon_expiry_time_" + totalHoursCountTuesdayVal + "' value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_tuesday cross-hour'></a></span>";
-			//
-			// 	$(".tuesday").append(appendedElementTuesday);
-			// 	totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
-			// 	flatPicker('tuesday');
-			//
-			// 	if(totalHoursCountTuesdayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_tue_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountTuesdayVal < 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_tue_pro_text").hide();
-			// 	}
-			//
-			// }
 		}
 
 		// Add input field dynamically for tuesday when the button is clicked
@@ -1342,14 +1208,6 @@
 			}
 
 			totalHoursCountTuesday.val(totalHoursCountTuesdayVal);
-
-			// Enable the "Add More Hours" button since an item was removed
-			// $("#tue_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountTuesdayVal < 1) {
-			// 	$(".add_more_hours_tue_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1369,14 +1227,6 @@
 			showHideDayFields('wednesday', 'wed');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountWednesdayVal = totalHoursCountWednesday.val();
-		//
-		// if(totalHoursCountWednesdayVal == 1){
-		// 	// Show the additional hours div when adding hours
-		// 	$(".add_more_hours_wed_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for wednesday
 		function addWednesdayInputField(){
 			let totalHoursCountWednesdayVal = totalHoursCountWednesday.val();
@@ -1388,26 +1238,6 @@
 			$(".wednesday").append(appendedElementWednesday);
 			totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
 			flatPicker('wednesday');
-
-			// if (totalHoursCountWednesdayVal < 1) {
-			// 	totalHoursCountWednesdayVal++;
-			//
-			// 	let appendedElementWednesday = "<span class='appededItem first-input'><input type='text' class='time-picker-wednesday' name='wed_coupon_start_time_" + totalHoursCountWednesdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_wednesday'>-</span><input type='text' class='time-picker-wednesday coupon_expiry_time' name='wed_coupon_expiry_time_" + totalHoursCountWednesdayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_wednesday cross-hour'></a></span>";
-			//
-			// 	$(".wednesday").append(appendedElementWednesday);
-			// 	totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
-			// 	flatPicker('wednesday');
-			//
-			// 	if(totalHoursCountWednesdayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_wed_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountWednesdayVal < 1) {
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_wed_pro_text").hide();
-			// 	}
-			//
-			// }
 		}
 
 		// Add input field dynamically for wednesday when the button is clicked
@@ -1423,14 +1253,6 @@
 			}
 
 			totalHoursCountWednesday.val(totalHoursCountWednesdayVal);
-
-			// Enable the "Add More Hours" button since an item was removed
-			// $("#wed_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountWednesdayVal < 1) {
-			// 	$(".add_more_hours_wed_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1450,14 +1272,6 @@
 			showHideDayFields('thursday', 'thu');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountThursdayVal = totalHoursCountThursday.val();
-		//
-		// if(totalHoursCountThursdayVal == 1){
-		// 	// Show the additional hours div when adding hours
-		// 	$(".add_more_hours_thu_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for thursday
 		function addThursdayInputField(){
 			let totalHoursCountThursdayVal = totalHoursCountThursday.val();
@@ -1469,25 +1283,6 @@
 			$(".thursday").append(appendedElementThursday);
 			totalHoursCountThursday.val(totalHoursCountThursdayVal);
 			flatPicker('thursday');
-
-			// if (totalHoursCountThursdayVal < 1) {
-			// 	totalHoursCountThursdayVal++;
-			//
-			// 	let appendedElementThursday = "<span class='appededItem first-input'><input type='text' class='time-picker-thursday' name='thu_coupon_start_time_" + totalHoursCountThursdayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_thursday'>-</span><input type='text' class='time-picker-thursday coupon_expiry_time' name='thu_coupon_expiry_time_" + totalHoursCountThursdayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_thursday cross-hour'></a></span>";
-			//
-			// 	$(".thursday").append(appendedElementThursday);
-			// 	totalHoursCountThursday.val(totalHoursCountThursdayVal);
-			// 	flatPicker('thursday');
-			//
-			// 	if(totalHoursCountThursdayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_thu_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountThursdayVal < 1) {
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_thu_pro_text").hide();
-			// 	}
-			// }
 		}
 
 		// Add input field dynamically for thursday when the button is clicked
@@ -1503,14 +1298,6 @@
 			}
 
 			totalHoursCountThursday.val(totalHoursCountThursdayVal);
-
-			// Enable the "Add More Hours" button since an item was removed
-			// $("#thu_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountThursdayVal < 1) {
-			// 	$(".add_more_hours_thu_pro_text").hide();
-			// }
 		});
 
 		/*
@@ -1530,14 +1317,6 @@
 			showHideDayFields('friday', 'fri');
 		});
 
-		// Add pro text on page load
-		// let totalHoursCountFridayVal = totalHoursCountFriday.val();
-		//
-		// if(totalHoursCountFridayVal == 1){
-		// 	// Show the additional hours div when adding hours
-		// 	$(".add_more_hours_fri_pro_text").show();
-		// }
-
 		// Function to add input field dynamically for friday
 		function addFridayInputField(){
 			let totalHoursCountFridayVal = totalHoursCountFriday.val();
@@ -1549,25 +1328,6 @@
 			$(".friday").append(appendedElementFriday);
 			totalHoursCountFriday.val(totalHoursCountFridayVal);
 			flatPicker('friday');
-
-			// if (totalHoursCountFridayVal < 1) {
-			// 	totalHoursCountFridayVal++;
-			//
-			// 	let appendedElementFriday = "<span class='appededItem first-input'><input type='text' class='time-picker-friday' name='fri_coupon_start_time_" + totalHoursCountFridayVal + "' id='coupon_start_time' value='' placeholder='HH:MM'><span class='input_separator_friday'>-</span><input type='text' class='time-picker-friday coupon_expiry_time' name='fri_coupon_expiry_time_" + totalHoursCountFridayVal + "'  value='' placeholder='HH:MM'><a href='javascript:void(0)' class='dashicons dashicons-no-alt cross_hour_friday cross-hour'></a></span>";
-			//
-			// 	$(".friday").append(appendedElementFriday);
-			// 	totalHoursCountFriday.val(totalHoursCountFridayVal);
-			// 	flatPicker('friday');
-			//
-			// 	if(totalHoursCountFridayVal == 1){
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_fri_pro_text").show();
-			// 	}
-			// 	else if(totalHoursCountFridayVal < 1) {
-			// 		// Show the additional hours div when adding hours
-			// 		$(".add_more_hours_fri_pro_text").hide();
-			// 	}
-			// }
 		}
 
 		// Add input field dynamically for friday when the button is clicked
@@ -1583,14 +1343,6 @@
 			}
 
 			totalHoursCountFriday.val(totalHoursCountFridayVal);
-
-			// Enable the "Add More Hours" button since an item was removed
-			// $("#fri_add_more_hours").prop("disabled", false);
-			//
-			// // If no additional hours are present, hide the additional hours div
-			// if (totalHoursCountFridayVal < 1) {
-			// 	$(".add_more_hours_fri_pro_text").hide();
-			// }
 		});
 
 		$('.toggle-input').on('change', function() {
