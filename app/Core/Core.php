@@ -5,6 +5,7 @@ namespace HexCoupon\App\Core;
 use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
 use HexCoupon\App\Controllers\ConvertCartPageToClassic;
+use HexCoupon\App\Controllers\Licensing\LicenseExpiry;
 use HexCoupon\App\Controllers\RedirectUserToPluginDashboard;
 use HexCoupon\App\Controllers\WooCommerce\Admin\CouponGeneralTabController;
 use HexCoupon\App\Controllers\WooCommerce\Admin\PaymentAndShippingTabController;
@@ -122,6 +123,7 @@ final class Core extends BootManager
 			LoyaltyProgram::class,
 			FlushRewriteForLoyaltyProgram::class,
 			OrderDetailsForStoreCredit::class,
+			LicenseExpiry::class,
 		];
 	}
 }
