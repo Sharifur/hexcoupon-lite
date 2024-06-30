@@ -451,6 +451,7 @@
 		if(! isProActive){
 			$(document).on('click','.product-quantity-input', function (){
 				$('body').focusout().removeClass('show');
+				alert("Upgrade to Pro enable this field!");
 				$(this).closest('.product-wrap').find('.product-wrap-pro').addClass('show');
 			});
 			$(document).on('focusout', '.product-quantity-input', function (){
@@ -459,11 +460,11 @@
 
 			$productQuantityInput.attr('readonly', 'readonly');
 
-		} else {
-
+		} else{
 			$productQuantityInput.attr('readonly');
 		}
 
+		// Remove product from select2 after clicking the cross icon
 		$(document).on("click",".remove_product", function (){
 			// get value from remove product element
 			let value = $(this).attr("data-value");
@@ -476,54 +477,60 @@
 			removeProductItemCard($(this));
 		});
 
-		$(document).on("change","#all_selected_products", function (){
-			// call this function for handlingAllProductSection task
-			handleSelectProductChange();
+		// Remove product from below select2 option field after removing item from select2
+		$(document).on("select2:unselect","#all_selected_products",function (e){
+			var unselectedId = e.params.data.id;
+
+			$('.product-item-whole#' + unselectedId).remove();
+		});
+
+		$(document).on("select2:select","#all_selected_products", function (e){
+			let selectedProduct = $(e.params.data.element);
+
+			handleSelectProductChange(selectedProduct);
 		});
 
 		function removeProductItemCard(element){
 			element.closest(".product-item-whole").remove();
 		}
 
-		function handleSelectProductChange(){
-			// get all selected products and store those data inside a temp variable
-			let selectedProducts = $("#all_selected_products option:selected");
-			// run a loop for doing all necessary action that will be needed.
-			// define a temp variable for storing html
-			let productItems = "";
-			selectedProducts.each(function (){
-				productItems += addProductItem($(this));
-			})
+		function handleSelectProductChange(product){
 
-			$("#selectedValuesContainer").html(productItems);
-		}
+			const title = product.attr("title");
+			const value = product.attr("value");
 
-		function convertTitleToName(title){
-			return title.replaceAll(" ","-").replaceAll("-","_").toLowerCase();
-		}
-
-		function addProductItem(element, min = null, max = null){
-			const title = element.attr("title");
-			const value = element.attr("value");
-
-			return `
-				<div class="product-item-whole">
+			// Adding the product when selecting
+			let productItem =  `
+				<div class="product-item-whole" id="${value}">
 					<div class="product_title">${title}</div>
 						<div class="product_min_max_main">
 							<div class="product_min product-wrap">
-								<span class="product-wrap-pro">${__( "This feature is only available on Pro", "hex-coupon-for-woocommerce" )}</span>
+								<div class="product_min product-wrap">
+									<span class="product-wrap-pro">${__( "This feature is only available on Pro", "hex-coupon-for-woocommerce" )}</span>
 								<div class="product-wrap-inner">
 									<p class="product-wrap-para">${__("min quantity", "hex-coupon-for-woocommerce")}</p>
-									<input name="product_min[${convertTitleToName(title)}]" class="product-quantity-input" placeholder="Enter Qty" type="number" min="1">
+									<input name="${convertTitleToName(title)}_min_quantity" class="product-quantity-input" placeholder="Enter Qty" type="number" min="1">
 								</div>
+								<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
+								</div>
+
+
+
 							</div>
 
 
-							<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
+
 						</div>
 					</div>
 				</div>
 			`;
+
+			$("#selectedValuesContainer").append(productItem);
+
+		}
+
+		function convertTitleToName(title){
+			return title.replaceAll(" ","-").replaceAll("-","_").toLowerCase();
 		}
 
 		/*
@@ -710,7 +717,7 @@
 			var convertedTitleName = convertTitleToName(titleAttribute);
 
 			// Create a new product item
-			var newPurchasedProductItem = $('<div class="product-item-whole">' +
+			var newPurchasedProductItem = $('<div class="product-item-whole" id="'+valueAttribute+'">' +
 				'<div class="product_title">'+titleAttribute+'</div>' +
 				'<div class="product_min_max_main">' +
 				'<div class="product_min product-wrap">' +
@@ -763,14 +770,30 @@
 			matchingDiv.remove();
 		});
 
-		$(document).on('click', 'span.select2-selection__choice__remove',function(){
-			var liValue = $(this).closest('li').attr('value');
+		$('#add_specific_product_to_purchase').on('select2:unselect', function(e) {
+			// Get the ID of the unselected item
+			var unselectedId = e.params.data.id;
 
-			// Find the product-item-whole div with a matching a tag
-			var matchingDiv = $('#selected_purchased_categories .product-item-whole a[data-value="' + liValue + '"]').closest('.product-item-whole');
+			// Find and remove the div with the class 'product-item-whole' that has the ID of the unselected item
+			$('.product-item-whole#' + unselectedId).remove();
+		});
 
-			// Remove the product-item-whole div
-			matchingDiv.remove();
+
+
+		$('#add_specific_product_for_free').on('select2:unselect', function(e) {
+			// Get the ID of the unselected item
+			var unselectedId = e.params.data.id;
+
+			// Find and remove the div with the class 'product-item-whole' that has the ID of the unselected item
+			$('.product-item-whole#' + unselectedId).remove();
+		});
+
+		$('#add_categories_to_purchase').on('select2:unselect', function(e) {
+			// Get the ID of the unselected item
+			var unselectedId = e.params.data.id;
+
+			// Find and remove the div with the class 'product-item-whole' that has the ID of the unselected item
+			$('.product-item-whole#' + unselectedId).remove();
 		});
 
 		// product purchase
@@ -803,7 +826,7 @@
 			var convertedCatTitleName = convertTitleToName(CatTitleAttribute);
 
 			// Create a new product item
-			var newPurchasedCatProductItem = $('<div class="product-item-whole">' +
+			var newPurchasedCatProductItem = $('<div class="product-item-whole" id="'+valueAttribute+'">' +
 				'<div class="product_title">'+CatTitleAttribute+'</div>' +
 				'<div class="product_min_max_main">' +
 				'<div class="product_min product-wrap">' +
@@ -841,7 +864,7 @@
 			var convertedFreeTitleName = convertTitleToName(freeTitleAttribute);
 
 			var newPurchasedFreeProductItem = `
-				  <div class="product-item-whole">
+				  <div class="product-item-whole" id="${freeValueAttribute}">
 					<div class="product_title">${freeTitleAttribute}</div>
 					<div class="product_min_max_main">
 					  <div class="product_min product-wrap">
