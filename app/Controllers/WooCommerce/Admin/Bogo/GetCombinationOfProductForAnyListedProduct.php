@@ -13,7 +13,7 @@ class GetCombinationOfProductForAnyListedProduct extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method any_product_listed_below_against_a_combination_of_product
-	 * @return mixed
+	 * @return void
 	 * Customer gets a combination of product against any product listed below
 	 */
 	public function any_product_listed_below_against_a_combination_of_product( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id )

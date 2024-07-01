@@ -85,6 +85,14 @@ class AssetsManager
 				true
 			);
 
+			wp_enqueue_script(
+				hexcoupon_prefix( 'toast' ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/js/toast.min.js" ),
+				[ 'jquery'],
+				$this->version,
+				true
+			);
+
 			wp_enqueue_style(
 				hexcoupon_prefix( 'admin' ),
 				hexcoupon_asset_url( $folder_prefix. "/admin/css/admin" .$css_file_extension ),
@@ -96,6 +104,14 @@ class AssetsManager
 			wp_enqueue_style(
 				hexcoupon_prefix( 'flatpickr' ),
 				hexcoupon_asset_url( $folder_prefix . "/admin/css/flatpickr.min.css" ),
+				array(),
+				$this->version,
+				'all'
+			);
+
+			wp_enqueue_style(
+				hexcoupon_prefix( 'toast' ),
+				hexcoupon_asset_url( $folder_prefix . "/admin/css/toast.min.css" ),
 				array(),
 				$this->version,
 				'all'

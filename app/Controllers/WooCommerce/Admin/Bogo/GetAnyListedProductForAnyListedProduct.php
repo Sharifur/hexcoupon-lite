@@ -13,7 +13,7 @@ class GetAnyListedProductForAnyListedProduct extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method any_product_listed_below_against_any_product_listed_below
-	 * @return mixed
+	 * @return void
 	 * Customer gets any product listed below against any product listed below
 	 */
 	public function any_product_listed_below_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $wc_cart, $main_product_id, $coupon_id, $free_item_id, $selected_products_as_free )

@@ -11,7 +11,6 @@ class LicenseExpiry
 	{
 		// Hook into init
 		add_action( 'init', [ $this, 'check_license_expiry_on_init' ] );
-		add_action( 'wp_init', [ $this, 'check_license_expiry_on_init' ] );
 	}
 
 	public function check_license_expiry_on_init()
@@ -22,7 +21,7 @@ class LicenseExpiry
 		$edd_site_url = 'https://wphex.com';
 		// License key to check
 		$license_key = $hexcoupon_license_key;
-		// Item ID (if required)
+		// Item ID
 		$item_id = 2810;
 		// URL of the site
 		$site_url = home_url();
@@ -52,13 +51,16 @@ class LicenseExpiry
 			update_option(  'hexcoupon_license_status', $license_data->license );
 			// Handle expired license
 			add_action( 'admin_notices', function() {
-				echo '<div class="notice notice-error"><p>Your license is expired. Please renew to continue using the product.</p></div>';
+				$message = sprintf(
+					__( 'Your HexCoupon Pro license has expired. Please %1$srenew%2$s to continue getting the update.', 'hex-coupon-for-woocommerce' ),
+					'<a href="https://hexcoupon.com/pricing" target="_blank">',
+					'</a>'
+				);
+
+				echo '<div class="notice notice-error"><p>' . wp_kses_post( $message ) . '</p></div>';
 			} );
-		} elseif ( $license_data && isset( $license_data->license ) && $license_data->license !== 'expired' ) {
-			// Handle active license
-			// You can add additional logic for active licenses if needed
-		} else {
-			error_log('License check failed: Invalid response.');
+		} elseif ( $license_data && isset( $license_data->license ) && $license_data->license === 'key_mismatch' ) {
+			update_option(  'hexcoupon_license_status', $license_data->license );
 		}
 	}
 

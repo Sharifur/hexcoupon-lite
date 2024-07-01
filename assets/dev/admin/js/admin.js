@@ -1,7 +1,6 @@
 (function($) {
 	"use strict";
 	$(document).ready(function(){
-
 		// destructuring internationalization functions for making text translatable
 		const { __, _x, _n, _nx } = wp.i18n;
 		let isProActive = false;
@@ -634,6 +633,62 @@
        ========================================
        */
 
+		// Function to show toast message
+		function showNotice(message,type) {
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-top-center",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "5000",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+			switch(type) {
+				case 'info':
+					toastr.info(message);
+					break;
+				case 'success':
+					toastr.success(message);
+					break;
+				case 'warning':
+					toastr.warning(message);
+					break;
+				case 'error':
+					toastr.error(message);
+					break;
+				default:
+					toastr.info(message);
+			}
+		}
+
+		if(!isProActive){
+			var any_products_listed_below = $('input[type="radio"][name="customer_purchases"][value="any_products_listed_below"]');
+			var product_categories = $('input[type="radio"][name="customer_purchases"][value="product_categories"]');
+
+			any_products_listed_below.prop('disabled', true);
+			product_categories.prop('disabled', true);
+
+			var message = 'To use this feature. <a href="https://hexcoupon.com/pricing" target="_blank">Upgrade to Pro</a>';
+			//
+			any_products_listed_below.parent().on('click', function() {
+				showNotice(message, 'info');
+			});
+
+			product_categories.parent().on('click', function() {
+				showNotice(message, 'info');
+			});
+		}
+
+
 		// Show an alert box to the user if the Bogo purchased and free fields are not properly entered
 		$(document).on('click', '.submitbox #publish', function (e) {
 			let couponDiscountType = $('select[name="discount_type"]');
@@ -909,7 +964,26 @@
            	Days & Hours in General Tab
        ========================================
        */
+		// Make this area blur to show Upgrade Pro notice
+		let $daysAndHoursTab = $("#days_and_hours_tab");
+		let $upgradeNotice = $("#upgrade_notice");
 
+		if(!isProActive){
+			$daysAndHoursTab.hover(
+				function() {
+					$daysAndHoursTab.addClass("blur");
+					$upgradeNotice.css("display", "block");
+				},
+				function() {
+					$daysAndHoursTab.removeClass("blur");
+					$upgradeNotice.css("display", "none");
+				}
+			);
+		} else {
+			$upgradeNotice.css("display","none");
+		}
+
+		// Other tasks
 		const applyDaysHoursOfWeek = $("#apply_days_hours_of_week");
 		const totalHoursCountSaturday = $("#total_hours_count_saturday");
 		const totalHoursCountSunday = $("#total_hours_count_sunday");
@@ -1043,7 +1117,11 @@
 		// Show hide saturday fields
 		showHideDayFields('saturday','sat');
 
-		// Show hide saturday hours on the basis of clicking the saturday checkbox
+		if (!isProActive){
+			// Show hide saturday hours on the basis of clicking the saturday checkbox
+			$('#coupon_apply_on_saturday').prop('disabled', true);
+		}
+
 		$("#coupon_apply_on_saturday").on("change", function () {
 			showHideDayFields('saturday', 'sat');
 		});

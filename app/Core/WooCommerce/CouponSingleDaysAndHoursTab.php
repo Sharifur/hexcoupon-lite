@@ -55,6 +55,10 @@ class CouponSingleDaysAndHoursTab
 	{
 		echo '<div id="days_and_hours_tab" class="panel woocommerce_options_panel days_and_hours_tab">';
 
+		echo '<div id="upgrade_notice">';
+		echo '<p>' . esc_html__( 'To access this feature ', 'hex-coupon-for-woocommerce' ) . '<a href="' . esc_url( 'https://hexcoupon.com/pricing' ) . '">' . esc_html__( 'Upgrade to Pro', 'hex-coupon-for-woocommerce' ) . '</a></p>';
+		echo '</div>';
+
 		// Add apply days and hours of week checkbox
 		$this->apply_days_hours_of_week_checkbox();
 

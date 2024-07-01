@@ -27,10 +27,12 @@
 					<th scope="row"><?php esc_html_e( 'License Key', 'hex-coupon-for-woocommerce' ); ?></th>
 					<td>
 						<input id="hexcoupon_license_key" name="hexcoupon_license_key" type="text" class="regular-text" value="<?php echo esc_attr( get_option( 'hexcoupon_license_key' ) ); ?>" />
-						<?php $hexcoupon_license_status = get_option( 'hexcoupon_license_status' ) == 'valid'; if ( $hexcoupon_license_status == 'valid' ) : ?>
+						<?php $hexcoupon_license_status = get_option( 'hexcoupon_license_status' ); if ( $hexcoupon_license_status == 'valid' ) : ?>
 						<span class="license-active"><?php esc_html_e( 'Active', 'hex-coupon-for-woocommerce' ); ?></span>
 						<?php elseif ( $hexcoupon_license_status == 'expired' ) : ?>
 						<span class="license-inactive"><?php esc_html_e( 'Expired', 'hex-coupon-for-woocommerce' ); ?></span>
+						<?php elseif ( $hexcoupon_license_status == 'key_mismatch' ) : ?>
+						<span class="license-inactive"><?php esc_html_e( 'Key Mismatched', 'hex-coupon-for-woocommerce' ); ?></span>
 						<?php else : ?>
 						<span class="license-inactive"><?php esc_html_e( 'Inactive', 'hex-coupon-for-woocommerce' ); ?></span>
 						<?php endif; ?>
