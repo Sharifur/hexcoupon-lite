@@ -94,5 +94,4 @@ class StoreBlock {
 			StoreCreditPaymentHelpers::getInstance()->send_log_for_store_credit_order_purchase( $order_id, $deducted_store_credit_amount );
 		}
 	}
-
 }

@@ -27,9 +27,12 @@ class OrderDetailsForStoreCredit {
 	 */
 	public function add_custom_order_total_row( $order_id )
 	{
+		$deducted_store_credit = 0;
+		$order = wc_get_order( $order_id );
+
 		// Get the meta value
-		$deducted_store_credit_legacy = get_post_meta( $order_id, 'deducted_store_credit', true );
-		$deducted_store_credit_block = get_post_meta( $order_id, 'deducted_store_credit_amount', true );
+		$deducted_store_credit_legacy = get_post_meta( $order_id, 'deducted_store_credit_amount', true );
+		$deducted_store_credit_block = $order->get_meta( 'deducted_store_credit' );
 
 		// Checking if the deducted amount is not empty for legacy and block checkout page
 		if ( ! empty( $deducted_store_credit_legacy ) ) {
@@ -46,5 +49,4 @@ class OrderDetailsForStoreCredit {
 			echo '</tr>';
 		}
 	}
-
 }
