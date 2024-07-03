@@ -7,6 +7,14 @@ class ActivateLicense
 {
 	use SingleTon;
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method activate_license
+	 * @return void
+	 * @since 1.0.0
+	 * Activating the license from the License menu.
+	 */
 	public function activate_license()
 	{
 		$license = trim( get_option( 'hexcoupon_license_key' ) );

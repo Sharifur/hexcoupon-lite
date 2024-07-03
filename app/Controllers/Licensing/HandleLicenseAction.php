@@ -7,6 +7,14 @@ class HandleLicenseAction
 {
 	use SingleTon;
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method handle_license_action
+	 * @return void
+	 * @since 1.0.0
+	 * Adding the mechanism for license saving, activating and deactivating from the 'License' menu
+	 */
 	public function handle_license_action()
 	{
 		if ( isset( $_POST['hexcoupon_license_action'] ) && check_admin_referer( 'hexcoupon_nonce', 'hexcoupon_nonce' ) ) {

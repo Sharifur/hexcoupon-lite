@@ -7,6 +7,14 @@ class DeactivateLicense
 {
 	use SingleTon;
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method deactivate_license
+	 * @return void
+	 * @since 1.0.0
+	 * Deactivating the license from the 'License' menu
+	 */
 	public function deactivate_license()
 	{
 		$license = trim( get_option( 'hexcoupon_license_key' ) );

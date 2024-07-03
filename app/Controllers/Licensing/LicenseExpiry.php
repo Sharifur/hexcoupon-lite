@@ -7,12 +7,27 @@ class LicenseExpiry
 {
 	use SingleTon;
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method register
+	 * @return void
+	 * @since 1.0.0
+	 * Registering the necessary hooks that are needed
+	 */
 	public function register()
 	{
-		// Hook into init
 		add_action( 'init', [ $this, 'check_license_expiry_on_init' ] );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method check_license_expiry_on_init
+	 * @return void
+	 * @since 1.0.0
+	 * Checking license expiry to validate the license key
+	 */
 	public function check_license_expiry_on_init()
 	{
 		$hexcoupon_license_key = get_option( 'hexcoupon_license_key' );
@@ -39,7 +54,7 @@ class LicenseExpiry
 
 		// Check for errors
 		if ( is_wp_error( $response ) ) {
-			error_log( 'License check failed: ' . $response->get_error_message() );
+			error_log( 'License check failed: Could not connect to the server' . $response->get_error_message() );
 			return;
 		}
 
