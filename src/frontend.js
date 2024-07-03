@@ -8,24 +8,21 @@ import axios from "axios";
 const { registerCheckoutBlock } = wc.blocksCheckout;
 
 const Block = ({ children, checkoutExtensionData }) => {
-	const [postUrl, setPostUrl] = useState('');
+	if (typeof storeCreditData === 'undefined') {
+		return null; // or handle the error appropriately
+	}
+
+	const { nonce, cart_total, total_remaining_store_credit, postUrl } = storeCreditData;
+
 	const [storeCredit, setStoreCredit] = useState('0');
 
-	const nonce = window.storeCreditData?.nonce;
-	const remainingCredit = parseFloat(window.storeCreditData?.total_remaining_store_credit || 0);
+	const remainingCredit = parseFloat(total_remaining_store_credit);
 
-	const cartTotal = parseFloat(window.storeCreditData.cart_total);
+	const cartTotal = parseFloat(cart_total);
 	const deductedTotal = parseFloat(remainingCredit) > parseFloat(cartTotal) ? cartTotal : remainingCredit;
 
 	const { setExtensionData } = checkoutExtensionData;
 	const myRef = useRef(null);
-
-	useEffect(() => {
-		// Set postUrl once window.storeCreditData.postUrl is available
-		if (window.storeCreditData && window.storeCreditData.postUrl) {
-			setPostUrl(window.storeCreditData.postUrl);
-		}
-	}, []);
 
 	// Function to handle checkbox change
 	useEffect(() => {
