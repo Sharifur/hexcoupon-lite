@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { TbChevronLeft } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import BodyCard from "../../Pagebody/card/BodyCard";
 import BodyCardHeaderLeft from "../../Pagebody/card/BodyCardHeaderLeft";
@@ -82,7 +82,7 @@ const GiveNewCredit = () => {
 					<BodyCardHeader className="p-4" isFlex={true}>
 						<BodyCardHeaderLeft isFlex={true}>
 							<BodyCardHeaderLeftItem>
-								<BodyCardHeaderTItle icon={<IconChevronLeft onClick={goToPreviousPage} />} children={__("Give new credits", "hex-coupon-for-woocommerce")} />
+								<BodyCardHeaderTItle icon={<TbChevronLeft size={24} onClick={goToPreviousPage} />} children={__("Give new credits", "hex-coupon-for-woocommerce")} />
 							</BodyCardHeaderLeftItem>
 						</BodyCardHeaderLeft>
 					</BodyCardHeader>

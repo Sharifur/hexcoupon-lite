@@ -4,8 +4,8 @@
 	"description": "WordPress plugin starter",
 	"main": "index.js",
 	"scripts": {
-		"build": "wp-scripts build",
-		"start": "wp-scripts start"
+		"build": "vite build --mode production",
+		"dev": "vite build --watch --mode development"
 	},
 	"author": {
 		"name": "Keramot UL Islam [AbmSourav]",

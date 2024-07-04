@@ -14,7 +14,7 @@ import Table from "../../utils/table/Table";
 import THead from "../../utils/table/THead";
 import Th from "../../utils/table/Th";
 import TBody from "../../utils/table/TBody";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { TbChevronLeft } from "react-icons/tb";
 import ReactPaginate from "react-paginate";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
@@ -93,7 +93,7 @@ const StoreCreditUserLogs = () => {
 						<BodyCardHeader className="p-4" isFlex={true}>
 							<BodyCardHeaderLeft isFlex={true}>
 								<BodyCardHeaderLeftItem>
-									<BodyCardHeaderTItle icon={<IconChevronLeft onClick={goBack}/>} children={userName + "'s Store Credit log"} />
+									<BodyCardHeaderTItle icon={<TbChevronLeft size={24} onClick={goBack}/>} children={userName + "'s Store Credit log"} />
 								</BodyCardHeaderLeftItem>
 							</BodyCardHeaderLeft>
 							<BodyCardHeaderRight>

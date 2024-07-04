@@ -345,6 +345,5 @@ class AssetsManager
 				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			] );
 		}
-
 	}
 }

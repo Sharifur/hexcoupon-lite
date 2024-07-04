@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useI18n } from '@wordpress/react-i18n';
+import { __ } from '@wordpress/i18n';
 import { Link, useLocation } from 'react-router-dom';
 import {
 	TbHome,
 	TbMenu2,
 	TbChevronDown,
-	TbCoin,
-	TbCoins,
+	TbDiscount,
 	TbBook,
 	TbCrown,
 	TbHelpSquareRounded,
 	TbBox,
-	TbDiscount,
+	TbCoin,
 	TbGiftCard,
+	TbFidgetSpinner,
 	TbSettingsAutomation,
-	TbFidgetSpinner
+	TbCoins,
 } from "react-icons/tb";
 import LogoImg from '../../../img/logo.png';
 import { useSidebar } from '../../context/SidebarContext';
 
 const Sidebar = () => {
-	const { __ } = useI18n();
-
 	const [siteUrl, setSiteUrl] = useState('')
 	useEffect(() => {
 		setSiteUrl(window.location.href);
@@ -60,9 +58,9 @@ const Sidebar = () => {
 	};
 
 	const storeCredit = ['/store-credit', '/store-credit/store-credit-settings', '/store-credit/store-credit-logs'];
-	const loyaltyProgram = ['/loyalty-program/loyalty-program-settings', '/loyalty-program/loyalty-program-logs'];
 
 	const { toggleSidebar, closeSidebar, isSidebarActive } = useSidebar();
+	const loyaltyProgram = ['/loyalty-program/loyalty-program-settings', '/loyalty-program/loyalty-program-logs'];
 
 	return (
 		<>
@@ -76,6 +74,7 @@ const Sidebar = () => {
 					</div>
 				</div>
 				<div className="hexpDashboard__left__inner">
+
 					<ul className='hexpDashboard__list mt-4'>
 						<li className='hexpDashboard__list__item'>
 							<Link to="/" className={`hexpDashboard__list__item__link ${activeLink === '/' ? 'active' : ''}`} onClick={() => handleLinkClick('/')}>
@@ -134,6 +133,7 @@ const Sidebar = () => {
 										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Settings", "hex-coupon-for-woocommerce")}</span>
 									</Link>
 								</li>
+
 								<li className="hexpDashboard__list__item" onClick={stopPropagation}>
 									<Link to="/loyalty-program/loyalty-program-logs" onClick={() => handleLinkClick('/loyalty-program/loyalty-program-logs')} className={`hexpDashboard__list__item__link ${activeLink === '/loyalty-program/loyalty-program-logs' ? 'active' : ''}`}>
 										<span className="hexpDashboard__list__item__link__left">{__("Loyalty Program Logs", "hex-coupon-for-woocommerce")}</span>
@@ -141,6 +141,7 @@ const Sidebar = () => {
 								</li>
 							</ul>
 						</li>
+
 
 						<li className='hexpDashboard__list__item'>
 							<Link to="/gift-card" className={`hexpDashboard__list__item__link ${activeLink === '/gift-card' ? 'active' : ''}`} onClick={() => handleLinkClick('/gift-card')}>
@@ -158,7 +159,10 @@ const Sidebar = () => {
 							</Link>
 						</li>
 
+
 					</ul>
+
+
 					<div className="hexcoupon_resources">
 						<p className='hexcoupon_resources__title'>{__("Our Resources", "hex-coupon-for-woocommerce")}</p>
 						<ul className='hexpDashboard__list'>

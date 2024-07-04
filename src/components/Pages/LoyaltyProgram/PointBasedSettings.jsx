@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TbChevronLeft, TbInfoCircle } from "react-icons/tb";
+import { TbChevronLeft } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Switch from "../../utils/switch/Switch";
 import { __ } from '@wordpress/i18n';
@@ -7,7 +7,6 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { getNonce, getPostRequestUrl } from "../../../utils/helper";
 import { Skeleton } from "../../Skeleton";
-import Tooltip from '@mui/material/Tooltip';
 
 const PointBasedLoyaltySettings = () => {
 	const { nonce, ajaxUrl } = loyaltyProgramData;
@@ -186,9 +185,6 @@ const PointBasedLoyaltySettings = () => {
 									</label>
 									<label>
 										{__("Spending Amount","hex-coupon-for-woocommerce")}
-										<Tooltip title={__("Amount to spend to earn points on every purchase","hex-coupon-for-woocommerce")}>
-											<TbInfoCircle style={{ marginLeft: "5px" }} />
-										</Tooltip>
 										<input
 											type="number"
 											value={settings.pointsOnPurchase.spendingAmount}
@@ -244,7 +240,6 @@ const PointBasedLoyaltySettings = () => {
 								</div>
 							</div>
 						</div>
-
 
 						<div className="setting-item">
 							<div className="setting-header">

@@ -79,7 +79,6 @@ class AjaxApiController extends Controller
 
 		unset( $item );
 
-
 		if ( $this->verify_nonce() ) {
 			// Nonce is valid, proceed with your code
 			wp_send_json( [
