@@ -199,10 +199,9 @@ class CouponSingleUsageRestriction {
 				?>
 				<div class="product_min_max_main">
 					<div class='product_min product-wrap'>
-						<span class="product-wrap-pro"><?php echo esc_html__( 'This feature is only available on Pro', 'hex-coupon-for-woocommerce' ); ?></span>
 						<div class="product-wrap-inner">
 							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hex-coupon-for-woocommerce' ); ?></p>
-							<input class="product-quantity-input" placeholder='Enter Qty' type='number' min="1" readonly>
+							<input class="product-quantity-input product-cart-condition" placeholder='Enter Qty' type='number' min="1" readonly>
 						</div>
 						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product'></a>
 					</div>

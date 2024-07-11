@@ -445,18 +445,13 @@
 		//** Show premium feature text clicking on min max input field **//
 
 		// Select the input element
-		let $productQuantityInput = $(".product-quantity-input");
+		let $productQuantityInput = $(".product-cart-condition");
 
 		if(! isProActive){
-			$(document).on('click','.product-quantity-input', function (){
-				$('body').focusout().removeClass('show');
-				alert("Upgrade to Pro enable this field!");
-				$(this).closest('.product-wrap').find('.product-wrap-pro').addClass('show');
+			$(document).on('click','.product-cart-condition', function (){
+				var message = "Upgrade to Pro enable this field!";
+				showNotice(message, 'info');
 			});
-			$(document).on('focusout', '.product-quantity-input', function (){
-				$('.product-wrap-pro').removeClass('show');
-			});
-
 			$productQuantityInput.attr('readonly', 'readonly');
 
 		} else{
@@ -505,10 +500,10 @@
 						<div class="product_min_max_main">
 							<div class="product_min product-wrap">
 								<div class="product_min product-wrap">
-									<span class="product-wrap-pro">${__( "This feature is only available on Pro", "hex-coupon-for-woocommerce" )}</span>
+
 									<div class="product-wrap-inner">
 										<p class="product-wrap-para">${__("min quantity", "hex-coupon-for-woocommerce")}</p>
-										<input name="${convertTitleToName(title)}_min_quantity" class="product-quantity-input" placeholder="Enter Qty" type="number" min="1">
+										<input name="${convertTitleToName(title)}_min_quantity" class="product-quantity-input product-cart-condition" placeholder="Enter Qty" type="number" min="1">
 									</div>
 									<a href="javascript:void(0)" class="dashicons dashicons-no-alt remove_product" data-value="${value}" data-title="${title}"></a>
 								</div>

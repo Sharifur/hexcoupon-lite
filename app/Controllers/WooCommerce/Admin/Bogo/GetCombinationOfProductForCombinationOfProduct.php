@@ -3,7 +3,6 @@ namespace hexcoupon\app\Controllers\WooCommerce\Admin\Bogo;
 
 use HexCoupon\App\Controllers\BaseController;
 use HexCoupon\App\Core\Lib\SingleTon;
-use ParagonIE\ConstantTime\Hex;
 
 class GetCombinationOfProductForCombinationOfProduct extends BaseController
 {
@@ -14,7 +13,7 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method combination_of_product_against_combination_of_product
-	 * @return mixed
+	 * @return void
 	 * Customer gets a combination of product against a combination of product
 	 */
 	public function combination_of_product_against_combination_of_product( $customer_purchases, $customer_gets_as_free, $main_product_id, $coupon_id, $free_item_id, $wc_cart )
@@ -40,12 +39,6 @@ class GetCombinationOfProductForCombinationOfProduct extends BaseController
 					if ( ! ( $cart_item['quantity'] >= $main_product_min_quantity ) ) {
 						$is_main_product_greater_or_equal_to_min = false;
 					}
-//					else {
-//						$is_main_product_greater_or_equal_to_min = false;
-//						// Show error message to the user if main product quantity is less than the store owner has selected
-//						add_action( 'woocommerce_before_cart', [ $hexcoupon_bogo_instance, 'cart_custom_error_message' ] );
-//						break;
-//					}
 				}
 			}
 

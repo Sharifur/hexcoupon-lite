@@ -5,7 +5,7 @@
  * Plugin Name: HexCoupon: Ultimate WooCommerce Toolkit
  * Plugin URI: https://wordpress.org/plugins/hex-coupon-for-woocommerce
  * Description: Extend coupon functionality in your Woocommerce store.
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author: WpHex
  * Requires at least: 5.4
  * Tested up to: 6.5.5
@@ -22,7 +22,6 @@
 use Automattic\WooCommerce\StoreApi\Schemas\V1\CheckoutSchema;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use HexCoupon\App\Core\Core;
-use HexCoupon\App\Core\Helpers\LoyaltyProgram\CreateAllTables;
 use HexCoupon\App\Core\Helpers\StoreCredit\StoreCreditBlockSupport;
 
 if ( ! defined( 'ABSPATH' ) ) die();

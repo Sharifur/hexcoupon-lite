@@ -17,7 +17,7 @@ class LicenseExpiry
 	 */
 	public function register()
 	{
-		add_action( 'init', [ $this, 'check_license_expiry_on_init' ] );
+		add_action( 'admin_init', [ $this, 'check_license_expiry_on_init' ] );
 	}
 
 	/**

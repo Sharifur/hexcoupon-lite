@@ -158,6 +158,10 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.1.9 ==
+Added a nice design for coupon shortcode, which you may use it to do a promotion.
+Fixed upgrade to pro notice in Bogo coupon type.
+
 == 1.1.8 ==
 Fixed some bugs.
 

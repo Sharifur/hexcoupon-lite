@@ -11,14 +11,27 @@ class CouponShortcode
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @method register
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Registers all hooks that are needed to create 'Coupon' shortcode functionality.
 	 */
 	public function register()
 	{
 		add_filter( 'manage_edit-shop_coupon_columns', [ $this, 'custom_coupon_list_table_columns' ] );
-		add_action( 'manage_shop_coupon_posts_custom_column', [ $this, 'custom_coupon_list_table_column_values' ], 10, 2);
+		add_action( 'manage_shop_coupon_posts_custom_column', [ $this, 'custom_coupon_list_table_column_values' ], 10, 2 );
+		add_action( 'wp_loaded', [ $this, 'check_woocommerce_installed_after_wp_loaded' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method check_woocommerce_installed_after_wp_loaded
+	 * @return void
+	 * @since 1.0.0
+	 * Run this shortcode after 'WooCommerce is loaded and active'
+	 */
+	public function check_woocommerce_installed_after_wp_loaded()
+	{
 		if ( class_exists( 'WooCommerce' ) ) {
 			add_shortcode('hexcoupon', [ $this, 'display_coupon_info_shortcode' ] );
 		}
@@ -29,11 +42,11 @@ class CouponShortcode
 	 * @author WpHex
 	 * @method display_coupon_info_shortcode
 	 * @param $atts
-	 * @return mixed
+	 * @return string
 	 * @since 1.0.0
 	 * Creates a shortcode for the coupon.
 	 */
-	public function display_coupon_info_shortcode ( $atts )
+	public function display_coupon_info_shortcode( $atts )
 	{
 		// Shortcode attributes (if provided) or default values.
 		$atts = shortcode_atts( [
@@ -52,43 +65,44 @@ class CouponShortcode
 		$coupon_code = $coupon->get_code();
 		$coupon_description = $coupon->get_description();
 		$coupon_discount_type = $coupon->get_discount_type();
-		$coupon_amount = wc_price( $coupon->get_discount_amount( $coupon->get_amount() ) );
+		$coupon_expiry_date = $coupon->get_date_expires() ? $coupon->get_date_expires()->date('F j, Y') : esc_html__('No expiry date', 'hex-coupon-for-woocommerce');
 
 		$discount_type = '';
 
 		switch ( $coupon_discount_type ) {
 			case 'percent' :
-				$discount_type = 'Percentage Discount';
+				$discount_type = '%';
+				$coupon_amount = $coupon->get_amount();
 				break;
 			case 'fixed_cart' :
-				$discount_type = 'Fixed Cart Discount';
-				break;
 			case 'fixed_product' :
-				$discount_type = 'Fixed Product Discount';
+				$discount_type = get_woocommerce_currency_symbol();
+				$coupon_amount = $coupon->get_amount();
 				break;
-				case 'buy_x_get_x_bogo':
-					$discount_type = 'Bogo Discount';
+			case 'buy_x_get_x_bogo':
+				$discount_type = '';
+				$coupon_amount = esc_html__( 'BOGO', 'hex-coupon-for-woocommerce' );
+				break;
 		}
 
-		$allowed_html  = [
-			'a' => [
-				'href' => [],
-			],
-			'p' => [],
-			'b' => [
-
-			]
-		];
-
 		// Build the HTML output for the coupon information.
-		$output = '<div class="hexcoupon-shortcode-banner">';
-		$output .= '<p class="coupon-code">' . esc_html__( 'Coupon Code: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_code ) ) . '</span></p>';
-		$output .= '<p class="coupon-discount">' . esc_html__( 'Coupon Type: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $discount_type ) ) . '</span></p>';
-		$output .= '<p class="coupon-description">' . esc_html__( 'Description: ', 'hex-coupon-for-woocommerce' ) . '<span>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_description ) ) . '</span></p>';
-		$output .= '<p <p class="coupon-amount">' . esc_html__( 'Discount Amount: ', 'hex-coupon-for-woocommerce' ) . '<span>' . wp_kses( $coupon_amount, $allowed_html ) . '</span></p>';
+		$output = '<div class="discount-card">';
+		$output .= '<div class="discount-info">';
+		$output .= '<div class="discount-rate">' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_amount ) ) . '<span>' . $discount_type . '</span> <br> ' . esc_html__( 'DISCOUNT', 'hex-coupon-for-woocommerce' ) . '</div>';
+		$output .= '<div class="discount-details">';
+		$output .= '<p>' . sprintf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_description ) ) . '</p>';
+		$output .= '<div class="discount-code">';
+		$output .= '<span class="icon">🎟️</span> <span class="code">' . esc_html( strtoupper( $coupon_code ) ) . '</span>';
+		$output .= '</div>';
+		$output .= '<div class="discount-expiry">';
+		$output .= '<span class="icon">⏰</span> <span class="date">' . esc_html( $coupon_expiry_date ) . '</span>';
+		$output .= '</div>';
+		$output .= '</div>';
+		$output .= '</div>';
 		$output .= '</div>';
 
 		return $output;
+
 	}
 
 	/**
@@ -96,7 +110,7 @@ class CouponShortcode
 	 * @author WpHex
 	 * @method display_coupon_info_shortcode
 	 * @param $coupon_code
-	 * @return mixed
+	 * @return string
 	 * @since 1.0.0
 	 * Creates a shortcode for the coupon.
 	 */
@@ -126,7 +140,7 @@ class CouponShortcode
 	 * @method custom_coupon_list_table_column_values
 	 * @param $column
 	 * @param $coupon_id
-	 * @return mixed
+	 * @return void
 	 * @since 1.0.0
 	 * Creates a shortcode for the coupon.
 	 */

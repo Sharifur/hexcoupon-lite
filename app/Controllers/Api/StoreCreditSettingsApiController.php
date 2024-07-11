@@ -25,7 +25,7 @@ class StoreCreditSettingsApiController extends Controller
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method store_credit_settings_save
-	 * @return mixed
+	 * @return void
 	 * Saving store credit enable/disable option in the option table
 	 */
 	public function store_credit_settings_save()
