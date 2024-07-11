@@ -14,7 +14,7 @@ class GetSameProductForSpecificProduct extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method specific_products_against_same_product
-	 * @return mixed
+	 * @return void
 	 * Add same product against a specific product
 	 */
 	public function specific_products_against_same_product( $customer_purchases, $customer_gets_as_free, $main_product_min_purchased_quantity, $cart_item_quantity, $free_item_id, $coupon_id, $wc_cart, $main_product_id )

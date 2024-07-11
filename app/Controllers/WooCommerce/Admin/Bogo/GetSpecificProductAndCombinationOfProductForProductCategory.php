@@ -13,7 +13,7 @@ class GetSpecificProductAndCombinationOfProductForProductCategory extends BaseCo
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method product_categories_against_specific_product_and_combination_of_product
-	 * @return mixed
+	 * @return void
 	 * Customer gets specific product and a combination of product against any product from the categories
 	 */
 	public function product_categories_against_specific_product_and_combination_of_product( $customer_purchases, $customer_gets_as_free, $free_item_id, $wc_cart, $coupon_id )

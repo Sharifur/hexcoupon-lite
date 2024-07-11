@@ -13,7 +13,7 @@ class GetProductFromListForSpecificProduct extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method specific_products_against_any_product_listed_below
-	 * @return mixed
+	 * @return void
 	 * Customer gets any product listed below against a specific product
 	 */
 	public function specific_products_against_any_product_listed_below( $customer_purchases, $customer_gets_as_free, $main_product_min_purchased_quantity, $cart_item_quantity, $free_item_id, $wc_cart, $selected_products_as_free, $coupon_id, $main_product_id )

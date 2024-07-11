@@ -80,7 +80,7 @@ class HexcouponBogoController extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method custom_fee_for_bogo_deal
-	 * @return mixed
+	 * @return int
 	 * Add discount fee based on bogo deal
 	 */
 	public function custom_fee_for_bogo_deal( $cart )
@@ -138,7 +138,7 @@ class HexcouponBogoController extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method alter_product_subtotal_in_cart_for_bogo
-	 * @return mixed
+	 * @return string
 	 * Show product new subtotal in cart according to the Bogo discounts
 	 */
 	public function alter_product_subtotal_in_cart_for_bogo( $product_subtotal, $product, $quantity, $cart )
@@ -236,7 +236,7 @@ class HexcouponBogoController extends BaseController
 	 * @author WpHex
 	 * @since 1.0.0
 	 * @method remove_cart_product
-	 * @return mixed
+	 * @return void
 	 * remove cart items/products from cart page
 	 */
 	public function remove_cart_product( $free_item_id )
@@ -439,6 +439,7 @@ class HexcouponBogoController extends BaseController
 		$string = get_the_title( $post_id );
 		$string_to_be_replaced = [ ' ', '-' ];
 		$replaced_string = strtolower( str_replace( $string_to_be_replaced, '-', $string ) );
+
 		return $replaced_string;
 	}
 
