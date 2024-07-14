@@ -83,23 +83,40 @@ class MyAccount
 
 		if( $coupon_posts ) {
 			foreach ( $coupon_posts as $coupon_post ) {
-				$real_expiry_date = '';
 				$expiry_date = get_post_meta( $coupon_post->ID, 'date_expires', true );
-				if ( (int)$expiry_date > 0 ) {
-					$real_expiry_date = date('Y-m-d', (int)$expiry_date);
-				} else {
-					$real_expiry_date = __( 'No date set', 'hex-coupon-for-woocommerce' );
+
+				if ( $expiry_date ) {
+					$real_expiry_date = date( 'Y-m-d', $expiry_date ); // Convert expiry date to a readable format
+					$current_date = date( 'Y-m-d' ); // Get current date in the same format
+
+					$coupon_description = get_post_field( 'post_excerpt', $coupon_post->ID );
+
+					// Check if the expiry date has passed
+					if ( $real_expiry_date > $current_date ) {
+						?>
+						<div class="discount-card">
+							<div class="discount-info">
+								<div class="discount-rate">
+									20<span>%</span> <br> DISCOUNT
+								</div>
+								<div class="discount-details">
+									<p><?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_description ) ); ?></p>
+									<div class="discount-code">
+										<span class="icon">🎟️</span>
+										<span class="code"><?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?></span>
+									</div>
+									<div class="discount-expiry">
+										<span class="icon">⏰</span>
+										<span class="date"><?php printf( esc_html__( 'Expiry Date:', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php
+					} else {
+						continue;
+					}
 				}
-				?>
-				<p>
-					<b><?php printf( esc_html__( 'Code: ', 'hex-coupon-for-woocommerce' ) ); ?></b>
-					<?php printf( esc_html__( '%s ', 'hex-coupon-for-woocommerce' ),  esc_html( $coupon_post->post_title ) ); ?>
-					<b>
-						<?php printf( esc_html__( 'Expiry Date:', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
-					</b>
-					<?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $real_expiry_date ) ); ?>
-				</p>
-				<?php
 			}
 		} else {
 			echo esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' );
@@ -120,6 +137,9 @@ class MyAccount
 		<header class="woocommerce-Address-title title">
 			<h3><?php echo esc_html__( 'All Available Coupons', 'hex-coupon-for-woocommerce' ); ?></h3>
 		</header>
+		<h4>Active Coupons</h4>
+		<h4>Expired Coupons</h4>
+		<h4>Upcoming Coupons</h4>
 		<?php
 		$this->all_coupon_list();
 	}

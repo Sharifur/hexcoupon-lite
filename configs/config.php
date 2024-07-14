@@ -9,7 +9,7 @@ return array(
 	'plugin_prefix'		=> 'hexcoupon',
 	'plugin_slug'		=> 'hexcoupon',
 	'namespace_root'	=> 'HexCoupon',
-	'plugin_version'	=> '1.1.8',
+	'plugin_version'	=> '1.1.9',
 	'plugin_name'		=> 'HexCoupon',
 	'dev_mode'			=> false,
 	'root_dir'			=> dirname(__DIR__),

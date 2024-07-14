@@ -5,8 +5,8 @@ Tags: bogo, buy one get one, store credit, loyalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.5.5
-Version: 1.1.8
-Stable tag: 1.1.8
+Version: 1.1.9
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Extend coupon functionality in your Woocommerce store.
@@ -135,18 +135,25 @@ HexCoupon allows date and time-based validation, you may find options to set the
 1. After activating the HexCoupon WooCommerce plugin WooCommerce shop owners will see a top level menu called HexCoupon where they can add new WooCommerce coupon, will see all WooCommerce coupons, and its coupon category page.
 2. WooCommerce registered users can view all available coupons that are available for use in the WooCommerce my account page.
 3. Here from this field shop owners can select coupon starting date.
-4. Shop owners can select coupon validation for all days of the week with certain periods of the day.
-5. Shop owners can BOGO coupon from the general tab.
-6. In the BOGO option shop owners can select products and their criteria for the customers that they have to buy.
-7. In the BOGO option shop owners can select products and their criteria that they will get as free.
-8. Shop owners can add product cart condition from the usage restriction tab.
-9. Shop owners can add category cart condition from the usage restriction tab.
-10. Shop owners can allow or restrict group of customers for the coupon.
-11. Shop owners can allow or restrict individual customers from the registered list.
-12. From here store owners can reset the usage limit fields periodically after a certain amount of time.
-13. In the payment and shipping method tab certain payment and shipping methods can be added for the users.
-14. In the geographic restriction tab shop owners can restrict customers from specific shipping zones and country from using the coupon.
-15. From sharable coupon tab users get the url that they want to share with the customers and customers can apply the coupon just by visiting this url.
+4. Shop owners can BOGO coupon from the general tab.
+5. In the BOGO option shop owners can select products and their criteria for the customers that they have to buy.
+6. In the BOGO option shop owners can select products and their criteria that they will get as free.
+7. Shop owners can add product cart condition from the usage restriction tab.
+8. Shop owners can add category cart condition from the usage restriction tab.
+9. Shop owners can allow or restrict group of customers for the coupon.
+10. Shop owners can allow or restrict individual customers from the registered list.
+11. From here store owners can reset the usage limit fields periodically after a certain amount of time.
+12. In the payment and shipping method tab certain payment and shipping methods can be added for the users.
+13. In the geographic restriction tab shop owners can restrict customers from specific shipping zones and country from using the coupon.
+14. From sharable coupon tab users get the url that they want to share with the customers and customers can apply the coupon just by visiting this url.
+15. From the Dashboard shop owners can easily get a detail insights about the coupon and loyalty points.
+16. From 'Store Credit Settings' menu owners can make the store credit option on/off.
+17. Users can see logs store credit from 'Store Credit' tab in the 'My Account' page.
+18. Shop owners can make 'Loyalty Points' on/off from the
+19. Shop owners can see logs from the 'Loyalty Points Log' page.
+20. Shop owners can set 'Points on Purchase', 'Points on SignUp', 'Points on Referral' from the points based loyalty settings page.
+21. Shop owners can select and copy shortcode of specific coupon from the all coupon list page to show it in any page.
+22. This is the front end design of the shortcode output that the end user will see.
 
 ## Privacy Policy
 HexCoupon &#8211; Advance Coupons For WooCommerce uses [Appsero](https://appsero.com) SDK to collect some telemetry data upon user's confirmation. This helps us to troubleshoot problems faster & make product improvements.
