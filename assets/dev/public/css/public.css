@@ -229,3 +229,22 @@
 		font-size: 0.8em;
 	}
 }
+
+/* My Account Page All Coupons Tab */
+.woocommerce-Address-title.title h3 {
+	text-align: center;
+}
+.coupon-section-title {
+	text-align: center;
+	margin: 20px 0;
+}
+.user-all-coupon-wrap {
+	display: flex;
+	flex-wrap: wrap;
+}
+.user-all-coupon-wrap .discount-card {
+	width: 33%;
+}
+.discount-card.upcoming {
+	background-color: #2c2c2ca6;
+}
