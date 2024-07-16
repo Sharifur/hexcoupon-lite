@@ -345,7 +345,7 @@ const PointBasedLoyaltySettings = () => {
 									value={settings.conversionRate.points}
 									onChange={handleInputChange("conversionRate", "points")}
 								/>
-								<span>{settings.conversionRate.points} POINTS = {settings.conversionRate.credit} S.CREDIT</span>
+								<span>{settings.conversionRate.points} POINTS = {settings.conversionRate.credit} {__("S.CREDIT","hex-coupon-for-woocommerce")}</span>
 							</label>
 							<p>{__("No. of points required to convert in 1 store credit","hex-coupon-for-woocommerce")}</p>
 						</div>

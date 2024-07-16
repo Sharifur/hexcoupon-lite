@@ -146,6 +146,7 @@ class AssetsManager
 		//load react js and css only on the hexcoupon plugin page
 		if ( ! $this->is_pro_active ) {
 			$screen = get_current_screen();
+			wp_set_script_translations( 'main-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . '../..languages' );
 
 			if ( $screen->base === "toplevel_page_hexcoupon-page" ){
 				wp_enqueue_script(
@@ -217,7 +218,7 @@ class AssetsManager
 			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
 		] );
 
-		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . 'languages' );
+		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . '../..languages' );
 	}
 
 	/**

@@ -18,11 +18,16 @@ class ActivationService
 			HEXCOUPON_FILE,
 			[ __CLASS__, 'activate' ]
 		);
+
+		// activation event handler
+		\register_activation_hook(
+			HEXCOUPON_FILE,
+			[ __CLASS__, 'load_hexcoupon_textdomain' ]
+		);
 	}
 
 	public static function activate()
 	{
-		add_action( 'init', [ __CLASS__, 'load_hexcoupon_textdomain' ], 1 );
 		QrCodeGeneratorHelpers::getInstance()->qr_code_generator_for_url( 0 );
 
 		// Creating all necessary tables for store credit
@@ -85,8 +90,16 @@ class ActivationService
 		update_option('allLoyaltyLabels', $all_labels );
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author Wphex
+	 * @since 1.0.0
+	 * @method load_hexcoupon_textdomain
+	 * @return void
+	 * Loading plugin text-domain
+	 */
 	public static function load_hexcoupon_textdomain()
 	{
-		load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'hex-coupon-for-woocommerce', false, dirname(plugin_basename(__FILE__), 3) . '/languages/' );
 	}
 }

@@ -139,7 +139,7 @@ msgstr "A combination of products"
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:92
 #: app/Core/WooCommerce/CouponSingleGeneralTab.php:220
 msgid "A specific product"
-msgstr "A specific product"
+msgstr "A specific products"
 
 #: app/Core/WooCommerce/StoreCredit.php:114
 msgid "Actions"

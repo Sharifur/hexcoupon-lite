@@ -62,26 +62,26 @@ const LoyaltyProgramUserLogs = () => {
 	const getReasonString = (reasonCode) => {
 		switch (reasonCode) {
 			case "0":
-				return __("Signup");
+				return __("Signup","hex-coupon-for-woocommerce");
 			case "1":
-				return __("Referral");
+				return __("Referral", "hex-coupon-for-woocommerce");
 			case "2":
-				return __("Purchase");
+				return __("Purchase", "hex-coupon-for-woocommerce");
 			default:
-				return __("Unknown");
+				return __("Unknown", "hex-coupon-for-woocommerce");
 		}
 	};
 
 	const getReasonElement = (reasonCode) => {
 		switch (reasonCode) {
 			case "0":
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Signup")}</span>;
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Signup","hex-coupon-for-woocommerce")}</span>;
 			case "1":
-				return <span className="px-2.5 py-2 bg-cyan-100 text-cyan-800 w-full text-center">{__("Referral")}</span>;
+				return <span className="px-2.5 py-2 bg-cyan-100 text-cyan-800 w-full text-center">{__("Referral","hex-coupon-for-woocommerce")}</span>;
 			case "2":
-				return <span className="px-2.5 py-2 bg-indigo-100 text-indigo-800 w-full text-center">{__("Purchase")}</span>;
+				return <span className="px-2.5 py-2 bg-indigo-100 text-indigo-800 w-full text-center">{__("Purchase","hex-coupon-for-woocommerce")}</span>;
 			default:
-				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Unknown")}</span>;
+				return <span className="px-2.5 py-2 bg-green-100 text-green-800 w-full text-center">{__("Unknown","hex-coupon-for-woocommerce")}</span>;
 		}
 	};
 
@@ -125,10 +125,10 @@ const LoyaltyProgramUserLogs = () => {
 									onChange={handleFilterChange}
 									className="customSelect py-2.5 pl-4 pr-4 h-[34px] !ring-1 !border-transparent !ring-[var(--hex-border-color)] text-md !text-[var(--hex-paragraph-color)] focus:!ring-[var(--hex-main-color-one)] focus:!border-transparent"
 								>
-									<option value="all">{__("All")}</option>
-									<option value="signup">{__("Signup")}</option>
-									<option value="referral">{__("Referral")}</option>
-									<option value="purchase">{__("Purchase")}</option>
+									<option value="all">{__("All","hex-coupon-for-woocommerce")}</option>
+									<option value="signup">{__("Signup","hex-coupon-for-woocommerce")}</option>
+									<option value="referral">{__("Referral","hex-coupon-for-woocommerce")}</option>
+									<option value="purchase">{__("Purchase","hex-coupon-for-woocommerce")}</option>
 								</select>
 							</ButtonWrapper>
 						</BodyCardHeaderRight>
@@ -139,14 +139,14 @@ const LoyaltyProgramUserLogs = () => {
 						<>
 							<Table className="border text-left">
 								<THead>
-									<Th>{__("Customer Name")}</Th>
-									<Th>{__("Email")}</Th>
-									<Th>{__("Points")}</Th>
-									<Th>{__("Reason")}</Th>
-									<Th>{__("Referrer ID")}</Th>
-									<Th>{__("Converted Credit")}</Th>
-									<Th>{__("Conversion Rate")}</Th>
-									<Th>{__("Date")}</Th>
+									<Th>{__("Customer Name","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Email","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Points","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Reason","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Referrer ID","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Converted Credit","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Conversion Rate","hex-coupon-for-woocommerce")}</Th>
+									<Th>{__("Date","hex-coupon-for-woocommerce")}</Th>
 								</THead>
 								<TBody>
 									{currentLogs.length > 0 ? (
@@ -164,7 +164,7 @@ const LoyaltyProgramUserLogs = () => {
 										))
 									) : (
 										<tr style={{ textAlign: "center" }}>
-											<td colSpan="8">No Data Available</td>
+											<td colSpan="8">{__("No Data Available","hex-coupon-for-woocommerce")}</td>
 										</tr>
 									)}
 								</TBody>

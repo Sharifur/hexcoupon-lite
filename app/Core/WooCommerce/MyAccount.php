@@ -116,6 +116,8 @@ class MyAccount
 	 */
 	private function active_coupons()
 	{
+		global $woocommerce;
+
 		$coupon_posts = $this->cooupon_query();
 
 		if( $coupon_posts ) {
@@ -131,6 +133,85 @@ class MyAccount
 				$selected_individual_customer = ! empty( $usage_restriction['selected_individual_customer'] ) ? $usage_restriction['selected_individual_customer'] : [];
 				$current_user_role = $this->get_current_user_role();
 				$current_user_id = get_current_user_id();
+				$geographic_restriction = get_post_meta( $coupon_post->ID, 'geographic_restriction', true );
+				$all_zones = ! empty( $geographic_restriction['restricted_shipping_zones'] ) ? $geographic_restriction['restricted_shipping_zones'] : [];
+				$all_shipping_zones = CouponSingleGeographicRestrictions::getInstance()->get_all_shipping_zones();
+
+				// Deleting changed shipping zone location
+				foreach ( $all_zones as $value ) {
+					if ( ! array_key_exists( $value, $all_shipping_zones ) ) {
+						$key = array_search( $value, $all_zones );
+						unset( $all_zones[$key] );
+					}
+				}
+
+				$all_zones = implode( ',', $all_zones );
+
+				$all_continents = [
+					'Africa' => 'AF',
+					'Antarctica' => 'AN',
+					'Asia' => 'AS',
+					'Europe' => 'EU',
+					'North America' => 'NA',
+					'Oceania' => 'OC',
+					'South America' => 'SA',
+				];
+
+				// Initializing WC_Countries class
+				$countries = new \WC_Countries();
+				// Get all countries and their data
+				$all_countries = $countries->get_countries();
+
+				// Getting shipping information of the user
+				$shipping_city = $woocommerce->customer->get_shipping_city();
+				$shipping_country = $woocommerce->customer->get_shipping_country();
+				$get_shipping_country_name = array_key_exists( $shipping_country, $all_countries ) ? $all_countries[$shipping_country] : 'None';
+
+				$shipping_continent_code = $countries->get_continent_code_for_country( $shipping_country );
+				$shipping_continent_full_name = array_search( $shipping_continent_code, $all_continents );
+
+				// Getting billing information of the user
+				$billing_city = $woocommerce->customer->get_billing_city(); // get the current billing city of the user
+				$billing_country = $woocommerce->customer->get_billing_country();
+				$get_billing_country_name = array_key_exists( $billing_country, $all_countries ) ? $all_countries[$billing_country] : 'None';
+
+				$billing_continent_code = $countries->get_continent_code_for_country( $billing_country );
+				$billing_continent_full_name = array_search( $billing_continent_code, $all_continents );
+
+				if ( $shipping_city || $shipping_country ) {
+					if ( ! empty( $all_zones ) && $shipping_city && str_contains( $all_zones, $shipping_city ) ) {
+						continue;
+					}
+					if ( ! empty( $all_zones ) && $shipping_country && $get_shipping_country_name && str_contains( $all_zones, $get_shipping_country_name ) ) {
+						continue;
+					}
+					if ( ! empty( $all_zones ) && $shipping_continent_full_name && $get_shipping_country_name && str_contains( $all_zones, $shipping_continent_full_name ) ) {
+						continue;
+					}
+				} else {
+					if ( ! empty( $all_zones ) && ! empty( $billing_city ) && str_contains( $all_zones, $billing_city ) ) {
+						continue;
+					}
+					if ( ! empty( $all_zones ) && $billing_country && $get_billing_country_name && str_contains( $all_zones, $get_billing_country_name ) ) {
+						continue;
+					}
+					if ( ! empty( $all_zones ) && $billing_continent_full_name && $get_billing_country_name && str_contains( $all_zones, $billing_continent_full_name ) ) {
+						continue;
+					}
+				}
+
+				$all_countries = ! empty( $geographic_restriction['restricted_countries'] ) ? $geographic_restriction['restricted_countries'] : [];
+
+				$shipping_country = $woocommerce->customer->get_shipping_country();
+				$billing_country = $woocommerce->customer->get_billing_country();
+
+				// Validating coupon based on user country for country wise restriction
+				if ( in_array( $shipping_country, $all_countries ) ) {
+					continue;
+				}
+				if ( in_array( $billing_country, $all_countries ) ) {
+					continue;
+				}
 
 				$restricted_for_groups_logic = 'restricted_for_groups' == $allowed_group_of_customer && in_array( $current_user_role, $selected_customer_group );
 				$restricted_for_customers_logic = 'restricted_for_customers' == $allowed_individual_customer && in_array( $current_user_id, $selected_individual_customer );
@@ -138,7 +219,6 @@ class MyAccount
 				if ( $restricted_for_groups_logic || $restricted_for_customers_logic  ) {
 					continue;
 				}
-
 
 				$real_expiry_date = ! empty( $expiry_date ) ? date( 'Y-m-d', $expiry_date ) : 'No date set'; // Convert expiry date to a readable format
 				$current_date = date( 'Y-m-d' ); // Get current date in the same format
@@ -374,6 +454,14 @@ class MyAccount
 
 	}
 
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @method get_current_user_role
+	 * @return void
+	 * @since 1.0.0
+	 * Getting the current user role.
+	 */
 	private function get_current_user_role() {
 		// Get the current user object
 		$current_user = wp_get_current_user();

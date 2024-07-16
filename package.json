@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "vite build --mode production",
-		"dev": "vite build --watch --mode development"
+		"dev": "vite build --watch --mode development",
+		"make-pot": "wp i18n make-pot . languages/hex-coupon-for-woocommerce.pot --exclude=vendor --exclude=build --exclude=node_modules"
 	},
 	"author": {
 		"name": "Keramot UL Islam [AbmSourav]",
