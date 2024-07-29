@@ -267,7 +267,7 @@ class MyAccount
 			}
 			echo '</div>';
 		} else {
-			echo esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' );
+			echo '<p style="text-align: center;">' . esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' ) . '</p>';
 		}
 	}
 
@@ -344,7 +344,7 @@ class MyAccount
 			}
 			echo '</div>';
 		} else {
-			echo esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' );
+			echo '<p style="text-align: center;">' . esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' ) . '</p>';
 		}
 	}
 
@@ -446,10 +446,10 @@ class MyAccount
 				}
 				echo '</div>';
 			} else {
-				echo esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' );
+				echo '<p style="text-align: center;">' . esc_html__( 'No coupon found', 'hex-coupon-for-woocommerce' ) . '</p>';
 			}
 		} else {
-			echo esc_html__( 'No used coupons found', 'hex-coupon-for-woocommerce' );
+			echo '<p style="text-align: center;">' . esc_html__( 'No used coupons found', 'hex-coupon-for-woocommerce' ) . '</p>';
 		}
 
 	}

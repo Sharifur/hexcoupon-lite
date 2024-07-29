@@ -33,6 +33,8 @@ class AssetsManager
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 		// enqueuing scripts for block pattern
 		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'load_translation_for_admin_side' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'load_translation_for_public_side' ] );
 	}
 
 	/**
@@ -96,7 +98,7 @@ class AssetsManager
 			wp_enqueue_style(
 				hexcoupon_prefix( 'admin' ),
 				hexcoupon_asset_url( $folder_prefix. "/admin/css/admin" .$css_file_extension ),
-				array(),
+				[],
 				$this->version,
 				'all'
 			);
@@ -104,7 +106,7 @@ class AssetsManager
 			wp_enqueue_style(
 				hexcoupon_prefix( 'flatpickr' ),
 				hexcoupon_asset_url( $folder_prefix . "/admin/css/flatpickr.min.css" ),
-				array(),
+				[],
 				$this->version,
 				'all'
 			);
@@ -112,7 +114,7 @@ class AssetsManager
 			wp_enqueue_style(
 				hexcoupon_prefix( 'toast' ),
 				hexcoupon_asset_url( $folder_prefix . "/admin/css/toast.min.css" ),
-				array(),
+				[],
 				$this->version,
 				'all'
 			);
@@ -120,7 +122,7 @@ class AssetsManager
 		}
 
 		wp_enqueue_script(
-			hexcoupon_prefix( 'admin' ),
+			hexcoupon_prefix( 'all-coupon-page' ),
 			hexcoupon_asset_url( $folder_prefix . "/admin/js/all-coupon-page" . $js_file_extension ),
 			['jquery', 'select2', 'wp-i18n'],
 			$this->version,
@@ -130,7 +132,7 @@ class AssetsManager
 		wp_enqueue_style(
 			hexcoupon_prefix( 'hexcoupon-admin-notice' ),
 			hexcoupon_asset_url( $folder_prefix . "/admin/css/hex-dashboard-notice" . $css_file_extension ),
-			array(),
+			[],
 			$this->version,
 			'all'
 		);
@@ -138,7 +140,7 @@ class AssetsManager
 		wp_enqueue_style(
 			hexcoupon_prefix( 'all-coupon-page' ),
 			hexcoupon_asset_url( $folder_prefix . "/admin/css/all-coupon-page" . $css_file_extension ),
-			array(),
+			[],
 			$this->version,
 			'all'
 		);
@@ -146,7 +148,6 @@ class AssetsManager
 		//load react js and css only on the hexcoupon plugin page
 		if ( ! $this->is_pro_active ) {
 			$screen = get_current_screen();
-			wp_set_script_translations( 'main-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . '../..languages' );
 
 			if ( $screen->base === "toplevel_page_hexcoupon-page" ){
 				wp_enqueue_script(
@@ -217,8 +218,6 @@ class AssetsManager
 			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
 		] );
-
-		wp_set_script_translations( 'admin-js', 'hex-coupon-for-woocommerce', plugin_dir_path( __FILE__ ) . '../..languages' );
 	}
 
 	/**
@@ -319,7 +318,7 @@ class AssetsManager
 		wp_enqueue_style(
 			hexcoupon_prefix( 'public' ),
 			hexcoupon_asset_url( $folder_prefix . "/public/css/public" . $css_file_extension ),
-			array(),
+			[],
 			$this->version,
 			'all'
 		);
@@ -346,5 +345,33 @@ class AssetsManager
 				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			] );
 		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method load_translation_for_admin_side
+	 * @return void
+	 *
+	 */
+	public function load_translation_for_admin_side()
+	{
+		wp_set_script_translations( hexcoupon_prefix( 'admin' ), 'hex-coupon-for-woocommerce', hexcoupon_url( "languages" ) );
+		wp_set_script_translations( hexcoupon_prefix( 'all-coupon-page' ), 'hex-coupon-for-woocommerce', hexcoupon_url( "languages" ) );
+		wp_set_script_translations( hexcoupon_prefix( 'main' ), 'hex-coupon-for-woocommerce', hexcoupon_url( "languages" ) );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method load_translation_for_public_side
+	 * @return void
+	 *
+	 */
+	public function load_translation_for_public_side()
+	{
+		wp_set_script_translations( hexcoupon_prefix( 'public' ), 'hex-coupon-for-woocommerce', hexcoupon_url( "languages" ) );
 	}
 }

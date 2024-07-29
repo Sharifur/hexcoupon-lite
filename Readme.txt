@@ -1,12 +1,12 @@
 === HexCoupon - Advanced Tools for WooCommerce Coupons, BOGO, Store Credit, Loyalty Programs, and More ===
-Contributors: wphex
+Contributors: wphex, palashwpdev
 Donate link: https://example.com/
 Tags: bogo, buy one get one, store credit, loyalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.5.5
-Version: 1.1.9
-Stable tag: 1.1.9
+Version: 1.2.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Extend coupon functionality in your Woocommerce store.
@@ -165,9 +165,12 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.2.0 ==
+Added nice design to show all coupon tab in my account page of WooCommerce.
+
 == 1.1.9 ==
 Added a nice design for coupon shortcode, which you may use it to do a promotion.
-Fixed upgrade to pro notice in Bogo coupon type.
+Fixed upgrade to pro notice in BOGO coupon type.
 
 == 1.1.8 ==
 Fixed some bugs.
@@ -183,15 +186,6 @@ Added new feature "store credit" for both block pattern and legacy pattern
 Added QR Code in the URL tab to enhance marketing ability
 
 Solved URL coupon success message not displaying issue.
-
-== 1.1.4 ==
-Fixed dynamic time not being saved for wednesday issue.
-
-== 1.1.3 ==
-Fixed always displaying shipping zone error while applying the coupon
-
-== 1.1.2 ==
-* Fixed the blank dashboard issue
 
 == Upgrade Notice ==
 
