@@ -1,6 +1,9 @@
 (function($) {
 	"use strict";
 	$(document).ready(function(){
+		// destructuring internationalization functions for making text translatable
+		const { __ } = wp.i18n;
+
 		$(".product_addition_notice span.dashicons-dismiss").on("click",function(){
 			$(".product_addition_notice").hide();
 		});
@@ -34,18 +37,18 @@
 			if (navigator.clipboard) {
 				navigator.clipboard.writeText(referralLink.val()).then(function() {
 					// Alert the copied text
-					alert('Referral link copied to clipboard!');
+					alert(__('Referral link copied to clipboard!','hex-coupon-for-woocommerce'));
 				}, function(err) {
 					// If something goes wrong
-					alert('Failed to copy the referral link: ' + err);
+					alert(__('Failed to copy the referral link: ','hex-coupon-for-woocommerce') + err);
 				});
 			} else {
 				// Fallback for browsers that don't support navigator.clipboard
 				try {
 					document.execCommand('copy');
-					alert('Referral link copied to clipboard!');
+					alert(__('Referral link copied to clipboard!','hex-coupon-for-woocommerce'));
 				} catch (err) {
-					alert('Failed to copy the referral link: ' + err);
+					alert(__('Failed to copy the referral link: ','hex-coupon-for-woocommerce') + err);
 				}
 			}
 		});

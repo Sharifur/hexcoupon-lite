@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HexCoupon: Ultimate WooCommerce Toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 13:20+0000\n"
+"POT-Creation-Date: 2024-07-29 10:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -243,6 +243,7 @@ msgstr ""
 
 #: app/Core/WooCommerce/StoreCredit/AddStoreCreditCheckbox.php:50
 #: app/Core/WooCommerce/StoreCredit/AddStoreCreditCheckbox.php:64
+#: react-backup/frontend.js:84 src/frontend.js:84
 msgid "Available Store Credit: "
 msgstr ""
 
@@ -266,12 +267,18 @@ msgstr ""
 msgid "Bogo"
 msgstr ""
 
-#: app/Core/AssetsManager.php:177
+#: app/Core/AssetsManager.php:178
 msgid "Bogo Coupons"
 msgstr ""
 
 #: hex-coupon-for-woocommerce.php:78
 msgid "Bogo Discount"
+msgstr ""
+
+#: assets/dev/admin/js/admin.js:44
+msgid ""
+"Can not select same item on both purchased and free product, chose specific "
+"and same product to do so!"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:175
@@ -399,7 +406,7 @@ msgstr ""
 msgid "Coupon deactivated for Wednesday"
 msgstr ""
 
-#: app/Core/AssetsManager.php:179
+#: app/Core/AssetsManager.php:180
 msgid "Coupon Insights"
 msgstr ""
 
@@ -423,19 +430,19 @@ msgstr ""
 msgid "Coupon type"
 msgstr ""
 
-#: app/Core/AssetsManager.php:173
+#: app/Core/AssetsManager.php:174
 msgid "Coupons Active"
 msgstr ""
 
-#: app/Core/AssetsManager.php:171
+#: app/Core/AssetsManager.php:172
 msgid "Coupons Created"
 msgstr ""
 
-#: app/Core/AssetsManager.php:174
+#: app/Core/AssetsManager.php:175
 msgid "Coupons Expired"
 msgstr ""
 
-#: app/Core/AssetsManager.php:172
+#: app/Core/AssetsManager.php:173
 msgid "Coupons Redeemed"
 msgstr ""
 
@@ -504,6 +511,10 @@ msgstr ""
 msgid "Discount Type"
 msgstr ""
 
+#: assets/dev/admin/js/admin.js:747
+msgid "Do not leave date and time empty."
+msgstr ""
+
 #: app/Core/WooCommerce/AddCustomLinksInAllPluginsPage.php:41
 #: app/Core/WooCommerce/AddCustomLinksInAllPluginsPage.php:47
 #: app/Core/WooCommerce/AddCustomLinksInAllPluginsPage.php:47
@@ -512,6 +523,10 @@ msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:129
 msgid "Edit URL link"
+msgstr ""
+
+#: assets/dev/admin/js/admin.js:714
+msgid "Enter a valid number in the Bogo fields, equivalent or greater than 1"
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleSharableUrl.php:170
@@ -542,6 +557,10 @@ msgstr ""
 msgid "Extend coupon functionality in your Woocommerce store."
 msgstr ""
 
+#: assets/dev/public/js/public.js:43 assets/dev/public/js/public.js:51
+msgid "Failed to copy the referral link: "
+msgstr ""
+
 #: app/Core/WooCommerce/StoreCredit.php:86
 msgid "Filter:"
 msgstr ""
@@ -562,7 +581,7 @@ msgstr ""
 msgid "Geographic restrictions"
 msgstr ""
 
-#: app/Core/AssetsManager.php:178
+#: app/Core/AssetsManager.php:179
 msgid "Geographically Restricted"
 msgstr ""
 
@@ -688,6 +707,7 @@ msgid "Message for customer e.g. This coupon has not been started yet."
 msgstr ""
 
 #: app/Core/WooCommerce/CouponSingleUsageRestriction.php:203
+#: assets/dev/admin/js/admin.js:506
 msgid "min quantity"
 msgstr ""
 
@@ -784,7 +804,7 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: app/Core/AssetsManager.php:175
+#: app/Core/AssetsManager.php:176
 msgid "Redeemed Coupon Amount"
 msgstr ""
 
@@ -794,6 +814,10 @@ msgstr ""
 
 #: app/Core/WooCommerce/LoyaltyProgram/LoyaltyProgram.php:221
 msgid "Referee ID"
+msgstr ""
+
+#: assets/dev/public/js/public.js:40 assets/dev/public/js/public.js:49
+msgid "Referral link copied to clipboard!"
 msgstr ""
 
 #: app/Core/WooCommerce/StoreCredit.php:84
@@ -910,7 +934,7 @@ msgstr ""
 msgid "Sharable URL coupon"
 msgstr ""
 
-#: app/Core/AssetsManager.php:176
+#: app/Core/AssetsManager.php:177
 msgid "Sharable Url Coupons"
 msgstr ""
 
@@ -955,6 +979,10 @@ msgstr ""
 msgid "Store Credit Used:"
 msgstr ""
 
+#: react-backup/frontend.js:89 src/frontend.js:89
+msgid "Store Credit Used: -"
+msgstr ""
+
 #: app/Core/WooCommerce/CouponSingleDaysAndHoursTab.php:206
 msgid "Sunday"
 msgstr ""
@@ -994,7 +1022,7 @@ msgstr ""
 msgid "This plugin requires at least WordPress version of %s"
 msgstr ""
 
-#: app/Core/AssetsManager.php:180
+#: app/Core/AssetsManager.php:181
 msgid "This Week"
 msgstr ""
 
@@ -1020,7 +1048,11 @@ msgstr ""
 msgid "To add more hours switch to Pro version"
 msgstr ""
 
-#: app/Core/AssetsManager.php:182
+#: assets/dev/admin/js/admin.js:676
+msgid "To use this feature."
+msgstr ""
+
+#: app/Core/AssetsManager.php:183
 msgid "Today"
 msgstr ""
 
@@ -1048,10 +1080,16 @@ msgstr ""
 
 #: app/Core/WooCommerce/AddCustomLinksInAllPluginsPage.php:42
 #: app/Core/WooCommerce/CouponSingleDaysAndHoursTab.php:59
+#: assets/dev/admin/js/admin.js:676
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: hex-coupon-for-woocommerce.php:153
+#: assets/dev/admin/js/admin.js:622
+msgid "URL copied to clipboard:"
+msgstr ""
+
+#: hex-coupon-for-woocommerce.php:153 react-backup/edit.js:15
+#: react-backup/frontend.js:85 src/edit.js:15 src/frontend.js:85
 msgid "Use Store Credit"
 msgstr ""
 
@@ -1085,7 +1123,7 @@ msgstr ""
 msgid "WpHex"
 msgstr ""
 
-#: app/Core/AssetsManager.php:181
+#: app/Core/AssetsManager.php:182
 msgid "Yesterday"
 msgstr ""
 
@@ -1100,6 +1138,10 @@ msgid ""
 "flexibility to choose what you want, whenever you want"
 msgstr ""
 
+#: assets/dev/admin/js/admin.js:697
+msgid "You did not entered any amount in the coupon amount field"
+msgstr ""
+
 #: app/Controllers/WooCommerce/Admin/Bogo/HexcouponBogoController.php:408
 msgid "You do not have enough item or enough quantity to avail the Bogo offer."
 msgstr ""
@@ -1107,6 +1149,14 @@ msgstr ""
 #: app/Controllers/WooCommerce/StoreCredit/StoreCreditRefund.php:46
 #: app/Controllers/WooCommerce/StoreCredit/StoreCreditRefund.php:70
 msgid "You got store credit "
+msgstr ""
+
+#: assets/dev/admin/js/admin.js:51
+msgid "You have select same product for both purchased and free options!"
+msgstr ""
+
+#: assets/dev/admin/js/admin.js:38
+msgid "You have to select at least a product for the purchase and free item"
 msgstr ""
 
 #: app/Views/admin/licensing.php:7

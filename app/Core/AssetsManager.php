@@ -153,7 +153,7 @@ class AssetsManager
 				wp_enqueue_script(
 					hexcoupon_prefix( 'main' ),
 					hexcoupon_url( "dist/assets/index.js" ),
-					['jquery','wp-element'],
+					['jquery','wp-element','wp-i18n'],
 					$this->version,
 					true
 				);
@@ -310,7 +310,7 @@ class AssetsManager
 		wp_enqueue_script(
 			hexcoupon_prefix( 'public' ),
 			hexcoupon_asset_url( $folder_prefix . "/public/js/public" . $js_file_extension ),
-			[],
+			['jquery', 'wp-i18n'],
 			$this->version,
 			true
 		);

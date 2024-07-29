@@ -2,7 +2,8 @@
 	"use strict";
 	$(document).ready(function(){
 		// destructuring internationalization functions for making text translatable
-		const { __, _x, _n, _nx } = wp.i18n;
+		const { __ } = wp.i18n;
+
 		let isProActive = false;
 
 		if (typeof pro_data !== 'undefined' && pro_data.is_pro_active) {
@@ -672,7 +673,7 @@
 			any_products_listed_below.prop('disabled', true);
 			product_categories.prop('disabled', true);
 
-			var message = 'To use this feature. <a href="https://hexcoupon.com/pricing" target="_blank">Upgrade to Pro</a>';
+			var message = __( 'To use this feature.', 'hex-coupon-for-woocommerce' ) + '<a href="https://hexcoupon.com/pricing" target="_blank">' + __('Upgrade to Pro','hex-coupon-for-woocommerce') + '</a>';
 			//
 			any_products_listed_below.parent().on('click', function() {
 				showNotice(message, 'info');
