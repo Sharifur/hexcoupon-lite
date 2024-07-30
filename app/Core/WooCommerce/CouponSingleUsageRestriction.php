@@ -194,7 +194,7 @@ class CouponSingleUsageRestriction {
 		echo '<div id="selectedValuesContainer">';
 		if ( ! empty( $all_selected_products ) ) {
 			foreach ( $all_selected_products as $single_product ) {
-				echo '<div class="product-item-whole">';
+				echo '<div class="product-item-whole" id="' . esc_attr( $single_product ) . '">';
 				echo '<div class="product_title">'.get_the_title( $single_product ).'</div>';
 				?>
 				<div class="product_min_max_main">
@@ -203,7 +203,7 @@ class CouponSingleUsageRestriction {
 							<p class="product-wrap-para"><?php echo esc_html__( 'min quantity', 'hex-coupon-for-woocommerce' ); ?></p>
 							<input class="product-quantity-input product-cart-condition" placeholder='Enter Qty' type='number' min="1" readonly>
 						</div>
-						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product'></a>
+						<a href="javascript:void(0)" class='dashicons dashicons-no-alt remove_product' data-value="<?php echo esc_attr( $single_product ); ?>"></a>
 					</div>
 				</div>
 				<?php

@@ -33,6 +33,7 @@ class AssetsManager
 		add_action( 'wp_enqueue_scripts', [ $this, 'public_scripts' ] );
 		// enqueuing scripts for block pattern
 		add_action( 'enqueue_block_assets', [ $this, 'block_scripts' ] );
+		// loading js files for translation
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_translation_for_admin_side' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_translation_for_public_side' ] );
 	}

@@ -142,7 +142,6 @@ class CouponUsageRestrictionTabController extends BaseController
 					if ( ! empty( $all_selected_products ) && in_array( $key['product_id'], $all_selected_products ) ) {
 						return $valid;
 					}
-
 					else {
 						// display a custom coupon error message if the coupon is invalid
 						add_filter( 'woocommerce_coupon_error', [ $this, 'invalid_error_message_for_not_matching_any_of_the_products' ] , 10, 3 );
@@ -323,11 +322,9 @@ class CouponUsageRestrictionTabController extends BaseController
 		if ( is_null( $apply_cart_condition_on_product ) && is_null( $apply_cart_condition_on_categories ) && is_null( $apply_cart_condition_on_customer_grp ) && is_null( $apply_cart_condition_on_individual_customer ) ) {
 			return $valid;
 		}
-
 		elseif ( false === $apply_cart_condition_on_product || false === $apply_cart_condition_on_categories || false === $apply_cart_condition_on_customer_grp || false === $apply_cart_condition_on_individual_customer ) {
 			return false;
 		}
-
 		else {
 			return $valid;
 		}
@@ -349,15 +346,12 @@ class CouponUsageRestrictionTabController extends BaseController
 		if ( empty( $all_meta_values['apply_cart_condition_for_customer_on_products'] ) ) {
 			unset( $all_meta_values['apply_on_listed_product'], $all_meta_values['all_selected_products'] );
 		}
-
 		if ( empty( $all_meta_values['apply_cart_condition_for_customer_on_categories'] ) ) {
 			unset( $all_meta_values['all_selected_categories'] );
 		}
-
 		if ( empty( $all_meta_values['allowed_or_restricted_customer_group'] ) ) {
 			unset( $all_meta_values['allowed_group_of_customer'], $all_meta_values['selected_customer_group'] );
 		}
-
 		if ( empty( $all_meta_values['allowed_or_restricted_individual_customer'] ) ) {
 			unset( $all_meta_values['allowed_individual_customer'], $all_meta_values['selected_individual_customer'] );
 		}
@@ -378,7 +372,7 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	public function invalid_error_message_for_not_matching_all_products( $err, $err_code, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon->id );
+		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get value of 'all_selected_products' meta field
 		$all_selected_products = ! empty( $all_meta_values['all_selected_products'] ) ? $all_meta_values['all_selected_products'] : [];
@@ -414,7 +408,7 @@ class CouponUsageRestrictionTabController extends BaseController
 	 */
 	public function invalid_error_message_for_not_matching_any_of_the_products( $err, $err_code, $coupon )
 	{
-		$all_meta_values = $this->get_all_post_meta( $coupon->id );
+		$all_meta_values = $this->get_all_post_meta( $coupon->get_id() );
 
 		// get value of 'all_selected_products' meta field
 		$all_selected_products = ! empty( $all_meta_values['all_selected_products'] ) ? $all_meta_values['all_selected_products'] : [];
