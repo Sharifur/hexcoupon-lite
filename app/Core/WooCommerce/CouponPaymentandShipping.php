@@ -73,7 +73,6 @@ class CouponPaymentandShipping
 			}
 		}
 
-
 		return $shipping_method_names; // finally return all shipping method names
 	}
 

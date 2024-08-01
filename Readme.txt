@@ -5,8 +5,8 @@ Tags: bogo, buy one get one, store credit, loyalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.5.5
-Version: 1.2.0
-Stable tag: 1.2.0
+Version: 1.2.1
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Extend coupon functionality in your Woocommerce store.
