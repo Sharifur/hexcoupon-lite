@@ -4,6 +4,7 @@ namespace HexCoupon\App\Core;
 
 use HexCoupon\App\Controllers\AdminMenuController;
 use HexCoupon\App\Controllers\AjaxApiController;
+use HexCoupon\App\Controllers\Api\SpinWheelSettingsApiController;
 use HexCoupon\App\Controllers\ConvertCartPageToClassic;
 use HexCoupon\App\Controllers\Licensing\LicenseExpiry;
 use HexCoupon\App\Controllers\RedirectUserToPluginDashboard;
@@ -107,6 +108,7 @@ final class Core extends BootManager
 			StoreCredit::class,
 			StoreCreditSettingsApiController::class,
 			LoyaltyProgramSettingsApiController::class,
+			SpinWheelSettingsApiController::class,
 			AddCustomLinksInAllPluginsPage::class,
 			RedirectUserToPluginDashboard::class,
 			ConvertCartPageToClassic::class,
