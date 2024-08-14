@@ -58,6 +58,7 @@ use HexCoupon\App\Services\DeactivationService;
 use HexCoupon\App\Controllers\Api\StoreCreditSettingsApiController;
 use HexCoupon\App\Controllers\Api\LoyaltyProgramSettingsApiController;
 use HexCoupon\App\Core\WooCommerce\StoreCredit;
+use HexCoupon\App\Core\WooCommerce\SpinWheel\SpinWheel;
 use Kathamo\Framework\Lib\BootManager;
 
 final class Core extends BootManager
@@ -126,6 +127,7 @@ final class Core extends BootManager
 			FlushRewriteForLoyaltyProgram::class,
 			OrderDetailsForStoreCredit::class,
 			LicenseExpiry::class,
+			SpinWheel::class,
 		];
 	}
 }

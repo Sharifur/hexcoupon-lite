@@ -36,6 +36,7 @@ class AssetsManager
 		// loading js files for translation
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_translation_for_admin_side' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'load_translation_for_public_side' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'spin_wheel_inline_css' ] );
 	}
 
 	/**
@@ -213,6 +214,14 @@ class AssetsManager
 			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 		] );
 
+		wp_localize_script( hexcoupon_prefix( 'main' ), 'spinWheelSettingsData', [
+			'check' => 'hello',
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'postUrl' => admin_url( 'admin-post.php' ),
+			'restApiUrl' => get_site_url().'/wp-json/hexcoupon/v1/',
+			'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
+		] );
+
 		wp_localize_script( hexcoupon_prefix( 'main' ), 'loyaltyProgramLogs', [
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'postUrl' => admin_url( 'admin-post.php' ),
@@ -304,7 +313,7 @@ class AssetsManager
 	 */
 	public function public_scripts()
 	{
-		$folder_prefix = hexcoupon_get_config( 'dev_mode' ) ? '/dev' : '/dist';
+		$folder_prefix = hexcoupon_get_config('dev_mode') ? '/dev' : '/dist';
 		$js_file_extension = hexcoupon_get_config('dev_mode') ? '.js' : '.min.js';
 		$css_file_extension = hexcoupon_get_config('dev_mode') ? '.css' : '.min.css';
 
@@ -316,9 +325,25 @@ class AssetsManager
 			true
 		);
 
+		wp_enqueue_script(
+			hexcoupon_prefix( 'spin' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/js/spin" . $js_file_extension ),
+			['jquery', 'wp-i18n'],
+			$this->version,
+			true
+		);
+
 		wp_enqueue_style(
 			hexcoupon_prefix( 'public' ),
 			hexcoupon_asset_url( $folder_prefix . "/public/css/public" . $css_file_extension ),
+			[],
+			$this->version,
+			'all'
+		);
+
+		wp_enqueue_style(
+			hexcoupon_prefix( 'spin' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/css/spin" . $css_file_extension ),
 			[],
 			$this->version,
 			'all'
@@ -346,6 +371,39 @@ class AssetsManager
 				'nonce' => wp_create_nonce('hexCuponData-react_nonce'),
 			] );
 		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method spin_wheel_inline_css
+	 * @return void
+	 * Enqueuing all the scripts for front-end
+	 */
+	public function spin_wheel_inline_css()
+	{
+		$spin_wheel_popup = get_option( 'spinWheelPopup' );
+		$spin_wheel_wheel = get_option( 'spinWheelWheel' );
+
+		// Create the CSS string
+		$custom_css = "
+			.popup-content {
+				background-color: {$spin_wheel_popup['iconColor']};
+			}
+			.popup-container {
+				justify-content: {$spin_wheel_popup['alignment']};
+			}
+			.form-container h2 {
+				color: {$spin_wheel_wheel['textColor']};
+			}				
+			.form-container button {
+				color: {$spin_wheel_wheel['buttonColor']}
+			}
+		";
+	
+		// Add the inline style
+		wp_add_inline_style( hexcoupon_prefix( 'spin' ), $custom_css);
 	}
 
 	/**

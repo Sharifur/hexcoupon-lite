@@ -28,10 +28,69 @@ class AjaxApiController extends Controller
 		}
 		add_action( 'wp_ajax_loyalty_program_enable_data', [ $this, 'loyalty_program_enable_data' ] );
 		add_action( 'wp_ajax_point_loyalty_program_data', [ $this, 'point_loyalty_program_data' ] );
+		add_action( 'wp_ajax_spin_wheel_settings_data', [ $this, 'spin_wheel_settings_data' ] );
 		add_action( 'wp_ajax_point_loyalty_program_logs', [ $this, 'point_loyalty_program_logs' ] );
 		add_action( 'wp_ajax_show_loyalty_points_in_checkout', [ $this, 'show_loyalty_points_in_checkout' ] );
 		add_action( 'wp_ajax_coupon_data', [ $this, 'total_coupon_created_and_redeemed' ] );
 		add_action( 'wp_ajax_get_additional_data', [ $this, 'get_additional_data'] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method get_spin_wheel_settings_data
+	 * @return array
+	 * Get all the value of spin wheel settings
+	 */
+	private function get_spin_wheel_settings_data()
+	{
+		$general = get_option( 'spinWheelGeneral' );
+		$popup = get_option( 'spinWheelPopup' );
+		$wheel = get_option( 'spinWheelWheel' );
+		$wheel_content = get_option( 'spinWheelContent' );
+		$wheel_text = get_option( 'spinWheelText' );
+		$wheel_coupon = get_option( 'spinWheelCoupon' );
+
+		$spinWheelSettings = [
+			'spinWheelGeneral' => $general,
+			'spinWheelPopup' => $popup,
+			'spinWheelWheel' => $wheel,
+			'spinWheelContent' => $wheel_content,
+			'spinWheelText' => $wheel_text,
+			'spinWheelCoupon' => $wheel_coupon,
+		];
+
+		return $spinWheelSettings;
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method spin_wheel_settings_data
+	 * @return void
+	 * Sending data of spin wheel settings
+	 */
+	public function spin_wheel_settings_data()
+	{
+		$spin_wheel_settings_data = $this->get_spin_wheel_settings_data();
+
+		// Check the nonce and action
+		if ( $this->verify_nonce() ) {
+			// Nonce is valid, proceed with your code
+			wp_send_json( [
+				// Your response data here
+				'msg' => 'hello',
+				'type' => 'success',
+				'spinWheelSettingsData' => $spin_wheel_settings_data,
+			], 200);
+		} else {
+			// Nonce verification failed, handle the error
+			wp_send_json( [
+				'error' => 'Nonce verification failed',
+			], 403); // 403 Forbidden status code
+		}
 	}
 
 	/**
