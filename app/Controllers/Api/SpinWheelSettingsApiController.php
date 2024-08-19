@@ -60,6 +60,43 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_content_settings_save', [ $this, 'spin_wheel_content_settings_save' ] );
 		add_action( 'admin_post_spin_wheel_text_settings_save', [ $this, 'spin_wheel_text_settings_save' ] );
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
+		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method update_spin_count
+	 * @return void
+	 * Sending spin count to the userMeta table of each user
+	 */
+	public function update_spin_count() 
+	{
+		// Get the current user ID
+		$user_id = get_current_user_id();
+
+		// Ensure the user is logged in
+		if ( $user_id == 0 ) {
+			wp_send_json_error( 'User not logged in' );
+		}
+
+		// Get the current spin count from user meta
+		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
+
+		// If there is no spin count yet, initialize it to 0
+		if ( $spin_count === '' ) {
+			$spin_count = 0;
+		}
+
+		// Increment the spin count
+		$spin_count++;
+
+		// Update the spin count in user meta
+		update_user_meta( $user_id, 'user_spin_count', $spin_count );
+
+		// Return the updated spin count as a JSON response
+		wp_send_json_success( $spin_count );
 	}
 
 	/**

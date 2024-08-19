@@ -332,6 +332,16 @@ class AssetsManager
 			$this->version,
 			true
 		);
+		
+		$spin_wheel_general = get_option( 'spinWheelGeneral' );
+		$spin_per_email = $spin_wheel_general['spinPerEmail'];
+		$delay_between_spins = $spin_wheel_general['delayBetweenSpins'];
+
+		wp_localize_script( hexcoupon_prefix( 'spin' ), 'spinToWinData', [
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'spinPerEmail' => $spin_per_email,
+			'delayBetweenSpin' => $delay_between_spins,
+		] );
 
 		wp_enqueue_style(
 			hexcoupon_prefix( 'public' ),
@@ -379,26 +389,43 @@ class AssetsManager
 	 * @since 1.0.0
 	 * @method spin_wheel_inline_css
 	 * @return void
-	 * Enqueuing all the scripts for front-end
+	 * Set CSS value dynamically from php file to css file
 	 */
 	public function spin_wheel_inline_css()
 	{
 		$spin_wheel_popup = get_option( 'spinWheelPopup' );
 		$spin_wheel_wheel = get_option( 'spinWheelWheel' );
+		$spin_wheel_content = get_option( 'spinWheelContent' );
+		$content1_color = $spin_wheel_content['content1']['color'];
+		$content2_color = $spin_wheel_content['content2']['color'];
+		$content3_color = $spin_wheel_content['content3']['color'];
+		$content4_color = $spin_wheel_content['content4']['color'];
 
 		// Create the CSS string
 		$custom_css = "
-			.popup-content {
+			.spinToWin, .spinToWin .spinToWin-wraper {
 				background-color: {$spin_wheel_popup['iconColor']};
 			}
 			.popup-container {
 				justify-content: {$spin_wheel_popup['alignment']};
 			}
-			.form-container h2 {
+			.text-part p {
 				color: {$spin_wheel_wheel['textColor']};
 			}				
-			.form-container button {
-				color: {$spin_wheel_wheel['buttonColor']}
+			.spinToWin .text-part button.try-your-luck {
+				color: {$spin_wheel_wheel['buttonColor']};
+			}
+			.spinToWin .slice:nth-child(4n + 1 ) {
+				--bg: {$content1_color};
+			}
+			.spinToWin .slice:nth-child(4n + 2 ) {
+				--bg: {$content2_color};
+			}
+			.spinToWin .slice:nth-child(4n + 3 ) {
+				--bg: {$content3_color};
+			}
+			.spinToWin  .slice:nth-child(4n + 4 ) {
+				--bg: {$content4_color};
 			}
 		";
 	
