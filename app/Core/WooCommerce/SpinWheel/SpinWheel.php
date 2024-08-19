@@ -71,14 +71,27 @@ class SpinWheel
     {
         $spin_wheel_popup = get_option( 'spinWheelPopup' );
         $spin_wheel_wheel = get_option( 'spinWheelWheel' );
+        $spin_wheel_general = get_option( 'spinWheelGeneral' );
+		$spin_per_email = $spin_wheel_general['spinPerEmail'];
+
+        // Get the current user ID
+		$user_id = get_current_user_id();
+
+		// Ensure the user is logged in
+		if ( $user_id == 0 ) {
+			wp_send_json_error( 'User not logged in' );
+		}
+
+		// Get the current spin count from user meta
+		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
         function is_blog () {
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 || is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 || is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 ) :
+        if ( is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
         ?>
-         <!-- Popup Modal -->
+        <!-- Popup Modal -->
         <div class="spinToWin">
             <div class="container">
                 <div class="spinToWin-wraper">
