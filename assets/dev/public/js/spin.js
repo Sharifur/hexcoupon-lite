@@ -57,7 +57,6 @@
                     let offernum = (((deg) % 360) / sliceDeg) - 1;
 
                     setTimeout(function() {
-                        console.log(emailContentIfWin);
                         alert(messageIfWin + " " + innerTexts[offernum]);
 
                         $.ajax({
@@ -65,6 +64,7 @@
                             type: 'post',
                             data: {
                                 action: 'send_win_email',
+                                couponCode: 'testcoupon',
                                 emailSubject: emailSubject,
                                 emailText: emailContentIfWin,
                             },
@@ -92,7 +92,7 @@
                             alert("You have reached the maximum number of spins!");
                             pointer_btn.style.cursor = "not-allowed";
                         }
-                    }, 4000); // Delay for the spin animation (adjust as necessary)
+                    }, 4000); // Delay for the spin animation
                 } else {
                     alert("You have already used all your spins!");
                 }

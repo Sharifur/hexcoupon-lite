@@ -62,6 +62,7 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
 		add_action( 'wp_ajax_send_win_email', [ $this, 'send_win_email' ] );
+		add_action( 'init', [ $this, 'create_woocommerce_coupon' ] );
 	}
 
 	/**
@@ -313,7 +314,7 @@ class SpinWheelSettingsApiController extends Controller
 		wp_send_json_success( $spin_count );
 	}
 
-	public function email_template() {
+	public function email_template( $emailText ) {
 		ob_start();
 		?>
 		<!doctype html>
@@ -368,14 +369,14 @@ class SpinWheelSettingsApiController extends Controller
 		<body>
 		<div class="mail-container">
 			<div class="inner-wrap">
-				<h2>Congratulations!</h2>
-				<p>Dear Customer,</p>
-				<p>You have won a discount coupon by spinning the lucky wheel on my website. Please apply the coupon when shopping with us.</p>
-				<p>Thank you!</p>
-				<p><strong>Coupon code:</strong> <span class="coupon-code">MyCoupon</span></p>
-				<p><strong>Expiry date:</strong> Todays Exist</p>
-				<p>Yours sincerely,</p>
-				<p><strong>The Xgenious Team</strong></p>
+				<h2><?php esc_html_e( 'Congratulations', 'hex-coupon-for-woocommerce' ); ?></h2>
+				<p><?php esc_html_e( 'Dear Customer,', 'hex-coupon-for-woocommerce' ); ?></p>
+				<p><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $emailText ) ); ?></p>
+				<p><?php esc_html_e( 'Thank you!', 'hex-coupon-for-woocommerce' ); ?></p>
+				<p><strong><?php esc_html_e( 'Coupon code:', 'hex-coupon-for-woocommerce' ); ?></strong> <span class="coupon-code">MyCoupon</span></p>
+				<p><strong><?php esc_html_e( 'Expiry date:', 'hex-coupon-for-woocommerce' ); ?></strong> Todays Exist</p>
+				<p><?php esc_html_e( 'Yours sincerely,', 'hex-coupon-for-woocommerce' ); ?></p>
+				<p><strong><?php esc_html_e( 'The', 'hex-coupon-for-woocommerce' ); ?> <?php get_bloginfo( 'title' ); ?> <?php esc_html_e( 'Team', 'hex-coupon-for-woocommerce' ); ?></strong></p>
 			</div>
 		</div>
 		</body>
@@ -404,8 +405,8 @@ class SpinWheelSettingsApiController extends Controller
 			// Set the email parameters
 			$to = 'palash.xgenious@gmail.com';
 			$subject = $emailSubject;
-			$message = $this->email_template();
-			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+			$message = $this->email_template( $emailText );
+			$headers = [ 'Content-Type: text/html; charset=UTF-8' ];
 	
 			// Send the email
 			$mail_sent = wp_mail( $to, $subject, $message, $headers );
@@ -416,8 +417,73 @@ class SpinWheelSettingsApiController extends Controller
 			} else {
 				wp_send_json_error();
 			}
+
+			// Finally create a coupon for the user
+			$this->create_woocommerce_coupon();
 		} else {
 			wp_send_json_error( 'No prize information provided.' );
+		}
+	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method spin_wheel_general_settings_save
+	 * @return void
+	 * Creating a coupon after spinning the wheel
+	 */
+	public function create_woocommerce_coupon() 
+	{
+		$user_data = get_userdata( get_current_user_id() );
+		$user_email = $user_data->user_email;
+
+		$spin_wheel_coupon = get_option( 'spinWheelCoupon' );
+		$minimum_spend = $spin_wheel_coupon['spinMinimumSpend'];
+		$maximum_spend = $spin_wheel_coupon['spinMaximumSpend'];
+		$individual_use_only = $spin_wheel_coupon['spinIndividualSpendOnly'];
+		$exclude_sale_item = $spin_wheel_coupon['spinExcludeSaleItem'];
+		$include_products = $spin_wheel_coupon['spinIncludeProducts'];
+		$exclude_products = $spin_wheel_coupon['spinExcludeSaleItem'];
+		$include_categories = $spin_wheel_coupon['spinIncludeCategories'];
+		$exclude_categories = $spin_wheel_coupon['spinExcludeCategories'];
+		$usage_limit_per_coupon = $spin_wheel_coupon['spinUsageLimitPerCoupon'];
+		$limit_usage_to_xitems = $spin_wheel_coupon['spinLimitUsageToXItems'];
+		$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
+
+		// Define the coupon details
+		$coupon_code = 'TestCoupon'; // Code of coupon
+		$discount_amount = 20; // The discount amount
+		$discount_type = 'fixed_cart'; // Type of coupon
+		$expiry_date = '2024-12-31'; // Expiry date for the coupon
+	
+		// Check if a coupon with the same code already exists
+		if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
+			// Create a new coupon
+			$coupon = new \WC_Coupon();
+			$coupon->set_code( $coupon_code );
+			$coupon->set_amount( $discount_amount );
+			$coupon->set_discount_type( $discount_type );
+			$coupon->set_description( 'Got this discount fro spin wheel' );
+			$coupon->set_individual_use( $individual_use_only ); // Prevents other coupons from being used with this coupon
+			$coupon->set_exclude_sale_items( $exclude_sale_item );
+			$coupon->set_excluded_product_ids( $exclude_products );
+			$coupon->set_excluded_product_categories( $exclude_categories );
+			$coupon->set_usage_limit( $usage_limit_per_coupon ); // The number of times the coupon can be used
+			$coupon->set_usage_limit_per_user( $usage_limit_per_user ); // The number of times the coupon can be used per customer
+			$coupon->set_limit_usage_to_x_items( $limit_usage_to_xitems );
+			$coupon->set_minimum_amount( $minimum_spend ); // Minimum spend required to use the coupon
+			$coupon->set_maximum_amount( $maximum_spend );
+			$coupon->set_email_restrictions( $user_email ); // Restrict to specific emails
+	
+			// Save the coupon
+			$coupon_id = $coupon->save();
+	
+			if ( ! $coupon_id ) {
+				error_log( 'Coupon creation failed: Coupon Id: ' . $coupon_id );
+			}
+		} else {
+			error_log( 'Coupon code already exist' );;
 		}
 	}
 	
