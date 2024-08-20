@@ -23,14 +23,14 @@
         background: #B71C1C;
         color: #fff;
         position: relative;
-        /* & .close{
-          font-weight: 900;
+        & .close{
           position: absolute;
           top: 0;
           line-height: 1;
           right: 0;
           font-size: 30px;
-        } */
+          cursor: pointer;
+        }
     }
     .text-part {
         max-width: 436px ;

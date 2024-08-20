@@ -336,10 +336,19 @@ class AssetsManager
 		// Get the current spin count from user meta
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
-		$spin_wheel_popup = get_option( 'spinWheelPopup' );
 		$spin_wheel_general = get_option( 'spinWheelGeneral' );
 		$spin_per_email = $spin_wheel_general['spinPerEmail'];
 		$delay_between_spins = $spin_wheel_general['delayBetweenSpins'];
+
+		$spin_wheel_popup = get_option( 'spinWheelPopup' );
+		$popup_interval = $spin_wheel_popup['popupInterval'];
+
+		$spin_wheel_text = get_option( 'spinWheelText' );
+		$frontend_message_if_win = $spin_wheel_text['frontendMessageIfWin'];
+		$frontend_message_if_loss = $spin_wheel_text['frontendMessageIfLost'];
+		$email_subject = $spin_wheel_text['emailSubject'];
+		$email_content = $spin_wheel_text['emailContent'];
+
 
 		function is_blog () {
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
@@ -359,6 +368,11 @@ class AssetsManager
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'spinPerEmail' => $spin_per_email,
 			'delayBetweenSpin' => $delay_between_spins,
+			'popupIntervalTime' => $popup_interval,
+			'frontendMessageIfWin' => $frontend_message_if_win,
+			'frontendMessageIfLoss' => $frontend_message_if_loss,
+			'emailSubject' => $email_subject,
+			'emailContent' => $email_content,
 		] );
 
 		endif;

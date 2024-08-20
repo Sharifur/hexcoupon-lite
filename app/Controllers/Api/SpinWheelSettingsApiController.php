@@ -61,42 +61,7 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_text_settings_save', [ $this, 'spin_wheel_text_settings_save' ] );
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
-	}
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method update_spin_count
-	 * @return void
-	 * Sending spin count to the userMeta table of each user
-	 */
-	public function update_spin_count() 
-	{
-		// Get the current user ID
-		$user_id = get_current_user_id();
-
-		// Ensure the user is logged in
-		if ( $user_id == 0 ) {
-			wp_send_json_error( 'User not logged in' );
-		}
-
-		// Get the current spin count from user meta
-		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
-
-		// If there is no spin count yet, initialize it to 0
-		if ( $spin_count === '' ) {
-			$spin_count = 0;
-		}
-
-		// Increment the spin count
-		$spin_count++;
-
-		// Update the spin count in user meta
-		update_user_meta( $user_id, 'user_spin_count', $spin_count );
-
-		// Return the updated spin count as a JSON response
-		wp_send_json_success( $spin_count );
+		add_action( 'wp_ajax_send_win_email', [ $this, 'send_win_email' ] );
 	}
 
 	/**
@@ -258,8 +223,8 @@ class SpinWheelSettingsApiController extends Controller
 			$spin_wheel_text_settings = [
 				'emailSubject' => isset( $dataArray['settings']['emailSubject'] ) ? sanitize_text_field( $dataArray['settings']['emailSubject'] ) : '',
 				'emailContent' => isset( $dataArray['settings']['emailContent'] ) ? wp_kses( $dataArray['settings']['emailContent'], $this->allowed_html ) : '',
-				'frontendMessageIfWin' => isset( $dataArray['settings']['frontendMessageIfWin'] ) ? wp_kses( $dataArray['settings']['frontendMessageIfWin'], $this->allowed_html ) : '',
-				'frontendMessageIfLost' => isset( $dataArray['settings']['frontendMessageIfLost'] ) ? wp_kses( $dataArray['settings']['frontendMessageIfLost'], $this->allowed_html ) : '',
+				'frontendMessageIfWin' => isset( $dataArray['settings']['frontendMessageIfWin'] ) ? sanitize_text_field( $dataArray['settings']['frontendMessageIfWin'] ) : '',
+				'frontendMessageIfLost' => isset( $dataArray['settings']['frontendMessageIfLost'] ) ? sanitize_text_field( $dataArray['settings']['frontendMessageIfLost'] ) : '',
 			];
 			update_option( 'spinWheelText', $spin_wheel_text_settings );
 
@@ -311,4 +276,149 @@ class SpinWheelSettingsApiController extends Controller
 			], 403); // 403 Forbidden status code
 		}
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method update_spin_count
+	 * @return void
+	 * Sending spin count to the userMeta table of each user
+	 */
+	public function update_spin_count() 
+	{
+		// Get the current user ID
+		$user_id = get_current_user_id();
+
+		// Ensure the user is logged in
+		if ( $user_id == 0 ) {
+			wp_send_json_error( 'User not logged in' );
+		}
+
+		// Get the current spin count from user meta
+		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
+
+		// If there is no spin count yet, initialize it to 0
+		if ( $spin_count === '' ) {
+			$spin_count = 0;
+		}
+
+		// Increment the spin count
+		$spin_count++;
+
+		// Update the spin count in user meta
+		update_user_meta( $user_id, 'user_spin_count', $spin_count );
+
+		// Return the updated spin count as a JSON response
+		wp_send_json_success( $spin_count );
+	}
+
+	public function email_template() {
+		ob_start();
+		?>
+		<!doctype html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+			<title>Congratulations Email</title>
+			<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+	
+			<style>
+				* {
+					font-family: 'Open Sans', sans-serif;
+				}
+				body {
+					background-color: #e3ebf2;
+					padding: 40px 0;
+				}
+				.mail-container {
+					max-width: 650px;
+					margin: 0 auto;
+					text-align: center;
+					background-color: #ffffff;
+					box-shadow: 0 0 20px rgba(0,0,0,0.1);
+				}
+				.inner-wrap {
+					text-align: left;
+					padding: 0 40px 40px 40px;
+				}
+				.inner-wrap h2 {
+					color: #ffffff;
+					background-color: #5f85a4;
+					padding: 20px;
+					margin: 0;
+					font-size: 24px;
+					text-align: center;
+				}
+				.inner-wrap p {
+					font-size: 16px;
+					line-height: 26px;
+					color: #333333;
+					margin: 20px 0;
+				}
+				.coupon-code {
+					color: #4e7db2;
+					font-size: 18px;
+					font-weight: bold;
+				}
+			</style>
+		</head>
+		<body>
+		<div class="mail-container">
+			<div class="inner-wrap">
+				<h2>Congratulations!</h2>
+				<p>Dear Customer,</p>
+				<p>You have won a discount coupon by spinning the lucky wheel on my website. Please apply the coupon when shopping with us.</p>
+				<p>Thank you!</p>
+				<p><strong>Coupon code:</strong> <span class="coupon-code">MyCoupon</span></p>
+				<p><strong>Expiry date:</strong> Todays Exist</p>
+				<p>Yours sincerely,</p>
+				<p><strong>The Xgenious Team</strong></p>
+			</div>
+		</div>
+		</body>
+		</html>
+		<?php
+		$html = ob_get_clean();
+		return $html;
+	}
+	
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method send_win_email
+	 * @return void
+	 * Sending success message to the users for spin wheel win
+	 */
+	public function send_win_email() {
+		// Verify the AJAX request
+		if ( isset( $_POST['emailText'] ) && isset( $_POST['emailSubject'] ) ) {
+			// Get the prize information
+			$emailSubject = sanitize_text_field( $_POST['emailSubject'] );
+			$emailText = sanitize_text_field( $_POST['emailText'] );
+	
+			// Set the email parameters
+			$to = 'palash.xgenious@gmail.com';
+			$subject = $emailSubject;
+			$message = $this->email_template();
+			$headers = array( 'Content-Type: text/html; charset=UTF-8' );
+	
+			// Send the email
+			$mail_sent = wp_mail( $to, $subject, $message, $headers );
+	
+			// Return a JSON response
+			if ( $mail_sent ) {
+				wp_send_json_success();
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error( 'No prize information provided.' );
+		}
+	}
+	
 }

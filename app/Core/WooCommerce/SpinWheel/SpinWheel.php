@@ -96,7 +96,7 @@ class SpinWheel
             <div class="container">
                 <div class="spinToWin-wraper">
                     <div class="close">
-                        <i class="fa-regular fa-rectangle-xmark"></i>
+                        x
                     </div>
                     <div class="row g-4">
                         <div class="col-xl-6">
