@@ -62,7 +62,7 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
 		add_action( 'wp_ajax_send_win_email', [ $this, 'send_win_email' ] );
-		add_action( 'init', [ $this, 'create_woocommerce_coupon' ] );
+		// add_action( 'init', [ $this, 'create_woocommerce_coupon' ] );
 	}
 
 	/**
@@ -310,6 +310,20 @@ class SpinWheelSettingsApiController extends Controller
 		// Update the spin count in user meta
 		update_user_meta( $user_id, 'user_spin_count', $spin_count );
 
+		// Retrieve the selected offer sent from JavaScript
+		$coupon_type = sanitize_text_field( $_POST['couponType'] );
+
+		if ( $coupon_type == 'PERCENTAGE DISCOUNT' ) {
+			$discount_type = 'percent';
+		} elseif ( $coupon_type == 'FIXED PRODUCT DISCOUNT' ) {
+			$discount_type = 'fixed_product';
+		} elseif ( $coupon_type == 'FIXED CART DISCOUNT' ) {
+			$discount_type = 'fixed_cart';
+		}
+		
+		// finally create coupon after winning spin wheel
+		$this->create_woocommerce_coupon( $discount_type );
+
 		// Return the updated spin count as a JSON response
 		wp_send_json_success( $spin_count );
 	}
@@ -433,7 +447,7 @@ class SpinWheelSettingsApiController extends Controller
 	 * @return void
 	 * Creating a coupon after spinning the wheel
 	 */
-	public function create_woocommerce_coupon() 
+	public function create_woocommerce_coupon( $discount_type ) 
 	{
 		$user_data = get_userdata( get_current_user_id() );
 		$user_email = $user_data->user_email;
@@ -452,19 +466,19 @@ class SpinWheelSettingsApiController extends Controller
 		$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
 
 		// Define the coupon details
-		$coupon_code = 'TestCoupon'; // Code of coupon
+		$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Code of coupon
 		$discount_amount = 20; // The discount amount
-		$discount_type = 'fixed_cart'; // Type of coupon
-		$expiry_date = '2024-12-31'; // Expiry date for the coupon
-	
+		
+		error_log('dhukenai');
 		// Check if a coupon with the same code already exists
 		if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
+			error_log('dhukche');
 			// Create a new coupon
 			$coupon = new \WC_Coupon();
 			$coupon->set_code( $coupon_code );
 			$coupon->set_amount( $discount_amount );
 			$coupon->set_discount_type( $discount_type );
-			$coupon->set_description( 'Got this discount fro spin wheel' );
+			$coupon->set_description( 'You got this discount fro spin wheel' );
 			$coupon->set_individual_use( $individual_use_only ); // Prevents other coupons from being used with this coupon
 			$coupon->set_exclude_sale_items( $exclude_sale_item );
 			$coupon->set_excluded_product_ids( $exclude_products );

@@ -23,26 +23,6 @@
             });
 
             pointer_btn.addEventListener("click", function() {
-                $.ajax({
-                    url: spinToWinData.ajax_url,
-                    type: 'POST',
-                    data: {
-                        action: 'update_spin_count' // Action to trigger the PHP function that updates user_meta
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            let newSpinCount = response.data;
-                
-                            console.log("Spin count successfully updated to: " + newSpinCount);
-                        } else {
-                            console.log("Failed to update spin count.");
-                        }
-                    },
-                    error: function() {
-                        console.log("An error occurred while updating the spin count.");
-                    }
-                });
-
                 if (spinCount < maxSpins) { // Check if the spin count is less than the maximum allowed
                     // Disable the button to prevent immediate re-spinning
                     pointer_btn.disabled = true;
@@ -58,13 +38,33 @@
 
                     setTimeout(function() {
                         alert(messageIfWin + " " + innerTexts[offernum]);
+                        console.log(innerTexts[offernum]);
+
+                        $.ajax({
+                            url: spinToWinData.ajax_url,
+                            type: 'POST',
+                            data: {
+                                action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
+                                couponType: innerTexts[offernum],
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    let newSpinCount = response.data;
+                                    console.log("Spin count successfully updated to: " + newSpinCount);
+                                } else {
+                                    console.log("Failed to update spin count.");
+                                }
+                            },
+                            error: function() {
+                                console.log("An error occurred while updating the spin count.");
+                            }
+                        });
 
                         $.ajax({
                             url: spinToWinData.ajax_url,
                             type: 'post',
                             data: {
                                 action: 'send_win_email',
-                                couponCode: 'testcoupon',
                                 emailSubject: emailSubject,
                                 emailText: emailContentIfWin,
                             },
