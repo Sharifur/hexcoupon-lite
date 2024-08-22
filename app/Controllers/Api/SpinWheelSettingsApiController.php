@@ -62,7 +62,6 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
 		add_action( 'wp_ajax_send_win_email', [ $this, 'send_win_email' ] );
-		// add_action( 'init', [ $this, 'create_woocommerce_coupon' ] );
 	}
 
 	/**
@@ -311,7 +310,11 @@ class SpinWheelSettingsApiController extends Controller
 		update_user_meta( $user_id, 'user_spin_count', $spin_count );
 
 		// Retrieve the selected offer sent from JavaScript
+		$user_name = sanitize_text_field( $_POST['userName'] );
+		$user_email = sanitize_text_field( $_POST['userEmail'] );
+
 		$coupon_type = sanitize_text_field( $_POST['couponType'] );
+		$value = sanitize_text_field( $_POST['couponValue'] );
 
 		if ( $coupon_type == 'PERCENTAGE DISCOUNT' ) {
 			$discount_type = 'percent';
@@ -321,8 +324,9 @@ class SpinWheelSettingsApiController extends Controller
 			$discount_type = 'fixed_cart';
 		}
 		
-		// finally create coupon after winning spin wheel
-		$this->create_woocommerce_coupon( $discount_type );
+		// finally create user and create coupon after winning spin wheel
+		$this->create_customer_user( $user_email, $user_name );
+		$this->create_woocommerce_coupon( $value, $discount_type );
 
 		// Return the updated spin count as a JSON response
 		wp_send_json_success( $spin_count );
@@ -445,9 +449,9 @@ class SpinWheelSettingsApiController extends Controller
 	 * @since 1.0.0
 	 * @method spin_wheel_general_settings_save
 	 * @return void
-	 * Creating a coupon after spinning the wheel
+	 * Create a coupon after spinning the wheel
 	 */
-	public function create_woocommerce_coupon( $discount_type ) 
+	public function create_woocommerce_coupon( $value, $discount_type ) 
 	{
 		$user_data = get_userdata( get_current_user_id() );
 		$user_email = $user_data->user_email;
@@ -466,13 +470,11 @@ class SpinWheelSettingsApiController extends Controller
 		$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
 
 		// Define the coupon details
-		$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Code of coupon
-		$discount_amount = 20; // The discount amount
+		$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Unique code of coupon
+		$discount_amount = $value; // The discount amount
 		
-		error_log('dhukenai');
 		// Check if a coupon with the same code already exists
 		if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
-			error_log('dhukche');
 			// Create a new coupon
 			$coupon = new \WC_Coupon();
 			$coupon->set_code( $coupon_code );
@@ -500,5 +502,36 @@ class SpinWheelSettingsApiController extends Controller
 			error_log( 'Coupon code already exist' );;
 		}
 	}
+
+	/**
+	 * @package hexcoupon
+	 * @author WpHex
+	 * @since 1.0.0
+	 * @method spin_wheel_general_settings_save
+	 * @return void
+	 * Create a new user after spin wheel with provided email
+	 */
+	public function create_customer_user( $user_email, $user_name ) {
+		$email = $user_email;
+		$name = $user_name;
+		$password = '12345';
+		$role = 'customer';
+
+		// Set the username as the name
+		$username = sanitize_user( $name, true );
+		
+	
+		// Check if the username or email already exists
+		if ( username_exists( $username ) || email_exists( $email ) ) {
+			return 'Username or email already exists.';
+		}
+	
+		// Create the user
+		$user_id = wp_create_user( $username, $password, $email, $role );
+	
+		if ( is_wp_error( $user_id ) ) {
+			return 'User creation failed: ' . $user_id->get_error_message();
+		}
+	}	
 	
 }

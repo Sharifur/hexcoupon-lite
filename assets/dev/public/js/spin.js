@@ -23,6 +23,15 @@
             });
 
             pointer_btn.addEventListener("click", function() {
+                // Capture the value of the name and email fields
+                let userName = document.querySelector(".custom-input.name").value;
+                let userEmail = document.querySelector(".custom-input.email").value;
+
+                if (!userName || !userEmail) {
+                    alert("Please provide both your name and email.");
+                    return;
+                }
+
                 if (spinCount < maxSpins) { // Check if the spin count is less than the maximum allowed
                     // Disable the button to prevent immediate re-spinning
                     pointer_btn.disabled = true;
@@ -37,14 +46,16 @@
                     let offernum = (((deg) % 360) / sliceDeg) - 1;
 
                     setTimeout(function() {
-                        alert(messageIfWin + " " + innerTexts[offernum]);
-                        console.log(innerTexts[offernum]);
+                        alert(messageIfWin + " " + innerTexts[offernum] + " " + userName + " " + userEmail);
 
                         $.ajax({
                             url: spinToWinData.ajax_url,
                             type: 'POST',
                             data: {
                                 action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
+                                userName: userName,
+                                userEmail: userEmail,
+                                couponValue: 10,
                                 couponType: innerTexts[offernum],
                             },
                             success: function(response) {
