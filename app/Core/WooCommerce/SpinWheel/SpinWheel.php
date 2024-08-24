@@ -72,6 +72,7 @@ class SpinWheel
         $spin_wheel_popup = get_option( 'spinWheelPopup' );
         $spin_wheel_wheel = get_option( 'spinWheelWheel' );
         $spin_wheel_general = get_option( 'spinWheelGeneral' );
+        $enable_spin_wheel = $spin_wheel_general['enableSpinWheel'];
 		$spin_per_email = $spin_wheel_general['spinPerEmail'];
 
         // Get the current user ID
@@ -84,7 +85,7 @@ class SpinWheel
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
+        if ( $enable_spin_wheel && is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
         ?>
         <!-- Popup Modal -->
         <div class="spinToWin">
@@ -101,82 +102,78 @@ class SpinWheel
                                         <?php
                                             $spin_wheel_content = get_option( 'spinWheelContent' );
                                             $coupon_type1 = $spin_wheel_content['content1']['couponType'];
-                                            $probability1 = $spin_wheel_content['content1']['probability'];
                                             $value1 = $spin_wheel_content['content1']['value'];
                                             $label1 = $spin_wheel_content['content1']['label'];
 
                                             $coupon_type2 = $spin_wheel_content['content2']['couponType'];
-                                            $probability2 = $spin_wheel_content['content2']['probability'];
                                             $value2 = $spin_wheel_content['content2']['value'];
                                             $label2 = $spin_wheel_content['content2']['label'];
 
                                             $coupon_type3 = $spin_wheel_content['content3']['couponType'];
-                                            $probability3 = $spin_wheel_content['content3']['probability'];
                                             $value3 = $spin_wheel_content['content3']['value'];
                                             $label3 = $spin_wheel_content['content3']['label'];
 
                                             $coupon_type4 = $spin_wheel_content['content4']['couponType'];
-                                            $probability4 = $spin_wheel_content['content4']['probability'];
                                             $value4 = $spin_wheel_content['content4']['value'];
                                             $label4 = $spin_wheel_content['content4']['label'];
                                         ?>
                                         <div class="slice" style="--i: 1">
-                                            <p class="value text bankrupt" data-probability="<?php echo esc_attr( $probability1 ); ?>" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                            <p class="value text bankrupt" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 2">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability2 ); ?>" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 3">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability3 ); ?>" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 4">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability4 ); ?>" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 5">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability1 ); ?>" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 6">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability2 ); ?>" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 7">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability3 ); ?>" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 8">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability4 ); ?>" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 9">
-                                            <p class="value text lose-turn" data-probability="<?php echo esc_attr( $probability1 ); ?>" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                            <p class="value text lose-turn" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 10">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability2 ); ?>" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 11">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability3 ); ?>" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 12">
-                                            <p class="value" data-probability="<?php echo esc_attr( $probability4 ); ?>" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
                                             </p>
                                         </div>

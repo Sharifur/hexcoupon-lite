@@ -331,6 +331,7 @@ class AssetsManager
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
 		$spin_wheel_general = get_option( 'spinWheelGeneral' );
+		$enable_spin_wheel = $spin_wheel_general['enableSpinWheel'];
 		$spin_per_email = $spin_wheel_general['spinPerEmail'];
 		$delay_between_spins = $spin_wheel_general['delayBetweenSpins'];
 
@@ -348,7 +349,7 @@ class AssetsManager
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
+        if ( $enable_spin_wheel && is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
 
 		wp_enqueue_script(
 			hexcoupon_prefix( 'spin' ),

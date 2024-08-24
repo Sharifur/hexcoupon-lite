@@ -193,7 +193,6 @@ class SpinWheelSettingsApiController extends Controller
 					'couponType'  => isset( $setting['couponType'] ) ? sanitize_text_field( $setting['couponType'] ) : '',
 					'label'       => isset( $setting['label'] ) ? sanitize_text_field( $setting['label'] ) : '',
 					'value'       => isset( $setting['value'] ) ? sanitize_text_field( $setting['value'] ) : '',
-					'probability' => isset( $setting['probability'] ) ? sanitize_text_field( $setting['probability'] ) : '',
 					'color'       => isset( $setting['color'] ) ? sanitize_text_field( $setting['color'] ) : '',
 				];
 			}
