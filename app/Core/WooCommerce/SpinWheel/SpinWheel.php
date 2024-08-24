@@ -77,11 +77,6 @@ class SpinWheel
         // Get the current user ID
 		$user_id = get_current_user_id();
 
-		// Ensure the user is logged in
-		if ( $user_id == 0 ) {
-			wp_send_json_error( 'User not logged in' );
-		}
-
 		// Get the current spin count from user meta
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
@@ -214,23 +209,23 @@ class SpinWheel
                                     <p><?php echo wp_kses( $spin_wheel_wheel['wheelDescription'] , $this->allowed_html ); ?></p>
                                 </div>
                                 <form action="#" method="get">
-                                <?php if (  is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
+                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
                                     <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $spin_wheel_wheel['yourName'] ) ); ?>" value="" required>
                                 <?php endif; ?>
-                                <?php if (  is_user_logged_in() && $spin_wheel_wheel['enablePhoneNumber'] == true ) : ?>
+                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enablePhoneNumber'] == true ) : ?>
                                     <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $spin_wheel_wheel['phoneNumber'] ) ); ?>" value="" required>
                                 <?php endif; ?>
                                 <div class="button-wraper">
                                     <button type="button" class="try-your-luck"><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $spin_wheel_wheel['buttonText'] ) ); ?></button>
                                 </div>
-                                    <div class="accept-agree">
-                                        <input type="checkbox">
-                                        <span><?php esc_html_e( 'I Agree With The', 'hex-coupon-for-woocommerce' ); ?></span>
-                                        <a href="#/" class="termCondition"><?php esc_html_e( 'Term And Condition', 'hex-coupon-for-woocommerce' ); ?></a>
-                                    </div>
-                                    <div class="openion">
-                                        <?php echo wp_kses( $spin_wheel_wheel['gdprMessage'], $this->allowed_html ); ?>
-                                    </div>
+                                <div class="accept-agree">
+                                    <input type="checkbox" id="termCondition" name="termCondition" value="1" required>
+                                    <span><?php esc_html_e( 'I Agree With The', 'hex-coupon-for-woocommerce' ); ?></span>
+                                    <a href="#/" class="termCondition"><?php esc_html_e( 'Term And Condition', 'hex-coupon-for-woocommerce' ); ?></a>
+                                </div>
+                                <div class="openion">
+                                    <?php echo wp_kses( $spin_wheel_wheel['gdprMessage'], $this->allowed_html ); ?>
+                                </div>
                                 </form>
                             </div>
                         </div>

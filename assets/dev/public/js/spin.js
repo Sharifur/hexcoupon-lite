@@ -17,18 +17,39 @@
         if (pointer_btn) {
             let innerTextParent = document.querySelectorAll(".wheel .slice .value");
             let innerTexts = [];
+            let innerValue = [];
             innerTextParent.forEach((e) => {
                 let text = e.innerText;
+                let dataValue = e.getAttribute('data-value');
                 innerTexts.unshift(text);
+                innerValue.unshift(dataValue);
             });
 
             pointer_btn.addEventListener("click", function() {
                 // Capture the value of the name and email fields
-                let userName = document.querySelector(".custom-input.name").value;
-                let userEmail = document.querySelector(".custom-input.email").value;
+                let userNameInput = document.querySelector(".custom-input.name");
+                let userEmailInput = document.querySelector(".custom-input.email");
+                let termConditionCheckbox = document.querySelector("#termCondition");
 
-                if (!userName || !userEmail) {
-                    alert("Please provide both your name and email.");
+                if (userNameInput){
+                    var userName = document.querySelector(".custom-input.name").value;
+                    if (!userName) {
+                        alert("Please provide both your name.");
+                        return;
+                    }
+                }
+                
+                if (userEmailInput){
+                    var userEmail = document.querySelector(".custom-input.email").value;
+                    if (!userEmail) {
+                        alert("Please provide both your email.");
+                        return;
+                    }
+                }
+
+                // Validate the checkbox
+                if (!termConditionCheckbox.checked) {
+                    alert("You must agree with the terms and conditions.");
                     return;
                 }
 
@@ -46,7 +67,12 @@
                     let offernum = (((deg) % 360) / sliceDeg) - 1;
 
                     setTimeout(function() {
-                        alert(messageIfWin + " " + innerTexts[offernum] + " " + userName + " " + userEmail);
+                        if (innerTexts[offernum] == "NON") {
+                            alert(messageIfLoss + " " + innerTexts[offernum]);
+                            return;
+                        } else {
+                            alert(messageIfWin + " " + innerTexts[offernum]);
+                        }
 
                         $.ajax({
                             url: spinToWinData.ajax_url,
@@ -55,7 +81,7 @@
                                 action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
                                 userName: userName,
                                 userEmail: userEmail,
-                                couponValue: 10,
+                                couponValue: innerValue[offernum],
                                 couponType: innerTexts[offernum],
                             },
                             success: function(response) {
@@ -63,7 +89,12 @@
                                     let newSpinCount = response.data;
                                     console.log("Spin count successfully updated to: " + newSpinCount);
                                 } else {
-                                    console.log("Failed to update spin count.");
+                                    // Show an alert if the email already exists or any other error occurred
+                                    if (response.data && response.data.message) {
+                                        alert(response.data.message);
+                                    } else {
+                                        console.log("Failed to update spin count.");
+                                    }
                                 }
                             },
                             error: function() {

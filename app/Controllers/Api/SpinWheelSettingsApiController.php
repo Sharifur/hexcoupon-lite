@@ -1,5 +1,6 @@
 <?php
 namespace HexCoupon\App\Controllers\Api;
+if(!defined('ABSPATH')) exit;
 
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Traits\NonceVerify;
@@ -61,7 +62,8 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_text_settings_save', [ $this, 'spin_wheel_text_settings_save' ] );
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
-		add_action( 'wp_ajax_send_win_email', [ $this, 'send_win_email' ] );
+		add_action( 'wp_ajax_nopriv_update_spin_count', [ $this, 'update_spin_count' ] );
+		add_action( 'wp_ajax_nopriv_send_win_email', [ $this, 'send_win_email' ] );
 	}
 
 	/**
@@ -112,7 +114,7 @@ class SpinWheelSettingsApiController extends Controller
 
 			$spin_popup_settings = [
 				'iconColor' => isset( $dataArray['settings']['iconColor'] ) ? sanitize_text_field( $dataArray['settings']['iconColor'] ) : '',
-				'alignment' => isset( $dataArray['settings']['alignment'] ) ? sanitize_text_field( $dataArray['settings']['alignment'] ) : '',
+				// 'alignment' => isset( $dataArray['settings']['alignment'] ) ? sanitize_text_field( $dataArray['settings']['alignment'] ) : '',
 				'popupInterval' => isset( $dataArray['settings']['popupInterval'] ) ? sanitize_text_field( $dataArray['settings']['popupInterval'] ) : '',
 				'showOnlyHomepage' => isset( $dataArray['settings']['showOnlyHomepage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyHomepage'] ) : '',
 				'showOnlyBlogPage' => isset( $dataArray['settings']['showOnlyBlogPage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyBlogPage'] ) : '',
@@ -266,8 +268,7 @@ class SpinWheelSettingsApiController extends Controller
 				'spinLimitUsageToXItems' => isset( $dataArray['settings']['spinLimitUsageToXItems'] ) ? sanitize_text_field( $dataArray['settings']['spinLimitUsageToXItems'] ) : '',
 				'spinUsageLimitPerUser' => isset( $dataArray['settings']['spinUsageLimitPerUser'] ) ? sanitize_text_field( $dataArray['settings']['spinUsageLimitPerUser'] ) : '',
 			];
-			update_option( 'spinWheelCoupon', $spin_wheel_coupon_settings );
-			
+			update_option( 'spinWheelCoupon', $spin_wheel_coupon_settings );			
 
 			wp_send_json( $_POST );
 		} else {
@@ -287,13 +288,24 @@ class SpinWheelSettingsApiController extends Controller
 	 */
 	public function update_spin_count() 
 	{
+		if ( is_user_logged_in() ) {
+			$current_user = wp_get_current_user();
+			$user_email = $current_user->user_email;	
+		} else {
+			// Retrieve the selected offer sent from JavaScript
+			$user_email = sanitize_text_field( $_POST['userEmail'] );
+			$user_name = sanitize_text_field( $_POST['userName'] );
+			
+			if ( get_user_by( 'email', $_POST['userEmail'] ) ) {
+				wp_send_json_error( array( 'message' => 'This email already exists.' ) ); // Return a specific error message
+				return;
+			} else {
+				$this->create_customer_user( $user_email, $user_name );
+			}
+		}
+
 		// Get the current user ID
 		$user_id = get_current_user_id();
-
-		// Ensure the user is logged in
-		if ( $user_id == 0 ) {
-			wp_send_json_error( 'User not logged in' );
-		}
 
 		// Get the current spin count from user meta
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
@@ -308,10 +320,8 @@ class SpinWheelSettingsApiController extends Controller
 
 		// Update the spin count in user meta
 		update_user_meta( $user_id, 'user_spin_count', $spin_count );
-
-		// Retrieve the selected offer sent from JavaScript
-		$user_name = sanitize_text_field( $_POST['userName'] );
-		$user_email = sanitize_text_field( $_POST['userEmail'] );
+		// Update term and condition value
+		update_user_meta( $user_id, 'spin_wheel_accepted_term_condition', true );
 
 		$coupon_type = sanitize_text_field( $_POST['couponType'] );
 		$value = sanitize_text_field( $_POST['couponValue'] );
@@ -322,10 +332,11 @@ class SpinWheelSettingsApiController extends Controller
 			$discount_type = 'fixed_product';
 		} elseif ( $coupon_type == 'FIXED CART DISCOUNT' ) {
 			$discount_type = 'fixed_cart';
+		} else {
+			return;
 		}
 		
 		// finally create user and create coupon after winning spin wheel
-		$this->create_customer_user( $user_email, $user_name );
 		$this->create_woocommerce_coupon( $value, $discount_type );
 
 		// Return the updated spin count as a JSON response
@@ -436,8 +447,6 @@ class SpinWheelSettingsApiController extends Controller
 				wp_send_json_error();
 			}
 
-			// Finally create a coupon for the user
-			$this->create_woocommerce_coupon();
 		} else {
 			wp_send_json_error( 'No prize information provided.' );
 		}
@@ -461,9 +470,7 @@ class SpinWheelSettingsApiController extends Controller
 		$maximum_spend = $spin_wheel_coupon['spinMaximumSpend'];
 		$individual_use_only = $spin_wheel_coupon['spinIndividualSpendOnly'];
 		$exclude_sale_item = $spin_wheel_coupon['spinExcludeSaleItem'];
-		$include_products = $spin_wheel_coupon['spinIncludeProducts'];
-		$exclude_products = $spin_wheel_coupon['spinExcludeSaleItem'];
-		$include_categories = $spin_wheel_coupon['spinIncludeCategories'];
+		$exclude_products = $spin_wheel_coupon['spinExcludeProducts'];
 		$exclude_categories = $spin_wheel_coupon['spinExcludeCategories'];
 		$usage_limit_per_coupon = $spin_wheel_coupon['spinUsageLimitPerCoupon'];
 		$limit_usage_to_xitems = $spin_wheel_coupon['spinLimitUsageToXItems'];
@@ -489,7 +496,7 @@ class SpinWheelSettingsApiController extends Controller
 			$coupon->set_usage_limit_per_user( $usage_limit_per_user ); // The number of times the coupon can be used per customer
 			$coupon->set_limit_usage_to_x_items( $limit_usage_to_xitems );
 			$coupon->set_minimum_amount( $minimum_spend ); // Minimum spend required to use the coupon
-			$coupon->set_maximum_amount( $maximum_spend );
+			$coupon->set_maximum_amount( $maximum_spend ); // Maximum spend required to use the coupon
 			$coupon->set_email_restrictions( $user_email ); // Restrict to specific emails
 	
 			// Save the coupon

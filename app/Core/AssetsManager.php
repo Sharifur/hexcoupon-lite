@@ -1,5 +1,4 @@
 <?php
-
 namespace HexCoupon\App\Core;
 
 use HexCoupon\App\Core\Helpers\StoreCreditPaymentHelpers;
@@ -327,11 +326,6 @@ class AssetsManager
 		
 		// Get the current user ID
 		$user_id = get_current_user_id();
-
-		// Ensure the user is logged in
-		if ( $user_id == 0 ) {
-			wp_send_json_error( 'User not logged in' );
-		}
 
 		// Get the current spin count from user meta
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
