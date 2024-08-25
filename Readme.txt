@@ -5,8 +5,8 @@ Tags: bogo, buy one get one, store credit, loyalty program, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
 Tested up to: 6.5.5
-Version: 1.2.1
-Stable tag: 1.2.1
+Version: 1.2.2
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Extend coupon functionality in your Woocommerce store.
@@ -165,6 +165,15 @@ Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without
 Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).
 
 == Changelog ==
+== 1.2.3 ==
+Added new feature 'Spin Wheel'. It will be used to give a coupon after succesful spin wheel win. 
+
+== 1.2.2 ==
+Fixed some CSS
+
+== 1.2.1 ==
+Added translation files for English(UK), French and Spain
+
 == 1.2.0 ==
 Added nice design to show all coupon tab in my account page of WooCommerce.
 
@@ -174,18 +183,6 @@ Fixed upgrade to pro notice in BOGO coupon type.
 
 == 1.1.8 ==
 Fixed some bugs.
-
-== 1.1.7 ==
-Added a brand new feature 'Loyalty Points'.
-Fixed QR Code Image issue on existing published coupon.
-
-== 1.1.6 ==
-Added new feature "store credit" for both block pattern and legacy pattern
-
-== 1.1.5 ==
-Added QR Code in the URL tab to enhance marketing ability
-
-Solved URL coupon success message not displaying issue.
 
 == Upgrade Notice ==
 

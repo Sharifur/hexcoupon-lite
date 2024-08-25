@@ -142,15 +142,14 @@ const Sidebar = () => {
 							</ul>
 						</li>
 
-
-						<li className='hexpDashboard__list__item'>
-							<Link to="/gift-card" className={`hexpDashboard__list__item__link ${activeLink === '/gift-card' ? 'active' : ''}`} onClick={() => handleLinkClick('/gift-card')}>
-								<span className='hexpDashboard__list__item__link__left'><TbGiftCard size={24} />{__("Gift Card", "hex-coupon-for-woocommerce")}</span>
-							</Link>
-						</li>
 						<li className='hexpDashboard__list__item'>
 							<Link to="/spinwheel" className={`hexpDashboard__list__item__link ${activeLink === '/spinwheel' ? 'active' : ''}`} onClick={() => handleLinkClick('/spinner')}>
 								<span className='hexpDashboard__list__item__link__left'><TbFidgetSpinner size={24} />{__("SpinWheel", "hex-coupon-for-woocommerce")}</span>
+							</Link>
+						</li>
+						<li className='hexpDashboard__list__item'>
+							<Link to="/gift-card" className={`hexpDashboard__list__item__link ${activeLink === '/gift-card' ? 'active' : ''}`} onClick={() => handleLinkClick('/gift-card')}>
+								<span className='hexpDashboard__list__item__link__left'><TbGiftCard size={24} />{__("Gift Card", "hex-coupon-for-woocommerce")}</span>
 							</Link>
 						</li>
 						<li className='hexpDashboard__list__item'>

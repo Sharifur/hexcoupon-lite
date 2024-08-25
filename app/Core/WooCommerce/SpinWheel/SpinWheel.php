@@ -208,7 +208,17 @@ class SpinWheel
                                         printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $title_text ) ); 
                                         ?>
                                     </h3>
-                                    <p><?php echo wp_kses( $spin_wheel_wheel['wheelDescription'] , $this->allowed_html ); ?></p>
+                                    <p>
+                                        <?php 
+                                        $default_description = '<ul>
+                                        <li>Try your lucky to get discount coupon.</li>
+                                        <li>1 spin per email.</li>
+                                        <li>No cheating.</li>
+                                        </ul>';
+                                        $wheel_description = ! empty( $spin_wheel_wheel['wheelDescription'] ) ? $spin_wheel_wheel['wheelDescription'] : $default_description;
+                                        echo wp_kses( $wheel_description , $this->allowed_html ); 
+                                        ?>
+                                    </p>
                                 </div>
                                 <form action="#" method="get">
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
@@ -218,10 +228,26 @@ class SpinWheel
                                     <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $spin_wheel_wheel['phoneNumber'] ) ); ?>" value="" required>
                                 <?php endif; ?>
                                 <div class="button-wraper">
-                                    <button type="button" class="try-your-luck"><?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $spin_wheel_wheel['buttonText'] ) ); ?></button>
+                                    <button type="button" class="try-your-luck">
+                                        <?php 
+                                        $button_text = ! empty( $spin_wheel_wheel['buttonText'] ) ? $spin_wheel_wheel['buttonText'] : 'Try Your Luck';
+                                        printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $button_text ) ); 
+                                        ?>
+                                    </button>
                                 </div>
                                 <div class="accept-agree">
-                                    <input type="checkbox" id="termCondition" name="termCondition" value="1" required>
+                                    <?php 
+                                    $spin_whel_term_condition_acceptence = get_user_meta( get_current_user_id(), 'spin_wheel_accepted_term_condition', true ); 
+                                    $checked = $spin_whel_term_condition_acceptence ? 'checked' : '';
+                                    ?>
+                                    <input 
+                                    type="checkbox" 
+                                    id="termCondition" 
+                                    name="termCondition" 
+                                    value="<?php echo esc_attr( $spin_whel_term_condition_acceptence ); ?>" 
+                                    <?php echo esc_attr( $checked ); ?>
+                                    required
+                                    >
                                     <span><?php esc_html_e( 'I Agree With The', 'hex-coupon-for-woocommerce' ); ?></span>
                                     <a href="#/" class="termCondition"><?php esc_html_e( 'Term And Condition', 'hex-coupon-for-woocommerce' ); ?></a>
                                 </div>

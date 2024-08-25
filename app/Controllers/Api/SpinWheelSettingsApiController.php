@@ -141,8 +141,6 @@ class SpinWheelSettingsApiController extends Controller
 	 */
 	public function spin_wheel_wheel_settings_save()
 	{
-
-
 		if ( $this->verify_nonce('POST') ) {
 			$formData = json_encode( $_POST );
 
@@ -182,7 +180,8 @@ class SpinWheelSettingsApiController extends Controller
 	 * @return void
 	 * Saving all the settings of spin wheel content settings
 	 */
-	public function spin_wheel_content_settings_save() {
+	public function spin_wheel_content_settings_save() 
+	{
 		if ( $this->verify_nonce( 'POST' ) ) {
 			$formData = json_encode( $_POST );
 			$dataArray = json_decode( $formData, true );
