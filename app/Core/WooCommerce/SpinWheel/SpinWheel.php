@@ -202,7 +202,12 @@ class SpinWheel
                         <div class="col-xl-6">
                             <div class="text-part mx-auto">
                                 <div class="heading-part">
-                                    <h3 class="heading"><?php esc_html_e( 'SPIN TO WIN!', 'hex-coupon-for-woocommerce' ); ?></h3>
+                                    <h3 class="heading">
+                                        <?php 
+                                        $title_text = ! empty( $spin_wheel_wheel['titleText'] ) ? $spin_wheel_wheel['titleText'] : 'SPIN TO WIN';
+                                        printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $title_text ) ); 
+                                        ?>
+                                    </h3>
                                     <p><?php echo wp_kses( $spin_wheel_wheel['wheelDescription'] , $this->allowed_html ); ?></p>
                                 </div>
                                 <form action="#" method="get">

@@ -149,10 +149,13 @@ class SpinWheelSettingsApiController extends Controller
 			$dataArray = json_decode( $formData, true );
 
 			$spin_wheel_wheel_settings = [
+				'titleText' => isset( $dataArray['settings']['titleText'] ) ? sanitize_text_field( $dataArray['settings']['titleText'] ) : '',
+				'titleColor' => isset( $dataArray['settings']['titleColor'] ) ? sanitize_text_field( $dataArray['settings']['titleColor'] ) : '',
 				'textColor' => isset( $dataArray['settings']['textColor'] ) ? sanitize_text_field( $dataArray['settings']['textColor'] ) : '',
 				'wheelDescription' => isset( $dataArray['settings']['wheelDescription'] ) ? wp_kses( $dataArray['settings']['wheelDescription'], $this->allowed_html ) : '',
 				'buttonText' => isset( $dataArray['settings']['buttonText'] ) ? sanitize_text_field( $dataArray['settings']['buttonText'] ) : '',
 				'buttonColor' => isset( $dataArray['settings']['buttonColor']) ? sanitize_text_field( $dataArray['settings']['buttonColor'] ) : '',
+				'buttonBGColor' => isset( $dataArray['settings']['buttonBGColor']) ? sanitize_text_field( $dataArray['settings']['buttonBGColor'] ) : '',
 				'enableYourName' => isset( $dataArray['settings']['enableYourName'] ) ? rest_sanitize_boolean( $dataArray['settings']['enableYourName'] ) : '',
 				'yourName' => isset( $dataArray['settings']['yourName'] ) ? sanitize_text_field( $dataArray['settings']['yourName'] ) : '',
 				'enablePhoneNumber' => isset( $dataArray['settings']['enablePhoneNumber'] ) ? sanitize_text_field( $dataArray['settings']['enablePhoneNumber'] ) : '',

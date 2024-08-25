@@ -438,11 +438,17 @@ class AssetsManager
 			.popup-container {
 				justify-content: {$spin_wheel_popup['alignment']};
 			}
+			.text-part h3 {
+				color: {$spin_wheel_wheel['titleColor']};
+			}
 			.text-part p {
 				color: {$spin_wheel_wheel['textColor']};
 			}				
 			.spinToWin .text-part button.try-your-luck {
 				color: {$spin_wheel_wheel['buttonColor']};
+			}
+			.text-part .try-your-luck {
+				background: {$spin_wheel_wheel['buttonBGColor']} !important;
 			}
 			.spinToWin .slice:nth-child(4n + 1 ) {
 				--bg: {$content1_color};
