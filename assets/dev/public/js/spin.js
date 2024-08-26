@@ -28,13 +28,22 @@
             pointer_btn.addEventListener("click", function() {
                 // Capture the value of the name and email fields
                 let userNameInput = document.querySelector(".custom-input.name");
+                let userPasswordInput = document.querySelector(".custom-input.password");
                 let userEmailInput = document.querySelector(".custom-input.email");
                 let termConditionCheckbox = document.querySelector("#termCondition");
 
                 if (userNameInput){
                     var userName = document.querySelector(".custom-input.name").value;
                     if (!userName) {
-                        alert("Please provide both your name.");
+                        alert("You must fill up the password field.");
+                        return;
+                    }
+                }
+
+                if (userPasswordInput){
+                    var userPassword = document.querySelector(".custom-input.password").value;
+                    if (!userPassword) {
+                        alert("You must fill up the password field.");
                         return;
                     }
                 }
@@ -42,7 +51,7 @@
                 if (userEmailInput){
                     var userEmail = document.querySelector(".custom-input.email").value;
                     if (!userEmail) {
-                        alert("Please provide both your email.");
+                        alert("You must fill up the password field.");
                         return;
                     }
                 }
@@ -80,6 +89,7 @@
                             data: {
                                 action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
                                 userName: userName,
+                                userPassword: userPassword,
                                 userEmail: userEmail,
                                 couponValue: innerValue[offernum],
                                 couponType: innerTexts[offernum],

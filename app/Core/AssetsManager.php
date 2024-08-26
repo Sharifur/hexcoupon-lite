@@ -331,25 +331,29 @@ class AssetsManager
 		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
 		$spin_wheel_general = get_option( 'spinWheelGeneral' );
-		$enable_spin_wheel = $spin_wheel_general['enableSpinWheel'];
-		$spin_per_email = $spin_wheel_general['spinPerEmail'];
-		$delay_between_spins = $spin_wheel_general['delayBetweenSpins'];
+		$enable_spin_wheel = ! empty( $spin_wheel_general['enableSpinWheel'] ) ? $spin_wheel_general['enableSpinWheel'] : 0;
+		$spin_per_email = ! empty( $spin_wheel_general['spinPerEmail'] ) ? $spin_wheel_general['spinPerEmail'] : 1;
+		$delay_between_spins = ! empty( $spin_wheel_general['delayBetweenSpins'] ) ? $spin_wheel_general['delayBetweenSpins']: 0;
 
 		$spin_wheel_popup = get_option( 'spinWheelPopup' );
-		$popup_interval = $spin_wheel_popup['popupInterval'];
+		$popup_interval = ! empty( $spin_wheel_popup['popupInterval'] ) ? $spin_wheel_popup['popupInterval'] : 0;
 
 		$spin_wheel_text = get_option( 'spinWheelText' );
-		$frontend_message_if_win = $spin_wheel_text['frontendMessageIfWin'];
-		$frontend_message_if_loss = $spin_wheel_text['frontendMessageIfLost'];
-		$email_subject = $spin_wheel_text['emailSubject'];
-		$email_content = $spin_wheel_text['emailContent'];
+		$frontend_message_if_win = ! empty( $spin_wheel_text['frontendMessageIfWin'] ) ? $spin_wheel_text['frontendMessageIfWin'] : 'You have it!';
+		$frontend_message_if_loss = ! empty( $spin_wheel_text['frontendMessageIfLost'] ) ? $spin_wheel_text['frontendMessageIfLost'] : 'You have lost!';
+		$email_subject = ! empty( $spin_wheel_text['emailSubject'] ) ? $spin_wheel_text['emailSubject'] : 'Spin Wheel Notification.';
+		$email_content = ! empty( $spin_wheel_text['emailContent'] ) ? $spin_wheel_text['emailContent'] : 'Hello Dear, You have won a coupon via spin wheel. Check your my account to check it.';
 
 
 		function is_blog () {
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( $enable_spin_wheel && is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
+		$show_on_homepage = ! empty( $spin_wheel_popup['showOnlyHomepage'] ) ? $spin_wheel_popup['showOnlyHomepage'] : 0;
+        $show_on_blogpage = ! empty( $spin_wheel_popup['showOnlyBlogPage'] ) ? $spin_wheel_popup['showOnlyBlogPage'] : 0;
+        $show_on_shoppage = ! empty( $spin_wheel_popup['showOnlyShopPage'] ) ? $spin_wheel_popup['showOnlyShopPage'] : 0;
+
+        if ( $enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ) :
 
 		wp_enqueue_script(
 			hexcoupon_prefix( 'spin' ),
@@ -372,9 +376,26 @@ class AssetsManager
 
 		endif;
 
+		wp_enqueue_script(
+			hexcoupon_prefix( 'bootstrap' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/js/bootstrap.bundle" . $js_file_extension ),
+			['jquery'],
+			$this->version,
+			true
+		);
+		
+
 		wp_enqueue_style(
 			hexcoupon_prefix( 'public' ),
 			hexcoupon_asset_url( $folder_prefix . "/public/css/public" . $css_file_extension ),
+			[],
+			$this->version,
+			'all'
+		);
+
+		wp_enqueue_style(
+			hexcoupon_prefix( 'bootstrap' ),
+			hexcoupon_asset_url( $folder_prefix . "/public/css/bootstrap" . $css_file_extension ),
 			[],
 			$this->version,
 			'all'

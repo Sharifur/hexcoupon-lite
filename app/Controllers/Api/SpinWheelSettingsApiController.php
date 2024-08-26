@@ -115,14 +115,12 @@ class SpinWheelSettingsApiController extends Controller
 
 			$spin_popup_settings = [
 				'iconColor' => isset( $dataArray['settings']['iconColor'] ) ? sanitize_text_field( $dataArray['settings']['iconColor'] ) : '',
-				// 'alignment' => isset( $dataArray['settings']['alignment'] ) ? sanitize_text_field( $dataArray['settings']['alignment'] ) : '',
 				'popupInterval' => isset( $dataArray['settings']['popupInterval'] ) ? sanitize_text_field( $dataArray['settings']['popupInterval'] ) : '',
 				'showOnlyHomepage' => isset( $dataArray['settings']['showOnlyHomepage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyHomepage'] ) : '',
 				'showOnlyBlogPage' => isset( $dataArray['settings']['showOnlyBlogPage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyBlogPage'] ) : '',
 				'showOnlyShopPage' => isset( $dataArray['settings']['showOnlyShopPage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyShopPage'] ) : '',
 			];
 			update_option( 'spinWheelPopup', $spin_popup_settings );
-
 
 			wp_send_json( $_POST );
 		} else {
@@ -157,12 +155,13 @@ class SpinWheelSettingsApiController extends Controller
 				'buttonBGColor' => isset( $dataArray['settings']['buttonBGColor']) ? sanitize_text_field( $dataArray['settings']['buttonBGColor'] ) : '',
 				'enableYourName' => isset( $dataArray['settings']['enableYourName'] ) ? rest_sanitize_boolean( $dataArray['settings']['enableYourName'] ) : '',
 				'yourName' => isset( $dataArray['settings']['yourName'] ) ? sanitize_text_field( $dataArray['settings']['yourName'] ) : '',
-				'enablePhoneNumber' => isset( $dataArray['settings']['enablePhoneNumber'] ) ? sanitize_text_field( $dataArray['settings']['enablePhoneNumber'] ) : '',
-				'phoneNumber' => isset( $dataArray['settings']['phoneNumber'] ) ? sanitize_text_field( $dataArray['settings']['phoneNumber'] ) : '',
+				'enablePassword' => isset( $dataArray['settings']['enablePassword'] ) ? sanitize_text_field( $dataArray['settings']['enablePassword'] ) : '',
+				'password' => isset( $dataArray['settings']['password'] ) ? sanitize_text_field( $dataArray['settings']['password'] ) : '',
 				'enableEmailAddress' => isset( $dataArray['settings']['enableEmailAddress'] ) ? sanitize_text_field( $dataArray['settings']['enableEmailAddress'] ) : '',
 				'emailAddress' => isset( $dataArray['settings']['emailAddress'] ) ? sanitize_text_field( $dataArray['settings']['emailAddress'] ) : '',
 				'gdprMessage' => isset( $dataArray['settings']['gdprMessage'] ) ? wp_kses( $dataArray['settings']['gdprMessage'], $this->allowed_html ) : '',
 			];
+
 			update_option( 'spinWheelWheel', $spin_wheel_wheel_settings );
 
 			wp_send_json( $_POST );
@@ -297,12 +296,13 @@ class SpinWheelSettingsApiController extends Controller
 			// Retrieve the selected offer sent from JavaScript
 			$user_email = sanitize_text_field( $_POST['userEmail'] );
 			$user_name = sanitize_text_field( $_POST['userName'] );
+			$password = sanitize_text_field( $_POST['userPassword'] );
 			
 			if ( get_user_by( 'email', $_POST['userEmail'] ) ) {
 				wp_send_json_error( array( 'message' => 'This email already exists.' ) ); // Return a specific error message
 				return;
 			} else {
-				$this->create_customer_user( $user_email, $user_name );
+				$this->create_customer_user( $user_name, $user_email, $password );
 			}
 		}
 
@@ -520,10 +520,10 @@ class SpinWheelSettingsApiController extends Controller
 	 * @return void
 	 * Create a new user after spin wheel with provided email
 	 */
-	public function create_customer_user( $user_email, $user_name ) {
+	public function create_customer_user( $user_name, $user_email, $password ) {
 		$email = $user_email;
 		$name = $user_name;
-		$password = '12345';
+		$password = $password;
 		$role = 'customer';
 
 		// Set the username as the name

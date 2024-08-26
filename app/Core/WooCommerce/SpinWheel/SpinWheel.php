@@ -73,8 +73,11 @@ class SpinWheel
         $spin_wheel_popup = get_option( 'spinWheelPopup' );
         $spin_wheel_wheel = get_option( 'spinWheelWheel' );
         $spin_wheel_general = get_option( 'spinWheelGeneral' );
-        $enable_spin_wheel = $spin_wheel_general['enableSpinWheel'];
-		$spin_per_email = $spin_wheel_general['spinPerEmail'];
+        $enable_spin_wheel = ! empty( $spin_wheel_general['enableSpinWheel'] ) ? $spin_wheel_general['enableSpinWheel'] : 0;
+		$spin_per_email = ! empty( $spin_wheel_general['spinPerEmail'] ) ? $spin_wheel_general['spinPerEmail'] : 1;
+        $show_on_homepage = ! empty( $spin_wheel_popup['showOnlyHomepage'] ) ? $spin_wheel_popup['showOnlyHomepage'] : 0;
+        $show_on_blogpage = ! empty( $spin_wheel_popup['showOnlyBlogPage'] ) ? $spin_wheel_popup['showOnlyBlogPage'] : 0;
+        $show_on_shoppage = ! empty( $spin_wheel_popup['showOnlyShopPage'] ) ? $spin_wheel_popup['showOnlyShopPage'] : 0;
 
         // Get the current user ID
 		$user_id = get_current_user_id();
@@ -86,7 +89,7 @@ class SpinWheel
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( $enable_spin_wheel && is_home() && $spin_wheel_popup['showOnlyHomepage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $spin_wheel_popup['showOnlyBlogPage'] == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $spin_wheel_popup['showOnlyShopPage'] == 1 && $spin_count < $spin_per_email ) :
+        if ( $enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ) :
         ?>
         <!-- Popup Modal -->
         <div class="spinToWin">
@@ -225,16 +228,23 @@ class SpinWheel
                                 $gdpr_message_defualt = '<p>I Agree With The <a href="#">Term And Condition</a></p>';
 
                                 $your_name = ! empty( $spin_wheel_wheel['yourName'] ) ? $spin_wheel_wheel['yourName'] : 'Enter your name';
-                                $your_email = ! empty( $spin_wheel_wheel['phoneNumber'] ) ? $spin_wheel_wheel['phoneNumber'] : 'Enter your email';
+                                $your_email = ! empty( $spin_wheel_wheel['emailAddress'] ) ? $spin_wheel_wheel['emailAddress'] : 'Enter your email';
+                                $password = ! empty( $spin_wheel_wheel['password'] ) ? $spin_wheel_wheel['password'] : 'Enter password';
                                 $gdpr_message = ! empty( $spin_wheel_wheel['gdprMessage'] ) ? $spin_wheel_wheel['gdprMessage'] : $gdpr_message_defualt;
                                 ?>
                                 <form action="#" method="get">
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
                                     <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_name ) ); ?>" value="" required>
                                 <?php endif; ?>
-                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enablePhoneNumber'] == true ) : ?>
+
+                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableEmailAddress'] == true ) : ?>
                                     <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_email ) ); ?>" value="" required>
                                 <?php endif; ?>
+
+                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enablePassword'] == true ) : ?>
+                                    <input type="text" class="custom-input password mb-3" name="password" id="password" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $password ) ); ?>" value="" required>
+                                <?php endif; ?>                               
+
                                 <div class="button-wraper">
                                     <button type="button" class="try-your-luck">
                                         <?php 

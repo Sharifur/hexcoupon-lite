@@ -90,13 +90,22 @@ const Tabs = ({ tabs }) => {
 				setSelectedExcludeProducts(excludedProducts);
 
 				// Initialize formData once spinWheelData is available
-				const spinWheelContentArray = Object.keys(data.spinWheelSettingsData?.spinWheelContent || {}).map(key => {
+				let spinWheelContentArray = Object.keys(data.spinWheelSettingsData?.spinWheelContent || {}).map(key => {
 					const item = data.spinWheelSettingsData.spinWheelContent[key];
 					return {
 						id: parseInt(key.replace('content', '')) || key, // Extract numeric ID or keep key as fallback
 						...item,
 					};
 				});
+
+				if (spinWheelContentArray.length === 0) {
+					spinWheelContentArray = [
+						{ id: 1, couponType: 'Non', label: 'Not Lucky', value: 0, color: '#ffe0b2' },
+						{ id: 2, couponType: 'Percentage discount', label: '{coupon_amount} OFF', value: 5, color: '#ec65100' },
+						{ id: 3, couponType: 'Non', label: 'Not Lucky', value: 0, color: '#ffb74d' },
+						{ id: 4, couponType: 'Fixed product discount', label: '{coupon_amount} OFF', value: 10, color: '#ff8c00' },
+					];
+				}
 
 
 				setFormData({
@@ -122,8 +131,8 @@ const Tabs = ({ tabs }) => {
 						buttonBGColor: data.spinWheelSettingsData.spinWheelWheel.buttonBGColor,
 						enableYourName: data.spinWheelSettingsData.spinWheelWheel.enableYourName,
 						yourName: data.spinWheelSettingsData.spinWheelWheel.yourName,
-						enablePhoneNumber: data.spinWheelSettingsData.spinWheelWheel.enablePhoneNumber,
-						phoneNumber: data.spinWheelSettingsData.spinWheelWheel.phoneNumber,
+						enablePassword: data.spinWheelSettingsData.spinWheelWheel.enablePassword,
+						password: data.spinWheelSettingsData.spinWheelWheel.password,
 						enableEmailAddress: data.spinWheelSettingsData.spinWheelWheel.enableEmailAddress,
 						emailAddress: data.spinWheelSettingsData.spinWheelWheel.emailAddress,
 						gdprMessage: data.spinWheelSettingsData.spinWheelWheel.gdprMessage,
@@ -333,8 +342,8 @@ const Tabs = ({ tabs }) => {
 					buttonBGColor: formData.tab3.buttonBGColor, 
 					enableYourName: formData.tab3.enableYourName, // Enable Your Name switch
 					yourName: formData.tab3.yourName, // Your name
-					enablePhoneNumber: formData.tab3.enablePhoneNumber, // Enable Phone Number switch
-					phoneNumber: formData.tab3.phoneNumber, // Phone number
+					enablePassword: formData.tab3.enablePassword, // Enable Password switch
+					password: formData.tab3.password, // Password number
 					enableEmailAddress: formData.tab3.enableEmailAddress, // Enable Email Address switch
 					emailAddress: formData.tab3.emailAddress, // Email address
 					gdprMessage: formData.tab3.gdprMessage, // GDPR message from ReactQuill
@@ -525,7 +534,7 @@ const Tabs = ({ tabs }) => {
 							/>
 						</div>
 						<div className="popup-settings">
-							<label>{__("Show only on Homepage", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Show on Homepage", "hex-coupon-for-woocommerce-pro")}</label>
 							<Switch
 								isChecked={formData?.tab2?.field4}  // Use optional chaining to avoid errors
 								onSwitchChange={(isChecked) => setFormData({
@@ -538,14 +547,14 @@ const Tabs = ({ tabs }) => {
 							/>
 						</div>
 						<div className="popup-settings">
-							<label>{__("Show only on Blog page", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Show on Blog page", "hex-coupon-for-woocommerce-pro")}</label>
 							<Switch
 								isChecked={formData.tab2.field5}
 								onSwitchChange={(isChecked) => setFormData({ ...formData, tab2: { ...formData.tab2, field5: isChecked } })}
 							/>
 						</div>
 						<div className="popup-settings">
-							<label>{__("Show only on Shop page", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Show on Shop page", "hex-coupon-for-woocommerce-pro")}</label>
 							<Switch
 								isChecked={formData.tab2.field6}
 								onSwitchChange={(isChecked) => setFormData({ ...formData, tab2: { ...formData.tab2, field6: isChecked } })}
@@ -653,20 +662,20 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings">
-							<label>{__("Phone Number", "hex-coupon-for-woocommerce")}</label>
-							<div className="phone">
+							<label>{__("Password", "hex-coupon-for-woocommerce")}</label>
+							<div className="password">
 								<Switch
-									isChecked={formData.tab3.enablePhoneNumber}
-									onSwitchChange={(isChecked) => setFormData({ ...formData, tab3: { ...formData.tab3, enablePhoneNumber: isChecked } })}
+									isChecked={formData.tab3.enablePassword}
+									onSwitchChange={(isChecked) => setFormData({ ...formData, tab3: { ...formData.tab3, enablePassword: isChecked } })}
 								/>
 								<input
-									type="text"
-									name="phoneNumber"
-									className="phone"
-									placeholder="Enter your phone number"
-									value={formData.tab3.phoneNumber}
+									type="password"
+									name="password"
+									className="password"
+									placeholder="Enter your password"
+									value={formData.tab3.password}
 									onChange={(e) => handleFormChange(e, 'tab3')}
-									disabled={!formData.tab3.enablePhoneNumber}
+									disabled={!formData.tab3.enablePassword}
 								/>
 							</div>
 						</div>

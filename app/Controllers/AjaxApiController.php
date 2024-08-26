@@ -5,6 +5,7 @@ use HexCoupon\App\Core\Helpers\LoyaltyProgram\LoyaltyPointsQueries;
 use HexCoupon\App\Core\Helpers\StoreCredit\StoreCreditQueries;
 use HexCoupon\App\Core\Lib\SingleTon;
 use HexCoupon\App\Core\Helpers\StoreCreditHelpers;
+use HexCoupon\App\Core\Helpers\GeneralFunctionsHelpers;
 use Kathamo\Framework\Lib\Controller;
 
 class AjaxApiController extends Controller
@@ -274,6 +275,9 @@ class AjaxApiController extends Controller
 			$store_credit_amounts[] = $value['credit'];
 		}
 
+		$all_products = GeneralFunctionsHelpers::getInstance()->show_all_products();
+		$all_categories = GeneralFunctionsHelpers::getInstance()->show_all_categories();
+
 		// Check the nonce and action
 		if ( $this->verify_nonce() ) {
 			// Nonce is valid, proceed with your code
@@ -310,6 +314,11 @@ class AjaxApiController extends Controller
 				// store credit
 				'topStoreCreditSources' => array_map( 'esc_html', $store_credit_sources),
 				'topStoreCreditAmounts' => array_map( 'esc_html', $store_credit_amounts ),
+
+				// all Woocommerce Product
+				'allWooCommerceProduct' => $all_products,
+				// all WooCommerce categories
+				'allWooCommerceCategories' => $all_categories,
 			], 200);
 		} else {
 			// Nonce verification failed, handle the error

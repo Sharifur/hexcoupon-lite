@@ -88,6 +88,31 @@ class ActivationService
 			'pointsText' => 'Points earned so far',
 		];
 		update_option('allLoyaltyLabels', $all_labels );
+
+
+
+		$spin_wheel_general = [
+			'enableSpinWheel' => 1,
+			'spinPerEmail' => 1,
+			'delayBetweenSpins' => 5,
+		];
+		update_option( 'spinWheelGeneral', $spin_wheel_general );
+
+		$spin_popup_settings = [
+			'popupInterval' => 10,
+			'showOnlyHomepage' => 1,
+			'showOnlyBlogPage' => 1,
+			'showOnlyShopPage' => 1,
+		];
+		update_option( 'spinWheelPopup', $spin_popup_settings );
+
+		$spin_wheel_wheel_settings = [			
+			'enableYourName' => 1,			
+			'enablePassword' => 1,			
+			'enableEmailAddress' => 1,			
+		];
+		
+		update_option( 'spinWheelWheel', $spin_wheel_wheel_settings );
 	}
 
 	/**

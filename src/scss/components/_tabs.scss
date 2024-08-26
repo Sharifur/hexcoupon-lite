@@ -68,14 +68,14 @@
 				display: inline-block;
 				width: 200px;
 			}
-			input:not(.colorPicker):not(.your-name):not(.phone):not(.email) {
+			input:not(.colorPicker):not(.your-name):not(.password):not(.email) {
 				width: 80%;
 				height: fit-content;
 				padding: 6px;
 				border: 1px solid #ccc;
 				border-radius: 4px;
 			}
-			.name, .phone, .email {
+			.name, .password, .email {
 				flex-grow: 1;
 				.switchWrap {
 					display: block;
