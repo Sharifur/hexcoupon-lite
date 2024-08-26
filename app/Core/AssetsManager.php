@@ -423,32 +423,36 @@ class AssetsManager
 	public function spin_wheel_inline_css()
 	{
 		$spin_wheel_popup = get_option( 'spinWheelPopup' );
+		$spinToWin_wraper_bg = ! empty( $spin_wheel_popup['iconColor'] ) ? $spin_wheel_popup['iconColor'] : '#B71C1C';
+
 		$spin_wheel_wheel = get_option( 'spinWheelWheel' );
+		$textPart_h3 = ! empty( $spin_wheel_wheel['titleColor'] ) ? $spin_wheel_wheel['titleColor'] : '#D8CFCF';
+		$textPart_p = ! empty( $spin_wheel_wheel['textColor'] ) ? $spin_wheel_wheel['textColor'] : '#D8CFCF';
+		$button_color = ! empty( $spin_wheel_wheel['buttonColor'] ) ? $spin_wheel_wheel['buttonColor'] : '#ffffff';
+		$button_bg = ! empty( $spin_wheel_wheel['buttonBGColor'] ) ? $spin_wheel_wheel['buttonBGColor'] : '#343434';
+		
 		$spin_wheel_content = get_option( 'spinWheelContent' );
-		$content1_color = $spin_wheel_content['content1']['color'];
-		$content2_color = $spin_wheel_content['content2']['color'];
-		$content3_color = $spin_wheel_content['content3']['color'];
-		$content4_color = $spin_wheel_content['content4']['color'];
+		$content1_color = ! empty( $spin_wheel_content['content1']['color'] ) ? $spin_wheel_content['content1']['color'] : '#E53935';
+		$content2_color = ! empty( $spin_wheel_content['content2']['color'] ) ? $spin_wheel_content['content2']['color'] : '#FFCDD2';
+		$content3_color = ! empty( $spin_wheel_content['content3']['color'] ) ? $spin_wheel_content['content3']['color'] : '#B71C1C';
+		$content4_color = ! empty( $spin_wheel_content['content4']['color'] ) ? $spin_wheel_content['content4']['color'] : '#E57373';
 
 		// Create the CSS string
 		$custom_css = "
 			.spinToWin, .spinToWin .spinToWin-wraper {
-				background-color: {$spin_wheel_popup['iconColor']};
-			}
-			.popup-container {
-				justify-content: {$spin_wheel_popup['alignment']};
+				background-color: {$spinToWin_wraper_bg};
 			}
 			.text-part h3 {
-				color: {$spin_wheel_wheel['titleColor']};
+				color: {$textPart_h3};
 			}
 			.text-part p {
-				color: {$spin_wheel_wheel['textColor']};
+				color: {$textPart_p};
 			}				
 			.spinToWin .text-part button.try-your-luck {
-				color: {$spin_wheel_wheel['buttonColor']};
+				color: {$button_color};
 			}
 			.text-part .try-your-luck {
-				background: {$spin_wheel_wheel['buttonBGColor']} !important;
+				background: {$button_bg} !important;
 			}
 			.spinToWin .slice:nth-child(4n + 1 ) {
 				--bg: {$content1_color};

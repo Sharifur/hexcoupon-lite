@@ -11,6 +11,7 @@ class SpinWheel
 		'a'      => [
 			'href'  => [],
 			'title' => [],
+            'class' => [],
 		],
 		'u'      => [],
 		'br'     => [],
@@ -101,21 +102,21 @@ class SpinWheel
                                     <div class="wheel mx-auto">
                                         <?php
                                             $spin_wheel_content = get_option( 'spinWheelContent' );
-                                            $coupon_type1 = $spin_wheel_content['content1']['couponType'];
-                                            $value1 = $spin_wheel_content['content1']['value'];
-                                            $label1 = $spin_wheel_content['content1']['label'];
+                                            $coupon_type1 = ! empty( $spin_wheel_content['content1']['couponType'] ) ? $spin_wheel_content['content1']['couponType'] : 'Non';
+                                            $value1 = ! empty( $spin_wheel_content['content1']['value'] ) ? $spin_wheel_content['content1']['value'] : 0;
+                                            $label1 = ! empty( $spin_wheel_content['content1']['label'] ) ? $spin_wheel_content['content1']['label'] : 'You are unlucky';
 
-                                            $coupon_type2 = $spin_wheel_content['content2']['couponType'];
-                                            $value2 = $spin_wheel_content['content2']['value'];
-                                            $label2 = $spin_wheel_content['content2']['label'];
+                                            $coupon_type2 = ! empty( $spin_wheel_content['content2']['couponType'] ) ? $spin_wheel_content['content2']['couponType'] : 'Percentage discount';
+                                            $value2 = ! empty( $spin_wheel_content['content2']['value'] ) ? $spin_wheel_content['content2']['value'] : 10;
+                                            $label2 = ! empty( $spin_wheel_content['content2']['label'] ) ? $spin_wheel_content['content2']['label'] : 'You won percent discount';
 
-                                            $coupon_type3 = $spin_wheel_content['content3']['couponType'];
-                                            $value3 = $spin_wheel_content['content3']['value'];
-                                            $label3 = $spin_wheel_content['content3']['label'];
+                                            $coupon_type3 = ! empty( $spin_wheel_content['content3']['couponType'] ) ? $spin_wheel_content['content3']['couponType'] : 'Fixed product discount';
+                                            $value3 = ! empty( $spin_wheel_content['content3']['value'] ) ? $spin_wheel_content['content3']['value'] : 20;
+                                            $label3 = ! empty( $spin_wheel_content['content3']['label'] ) ? $spin_wheel_content['content3']['label'] : 'You won fixed product discount';
 
-                                            $coupon_type4 = $spin_wheel_content['content4']['couponType'];
-                                            $value4 = $spin_wheel_content['content4']['value'];
-                                            $label4 = $spin_wheel_content['content4']['label'];
+                                            $coupon_type4 = ! empty( $spin_wheel_content['content4']['couponType'] ) ? $spin_wheel_content['content4']['couponType'] : 'Fixed cart discount';
+                                            $value4 = ! empty( $spin_wheel_content['content4']['value'] ) ? $spin_wheel_content['content4']['value'] : 30;
+                                            $label4 = ! empty( $spin_wheel_content['content4']['label'] ) ? $spin_wheel_content['content4']['label'] : 'You won fixed cart discount';
                                         ?>
                                         <div class="slice" style="--i: 1">
                                             <p class="value text bankrupt" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
@@ -220,12 +221,19 @@ class SpinWheel
                                         ?>
                                     </p>
                                 </div>
+                                <?php 
+                                $gdpr_message_defualt = '<p>I Agree With The <a href="#">Term And Condition</a></p>';
+
+                                $your_name = ! empty( $spin_wheel_wheel['yourName'] ) ? $spin_wheel_wheel['yourName'] : 'Enter your name';
+                                $your_email = ! empty( $spin_wheel_wheel['phoneNumber'] ) ? $spin_wheel_wheel['phoneNumber'] : 'Enter your email';
+                                $gdpr_message = ! empty( $spin_wheel_wheel['gdprMessage'] ) ? $spin_wheel_wheel['gdprMessage'] : $gdpr_message_defualt;
+                                ?>
                                 <form action="#" method="get">
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
-                                    <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $spin_wheel_wheel['yourName'] ) ); ?>" value="" required>
+                                    <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_name ) ); ?>" value="" required>
                                 <?php endif; ?>
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enablePhoneNumber'] == true ) : ?>
-                                    <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $spin_wheel_wheel['phoneNumber'] ) ); ?>" value="" required>
+                                    <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_email ) ); ?>" value="" required>
                                 <?php endif; ?>
                                 <div class="button-wraper">
                                     <button type="button" class="try-your-luck">
@@ -248,11 +256,7 @@ class SpinWheel
                                     <?php echo esc_attr( $checked ); ?>
                                     required
                                     >
-                                    <span><?php esc_html_e( 'I Agree With The', 'hex-coupon-for-woocommerce' ); ?></span>
-                                    <a href="#/" class="termCondition"><?php esc_html_e( 'Term And Condition', 'hex-coupon-for-woocommerce' ); ?></a>
-                                </div>
-                                <div class="openion">
-                                    <?php echo wp_kses( $spin_wheel_wheel['gdprMessage'], $this->allowed_html ); ?>
+                                    <span><?php echo wp_kses( $gdpr_message, $this->allowed_html ); ?></span>
                                 </div>
                                 </form>
                             </div>

@@ -465,7 +465,7 @@ const Tabs = ({ tabs }) => {
 				return (
 					<div className="tab-content-item general active">
 						<div className="general-item">
-							<label>{__("Enable/Disable Spin:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Enable/Disable Spin", "hex-coupon-for-woocommerce-pro")}</label>
 							<Switch
 								isChecked={formData.tab1.field1}
 								onSwitchChange={(isChecked) =>
@@ -477,7 +477,7 @@ const Tabs = ({ tabs }) => {
 							/>
 						</div>
 						<div className="general-item">
-							<label>{__("Spin per email:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Spin per email", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="number"
 								name="field2"
@@ -486,7 +486,7 @@ const Tabs = ({ tabs }) => {
 							/>
 						</div>
 						<div className="general-item">
-							<label>{__("Delay between each spin(in seconds):", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Delay between each spin(in seconds)", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="number"
 								name="field3"
@@ -494,7 +494,10 @@ const Tabs = ({ tabs }) => {
 								onChange={(e) => handleFormChange(e, 'tab1')}
 							/>
 						</div>
-						<button className="save" type="button" onClick={() => handleSave('tab1')}>{__("Save","hex-coupon-for-woocommerce")}</button>
+						<div className="general-item">
+							<label></label>
+							<button className="save" type="button" onClick={() => handleSave('tab1')}>{__("Save","hex-coupon-for-woocommerce")}</button>
+						</div>
 					</div>
 				);
 			case 1:
@@ -502,7 +505,7 @@ const Tabs = ({ tabs }) => {
 					<div className="tab-content-item popup-settings active">
 						<div className="popup-settings">
 							<div className="color-picker-container">
-								<label>{__("Pop-Up Background Color:", "hex-coupon-for-woocommerce-pro")}</label>
+								<label>{__("Pop-Up Background Color", "hex-coupon-for-woocommerce-pro")}</label>
 								<input
 									type="color"
 									className="colorPicker"
@@ -548,7 +551,10 @@ const Tabs = ({ tabs }) => {
 								onSwitchChange={(isChecked) => setFormData({ ...formData, tab2: { ...formData.tab2, field6: isChecked } })}
 							/>
 						</div>
-						<button type="button" onClick={() => handleSave('tab2')}>{__("Save","hex-coupon-for-woocommerce-pro")}</button>
+						<div className="popup-settings">
+							<label></label>
+							<button className="save" type="button" onClick={() => handleSave('tab2')}>{__("Save","hex-coupon-for-woocommerce-pro")}</button>
+						</div>
 					</div>
 				);
 			case 2:
@@ -556,7 +562,7 @@ const Tabs = ({ tabs }) => {
 					<div className="tab-content-item wheel-content active">
 						
 						<div className="wheel-settings">
-							<label>{__("Title Text:", "hex-coupon-for-woocommerce")}</label>
+							<label>{__("Title Text", "hex-coupon-for-woocommerce")}</label>
 							<input
 								type="text"
 								name="titleText"
@@ -566,7 +572,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings">
-							<label>{__("Title Text Color:", "hex-coupon-for-woocommerce")}</label>
+							<label>{__("Title Text Color", "hex-coupon-for-woocommerce")}</label>
 							<input
 								type="color"
 								className="colorPicker"
@@ -577,7 +583,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 						
 						<div className="wheel-settings wysiwyg-container">
-							<label>{__("Wheel Description:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Wheel Description", "hex-coupon-for-woocommerce-pro")}</label>
 							<ReactQuill
 								value={formData.tab3.wheelDescription}
 								onChange={(content) => setFormData({ ...formData, tab3: { ...formData.tab3, wheelDescription: content } })}
@@ -585,7 +591,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings">
-							<label>{__("Description Color:", "hex-coupon-for-woocommerce")}</label>
+							<label>{__("Description Color", "hex-coupon-for-woocommerce")}</label>
 							<input
 								type="color"
 								className="colorPicker"
@@ -606,7 +612,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings">
-							<label>{__("Button Text Color:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Button Text Color", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="color"
 								className="colorPicker"
@@ -617,7 +623,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings">
-							<label>{__("Button Background Color:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Button Background Color", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="color"
 								className="colorPicker"
@@ -685,16 +691,19 @@ const Tabs = ({ tabs }) => {
 						</div>
 						
 						<div className="wheel-settings wysiwyg-container">
-							<label>{__("GDPR Message:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("GDPR Checkbox Text", "hex-coupon-for-woocommerce-pro")}</label>
 							<ReactQuill
 								value={formData.tab3.gdprMessage}
 								onChange={(content) => setFormData({ ...formData, tab3: { ...formData.tab3, gdprMessage: content } })}
 							/>
 						</div>
-						
-						<button type="button" onClick={() => handleSave('tab3')}>
-							{__("Save", "hex-coupon-for-woocommerce-pro")}
-						</button>
+
+						<div className="wheel-settings wysiwyg-container">
+							<label>{__("GDPR Checkbox Text", "hex-coupon-for-woocommerce-pro")}</label>
+							<button className="save" type="button" onClick={() => handleSave('tab3')}>
+								{__("Save", "hex-coupon-for-woocommerce-pro")}
+							</button>
+						</div>
 					</div>
 				);
 			case 3:
@@ -751,7 +760,7 @@ const Tabs = ({ tabs }) => {
 								))}
 							</tbody>
 						</table>
-						<button type="button" onClick={submitSpinWheelContent}>
+						<button className="save" type="button" onClick={submitSpinWheelContent}>
 							{__("Save", "hex-coupon-for-woocommerce-pro")}
 						</button>
 					</div>
@@ -772,7 +781,7 @@ const Tabs = ({ tabs }) => {
 
 						<div className="text-setting-item wysiwyg-container">
 							
-								<label>{__("Email content:", "hex-coupon-for-woocommerce-pro")}</label>
+								<label>{__("Email content", "hex-coupon-for-woocommerce-pro")}</label>
 								<ReactQuill
 									value={formData.tab5.field2}
 									onChange={(content) => setFormData({ ...formData, tab5: { ...formData.tab5, field2: content } })}
@@ -781,7 +790,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="text-setting-item">
-							<label>{__("Frontend Message if win:", "hex-coupon-for-woocommerce-pro")}</label>								
+							<label>{__("Frontend Message if win", "hex-coupon-for-woocommerce-pro")}</label>								
 							<textarea
 								value={formData.tab5.field3}
 								onChange={(e) => setFormData({ ...formData, tab5: { ...formData.tab5, field3: e.target.value } })}
@@ -791,7 +800,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="text-setting-item">
-							<label>{__("Frontend message if lost:", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Frontend message if lost", "hex-coupon-for-woocommerce-pro")}</label>
 							<textarea
 								value={formData.tab5.field4}
 								onChange={(e) => setFormData({ ...formData, tab5: { ...formData.tab5, field4: e.target.value } })}
@@ -799,9 +808,12 @@ const Tabs = ({ tabs }) => {
 								cols="50"
 							/>
 						</div>
-						<button type="button" onClick={() => handleSave('tab5')}>
-							{__("Save", "hex-coupon-for-woocommerce-pro")}
-						</button>
+						<div className="text-setting-item">
+							<label></label>
+							<button className="save" type="button" onClick={() => handleSave('tab5')}>
+								{__("Save", "hex-coupon-for-woocommerce-pro")}
+							</button>
+						</div>
 					</div>
 				);
 			case 5:

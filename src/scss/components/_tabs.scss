@@ -46,6 +46,23 @@
 		.text-setting-item {
 			margin-bottom: 20px;
 			display: flex;
+			.save {
+				padding: 10px 20px;
+				font-size: 14px;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+		
+				&.save {
+					background-color: var(--hex-main-color-one);
+		
+					&:hover {
+						background-color: #a760fede;
+					}
+				}
+			}
 			label:not(.switchWrap__label) {
 				margin-right: 10px;
 				display: inline-block;
@@ -139,8 +156,8 @@
 				}
 			}
 		
-			.save-button {
-				margin: 10px;
+			.save {
+				
 				padding: 10px 20px;
 				font-size: 14px;
 				color: white;
@@ -149,11 +166,11 @@
 				cursor: pointer;
 				transition: background-color 0.3s ease;
 		
-				&.save-button {
-					background-color: #4caf50;
+				&.save {
+					background-color: var(--hex-main-color-one);
 		
 					&:hover {
-						background-color: #45a049;
+						background-color: #a760fede;
 					}
 				}
 			}
@@ -194,19 +211,15 @@
 			}
 		
 			.save-button {
-				display: block;
-				width: 100%;
-				padding: 15px;
-				background-color: #007bff;
+				background-color: var(--hex-main-color-one);
 				color: white;
-				font-size: 16px;
 				border: none;
 				border-radius: 4px;
 				cursor: pointer;
 				transition: background-color 0.3s ease;
 		
 				&:hover {
-					background-color: #2d639e;
+					background-color: #a760fede;
 				}
 			}
 		}

@@ -14,6 +14,7 @@ class SpinWheelSettingsApiController extends Controller
 		'a'      => [
 			'href'  => [],
 			'title' => [],
+			'class' => [],
 		],
 		'u'      => [],
 		'br'     => [],

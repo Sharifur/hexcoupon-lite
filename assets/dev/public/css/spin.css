@@ -74,7 +74,12 @@
         input[type="checkbox"] {
             accent-color: #343434;
         }
-        .openion {
+        .accept-agree {
+          span {
+            display: inline-block;
+          }
+        }
+        /* .openion {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -82,7 +87,7 @@
             .opinion-btn {
                 color: #fff;
             }
-        }
+        } */
     }
     /* Wheel-part */
     .spinner-wraper {
