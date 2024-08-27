@@ -46,6 +46,9 @@
 		.text-setting-item {
 			margin-bottom: 20px;
 			display: flex;
+			.selectedPages {
+				width: 80%;
+			}
 			.save {
 				padding: 10px 20px;
 				font-size: 14px;

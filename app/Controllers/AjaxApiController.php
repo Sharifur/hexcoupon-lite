@@ -277,6 +277,7 @@ class AjaxApiController extends Controller
 
 		$all_products = GeneralFunctionsHelpers::getInstance()->show_all_products();
 		$all_categories = GeneralFunctionsHelpers::getInstance()->show_all_categories();
+		$all_pages = GeneralFunctionsHelpers::getInstance()->show_all_pages();
 
 		// Check the nonce and action
 		if ( $this->verify_nonce() ) {
@@ -319,6 +320,8 @@ class AjaxApiController extends Controller
 				'allWooCommerceProduct' => $all_products,
 				// all WooCommerce categories
 				'allWooCommerceCategories' => $all_categories,
+				// all WP pages
+				'allPages' => $all_pages,
 			], 200);
 		} else {
 			// Nonce verification failed, handle the error

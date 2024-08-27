@@ -78,6 +78,7 @@ class SpinWheel
         $show_on_homepage = ! empty( $spin_wheel_popup['showOnlyHomepage'] ) ? $spin_wheel_popup['showOnlyHomepage'] : 0;
         $show_on_blogpage = ! empty( $spin_wheel_popup['showOnlyBlogPage'] ) ? $spin_wheel_popup['showOnlyBlogPage'] : 0;
         $show_on_shoppage = ! empty( $spin_wheel_popup['showOnlyShopPage'] ) ? $spin_wheel_popup['showOnlyShopPage'] : 0;
+        $selected_pages = ! empty( $spin_wheel_popup['selectedPages'] ) ? $spin_wheel_popup['selectedPages'] : [];
 
         // Get the current user ID
 		$user_id = get_current_user_id();
@@ -89,7 +90,12 @@ class SpinWheel
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
         }
 
-        if ( $enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || $enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ) :
+        if ( 
+            $enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || 
+            $enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || 
+            $enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ||
+            $enable_spin_wheel && is_page( $selected_pages ) || is_single( $selected_pages ) && $spin_count < $spin_per_email
+            ) :
         ?>
         <!-- Popup Modal -->
         <div class="spinToWin">
@@ -212,7 +218,7 @@ class SpinWheel
                                         printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $title_text ) ); 
                                         ?>
                                     </h3>
-                                    <p>
+                                    
                                         <?php 
                                         $default_description = '<ul>
                                         <li>Try your lucky to get discount coupon.</li>
@@ -222,7 +228,7 @@ class SpinWheel
                                         $wheel_description = ! empty( $spin_wheel_wheel['wheelDescription'] ) ? $spin_wheel_wheel['wheelDescription'] : $default_description;
                                         echo wp_kses( $wheel_description , $this->allowed_html ); 
                                         ?>
-                                    </p>
+                                    
                                 </div>
                                 <?php 
                                 $gdpr_message_defualt = '<p>I Agree With The <a href="#">Term And Condition</a></p>';
@@ -238,12 +244,8 @@ class SpinWheel
                                 <?php endif; ?>
 
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableEmailAddress'] == true ) : ?>
-                                    <input type="email" class="custom-input email" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_email ) ); ?>" value="" required>
-                                <?php endif; ?>
-
-                                <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enablePassword'] == true ) : ?>
-                                    <input type="text" class="custom-input password mb-3" name="password" id="password" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $password ) ); ?>" value="" required>
-                                <?php endif; ?>                               
+                                    <input type="email" class="custom-input email mb-3" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_email ) ); ?>" value="" required>
+                                <?php endif; ?>                           
 
                                 <div class="button-wraper">
                                     <button type="button" class="try-your-luck">

@@ -119,6 +119,7 @@ class SpinWheelSettingsApiController extends Controller
 				'showOnlyHomepage' => isset( $dataArray['settings']['showOnlyHomepage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyHomepage'] ) : '',
 				'showOnlyBlogPage' => isset( $dataArray['settings']['showOnlyBlogPage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyBlogPage'] ) : '',
 				'showOnlyShopPage' => isset( $dataArray['settings']['showOnlyShopPage'] ) ? rest_sanitize_boolean( $dataArray['settings']['showOnlyShopPage'] ) : '',
+				'selectedPages' => isset( $dataArray['settings']['selectedPages'] ) ? $dataArray['settings']['selectedPages'] : '',
 			];
 			update_option( 'spinWheelPopup', $spin_popup_settings );
 
@@ -155,8 +156,6 @@ class SpinWheelSettingsApiController extends Controller
 				'buttonBGColor' => isset( $dataArray['settings']['buttonBGColor']) ? sanitize_text_field( $dataArray['settings']['buttonBGColor'] ) : '',
 				'enableYourName' => isset( $dataArray['settings']['enableYourName'] ) ? rest_sanitize_boolean( $dataArray['settings']['enableYourName'] ) : '',
 				'yourName' => isset( $dataArray['settings']['yourName'] ) ? sanitize_text_field( $dataArray['settings']['yourName'] ) : '',
-				'enablePassword' => isset( $dataArray['settings']['enablePassword'] ) ? sanitize_text_field( $dataArray['settings']['enablePassword'] ) : '',
-				'password' => isset( $dataArray['settings']['password'] ) ? sanitize_text_field( $dataArray['settings']['password'] ) : '',
 				'enableEmailAddress' => isset( $dataArray['settings']['enableEmailAddress'] ) ? sanitize_text_field( $dataArray['settings']['enableEmailAddress'] ) : '',
 				'emailAddress' => isset( $dataArray['settings']['emailAddress'] ) ? sanitize_text_field( $dataArray['settings']['emailAddress'] ) : '',
 				'gdprMessage' => isset( $dataArray['settings']['gdprMessage'] ) ? wp_kses( $dataArray['settings']['gdprMessage'], $this->allowed_html ) : '',
@@ -287,63 +286,138 @@ class SpinWheelSettingsApiController extends Controller
 	 * @return void
 	 * Sending spin count to the userMeta table of each user
 	 */
-	public function update_spin_count() 
-	{
-		if ( is_user_logged_in() ) {
-			$current_user = wp_get_current_user();
-			$user_email = $current_user->user_email;	
-		} else {
-			// Retrieve the selected offer sent from JavaScript
-			$user_email = sanitize_text_field( $_POST['userEmail'] );
-			$user_name = sanitize_text_field( $_POST['userName'] );
-			$password = sanitize_text_field( $_POST['userPassword'] );
+	// public function update_spin_count() 
+	// {
+	// 	if ( is_user_logged_in() ) {
+	// 		$current_user = wp_get_current_user();
+	// 		$user_email = $current_user->user_email;	
+	// 	} else {
+	// 		// Retrieve the selected offer sent from JavaScript
+	// 		$user_email = sanitize_text_field( $_POST['userEmail'] );
+	// 		$user_name = sanitize_text_field( $_POST['userName'] );
+	// 		$password = sanitize_text_field( $_POST['userPassword'] );
 			
-			if ( get_user_by( 'email', $_POST['userEmail'] ) ) {
-				wp_send_json_error( array( 'message' => 'This email already exists.' ) ); // Return a specific error message
-				return;
-			} else {
-				$this->create_customer_user( $user_name, $user_email, $password );
-			}
-		}
+	// 		if ( get_user_by( 'email', $_POST['userEmail'] ) ) {
+	// 			wp_send_json_error( array( 'message' => 'This email already exists.' ) ); // Return a specific error message
+	// 			return;
+	// 		} else {
+	// 			$this->create_customer_user( $user_name, $user_email, $password );
+	// 		}
+	// 	}
 
-		// Get the current user ID
-		$user_id = get_current_user_id();
+	// 	// Get the current user ID
+	// 	$user_id = get_current_user_id();
 
-		// Get the current spin count from user meta
-		$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
+	// 	// Get the current spin count from user meta
+	// 	$spin_count = get_user_meta( $user_id, 'user_spin_count', true );
 
-		// If there is no spin count yet, initialize it to 0
-		if ( $spin_count === '' ) {
-			$spin_count = 0;
-		}
+	// 	// If there is no spin count yet, initialize it to 0
+	// 	if ( $spin_count === '' ) {
+	// 		$spin_count = 0;
+	// 	}
 
-		// Increment the spin count
-		$spin_count++;
+	// 	// Increment the spin count
+	// 	$spin_count++;
 
-		// Update the spin count in user meta
-		update_user_meta( $user_id, 'user_spin_count', $spin_count );
-		// Update term and condition value
-		update_user_meta( $user_id, 'spin_wheel_accepted_term_condition', true );
+	// 	// Update the spin count in user meta
+	// 	update_user_meta( $user_id, 'user_spin_count', $spin_count );
+	// 	// Update term and condition value
+	// 	update_user_meta( $user_id, 'spin_wheel_accepted_term_condition', true );
 
-		$coupon_type = sanitize_text_field( $_POST['couponType'] );
-		$value = sanitize_text_field( $_POST['couponValue'] );
+	// 	$coupon_type = sanitize_text_field( $_POST['couponType'] );
+	// 	$value = sanitize_text_field( $_POST['couponValue'] );
 
-		if ( $coupon_type == 'PERCENTAGE DISCOUNT' ) {
-			$discount_type = 'percent';
-		} elseif ( $coupon_type == 'FIXED PRODUCT DISCOUNT' ) {
-			$discount_type = 'fixed_product';
-		} elseif ( $coupon_type == 'FIXED CART DISCOUNT' ) {
-			$discount_type = 'fixed_cart';
-		} else {
-			return;
-		}
+	// 	if ( $coupon_type == 'PERCENTAGE DISCOUNT' ) {
+	// 		$discount_type = 'percent';
+	// 	} elseif ( $coupon_type == 'FIXED PRODUCT DISCOUNT' ) {
+	// 		$discount_type = 'fixed_product';
+	// 	} elseif ( $coupon_type == 'FIXED CART DISCOUNT' ) {
+	// 		$discount_type = 'fixed_cart';
+	// 	} else {
+	// 		return;
+	// 	}
 		
-		// finally create user and create coupon after winning spin wheel
-		$this->create_woocommerce_coupon( $value, $discount_type );
+	// 	// if ( ! is_user_logged_in() ) {
+	// 	// 	user_email
+	// 	// 	$this->create_woocommerce_coupon( $value, $discount_type );
+	// 	// } else {
+	// 	// 	$this->create_woocommerce_coupon( $value, $discount_type );
+	// 	// }
+	// 	// finally create user and create coupon after winning spin wheel
+	// 	$this->create_woocommerce_coupon( $value, $discount_type );
 
-		// Return the updated spin count as a JSON response
-		wp_send_json_success( $spin_count );
-	}
+	// 	// Return the updated spin count as a JSON response
+	// 	wp_send_json_success( $spin_count );
+	// }
+
+	public function update_spin_count() 
+{
+    // Initialize $user_email variable
+    $user_email = '';
+
+    if ( is_user_logged_in() ) {
+        $current_user = wp_get_current_user();
+        $user_email = $current_user->user_email;	
+    } else {
+        // Retrieve the selected offer sent from JavaScript
+        $user_email = sanitize_text_field( $_POST['userEmail'] );
+        $user_name = sanitize_text_field( $_POST['userName'] );
+        $password = sanitize_text_field( $_POST['userPassword'] );
+        
+        if ( get_user_by( 'email', $_POST['userEmail'] ) ) {
+            wp_send_json_error( array( 'message' => 'This email already exists.' ) ); // Return a specific error message
+            return;
+        } else {
+            $this->create_customer_user( $user_name, $user_email, $password );
+        }
+    }
+
+    // Get the current user ID, handle logged-in and non-logged-in users
+    $user_id = get_current_user_id();
+
+    // For non-logged-in users, we can get user ID after creation
+    if ( !$user_id && !empty($user_email) ) {
+        $user = get_user_by( 'email', $user_email );
+        if ( $user ) {
+            $user_id = $user->ID;
+        }
+    }
+
+    // Get the current spin count from user meta
+    $spin_count = get_user_meta( $user_id, 'user_spin_count', true );
+
+    // If there is no spin count yet, initialize it to 0
+    if ( $spin_count === '' ) {
+        $spin_count = 0;
+    }
+
+    // Increment the spin count
+    $spin_count++;
+
+    // Update the spin count in user meta
+    update_user_meta( $user_id, 'user_spin_count', $spin_count );
+    // Update term and condition value
+    update_user_meta( $user_id, 'spin_wheel_accepted_term_condition', true );
+
+    $coupon_type = sanitize_text_field( $_POST['couponType'] );
+    $value = sanitize_text_field( $_POST['couponValue'] );
+
+    if ( $coupon_type == 'PERCENTAGE DISCOUNT' ) {
+        $discount_type = 'percent';
+    } elseif ( $coupon_type == 'FIXED PRODUCT DISCOUNT' ) {
+        $discount_type = 'fixed_product';
+    } elseif ( $coupon_type == 'FIXED CART DISCOUNT' ) {
+        $discount_type = 'fixed_cart';
+    } else {
+        return;
+    }
+    
+    // Create coupon for the email provided
+    $this->create_woocommerce_coupon( $value, $discount_type, $user_email );
+
+    // Return the updated spin count as a JSON response
+    wp_send_json_success( $spin_count );
+}
 
 	public function email_template( $emailText ) {
 		ob_start();
@@ -462,55 +536,109 @@ class SpinWheelSettingsApiController extends Controller
 	 * @return void
 	 * Create a coupon after spinning the wheel
 	 */
-	public function create_woocommerce_coupon( $value, $discount_type ) 
-	{
-		$user_data = get_userdata( get_current_user_id() );
-		$user_email = $user_data->user_email;
+	// public function create_woocommerce_coupon( $value, $discount_type ) 
+	// {
+	// 	$user_data = get_userdata( get_current_user_id() );
+	// 	$user_email = $user_data->user_email;
 
-		$spin_wheel_coupon = get_option( 'spinWheelCoupon' );
-		$minimum_spend = $spin_wheel_coupon['spinMinimumSpend'];
-		$maximum_spend = $spin_wheel_coupon['spinMaximumSpend'];
-		$individual_use_only = $spin_wheel_coupon['spinIndividualSpendOnly'];
-		$exclude_sale_item = $spin_wheel_coupon['spinExcludeSaleItem'];
-		$exclude_products = $spin_wheel_coupon['spinExcludeProducts'];
-		$exclude_categories = $spin_wheel_coupon['spinExcludeCategories'];
-		$usage_limit_per_coupon = $spin_wheel_coupon['spinUsageLimitPerCoupon'];
-		$limit_usage_to_xitems = $spin_wheel_coupon['spinLimitUsageToXItems'];
-		$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
+	// 	$spin_wheel_coupon = get_option( 'spinWheelCoupon' );
+	// 	$minimum_spend = $spin_wheel_coupon['spinMinimumSpend'];
+	// 	$maximum_spend = $spin_wheel_coupon['spinMaximumSpend'];
+	// 	$individual_use_only = $spin_wheel_coupon['spinIndividualSpendOnly'];
+	// 	$exclude_sale_item = $spin_wheel_coupon['spinExcludeSaleItem'];
+	// 	$exclude_products = $spin_wheel_coupon['spinExcludeProducts'];
+	// 	$exclude_categories = $spin_wheel_coupon['spinExcludeCategories'];
+	// 	$usage_limit_per_coupon = $spin_wheel_coupon['spinUsageLimitPerCoupon'];
+	// 	$limit_usage_to_xitems = $spin_wheel_coupon['spinLimitUsageToXItems'];
+	// 	$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
 
-		// Define the coupon details
-		$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Unique code of coupon
-		$discount_amount = $value; // The discount amount
+	// 	// Define the coupon details
+	// 	$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Unique code of coupon
+	// 	$discount_amount = $value; // The discount amount
 		
-		// Check if a coupon with the same code already exists
-		if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
-			// Create a new coupon
-			$coupon = new \WC_Coupon();
-			$coupon->set_code( $coupon_code );
-			$coupon->set_amount( $discount_amount );
-			$coupon->set_discount_type( $discount_type );
-			$coupon->set_description( 'You got this discount fro spin wheel' );
-			$coupon->set_individual_use( $individual_use_only ); // Prevents other coupons from being used with this coupon
-			$coupon->set_exclude_sale_items( $exclude_sale_item );
-			$coupon->set_excluded_product_ids( $exclude_products );
-			$coupon->set_excluded_product_categories( $exclude_categories );
-			$coupon->set_usage_limit( $usage_limit_per_coupon ); // The number of times the coupon can be used
-			$coupon->set_usage_limit_per_user( $usage_limit_per_user ); // The number of times the coupon can be used per customer
-			$coupon->set_limit_usage_to_x_items( $limit_usage_to_xitems );
-			$coupon->set_minimum_amount( $minimum_spend ); // Minimum spend required to use the coupon
-			$coupon->set_maximum_amount( $maximum_spend ); // Maximum spend required to use the coupon
-			$coupon->set_email_restrictions( $user_email ); // Restrict to specific emails
+	// 	// Check if a coupon with the same code already exists
+	// 	if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
+	// 		// Create a new coupon
+	// 		$coupon = new \WC_Coupon();
+	// 		$coupon->set_code( $coupon_code );
+	// 		$coupon->set_amount( $discount_amount );
+	// 		$coupon->set_discount_type( $discount_type );
+	// 		$coupon->set_description( 'You got this discount fro spin wheel' );
+	// 		$coupon->set_individual_use( $individual_use_only ); // Prevents other coupons from being used with this coupon
+	// 		$coupon->set_exclude_sale_items( $exclude_sale_item );
+	// 		$coupon->set_excluded_product_ids( $exclude_products );
+	// 		$coupon->set_excluded_product_categories( $exclude_categories );
+	// 		$coupon->set_usage_limit( $usage_limit_per_coupon ); // The number of times the coupon can be used
+	// 		$coupon->set_usage_limit_per_user( $usage_limit_per_user ); // The number of times the coupon can be used per customer
+	// 		$coupon->set_limit_usage_to_x_items( $limit_usage_to_xitems );
+	// 		$coupon->set_minimum_amount( $minimum_spend ); // Minimum spend required to use the coupon
+	// 		$coupon->set_maximum_amount( $maximum_spend ); // Maximum spend required to use the coupon
+	// 		$coupon->set_email_restrictions( $user_email ); // Restrict to specific emails
 	
-			// Save the coupon
-			$coupon_id = $coupon->save();
+	// 		// Save the coupon
+	// 		$coupon_id = $coupon->save();
 	
-			if ( ! $coupon_id ) {
-				error_log( 'Coupon creation failed: Coupon Id: ' . $coupon_id );
-			}
-		} else {
-			error_log( 'Coupon code already exist' );;
-		}
-	}
+	// 		if ( ! $coupon_id ) {
+	// 			error_log( 'Coupon creation failed: Coupon Id: ' . $coupon_id );
+	// 		}
+	// 	} else {
+	// 		error_log( 'Coupon code already exist' );;
+	// 	}
+	// }
+
+	public function create_woocommerce_coupon( $value, $discount_type, $user_email ) 
+{
+    // If the email isn't provided, fall back to the current user's email
+    if (empty($user_email)) {
+        $user_data = get_userdata( get_current_user_id() );
+        $user_email = $user_data->user_email;
+    }
+
+    $spin_wheel_coupon = get_option( 'spinWheelCoupon' );
+    $minimum_spend = $spin_wheel_coupon['spinMinimumSpend'];
+    $maximum_spend = $spin_wheel_coupon['spinMaximumSpend'];
+    $individual_use_only = $spin_wheel_coupon['spinIndividualSpendOnly'];
+    $exclude_sale_item = $spin_wheel_coupon['spinExcludeSaleItem'];
+    $exclude_products = $spin_wheel_coupon['spinExcludeProducts'];
+    $exclude_categories = $spin_wheel_coupon['spinExcludeCategories'];
+    $usage_limit_per_coupon = $spin_wheel_coupon['spinUsageLimitPerCoupon'];
+    $limit_usage_to_xitems = $spin_wheel_coupon['spinLimitUsageToXItems'];
+    $usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
+
+    // Define the coupon details
+    $coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Unique code of coupon
+    $discount_amount = $value; // The discount amount
+    
+    // Check if a coupon with the same code already exists
+    if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
+        // Create a new coupon
+        $coupon = new \WC_Coupon();
+        $coupon->set_code( $coupon_code );
+        $coupon->set_amount( $discount_amount );
+        $coupon->set_discount_type( $discount_type );
+        $coupon->set_description( 'You got this discount from spin wheel' );
+        $coupon->set_individual_use( $individual_use_only ); // Prevents other coupons from being used with this coupon
+        $coupon->set_exclude_sale_items( $exclude_sale_item );
+        $coupon->set_excluded_product_ids( $exclude_products );
+        $coupon->set_excluded_product_categories( $exclude_categories );
+        $coupon->set_usage_limit( $usage_limit_per_coupon ); // The number of times the coupon can be used
+        $coupon->set_usage_limit_per_user( $usage_limit_per_user ); // The number of times the coupon can be used per customer
+        $coupon->set_limit_usage_to_x_items( $limit_usage_to_xitems );
+        $coupon->set_minimum_amount( $minimum_spend ); // Minimum spend required to use the coupon
+        $coupon->set_maximum_amount( $maximum_spend ); // Maximum spend required to use the coupon
+        $coupon->set_email_restrictions( array($user_email) ); // Restrict to specific emails
+
+        // Save the coupon
+        $coupon_id = $coupon->save();
+
+        if ( ! $coupon_id ) {
+            error_log( 'Coupon creation failed: Coupon Id: ' . $coupon_id );
+        }
+    } else {
+        error_log( 'Coupon code already exists' );
+    }
+}
+
 
 	/**
 	 * @package hexcoupon

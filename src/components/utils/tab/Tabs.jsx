@@ -16,12 +16,14 @@ const { nonce, ajaxUrl } = loyaltyProgramData;
 const Tabs = ({ tabs }) => {
 	
 	const [allProducts, setAllProducts] = useState([]);
-	const [allCategories, setAllCategories] = useState([]);0
+	const [allCategories, setAllCategories] = useState([]);
+	const [allPages, setAllPages] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [selectedUsers, setSelectedUsers] = useState([]);
 
     const [selectedExcludeProducts, setSelectedExcludeProducts] = useState([]);
     const [selectedExcludeCategories, setSelectedExcludeCategories] = useState([]);
+	const [selectedPages,setSelectedPages] = useState([]);
 
 	const handleUserSelect = (selectedOptions) => {
 		const selectedIds = selectedOptions.map(option => option.value);
@@ -30,6 +32,7 @@ const Tabs = ({ tabs }) => {
 	}
 
 	useEffect(() => {
+		// Fetch all combined data (products, categories) and pages
 		axios
 			.get(ajaxUrl, {
 				params: {
@@ -41,25 +44,32 @@ const Tabs = ({ tabs }) => {
 				},
 			})
 			.then(({ data }) => {
+				// Format WooCommerce Products
 				const formattedProducts = Object.entries(data.allWooCommerceProduct).map(([id, name]) => ({
 					value: id, // The key (product ID) as the value
 					label: name, // The value (product name) as the label
-				  }));
-				  setAllProducts(formattedProducts);
+				}));
+				setAllProducts(formattedProducts);
+	
+				// Format WooCommerce Categories
+				const formattedCategories = Object.entries(data.allWooCommerceCategories).map(([id, name]) => ({
+					value: id, // The key (category ID) as the value
+					label: name, // The value (category name) as the label
+				}));
+				setAllCategories(formattedCategories);
 
-				  const formattedCategories = Object.entries(data.allWooCommerceCategories).map(([id, name]) => ({
-					value: id, // The key (product ID) as the value
-					label: name, // The value (product name) as the label
-				  }));
-				  setAllCategories(formattedCategories);
+				const formattedPages = Object.entries(data.allPages).map(([id, title]) => ({
+					value: id,
+					label: title,
+				}));
+				setAllPages(formattedPages);
 			})
 			.catch((error) => {
 				console.error('Error:', error);
 			})
 			.finally(() => setIsLoading(false));
 	}, [nonce]);
-
-
+	
 	const [formData, setFormData] = useState(null);
 	const [activeTab, setActiveTab] = useState(0);
 
@@ -88,7 +98,15 @@ const Tabs = ({ tabs }) => {
 					allProducts.find(product => product.value === id)
 				).filter(product => product); // Filter out undefined values
 				setSelectedExcludeProducts(excludedProducts);
-
+	
+				// Fetch selected pages IDs from the API
+				const selectedPagesId = data.spinWheelSettingsData.spinWheelPopup.selectedPages || [];
+				// Map selectedPages IDs to the corresponding pages from allPages
+				const mappedSelectedPages = selectedPagesId.map(pageId => {
+					return allPages.find(page => page.value === pageId);
+				}).filter(page => page); // Remove any undefined entries
+				setSelectedPages(mappedSelectedPages);
+	
 				// Initialize formData once spinWheelData is available
 				let spinWheelContentArray = Object.keys(data.spinWheelSettingsData?.spinWheelContent || {}).map(key => {
 					const item = data.spinWheelSettingsData.spinWheelContent[key];
@@ -97,7 +115,7 @@ const Tabs = ({ tabs }) => {
 						...item,
 					};
 				});
-
+	
 				if (spinWheelContentArray.length === 0) {
 					spinWheelContentArray = [
 						{ id: 1, couponType: 'Non', label: 'Not Lucky', value: 0, color: '#ffe0b2' },
@@ -105,9 +123,8 @@ const Tabs = ({ tabs }) => {
 						{ id: 3, couponType: 'Non', label: 'Not Lucky', value: 0, color: '#ffb74d' },
 						{ id: 4, couponType: 'Fixed product discount', label: '{coupon_amount} OFF', value: 10, color: '#ff8c00' },
 					];
-				}
-
-
+				}				
+	
 				setFormData({
 					tab1: {
 						field1: data.spinWheelSettingsData.spinWheelGeneral.enableSpinWheel,
@@ -117,9 +134,10 @@ const Tabs = ({ tabs }) => {
 					tab2: {
 						field1: data.spinWheelSettingsData.spinWheelPopup.iconColor,
 						field3: data.spinWheelSettingsData.spinWheelPopup.popupInterval,
-						field4: !!data.spinWheelSettingsData.spinWheelPopup.showOnlyHomepage,  // Ensure it's a boolean
-						field5: !!data.spinWheelSettingsData.spinWheelPopup.showOnlyBlogPage,    // Ensure it's a boolean
-						field6: !!data.spinWheelSettingsData.spinWheelPopup.showOnlyShopPage,    // Ensure it's a boolean
+						field4: data.spinWheelSettingsData.spinWheelPopup.showOnlyHomepage,  
+						field5: data.spinWheelSettingsData.spinWheelPopup.showOnlyBlogPage,  
+						field6: data.spinWheelSettingsData.spinWheelPopup.showOnlyShopPage,   
+						field7: data.spinWheelSettingsData.spinWheelPopup.selectedPages,
 					},
 					tab3: {
 						titleText: data.spinWheelSettingsData.spinWheelWheel.titleText,
@@ -131,8 +149,8 @@ const Tabs = ({ tabs }) => {
 						buttonBGColor: data.spinWheelSettingsData.spinWheelWheel.buttonBGColor,
 						enableYourName: data.spinWheelSettingsData.spinWheelWheel.enableYourName,
 						yourName: data.spinWheelSettingsData.spinWheelWheel.yourName,
-						enablePassword: data.spinWheelSettingsData.spinWheelWheel.enablePassword,
-						password: data.spinWheelSettingsData.spinWheelWheel.password,
+						
+						
 						enableEmailAddress: data.spinWheelSettingsData.spinWheelWheel.enableEmailAddress,
 						emailAddress: data.spinWheelSettingsData.spinWheelWheel.emailAddress,
 						gdprMessage: data.spinWheelSettingsData.spinWheelWheel.gdprMessage,
@@ -161,10 +179,10 @@ const Tabs = ({ tabs }) => {
 				});
 				setSettings(spinWheelContentArray);
 			})
-			.catch( ( error ) => {
-				console.error( 'Error:', error );
-			} );
-	}, [allCategories, allProducts, nonce] );
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	}, [allCategories, allProducts, allPages, nonce]);	
 
 	const [settings, setSettings] = useState([
         { id: 1, couponType: 'Non', label: 'Not Lucky', value: 0, color: '#ffe0b2' },
@@ -306,6 +324,7 @@ const Tabs = ({ tabs }) => {
 					showOnlyHomepage: formData.tab2.field4,
 					showOnlyBlogPage: formData.tab2.field5,
 					showOnlyShopPage: formData.tab2.field6,
+					selectedPages: selectedPages.map(page => page.value)
 				},
 			}, {
 				headers: {
@@ -342,8 +361,8 @@ const Tabs = ({ tabs }) => {
 					buttonBGColor: formData.tab3.buttonBGColor, 
 					enableYourName: formData.tab3.enableYourName, // Enable Your Name switch
 					yourName: formData.tab3.yourName, // Your name
-					enablePassword: formData.tab3.enablePassword, // Enable Password switch
-					password: formData.tab3.password, // Password number
+					
+					
 					enableEmailAddress: formData.tab3.enableEmailAddress, // Enable Email Address switch
 					emailAddress: formData.tab3.emailAddress, // Email address
 					gdprMessage: formData.tab3.gdprMessage, // GDPR message from ReactQuill
@@ -560,6 +579,27 @@ const Tabs = ({ tabs }) => {
 								onSwitchChange={(isChecked) => setFormData({ ...formData, tab2: { ...formData.tab2, field6: isChecked } })}
 							/>
 						</div>
+
+						<div className="popup-settings">
+							<label>{__("Select Specific Pages", "hex-coupon-for-woocommerce-pro")}</label>
+							
+							<Select
+								
+								closeMenuOnSelect={false}
+								isMulti
+								options={allPages}
+								className="mt-2 selectedPages"
+								value={selectedPages}
+								onChange={setSelectedPages}
+							/>
+
+							
+						
+
+						</div>
+
+						
+
 						<div className="popup-settings">
 							<label></label>
 							<button className="save" type="button" onClick={() => handleSave('tab2')}>{__("Save","hex-coupon-for-woocommerce-pro")}</button>
@@ -661,24 +701,7 @@ const Tabs = ({ tabs }) => {
 							</div>
 						</div>
 
-						<div className="wheel-settings">
-							<label>{__("Password", "hex-coupon-for-woocommerce")}</label>
-							<div className="password">
-								<Switch
-									isChecked={formData.tab3.enablePassword}
-									onSwitchChange={(isChecked) => setFormData({ ...formData, tab3: { ...formData.tab3, enablePassword: isChecked } })}
-								/>
-								<input
-									type="password"
-									name="password"
-									className="password"
-									placeholder="Enter your password"
-									value={formData.tab3.password}
-									onChange={(e) => handleFormChange(e, 'tab3')}
-									disabled={!formData.tab3.enablePassword}
-								/>
-							</div>
-						</div>
+						
 
 						<div className="wheel-settings">
 							<label>{__("Email Address", "hex-coupon-for-woocommerce-pro")}</label>

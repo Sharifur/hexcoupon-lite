@@ -93,7 +93,7 @@ class ActivationService
 
 		$spin_wheel_general = [
 			'enableSpinWheel' => 1,
-			'spinPerEmail' => 1,
+			'spinPerEmail' => 10,
 			'delayBetweenSpins' => 5,
 		];
 		update_option( 'spinWheelGeneral', $spin_wheel_general );
@@ -108,7 +108,6 @@ class ActivationService
 
 		$spin_wheel_wheel_settings = [			
 			'enableYourName' => 1,			
-			'enablePassword' => 1,			
 			'enableEmailAddress' => 1,			
 		];
 		
