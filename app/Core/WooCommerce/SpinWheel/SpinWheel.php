@@ -98,7 +98,7 @@ class SpinWheel
             ) :
         ?>
         <!-- Popup Modal -->
-        <div class="spinToWin">
+        <div class="spinToWin" >
             <div class="container">
                 <div class="spinToWin-wraper">
                     <div class="close">
@@ -218,7 +218,7 @@ class SpinWheel
                                         printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $title_text ) ); 
                                         ?>
                                     </h3>
-                                    
+                                    <div class="wheelDescription" >
                                         <?php 
                                         $default_description = '<ul>
                                         <li>Try your lucky to get discount coupon.</li>
@@ -228,23 +228,19 @@ class SpinWheel
                                         $wheel_description = ! empty( $spin_wheel_wheel['wheelDescription'] ) ? $spin_wheel_wheel['wheelDescription'] : $default_description;
                                         echo wp_kses( $wheel_description , $this->allowed_html ); 
                                         ?>
-                                    
+                                    </div>
                                 </div>
                                 <?php 
                                 $gdpr_message_defualt = '<p>I Agree With The <a href="#">Term And Condition</a></p>';
-
-                                $your_name = ! empty( $spin_wheel_wheel['yourName'] ) ? $spin_wheel_wheel['yourName'] : 'Enter your name';
-                                $your_email = ! empty( $spin_wheel_wheel['emailAddress'] ) ? $spin_wheel_wheel['emailAddress'] : 'Enter your email';
-                                $password = ! empty( $spin_wheel_wheel['password'] ) ? $spin_wheel_wheel['password'] : 'Enter password';
                                 $gdpr_message = ! empty( $spin_wheel_wheel['gdprMessage'] ) ? $spin_wheel_wheel['gdprMessage'] : $gdpr_message_defualt;
                                 ?>
                                 <form action="#" method="get">
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableYourName'] == true ) : ?>
-                                    <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_name ) ); ?>" value="" required>
+                                    <input type="text" class="custom-input name mb-3" name="name" id="name" placeholder="Enter your name" value="" required>
                                 <?php endif; ?>
 
                                 <?php if (  ! is_user_logged_in() && $spin_wheel_wheel['enableEmailAddress'] == true ) : ?>
-                                    <input type="email" class="custom-input email mb-3" name="email" id="email" placeholder="<?php printf( esc_attr__( '%s', 'hex-coupon-for-woocommerce' ), esc_attr( $your_email ) ); ?>" value="" required>
+                                    <input type="email" class="custom-input email mb-3" name="email" id="email" placeholder="Enter your email" value="" required>
                                 <?php endif; ?>                           
 
                                 <div class="button-wraper">

@@ -144,13 +144,12 @@ const Tabs = ({ tabs }) => {
 						titleColor: data.spinWheelSettingsData.spinWheelWheel.titleColor,
 						textColor: data.spinWheelSettingsData.spinWheelWheel.textColor,
 						wheelDescription: data.spinWheelSettingsData.spinWheelWheel.wheelDescription,
+						wheelDescriptionColor: data.spinWheelSettingsData.spinWheelWheel.wheelDescriptionColor,
 						buttonText: data.spinWheelSettingsData.spinWheelWheel.buttonText,
 						buttonColor: data.spinWheelSettingsData.spinWheelWheel.buttonColor,
 						buttonBGColor: data.spinWheelSettingsData.spinWheelWheel.buttonBGColor,
 						enableYourName: data.spinWheelSettingsData.spinWheelWheel.enableYourName,
-						yourName: data.spinWheelSettingsData.spinWheelWheel.yourName,
-						
-						
+						yourName: data.spinWheelSettingsData.spinWheelWheel.yourName,						
 						enableEmailAddress: data.spinWheelSettingsData.spinWheelWheel.enableEmailAddress,
 						emailAddress: data.spinWheelSettingsData.spinWheelWheel.emailAddress,
 						gdprMessage: data.spinWheelSettingsData.spinWheelWheel.gdprMessage,
@@ -210,12 +209,18 @@ const Tabs = ({ tabs }) => {
 	};
 
 	const handleFormChange = (e, tab) => {
-		const { name, value } = e.target;
-		setFormData({
-			...formData,
-			[tab]: { ...formData[tab], [name]: value }
-		});
+		const { name, type, checked, value } = e.target;
+		const newValue = type === 'checkbox' ? checked : value;
+		
+		setFormData(prevFormData => ({
+			...prevFormData,
+			[tab]: { 
+				...prevFormData[tab], 
+				[name]: newValue 
+			}
+		}));
 	};
+	
 
 	const handleSave = (tab) => {
 		// Implement save logic here
@@ -356,15 +361,12 @@ const Tabs = ({ tabs }) => {
 					titleColor: formData.tab3.titleColor,
 					textColor: formData.tab3.textColor, // Text color from color picker
 					wheelDescription: formData.tab3.wheelDescription, // Wheel description from ReactQuill
+					wheelDescriptionColor: formData.tab3.wheelDescriptionColor, // wheel description color
 					buttonText: formData.tab3.buttonText, // Button text
 					buttonColor: formData.tab3.buttonColor, // Button color from color picker
 					buttonBGColor: formData.tab3.buttonBGColor, 
 					enableYourName: formData.tab3.enableYourName, // Enable Your Name switch
-					yourName: formData.tab3.yourName, // Your name
-					
-					
 					enableEmailAddress: formData.tab3.enableEmailAddress, // Enable Email Address switch
-					emailAddress: formData.tab3.emailAddress, // Email address
 					gdprMessage: formData.tab3.gdprMessage, // GDPR message from ReactQuill
 				},
 			}, {
@@ -505,7 +507,7 @@ const Tabs = ({ tabs }) => {
 							/>
 						</div>
 						<div className="general-item">
-							<label>{__("Spin per email", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("Spin per email(if user spin count exceeds he won't see the spin wheel again)", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="number"
 								name="field2"
@@ -544,7 +546,7 @@ const Tabs = ({ tabs }) => {
 							</div>
 						</div>
 						<div className="popup-settings">
-							<label>{__("If customers close and not spin, show popup again after", "hex-coupon-for-woocommerce-pro")}</label>
+							<label>{__("If customers close and not spin, show popup again after(in seconds)", "hex-coupon-for-woocommerce-pro")}</label>
 							<input
 								type="number"
 								name="field3" // Corrected name attribute
@@ -644,9 +646,9 @@ const Tabs = ({ tabs }) => {
 							<input
 								type="color"
 								className="colorPicker"
-								value={formData.tab3.textColor}
+								value={formData.tab3.wheelDescriptionColor}
 								onChange={(e) => handleFormChange(e, 'tab3')}
-								name="textColor"
+								name="wheelDescriptionColor"
 							/>
 						</div>
 
@@ -689,19 +691,8 @@ const Tabs = ({ tabs }) => {
 									isChecked={formData.tab3.enableYourName}
 									onSwitchChange={(isChecked) => setFormData({ ...formData, tab3: { ...formData.tab3, enableYourName: isChecked } })}
 								/>
-								<input
-									type="text"
-									name="yourName"
-									placeholder="Enter your name"
-									className="your-name"
-									value={formData.tab3.yourName}
-									onChange={(e) => handleFormChange(e, 'tab3')}
-									disabled={!formData.tab3.enableYourName}
-								/>
 							</div>
 						</div>
-
-						
 
 						<div className="wheel-settings">
 							<label>{__("Email Address", "hex-coupon-for-woocommerce-pro")}</label>
@@ -709,15 +700,6 @@ const Tabs = ({ tabs }) => {
 								<Switch
 									isChecked={formData.tab3.enableEmailAddress}
 									onSwitchChange={(isChecked) => setFormData({ ...formData, tab3: { ...formData.tab3, enableEmailAddress: isChecked } })}
-								/>
-								<input
-									type="email"
-									name="emailAddress"
-									className="email"
-									placeholder="Enter your email address"
-									value={formData.tab3.emailAddress}
-									onChange={(e) => handleFormChange(e, 'tab3')}
-									disabled={!formData.tab3.enableEmailAddress}
 								/>
 							</div>
 						</div>
@@ -731,7 +713,7 @@ const Tabs = ({ tabs }) => {
 						</div>
 
 						<div className="wheel-settings wysiwyg-container">
-							<label>{__("GDPR Checkbox Text", "hex-coupon-for-woocommerce-pro")}</label>
+							<label></label>
 							<button className="save" type="button" onClick={() => handleSave('tab3')}>
 								{__("Save", "hex-coupon-for-woocommerce-pro")}
 							</button>

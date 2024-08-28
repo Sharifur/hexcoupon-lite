@@ -89,28 +89,31 @@ class ActivationService
 		];
 		update_option('allLoyaltyLabels', $all_labels );
 
-
-
+		// spin wheel default data
 		$spin_wheel_general = [
-			'enableSpinWheel' => 1,
-			'spinPerEmail' => 10,
-			'delayBetweenSpins' => 5,
+			'enableSpinWheel' => 0,
+			'spinPerEmail' => 0,
+			'delayBetweenSpins' => 0,
 		];
 		update_option( 'spinWheelGeneral', $spin_wheel_general );
 
 		$spin_popup_settings = [
-			'popupInterval' => 10,
-			'showOnlyHomepage' => 1,
-			'showOnlyBlogPage' => 1,
-			'showOnlyShopPage' => 1,
+			'iconColor' => '#B71C1C',
+			'popupInterval' => 0,
+			'showOnlyHomepage' => 0,
+			'showOnlyBlogPage' => 0,
+			'showOnlyShopPage' => 0,
 		];
 		update_option( 'spinWheelPopup', $spin_popup_settings );
 
-		$spin_wheel_wheel_settings = [			
-			'enableYourName' => 1,			
-			'enableEmailAddress' => 1,			
+		$spin_wheel_wheel_settings = [	
+			'titleColor' => '#ffffff',	
+			'wheelDescriptionColor' => '#ffffff',	
+			'buttonColor' => '#ffffff',
+			'buttonBGColor' => '#3636ad',
+			'enableYourName' => 0,			
+			'enableEmailAddress' => 0,			
 		];
-		
 		update_option( 'spinWheelWheel', $spin_wheel_wheel_settings );
 	}
 

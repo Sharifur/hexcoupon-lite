@@ -5,8 +5,8 @@
         let pointer_btn = document.querySelector(".try-your-luck");
         let circle = document.querySelector(".wheel");
         let spinCount = 0; // Initialize spin counter
-        let maxSpins = spinToWinData.delayBetweenSpin; // Maximum number of allowed spins
-        let delayTime = spinToWinData.delayTime * 1000; // converting it to seconds format by multiplying with 1000
+        let maxSpins = spinToWinData.spinPerEmail; // Maximum number of allowed spins
+        let delayTime = spinToWinData.delayBetweenSpin * 1000; // converting it to seconds format by multiplying with 1000
         let popupIntervaltime = spinToWinData.popupIntervalTime * 1000; // converting it to seconds format by multiplying with 1000
         let messageIfWin = spinToWinData.frontendMessageIfWin;
         let emailSubject = spinToWinData.emailSubject;
@@ -18,11 +18,15 @@
             let innerTextParent = document.querySelectorAll(".wheel .slice .value");
             let innerTexts = [];
             let innerValue = [];
+            let innerLabel = [];
+
             innerTextParent.forEach((e) => {
                 let text = e.innerText;
                 let dataValue = e.getAttribute('data-value');
+                let dataLabel = e.getAttribute('data-label');
                 innerTexts.unshift(text);
                 innerValue.unshift(dataValue);
+                innerLabel.unshift(dataLabel);
             });
 
             pointer_btn.addEventListener("click", function() {
@@ -47,7 +51,6 @@
                         return;
                     }
                 }
-                console.log(userEmail);
 
                 // Validate the checkbox
                 if (!termConditionCheckbox.checked) {
@@ -70,22 +73,34 @@
 
                     setTimeout(function() {
                         if (innerTexts[offernum] == "NON") {
-                            alert(messageIfLoss + " " + innerTexts[offernum]);
+                            // alert(messageIfLoss + "\n" + "Discount Type: " + innerTexts[offernum] + "\n" + "Discount Details: " + innerLabel[offernum]);
+                            alert(messageIfLoss + "\n" + "Discount Details: " + innerLabel[offernum]);
                             return;
                         } else {
-                            alert(messageIfWin + " " + innerTexts[offernum]);
+                            // alert(messageIfWin + "\n" + "Discount Type: " + innerTexts[offernum] + "\n" + "Discount Details:" + innerLabel[offernum]);
+                            alert(messageIfWin + "\n" + "Discount Details: " + innerLabel[offernum]);
+                        }
+
+                        let data = {
+                            action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
+                            couponValue: innerValue[offernum],
+                            couponType: innerTexts[offernum],
+                        };
+                        
+                        // Conditionally add userName if it's not empty
+                        if (userName) {
+                            data.userName = userName;
+                        }
+                        
+                        // Conditionally add userEmail if it's not empty
+                        if (userEmail) {
+                            data.userEmail = userEmail;
                         }
 
                         $.ajax({
                             url: spinToWinData.ajax_url,
                             type: 'POST',
-                            data: {
-                                action: 'update_spin_count', // Action to trigger the PHP function that updates user_meta
-                                userName: userName,
-                                userEmail: userEmail,
-                                couponValue: innerValue[offernum],
-                                couponType: innerTexts[offernum],
-                            },
+                            data: data,
                             success: function(response) {
                                 if (response.success) {
                                     let newSpinCount = response.data;
@@ -104,29 +119,10 @@
                             }
                         });
 
-                        $.ajax({
-                            url: spinToWinData.ajax_url,
-                            type: 'post',
-                            data: {
-                                action: 'send_win_email',
-                                emailSubject: emailSubject,
-                                emailText: emailContentIfWin,
-                            },
-                            success: function(response){
-                                if (response.success) {
-                                    console.log("Email sent successfully.");
-                                } else {
-                                    console.log("Failed to send email.");
-                                }
-                            },
-                            error: function() {
-                                console.log("An error occurred while sending the email.");
-                            }
-                        });
-
                         spinCount++; // Increment the spin counter
 
                         if (spinCount < maxSpins) {
+                            console.log(maxSpins);
                             // Re-enable the button after the dynamic delay time
                             setTimeout(function() {
                                 pointer_btn.disabled = false;

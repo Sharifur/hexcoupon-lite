@@ -339,11 +339,10 @@ class AssetsManager
 		$popup_interval = ! empty( $spin_wheel_popup['popupInterval'] ) ? $spin_wheel_popup['popupInterval'] : 0;
 
 		$spin_wheel_text = get_option( 'spinWheelText' );
-		$frontend_message_if_win = ! empty( $spin_wheel_text['frontendMessageIfWin'] ) ? $spin_wheel_text['frontendMessageIfWin'] : 'You have it!';
+		$frontend_message_if_win = ! empty( $spin_wheel_text['frontendMessageIfWin'] ) ? $spin_wheel_text['frontendMessageIfWin'] : 'You have won!';
 		$frontend_message_if_loss = ! empty( $spin_wheel_text['frontendMessageIfLost'] ) ? $spin_wheel_text['frontendMessageIfLost'] : 'You have lost!';
 		$email_subject = ! empty( $spin_wheel_text['emailSubject'] ) ? $spin_wheel_text['emailSubject'] : 'Spin Wheel Notification.';
 		$email_content = ! empty( $spin_wheel_text['emailContent'] ) ? $spin_wheel_text['emailContent'] : 'Hello Dear, You have won a coupon via spin wheel. Check your my account to check it.';
-
 
 		function is_blog () {
             return ( is_archive() || is_author() || is_category() || is_home() || is_single() || is_tag()) && 'post' == get_post_type();
@@ -353,7 +352,6 @@ class AssetsManager
         $show_on_blogpage = ! empty( $spin_wheel_popup['showOnlyBlogPage'] ) ? $spin_wheel_popup['showOnlyBlogPage'] : 0;
         $show_on_shoppage = ! empty( $spin_wheel_popup['showOnlyShopPage'] ) ? $spin_wheel_popup['showOnlyShopPage'] : 0;
 		$selected_pages = ! empty( $spin_wheel_popup['selectedPages'] ) ? $spin_wheel_popup['selectedPages'] : [];
-		
 
         if ( 
 			$enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || 
@@ -456,8 +454,9 @@ class AssetsManager
 		$spin_wheel_wheel = get_option( 'spinWheelWheel' );
 		$textPart_h3 = ! empty( $spin_wheel_wheel['titleColor'] ) ? $spin_wheel_wheel['titleColor'] : '#D8CFCF';
 		$textPart_p = ! empty( $spin_wheel_wheel['textColor'] ) ? $spin_wheel_wheel['textColor'] : '#D8CFCF';
+		$description_color = ! empty( $spin_wheel_wheel['wheelDescriptionColor'] ) ? $spin_wheel_wheel['wheelDescriptionColor'] : '#ffffff';
 		$button_color = ! empty( $spin_wheel_wheel['buttonColor'] ) ? $spin_wheel_wheel['buttonColor'] : '#ffffff';
-		$button_bg = ! empty( $spin_wheel_wheel['buttonBGColor'] ) ? $spin_wheel_wheel['buttonBGColor'] : '#343434';
+		$button_bg = ! empty( $spin_wheel_wheel['buttonBGColor'] ) ? $spin_wheel_wheel['buttonBGColor'] : '#3636ad';
 		
 		$spin_wheel_content = get_option( 'spinWheelContent' );
 		$content1_color = ! empty( $spin_wheel_content['content1']['color'] ) ? $spin_wheel_content['content1']['color'] : '#E53935';
@@ -472,6 +471,9 @@ class AssetsManager
 			}
 			.text-part h3 {
 				color: {$textPart_h3};
+			}
+			.text-part .wheelDescription {
+				color: {$description_color};
 			}
 			.text-part p {
 				color: {$textPart_p};
