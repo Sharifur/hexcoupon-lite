@@ -354,10 +354,10 @@ class AssetsManager
 		$selected_pages = ! empty( $spin_wheel_popup['selectedPages'] ) ? $spin_wheel_popup['selectedPages'] : [];
 
         if ( 
-			$enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || 
-			$enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || 
-			$enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ||
-			$enable_spin_wheel && is_single( $selected_pages ) || is_page( $selected_pages ) && $spin_count < $spin_per_email
+				$enable_spin_wheel && is_home() && $show_on_homepage == 1 && $spin_count < $spin_per_email || 
+				$enable_spin_wheel && is_blog() && $show_on_blogpage == 1 && $spin_count < $spin_per_email || 
+				$enable_spin_wheel && is_shop() && $show_on_shoppage == 1 && $spin_count < $spin_per_email ||
+				$enable_spin_wheel && is_single( $selected_pages ) || is_page( $selected_pages ) && $spin_count < $spin_per_email
 			) :
 
 		wp_enqueue_script(

@@ -73,11 +73,9 @@
 
                     setTimeout(function() {
                         if (innerTexts[offernum] == "NON") {
-                            // alert(messageIfLoss + "\n" + "Discount Type: " + innerTexts[offernum] + "\n" + "Discount Details: " + innerLabel[offernum]);
                             alert(messageIfLoss + "\n" + "Discount Details: " + innerLabel[offernum]);
                             return;
                         } else {
-                            // alert(messageIfWin + "\n" + "Discount Type: " + innerTexts[offernum] + "\n" + "Discount Details:" + innerLabel[offernum]);
                             alert(messageIfWin + "\n" + "Discount Details: " + innerLabel[offernum]);
                         }
 

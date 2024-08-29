@@ -62,7 +62,7 @@ class GeneralFunctionsHelpers {
 	 * @package hexcoupon
 	 * @author WpHex
 	 * @since 1.0.0
-	 * @method show_all_categories
+	 * @method show_all_pages
 	 * @return array
 	 * Retrieve all available Pages of WP.
 	 */

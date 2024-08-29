@@ -275,8 +275,11 @@ class AjaxApiController extends Controller
 			$store_credit_amounts[] = $value['credit'];
 		}
 
+		// get all the products of WooCommerce product
 		$all_products = GeneralFunctionsHelpers::getInstance()->show_all_products();
+		// get all the categories of WooCommerce product
 		$all_categories = GeneralFunctionsHelpers::getInstance()->show_all_categories();
+		// get all the pages of WordPress
 		$all_pages = GeneralFunctionsHelpers::getInstance()->show_all_pages();
 
 		// Check the nonce and action
