@@ -1,6 +1,5 @@
 === HexCoupon - Advanced Tools for WooCommerce Coupons, BOGO, Store Credit, Loyalty Programs, and More ===
 Contributors: wphex, palashwpdev
-Donate link: https://example.com/
 Tags: bogo, store credit, loyalty program, spin wheel, woocommerce coupon
 Requires PHP: 7.1
 Requires at least: 5.4
