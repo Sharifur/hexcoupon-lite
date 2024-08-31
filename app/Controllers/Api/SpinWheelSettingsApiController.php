@@ -64,7 +64,6 @@ class SpinWheelSettingsApiController extends Controller
 		add_action( 'admin_post_spin_wheel_coupon_settings_save', [ $this, 'spin_wheel_coupon_settings_save' ] );
 		add_action( 'wp_ajax_update_spin_count', [ $this, 'update_spin_count' ] );
 		add_action( 'wp_ajax_nopriv_update_spin_count', [ $this, 'update_spin_count' ] );
-		// add_action( 'wp_ajax_nopriv_send_win_email', [ $this, 'send_win_email' ] );
 	}
 
 	/**
@@ -477,45 +476,6 @@ class SpinWheelSettingsApiController extends Controller
 		$html = ob_get_clean();
 		return $html;
 	}
-	
-
-	/**
-	 * @package hexcoupon
-	 * @author WpHex
-	 * @since 1.0.0
-	 * @method send_win_email
-	 * @return void
-	 * Sending success message to the users for spin wheel win
-	 */
-	public function send_win_email() {
-		// Verify the AJAX request
-		if ( isset( $_POST['userEmail'] ) && isset( $_POST['emailText'] ) && isset( $_POST['emailSubject'] ) ) {
-			// Get the prize information
-			$userEmail = sanitize_text_field( $_POST['userEmail'] );
-			$emailSubject = sanitize_text_field( $_POST['emailSubject'] );
-			$emailText = sanitize_text_field( $_POST['emailText'] );
-			$coupon_code = 'testcoupon';
-	
-			// Set the email parameters
-			$to = $userEmail;
-			$subject = $emailSubject;
-			$message = $this->email_template( $emailText, $coupon_code );
-			$headers = [ 'Content-Type: text/html; charset=UTF-8' ];
-	
-			// Send the email
-			$mail_sent = wp_mail( $to, $subject, $message, $headers );
-	
-			// Return a JSON response
-			if ( $mail_sent ) {
-				wp_send_json_success();
-			} else {
-				wp_send_json_error();
-			}
-
-		} else {
-			wp_send_json_error( 'No prize information provided.' );
-		}
-	}
 
 	/**
 	 * @package hexcoupon
@@ -545,14 +505,17 @@ class SpinWheelSettingsApiController extends Controller
 		$usage_limit_per_user = $spin_wheel_coupon['spinUsageLimitPerUser'];
 
 		// Define the coupon details
-		$coupon_code = 'SpinWheel' . get_current_user_id() . time(); // Unique code of coupon
+		$code = $this->get_last_created_coupon_by_email( $user_email );
+		$last_code = $code->post_title;
+		$get_code_number_part = explode( 'l', $last_code );
+		$final_code = 'SpinWheel' . get_current_user_id() . $get_code_number_part[1] + 1;
 		$discount_amount = $value; // The discount amount
 		
 		// Check if a coupon with the same code already exists
-		if ( ! wc_get_coupon_id_by_code( $coupon_code ) ) {
+		if ( ! wc_get_coupon_id_by_code( $final_code ) ) {
 			// Create a new coupon
 			$coupon = new \WC_Coupon();
-			$coupon->set_code( $coupon_code );
+			$coupon->set_code( $final_code );
 			$coupon->set_amount( $discount_amount );
 			$coupon->set_discount_type( $discount_type );
 			$coupon->set_description( 'You got this discount from spin wheel' );

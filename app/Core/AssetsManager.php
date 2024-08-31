@@ -484,16 +484,24 @@ class AssetsManager
 			.text-part .try-your-luck {
 				background: {$button_bg} !important;
 			}
-			.spinToWin .slice:nth-child(4n + 1 ) {
+			.spinToWin .slice:nth-child(1), 
+			.spinToWin .slice:nth-child(3), 
+			.spinToWin .slice:nth-child(5), 
+			.spinToWin .slice:nth-child(7), 
+			.spinToWin .slice:nth-child(9), 
+			.spinToWin .slice:nth-child(11) {
 				--bg: {$content1_color};
 			}
-			.spinToWin .slice:nth-child(4n + 2 ) {
+			.spinToWin .slice:nth-child(2),
+			.spinToWin .slice:nth-child(8),
+			.spinToWin .slice:nth-child(12) {
 				--bg: {$content2_color};
 			}
-			.spinToWin .slice:nth-child(4n + 3 ) {
+			.spinToWin .slice:nth-child(4),
+			.spinToWin .slice:nth-child(10) {
 				--bg: {$content3_color};
 			}
-			.spinToWin  .slice:nth-child(4n + 4 ) {
+			.spinToWin  .slice:nth-child(6) {
 				--bg: {$content4_color};
 			}
 		";

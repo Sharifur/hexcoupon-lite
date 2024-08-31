@@ -74,6 +74,13 @@
                     setTimeout(function() {
                         if (innerTexts[offernum] == "NON") {
                             alert(messageIfLoss + "\n" + "Discount Details: " + innerLabel[offernum]);
+                            
+                            // Re-enable the button after the dynamic delay time
+                            setTimeout(function() {
+                                pointer_btn.disabled = false;
+                                pointer_btn.style.cursor = "pointer";
+                            }, delayTime); // Use the dynamic delay time here
+
                             return;
                         } else {
                             alert(messageIfWin + "\n" + "Discount Details: " + innerLabel[offernum]);

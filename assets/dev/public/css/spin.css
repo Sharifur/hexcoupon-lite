@@ -190,7 +190,7 @@
   user-select: none;
 }
 
-.spinToWin .slice:nth-child(4n + 1) {
+.spinToWin .slice:nth-child(1) {
   --bg: #E53935;
 }
 

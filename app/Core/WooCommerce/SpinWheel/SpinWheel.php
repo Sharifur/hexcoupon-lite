@@ -128,7 +128,7 @@ class SpinWheel
                                             $label4 = ! empty( $spin_wheel_content['content4']['label'] ) ? $spin_wheel_content['content4']['label'] : 'You won fixed cart discount';
                                         ?>
                                         <div class="slice" style="--i: 1">
-                                            <p class="value text bankrupt" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
@@ -138,13 +138,13 @@ class SpinWheel
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 3">
-                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 4">
-                                            <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
+                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 5">
@@ -153,40 +153,40 @@ class SpinWheel
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 6">
-                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
-                                            </p>
-                                        </div>
-                                        <div class="slice" style="--i: 7">
-                                            <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
-                                            </p>
-                                        </div>
-                                        <div class="slice" style="--i: 8">
                                             <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
                                             </p>
                                         </div>
+                                        <div class="slice" style="--i: 7">
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
+                                            </p>
+                                        </div>
+                                        <div class="slice" style="--i: 8">
+                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
+                                            </p>
+                                        </div>
                                         <div class="slice" style="--i: 9">
-                                            <p class="value text lose-turn" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
                                         <div class="slice" style="--i: 10">
-                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
-                                            </p>
-                                        </div>
-                                        <div class="slice" style="--i: 11">
                                             <p class="value" data-value="<?php echo esc_attr( $value3 ); ?>" data-label="<?php echo esc_attr( $label3 ); ?>">
                                                 <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type3 ) ); ?>
                                             </p>
                                         </div>
-                                        <div class="slice" style="--i: 12">
-                                            <p class="value" data-value="<?php echo esc_attr( $value4 ); ?>" data-label="<?php echo esc_attr( $label4 ); ?>">
-                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type4 ) ); ?>
+                                        <div class="slice" style="--i: 11">
+                                            <p class="value" data-value="<?php echo esc_attr( $value1 ); ?>" data-label="<?php echo esc_attr( $label1 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type1 ) ); ?>
                                             </p>
                                         </div>
+                                        <div class="slice" style="--i: 12">
+                                            <p class="value" data-value="<?php echo esc_attr( $value2 ); ?>" data-label="<?php echo esc_attr( $label2 ); ?>">
+                                                <?php printf( esc_html__( '%s', 'hex-coupon-for-woocommerce' ), esc_html( $coupon_type2 ) ); ?>
+                                            </p>
+                                        </div>                                        
                                     </div>
                                     <div class="svg">
                                         <svg width="103" height="73" viewBox="0 0 103 73" fill="none" xmlns="http://www.w3.org/2000/svg">
