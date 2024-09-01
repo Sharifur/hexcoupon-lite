@@ -15,8 +15,9 @@ class FormHelpers
 	public function __construct( array $args )
 	{
 		$defaults = [
-			'label' => esc_html__('label','hexcoupon'),
+			'label' => esc_html__('label','hex-coupon-for-woocommerce'),
 			'name' => 'name',
+			'id' => '',
 			'parent_class' => 'options_group',
 			'input_class' => '',
 			'input_wrapper_class' => 'form-field',
@@ -26,6 +27,7 @@ class FormHelpers
 			'class' => 'short',
 			'select2' => false
 		];
+
 		$this->args = array_merge( $defaults, $args );
 	}
 	/**
@@ -36,6 +38,10 @@ class FormHelpers
 	private function getName()
 	{
 		return $this->args['name'];
+	}
+	private function getId()
+	{
+		return $this->args['id'];
 	}
 	private function getClass()
 	{
@@ -108,7 +114,7 @@ class FormHelpers
 				$placeholderData = !empty($this->args['placeholder']) && $this->args['placeholder'] ?  'data-placeholder="'.$this->args['placeholder'].'"' : '';
 				$search = '';
 				$multipleArrayAppend = $multiple === 'multiple' ? '[]' : '';
-				$markup .= '<select '.$placeholderData.'  name="'.$this->getName().$multipleArrayAppend.'" id="'.$this->getName().'" class="select '.$this->getClass().' '.$select2.'" '.$multiple.' >';
+				$markup .= '<select '.$placeholderData.'  name="'.$this->getName().$multipleArrayAppend.'" id="'.$this->getId().'" class="select '.$this->getClass().' '.$select2.'" '.$multiple.' >';
 
 				foreach($options as $opt => $val){
 					$selected = ($opt === $value) ? 'selected' : '';
@@ -117,9 +123,11 @@ class FormHelpers
 						$selected = in_array($opt,$value) ? 'selected' : '';
 					}
 
-					$markup .= '<option value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
+					$markup .= '<option title="'.esc_html($val).'" value="'.esc_attr($opt).'" '.$selected.' >'.esc_html($val).'</option>';
 				}
+
 				$markup .= '</select>';
+
 				if (!empty($this->args['description'])){
 					$markup .= '<span class="description">'.$this->getDescription().'</span>';
 				}

@@ -26,13 +26,15 @@ class RenderHelpers
 				'multiple' => true,
 				'tabindex' => true,
 				'aria-hidden' => true,
-				'data-placeholder' => true
+				'data-placeholder' => true,
+				'title' => true
 			],
 			'option' => 	[
 				'value' => true,
 				'selected' => true,
 				'class' => true,
-				'id' => true
+				'id' => true,
+				'title' => true
 			],
 			'optgroup' => 	[
 				'label' => true

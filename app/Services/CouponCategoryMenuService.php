@@ -14,6 +14,7 @@ class CouponCategoryMenuService extends Service
 		$data = [
 			'redirect_link' => 'edit-tags.php?taxonomy=shop_coupon_taxonomy&post_type=shop_coupon',
 		];
+
 		return $data;
 	}
 }
